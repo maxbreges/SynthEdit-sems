@@ -1,4 +1,4 @@
-## A repository for SynthEdit sems and their code
+## A repository for SynthEdit sems
 
 <!--
 **maxbreges/SynthEdit sems** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
