@@ -57,4 +57,4 @@ endif()
 include(plugin_helper.cmake)
 
 # here is where you list your modules
-add_subdirectory(IntToHex)
+add_subdirectory(TextAppend)
