@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Int to Hex" name="Int to Hex" category="mx/Sub-Controls/Conversion">
+        <GUI>
+            <Pin name="Int (0-255)" datatype="int" direction="in"/>
+            <Pin name="Hex" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
