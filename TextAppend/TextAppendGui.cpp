@@ -1,8 +1,5 @@
 #include "mp_sdk_gui2.h"
-#include <sstream>
-#include <string>
 
-using namespace std;
 using namespace gmpi;
 
 class TextAppendGui final : public SeGuiInvisibleBase
@@ -14,33 +11,24 @@ class TextAppendGui final : public SeGuiInvisibleBase
 	StringGuiPin pinText4;
  	StringGuiPin pinConcatenated;
 
-	/*std::string t1;
-	std::string t2;
-	std::string t3;
-	std::string t4;*/
-
 	void onSetText1()
 	{
 		pinConcatenated = pinText1.getValue() + pinText2.getValue() + pinText3.getValue() + pinText4.getValue();
-
 	}
 
 	void onSetText2()
 	{
 		pinConcatenated = pinText1.getValue() + pinText2.getValue() + pinText3.getValue() + pinText4.getValue();
-
 	}
 
 	void onSetText3()
 	{
 		pinConcatenated = pinText1.getValue() + pinText2.getValue() + pinText3.getValue() + pinText4.getValue();
-
 	}
 
 	void onSetText4()
 	{
 		pinConcatenated = pinText1.getValue() + pinText2.getValue() + pinText3.getValue() + pinText4.getValue();
-
 	}
 
 	void onSetConcatenated()
@@ -61,5 +49,5 @@ public:
 
 namespace
 {
-	auto r = Register<TextAppendGui>::withId(L"My Text Append");
+	auto r = Register<TextAppendGui>::withId(L"TextAppend");
 }
