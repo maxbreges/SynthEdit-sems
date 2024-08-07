@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My Text Append" name="Text Append" category="mx/Sub-Controls">
+        <GUI>
+			<Pin name="Text" datatype="string" autoduplicate="true"/>
+			<Pin name="Text" datatype="string" autoduplicate="true"/>
+			<Pin name="Text" datatype="string" autoduplicate="true"/>
+			<Pin name="Text" datatype="string" autoduplicate="true"/>
+			<Pin name="Appended" datatype="string" direction="out"/>            
+        </GUI>
+    </Plugin>
+</PluginList>
