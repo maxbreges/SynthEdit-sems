@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="RGB to Hex" name="RGB to Hex" category="mx/Conversion">
+		<Parameters>
+			<Parameter id="0" datatype="float" name=""/>
+			<Parameter id="1" datatype="float" name=""/>
+			<Parameter id="2" datatype="float" name=""/>
+		</Parameters>	
+        <Audio>
+            <Pin name="R(0-255)" datatype="float" />
+            <Pin name="G(0-255)" datatype="float" />
+            <Pin name="B(0-255)" datatype="float" />
+			<Pin name="Rout" datatype="float" direction="out" parameterId="0"/>
+			<Pin name="Gout" datatype="float" direction="out" parameterId="1"/>
+			<Pin name="Bout" datatype="float" direction="out" parameterId="2"/>			
+        </Audio>
+		<GUI>
+			<Pin name="Rin" datatype="float" direction="in" parameterId="0"/>
+			<Pin name="Gin" datatype="float" direction="in" parameterId="1"/>
+			<Pin name="Bin" datatype="float" direction="in" parameterId="2"/>
+			<Pin name="Alpha" datatype="string" private="true" default="ff"/>
+			<Pin name="R" datatype="string" direction="out" private="true"/>
+			<Pin name="G" datatype="string" direction="out" private="true"/>
+			<Pin name="B" datatype="string" direction="out" private="true"/>
+			<Pin name="#Hex" datatype="string" direction="out"/>	
+		</GUI>
+    </Plugin>
+</PluginList>
