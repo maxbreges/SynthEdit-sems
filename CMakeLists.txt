@@ -58,4 +58,6 @@ include(plugin_helper.cmake)
 
 # here is where you list your modules
 add_subdirectory(FloatMultiply)
+add_subdirectory(IntRGBToHex)
+add_subdirectory(RGBToHex)
 
