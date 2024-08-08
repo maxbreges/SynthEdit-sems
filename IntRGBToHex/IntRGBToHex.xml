@@ -5,20 +5,24 @@
 			<Parameter id="0" datatype="int" name=""/>
 			<Parameter id="1" datatype="int" name=""/>
 			<Parameter id="2" datatype="int" name=""/>
+			<Parameter id="3" datatype="int" name=""/>
 		</Parameters>	
         <Audio>
+			<Pin name="Alpha(0-255)" datatype="int" default="255"/>
             <Pin name="R(0-255)" datatype="int" />
             <Pin name="G(0-255)" datatype="int" />
             <Pin name="B(0-255)" datatype="int" />
 			<Pin name="Rout" datatype="int" direction="out" parameterId="0"/>
 			<Pin name="Gout" datatype="int" direction="out" parameterId="1"/>
-			<Pin name="Bout" datatype="int" direction="out" parameterId="2"/>			
+			<Pin name="Bout" datatype="int" direction="out" parameterId="2"/>
+			<Pin name="Alpha2Gui" datatype="int" direction="out" parameterId="3"/>
         </Audio>
 		<GUI>
 			<Pin name="Rin" datatype="int" direction="in" parameterId="0"/>
 			<Pin name="Gin" datatype="int" direction="in" parameterId="1"/>
 			<Pin name="Bin" datatype="int" direction="in" parameterId="2"/>
-			<Pin name="Alpha" datatype="string" private="true" default="ff"/>
+			<Pin name="AlphaFromDSP" datatype="int" direction="in" parameterId="3"/>
+			<Pin name="Alpha" datatype="string" private="true"/>
 			<Pin name="R" datatype="string" direction="out" private="true"/>
 			<Pin name="G" datatype="string" direction="out" private="true"/>
 			<Pin name="B" datatype="string" direction="out" private="true"/>

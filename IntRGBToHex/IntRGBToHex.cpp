@@ -4,7 +4,7 @@ using namespace gmpi;
 
 class RGBToHex final : public MpBase2
 {
-	
+	IntInPin pinAlpha;
 	IntInPin pinR;
 	IntInPin pinG;
 	IntInPin pinB;
@@ -12,24 +12,27 @@ class RGBToHex final : public MpBase2
 	IntOutPin pinRout;
 	IntOutPin pinGout;
 	IntOutPin pinBout;
-	
+	IntOutPin pinAlpha2Gui;	
 
 public:
 	RGBToHex()
-	{
+	{	
+		initializePin(pinAlpha);
 		initializePin( pinR );
 		initializePin( pinG );
 		initializePin( pinB );	
 		initializePin(pinRout);
 		initializePin(pinGout);
 		initializePin(pinBout);
+		initializePin(pinAlpha2Gui);
 	}
 
-	//void subProcess( int sampleFrames ){}
-
-
 	void onSetPins() override
-	{		
+	{	
+		if (pinAlpha.isUpdated())
+		{
+			pinAlpha2Gui = pinAlpha;
+		}
 		if( pinR.isUpdated() )
 		{
 			pinRout = pinR;
@@ -41,16 +44,7 @@ public:
 		if( pinB.isUpdated() )
 		{
 			pinBout = pinB;
-		}	
-		pinRout.isUpdated();
-		
-		pinGout.isUpdated();
-		
-		pinBout.isUpdated();
-		
-
-		// Set processing method.
-		//setSubProcess(&RGBToHex::subProcess);
+		}
 	}
 };
 
