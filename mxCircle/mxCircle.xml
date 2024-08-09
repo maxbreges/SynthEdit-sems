@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="mxCircle" name="mxCircle" category="mx/Sub-Controls">
+		<Parameters>
+			<Parameter id="0" datatype="bool" name=""/>
+			<Parameter id="1" datatype="bool" name=""/>
+		</Parameters>
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Value +Shift" datatype="float" direction="out" private="false"/>
+            <Pin name="Value +Ctrl" datatype="float" direction="out" private="false"/>
+			<Pin name="Color0" datatype="string" default="00FFFFFF" private="true"/>
+            <Pin name="Bg Color" datatype="string" default="FF000000" isMinimised="true"/>
+            <Pin name="Top Color" datatype="string" default="FFFF55AF" isMinimised="false"/>
+            <Pin name="Top Circle Size" datatype="float" default="0.93" isMinimised="true"/>
+            <Pin name="Mouse Down" datatype="bool"/>
+			<Pin name="Mouse Over" datatype="bool" direction="out" private="true"/>
+			<Pin name="Text#" datatype="string" direction="in" default="G#" isMinimised="true"/>
+			<Pin name="Textb" datatype="string" direction="in" default="Ab" isMinimised="true"/>
+			<Pin name="#/b" datatype="bool" direction="in"/>
+			<Pin name="Text Color" datatype="string" direction="in" default="FF000000" isMinimised="true"/>
+			<Pin name="Font" datatype="string" direction="in" default="Times New Roman" isMinimised="false"/>
+			<Pin name="Font Size" datatype="float" direction="in" default="-1" isMinimised="false"/>
+			<Pin name="OR In" datatype="bool"/>
+			<Pin name="TrigGui" datatype="bool" direction="in" parameterId="0"/>
+			<Pin name="ToDSP" datatype="bool" parameterId="1"/>
+			<Pin name="onMouseDownValue" datatype="float" private="true"/>
+			<Pin name="onMouseUpValue" datatype="float" private="true"/>
+			<Pin name="Value MinShift" datatype="float" default="0" isMinimised="true"/>
+			<Pin name="Value MaxShift" datatype="float" default="255" isMinimised="true"/>
+			<Pin name="onMouseDownValueCtrl" datatype="float" private="true"/>
+			<Pin name="onMouseUpValueCtrl" datatype="float" private="true"/>
+			<Pin name="Value MinCtrl" datatype="float" default="0" isMinimised="true"/>
+			<Pin name="Value MaxCtrl" datatype="float" default="255" isMinimised="true"/>
+		</GUI>
+		<Audio>
+			<Pin name="ToGui" datatype="bool" direction="out" parameterId="0"/>
+			<Pin name="Gate In" datatype="bool"/>
+			<Pin name="MIDI Out" datatype="midi" direction="out"/>
+			<Pin name="FromGui" datatype="bool" direction="in" parameterId="1"/>
+			<Pin name="Chan" datatype="int" default="1" isMinimised="true"/>
+			<Pin name="Note" datatype="int" default="44" isMinimised="true"/>
+		</Audio>
+    </Plugin>
+</PluginList>
