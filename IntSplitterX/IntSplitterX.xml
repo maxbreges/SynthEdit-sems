@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+	<Plugin id="IntSplitterX" name="Int Splitter" category="Sub-Controls/Old">
+		<GUI>
+			<Pin name="Int" datatype="int" direction="out" />
+			<Pin name="Int" datatype="int" direction="in" autoDuplicate="true" />
+		</GUI>
+	</Plugin>
+</PluginList>
