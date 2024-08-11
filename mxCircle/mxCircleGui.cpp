@@ -11,11 +11,13 @@ GmpiDrawing_API::MP1_POINT_L pointPrevious;
 
 class mxCircleGui final : public gmpi_gui::MpGuiGfxBase
 {
- 	void onSetAnimPosShift()
+ 	void onSetValueShift()
 	{
 	}
-
- 	void onSetAnimPosALT()
+ 	void onSetValueCtrl()
+	{
+	}
+	void onSetValueShiftCtrl()
 	{
 	}
 
@@ -114,8 +116,8 @@ class mxCircleGui final : public gmpi_gui::MpGuiGfxBase
 	}	
 
  	FloatGuiPin pinValueShift;
- 	FloatGuiPin pinAnimPosALT;
-	FloatGuiPin pinShiftCtrl;
+ 	FloatGuiPin pinValueCtrl;
+	FloatGuiPin pinValueShiftCtrl;
 	StringGuiPin pinColor0;
  	StringGuiPin pinBgColor;
  	StringGuiPin pinTopColor;
@@ -131,14 +133,15 @@ class mxCircleGui final : public gmpi_gui::MpGuiGfxBase
 	BoolGuiPin pinORIn;
 	BoolGuiPin pinTrigGui;
 	BoolGuiPin pinToDSP;
-	FloatGuiPin pinOnMouseDownValue;
-	FloatGuiPin pinOnMouseUpValue;
-	FloatGuiPin pinValueMin;
-	FloatGuiPin pinValueMax;
-	FloatGuiPin pinOnMouseDownValueAlt;
-	FloatGuiPin pinOnMouseUpValueAlt;
-	FloatGuiPin pinValueMinAlt;
-	FloatGuiPin pinValueMaxAlt;
+	FloatGuiPin pinOnMouseDownValueShift;
+	FloatGuiPin pinOnMouseUpValueShift;
+	FloatGuiPin pinValueMinShift;
+	FloatGuiPin pinValueMaxShift;
+	FloatGuiPin pinOnMouseDownValueCtrl;
+	FloatGuiPin pinOnMouseUpValueCtrl;
+	FloatGuiPin pinValueMinCtrl;
+	FloatGuiPin pinValueMaxCtrl;
+	FloatGuiPin pinOnMouseDownValueShiftCtrl;
 	FloatGuiPin pinOnMouseUpValueShiftCtrl;
 	FloatGuiPin pinValueMinShiftCtrl;
 	FloatGuiPin pinValueMaxShiftCtrl;
@@ -146,9 +149,9 @@ class mxCircleGui final : public gmpi_gui::MpGuiGfxBase
 public:
 	mxCircleGui()
 	{
-		initializePin(pinValueShift, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetAnimPosShift));
-		initializePin(pinAnimPosALT, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetAnimPosALT));
-		initializePin(pinShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetAnimPosShift));
+		initializePin(pinValueShift, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetValueShift));
+		initializePin(pinValueCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetValueCtrl));
+		initializePin(pinValueShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetValueShiftCtrl));
 		initializePin(pinColor0, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetColor0));
 		initializePin(pinBgColor, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetBgColor));
 		initializePin(pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetTopColor));
@@ -164,14 +167,15 @@ public:
 		initializePin(pinORIn, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetORIn));
 		initializePin(pinTrigGui, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onTrigGui));
 		initializePin(pinToDSP, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onToDSP));
-		initializePin(pinOnMouseDownValue, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseDown));
-		initializePin(pinOnMouseUpValue, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseUp));
-		initializePin(pinValueMin, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMin));
-		initializePin(pinValueMax, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMax));
-		initializePin(pinOnMouseDownValueAlt, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseDown));
-		initializePin(pinOnMouseUpValueAlt, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseUp));
-		initializePin(pinValueMinAlt, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMinAlt));
-		initializePin(pinValueMaxAlt, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMaxAlt));
+		initializePin(pinOnMouseDownValueShift, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseDown));
+		initializePin(pinOnMouseUpValueShift, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseUp));
+		initializePin(pinValueMinShift, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMin));
+		initializePin(pinValueMaxShift, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMax));
+		initializePin(pinOnMouseDownValueCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseDown));
+		initializePin(pinOnMouseUpValueCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseUp));
+		initializePin(pinValueMinCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMinAlt));
+		initializePin(pinValueMaxCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMaxAlt));
+		initializePin(pinOnMouseDownValueShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseDown));
 		initializePin(pinOnMouseUpValueShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseUp));
 		initializePin(pinValueMinShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMinShiftCtrl));
 		initializePin(pinValueMaxShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMaxShiftCtrl));
@@ -199,8 +203,9 @@ public:
 	//Mouse Down
 	int32_t onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
 	{		
-		pinOnMouseDownValue = point.y;
-		pinOnMouseDownValueAlt = point.y;
+		pinOnMouseDownValueShift = point.y;
+		pinOnMouseDownValueCtrl = point.y;
+		pinOnMouseDownValueShiftCtrl = point.y;
 
 			// Let host handle right-clicks.
 			if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
@@ -240,15 +245,15 @@ public:
 				return gmpi::MP_UNHANDLED;
 			}
 
-			PointL offset(point.x, pinOnMouseDownValue - point.y); // TODO overload subtraction.
+			PointL offset(point.x, pinOnMouseDownValueShiftCtrl - point.y); // TODO overload subtraction.
 
-			pinShiftCtrl = pinOnMouseUpValueShiftCtrl + offset.y;
+			pinValueShiftCtrl = pinOnMouseUpValueShiftCtrl + offset.y;
 
-			if (pinShiftCtrl < pinValueMinShiftCtrl)
-				pinShiftCtrl = pinValueMinShiftCtrl;
+			if (pinValueShiftCtrl < pinValueMinShiftCtrl)
+				pinValueShiftCtrl = pinValueMinShiftCtrl;
 
-			if (pinShiftCtrl > pinValueMaxShiftCtrl)
-				pinShiftCtrl = pinValueMaxShiftCtrl;
+			if (pinValueShiftCtrl > pinValueMaxShiftCtrl)
+				pinValueShiftCtrl = pinValueMaxShiftCtrl;
 
 			invalidateRect();
 
@@ -268,15 +273,15 @@ public:
 				return gmpi::MP_UNHANDLED;
 			}
 
-			PointL offset(point.x, pinOnMouseDownValue - point.y); // TODO overload subtraction.
+			PointL offset(point.x, pinOnMouseDownValueShift - point.y); // TODO overload subtraction.
 
-			pinValueShift = pinOnMouseUpValue + offset.y;
+			pinValueShift = pinOnMouseUpValueShift + offset.y;
 
-			if (pinValueShift < pinValueMin)
-				pinValueShift = pinValueMin;
+			if (pinValueShift < pinValueMinShift)
+				pinValueShift = pinValueMinShift;
 
-			if (pinValueShift > pinValueMax)
-				pinValueShift = pinValueMax;
+			if (pinValueShift > pinValueMaxShift)
+				pinValueShift = pinValueMaxShift;
 
 			invalidateRect();
 
@@ -296,15 +301,15 @@ public:
 				return gmpi::MP_UNHANDLED;
 			}
 
-			PointL offset(point.x, pinOnMouseDownValueAlt - point.y); // TODO overload subtraction.
+			PointL offset(point.x, pinOnMouseDownValueCtrl - point.y); // TODO overload subtraction.
 
-			pinAnimPosALT = pinOnMouseUpValueAlt + offset.y;
+			pinValueCtrl = pinOnMouseUpValueCtrl + offset.y;
 
-			if (pinAnimPosALT < pinValueMinAlt)
-				pinAnimPosALT = pinValueMinAlt;
+			if (pinValueCtrl < pinValueMinCtrl)
+				pinValueCtrl = pinValueMinCtrl;
 
-			if (pinAnimPosALT > pinValueMaxAlt)
-				pinAnimPosALT = pinValueMaxAlt;
+			if (pinValueCtrl > pinValueMaxCtrl)
+				pinValueCtrl = pinValueMaxCtrl;
 
 			invalidateRect();
 
@@ -322,8 +327,9 @@ public:
 			return gmpi::MP_UNHANDLED;
 		}		
 
-		pinOnMouseUpValue = pinValueShift;
-		pinOnMouseUpValueAlt = pinAnimPosALT;
+		pinOnMouseUpValueShift = pinValueShift;
+		pinOnMouseUpValueCtrl = pinValueCtrl;
+		pinOnMouseUpValueShiftCtrl = pinValueShiftCtrl;
 
 		releaseCapture();		
 
