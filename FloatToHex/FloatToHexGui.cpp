@@ -7,32 +7,37 @@ using namespace std;
 
 class FloatToHexGui final : public SeGuiInvisibleBase
 {
- 	void onSetFloat()
-	{		
-		std::stringstream ss;
-		ss << std::setfill('0') << std::setw(sizeof(int)-2) << std::hex << pinFloat;
-		std::string res(ss.str());
-
-		pinText = res;	
-	}
-
+ 	
  	void onSetText()
 	{	
 	}
 
  	FloatGuiPin pinFloat;
  	StringGuiPin pinText;
-
+	IntGuiPin pinInt;
+	
 public:
-	IntToHexGui()
+	FloatToHexGui()
 	{
-		initializePin( pinFloat, static_cast<MpGuiBaseMemberPtr2>(&IntToHexGui::onSetFloat) );
-		initializePin( pinText, static_cast<MpGuiBaseMemberPtr2>(&IntToHexGui::onSetText) );
+		initializePin( pinFloat, static_cast<MpGuiBaseMemberPtr2>(&FloatToHexGui::onSetFloat) );
+		initializePin( pinText, static_cast<MpGuiBaseMemberPtr2>(&FloatToHexGui::onSetText) );
+		initializePin(pinInt, static_cast<MpGuiBaseMemberPtr2>(&FloatToHexGui::onSetFloat));
 	}
 
+	void onSetFloat()
+	{
+		pinInt = pinFloat;
+
+		std::stringstream ss;
+		ss << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << pinInt;
+		std::string res(ss.str());
+
+		pinText = res;
+	}
+	
 };
 
 namespace
 {
-	auto r = Register<FloatToHexGui>::withId(L"Float to Hex");
+	auto r = Register<FloatToHexGui>::withId(L"FloatToHex");
 }
