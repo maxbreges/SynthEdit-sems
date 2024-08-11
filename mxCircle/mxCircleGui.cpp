@@ -104,9 +104,18 @@ class mxCircleGui final : public gmpi_gui::MpGuiGfxBase
 	{
 		invalidateRect();
 	}
+	void onSetMinShiftCtrl()
+	{
+		invalidateRect();
+	}
+	void onSetMaxShiftCtrl()
+	{
+		invalidateRect();
+	}	
 
- 	FloatGuiPin pinAnimPosShift;
+ 	FloatGuiPin pinValueShift;
  	FloatGuiPin pinAnimPosALT;
+	FloatGuiPin pinShiftCtrl;
 	StringGuiPin pinColor0;
  	StringGuiPin pinBgColor;
  	StringGuiPin pinTopColor;
@@ -130,12 +139,16 @@ class mxCircleGui final : public gmpi_gui::MpGuiGfxBase
 	FloatGuiPin pinOnMouseUpValueAlt;
 	FloatGuiPin pinValueMinAlt;
 	FloatGuiPin pinValueMaxAlt;
+	FloatGuiPin pinOnMouseUpValueShiftCtrl;
+	FloatGuiPin pinValueMinShiftCtrl;
+	FloatGuiPin pinValueMaxShiftCtrl;
 	
 public:
 	mxCircleGui()
 	{
-		initializePin(pinAnimPosShift, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetAnimPosShift));
+		initializePin(pinValueShift, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetAnimPosShift));
 		initializePin(pinAnimPosALT, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetAnimPosALT));
+		initializePin(pinShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetAnimPosShift));
 		initializePin(pinColor0, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetColor0));
 		initializePin(pinBgColor, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetBgColor));
 		initializePin(pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetTopColor));
@@ -159,7 +172,11 @@ public:
 		initializePin(pinOnMouseUpValueAlt, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseUp));
 		initializePin(pinValueMinAlt, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMinAlt));
 		initializePin(pinValueMaxAlt, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMaxAlt));
-		}
+		initializePin(pinOnMouseUpValueShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMouseUp));
+		initializePin(pinValueMinShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMinShiftCtrl));
+		initializePin(pinValueMaxShiftCtrl, static_cast<MpGuiBaseMemberPtr2>(&mxCircleGui::onSetMaxShiftCtrl));
+
+	}
 
 	virtual int32_t MP_STDCALL setHover(bool isMouseOverMe) override
 	{
@@ -208,7 +225,36 @@ public:
 	//animation position
 	int32_t MP_STDCALL onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
 	{
-		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
+
+		if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) && (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL))
+		{
+			if (((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) == 0) && ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)==0))
+			{
+				pinMouseOver = false;
+			}
+			pinMouseOver = pinMouseDown;
+			pinORIn = false;
+
+			if (!getCapture())
+			{
+				return gmpi::MP_UNHANDLED;
+			}
+
+			PointL offset(point.x, pinOnMouseDownValue - point.y); // TODO overload subtraction.
+
+			pinShiftCtrl = pinOnMouseUpValueShiftCtrl + offset.y;
+
+			if (pinShiftCtrl < pinValueMinShiftCtrl)
+				pinShiftCtrl = pinValueMinShiftCtrl;
+
+			if (pinShiftCtrl > pinValueMaxShiftCtrl)
+				pinShiftCtrl = pinValueMaxShiftCtrl;
+
+			invalidateRect();
+
+		}
+
+		if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) && ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) == 0))
 		{
 			if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) == 0)
 			{
@@ -224,19 +270,19 @@ public:
 
 			PointL offset(point.x, pinOnMouseDownValue - point.y); // TODO overload subtraction.
 
-			pinAnimPosShift = pinOnMouseUpValue + offset.y;
+			pinValueShift = pinOnMouseUpValue + offset.y;
 
-			if (pinAnimPosShift < pinValueMin)
-				pinAnimPosShift = pinValueMin;
+			if (pinValueShift < pinValueMin)
+				pinValueShift = pinValueMin;
 
-			if (pinAnimPosShift > pinValueMax)
-				pinAnimPosShift = pinValueMax;
+			if (pinValueShift > pinValueMax)
+				pinValueShift = pinValueMax;
 
 			invalidateRect();
 
 		}
 
-		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
+		if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) && ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) == 0))
 		{
 			if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) == 0)
 			{
@@ -276,7 +322,7 @@ public:
 			return gmpi::MP_UNHANDLED;
 		}		
 
-		pinOnMouseUpValue = pinAnimPosShift;
+		pinOnMouseUpValue = pinValueShift;
 		pinOnMouseUpValueAlt = pinAnimPosALT;
 
 		releaseCapture();		

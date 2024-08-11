@@ -8,6 +8,7 @@
         <GUI graphicsApi="GmpiGui">
             <Pin name="Value +Shift" datatype="float" direction="out" private="false"/>
             <Pin name="Value +Ctrl" datatype="float" direction="out" private="false"/>
+			<Pin name="Value Shift+Ctrl" datatype="float" direction="out" private="false"/>
 			<Pin name="Color0" datatype="string" default="00FFFFFF" private="true"/>
             <Pin name="Bg Color" datatype="string" default="FF000000" isMinimised="true"/>
             <Pin name="Top Color" datatype="string" default="FFFF55AF" isMinimised="false"/>
@@ -31,6 +32,9 @@
 			<Pin name="onMouseUpValueCtrl" datatype="float" private="true"/>
 			<Pin name="Value MinCtrl" datatype="float" default="0" isMinimised="true"/>
 			<Pin name="Value MaxCtrl" datatype="float" default="255" isMinimised="true"/>
+			<Pin name="onMouseUpValueShiftCtrl" datatype="float" private="true"/>
+			<Pin name="Value MinShiftCtrl" datatype="float" default="0" isMinimised="true"/>
+			<Pin name="Value MaxShiftCtrl" datatype="float" default="255" isMinimised="true"/>
 		</GUI>
 		<Audio>
 			<Pin name="ToGui" datatype="bool" direction="out" parameterId="0"/>
