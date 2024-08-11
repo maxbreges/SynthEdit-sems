@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Float to Hex" name="Float to Hex" category="mx/Sub-Controls/Conversion">
+        <GUI>
+            <Pin name="Float (0-255)" datatype="Float" direction="in"/>
+            <Pin name="Hex" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
