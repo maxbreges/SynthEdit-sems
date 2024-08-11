@@ -3,7 +3,7 @@
     <Plugin id="Float Multiply" name="Float Multiply" category="mx/Sub-Controls/Math">
         <GUI>
 			<Pin name="Value In" datatype="float" direction="out"/>            
-            <Pin name="Multiply by" datatype="float" default="255"/>
+            <Pin name="Multiply by" datatype="float" default="-1"/>
 			<Pin name="Value Out" datatype="float" direction="in"/>            
         </GUI>
     </Plugin>
