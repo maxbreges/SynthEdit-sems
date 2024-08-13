@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FloatCompare" name="Float Compare" category="mx/Sub-Controls/Modifiers">
+        <GUI>
+            <Pin name="Float A" datatype="float"/>
+            <Pin name="Float B" datatype="float"/>
+            <Pin name="Bool Out" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
