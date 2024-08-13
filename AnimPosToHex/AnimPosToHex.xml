@@ -3,7 +3,7 @@
     <Plugin id="AnimPos to Hex" name="AnimPos to Hex" category="mx/Sub-Controls/Conversion">
         <GUI>
             <Pin name="AnimPos (0-1)" datatype="float" direction="out"/>
-            <Pin name="Hex" datatype="string" direction="out"/>
+            <Pin name="Hex" datatype="string" direction="in"/>
             <Pin name="ValueIn" datatype="float" private="true"/>
 			<Pin name="R" datatype="int" direction="out" private="true"/>
 			<Pin name="G" datatype="int" direction="out" private="true"/>
