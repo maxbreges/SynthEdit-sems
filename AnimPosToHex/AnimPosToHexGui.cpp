@@ -5,122 +5,138 @@
 using namespace gmpi;
 using namespace std;
 
-class AnimPosToHexGui final : public SeGuiInvisibleBase
+class PatchMemoryFloatGui final : public SeGuiInvisibleBase
 {
- 	void onSetAnimPos()
+	void onSetScaleIn()
 	{
-		pinValueIn = pinAnimPos * 1535;
+		pinScale = pinScaleIn;
+	}
+	void onSetAnimationIn()
+	{
+		pinAnimationPosition = pinAnimationIn;
+	}
+	void onSetScale()
+	{
+		pinScaleIn = pinScale;
+	}
+	void onSetAnimationPosition()
+	{
+		pinAnimationIn = pinAnimationPosition;
+
+		int x = pinAnimationPosition * 1535;
+		int R, G, B;
+
+		/*std::stringstream stream;
+		stream << std::hex << x;
+		std::string result(stream.str());
+
+		pinHexIn = result;*/
 
 		//--------------------------------
 
-		if ((pinValueIn >= 255) && (pinValueIn < 768))
-			pinG = 255;
-		if (pinValueIn > 1023)
-			pinG = 0;
+		if ((x >= 255) && (x < 768))
+			G = 255;
+		if (x > 1023)
+			G = 0;
 
-		if ((pinValueIn >= 1279) || (pinValueIn < 255))
-			pinR = 255;
-		if ((pinValueIn > 510) && (pinValueIn <= 1024))
-			pinR = 0;
+		if ((x >= 1279) || (x < 255))
+			R = 255;
+		if ((x > 510) && (x <= 1024))
+			R = 0;
 
-		if ((pinValueIn >= 767) && (pinValueIn < 1280))
-			pinB = 255;
-		if (pinValueIn <= 511)
-			pinB = 0;
-
+		if ((x >= 767) && (x < 1280))
+			B = 255;
+		if (x <= 511)
+			B = 0;
 
 		//-----------------------------
 
-		if ((pinValueIn >= 0) && (pinValueIn <= 255))
+		if ((x >= 0) && (x <= 255))
 		{
-			pinG = pinValueIn;
+			G = x;
 		}
 		//-------------------
 
-		if ((pinValueIn >= 256) && (pinValueIn <= 511))
+		if ((x >= 256) && (x <= 511))
 		{
-			pinR = 255 - (pinValueIn - 256);
+			R = 255 - (x - 256);
 		}
 
 		//-------------------
-		if ((pinValueIn >= 512) && (pinValueIn <= 767))
+		if ((x >= 512) && (x <= 767))
 		{
-			pinB = pinValueIn - 512;
+			B = x - 512;
 		}
 
 		//-------------------
-		if ((pinValueIn >= 768) && (pinValueIn <= 1023))
+		if ((x >= 768) && (x <= 1023))
 		{
-			pinG = 255 - (pinValueIn - 768);
+			G = 255 - (x - 768);
 		}
 
 		//-------------------
 
-		if ((pinValueIn >= 1024) && (pinValueIn <= 1279))
+		if ((x >= 1024) && (x <= 1279))
 		{
-			pinR = pinValueIn - 1024;
+			R = x - 1024;
 		}
 
 		//-------------------
-		if ((pinValueIn >= 1280) && (pinValueIn <= 1535))
+		if ((x >= 1280) && (x <= 1535))
 		{
-			pinB = 255 - (pinValueIn - 1280);
+			B = 255 - (x - 1280);
 		}
 
 		std::stringstream ssR;
-		ssR << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << pinR;
+		ssR << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << R;
 		std::string resR(ssR.str());
 
-		R = resR;
-
 		std::stringstream ssG;
-		ssG << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << pinG;
+		ssG << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << G;
 		std::string resG(ssG.str());
 
-		G = resG;
-
 		std::stringstream ssB;
-		ssB << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << pinB;
+		ssB << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << B;
 		std::string resB(ssB.str());
 
-		B = resB;
-
-		pinHex = R.getValue() + G.getValue() + B.getValue();
+		pinHexIn = resR + resG + resB;
 
 	}
-
- 	void onSetHex()
+	void onSetHexIn()
 	{
-		// pinHex changed
+		pinHex = pinHexIn;
+	}
+	void onSetHex()
+	{
+		pinHexIn = pinHex;
 	}
 
-
- 	FloatGuiPin pinAnimPos;
- 	StringGuiPin pinHex;
-	FloatGuiPin pinValueIn;
-	IntGuiPin pinR;
-	IntGuiPin pinG;
-	IntGuiPin pinB;
-	StringGuiPin R;
-	StringGuiPin G;
-	StringGuiPin B;
+	FloatGuiPin pinScaleIn;
+	FloatGuiPin pinAnimationIn;
+	FloatGuiPin pinScale;
+	FloatGuiPin pinAnimationPosition;
+	StringGuiPin pinHexIn;
+	StringGuiPin pinHex;
 
 public:
-	AnimPosToHexGui()
+	PatchMemoryFloatGui()
 	{
-		initializePin( pinAnimPos, static_cast<MpGuiBaseMemberPtr2>(&AnimPosToHexGui::onSetAnimPos) );
-		initializePin( pinHex, static_cast<MpGuiBaseMemberPtr2>(&AnimPosToHexGui::onSetHex) );
-		initializePin(pinValueIn, static_cast<MpGuiBaseMemberPtr2>(&AnimPosToHexGui::onSetAnimPos) );
-		initializePin(pinR, static_cast<MpGuiBaseMemberPtr2>(&AnimPosToHexGui::onSetAnimPos));
-		initializePin(pinG, static_cast<MpGuiBaseMemberPtr2>(&AnimPosToHexGui::onSetAnimPos));
-		initializePin(pinB, static_cast<MpGuiBaseMemberPtr2>(&AnimPosToHexGui::onSetAnimPos));
-		initializePin(R, static_cast<MpGuiBaseMemberPtr2>(&AnimPosToHexGui::onSetAnimPos));
-		initializePin(G, static_cast<MpGuiBaseMemberPtr2>(&AnimPosToHexGui::onSetAnimPos));
-		initializePin(B, static_cast<MpGuiBaseMemberPtr2>(&AnimPosToHexGui::onSetAnimPos));
+		initializePin(pinScaleIn, static_cast<MpGuiBaseMemberPtr2>(&PatchMemoryFloatGui::onSetScaleIn));
+		initializePin(pinAnimationIn, static_cast<MpGuiBaseMemberPtr2>(&PatchMemoryFloatGui::onSetAnimationIn));
+		initializePin(pinScale, static_cast<MpGuiBaseMemberPtr2>(&PatchMemoryFloatGui::onSetScale));
+		initializePin(pinAnimationPosition, static_cast<MpGuiBaseMemberPtr2>(&PatchMemoryFloatGui::onSetAnimationPosition));
+		initializePin(pinHexIn, static_cast<MpGuiBaseMemberPtr2>(&PatchMemoryFloatGui::onSetHexIn));
+		initializePin(pinHex, static_cast<MpGuiBaseMemberPtr2>(&PatchMemoryFloatGui::onSetHex));
 	}
 };
 
 namespace
 {
-	auto r = Register<AnimPosToHexGui>::withId(L"AnimPos to Hex");
+	auto r = Register<PatchMemoryFloatGui>::withId(L"AnimPos to Hex");
 }
+
+
+/*namespace
+{
+	auto r = Register<AnimPosToHexGui>::withId(L"AnimPos to Hex");
+}*/

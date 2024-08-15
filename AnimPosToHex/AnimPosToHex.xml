@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
     <Plugin id="AnimPos to Hex" name="AnimPos to Hex" category="mx/Sub-Controls/Conversion">
-        <GUI>
-            <Pin name="AnimPos (0-1)" datatype="float" direction="out"/>
-            <Pin name="Hex" datatype="string" direction="in"/>
-            <Pin name="ValueIn" datatype="float" private="true"/>
-			<Pin name="R" datatype="int" direction="out" private="true"/>
-			<Pin name="G" datatype="int" direction="out" private="true"/>
-			<Pin name="B" datatype="int" direction="out" private="true"/>
-			<Pin name="R" datatype="string" private="true"/>
-			<Pin name="G" datatype="string" private="true"/>
-			<Pin name="B" datatype="string" private="true"/>
-        </GUI>
+		<Parameters>
+			<Parameter id="0" datatype="float" name=""/>
+			<Parameter id="1" datatype="string" name=""/>
+		</Parameters>
+		<GUI>
+			<Pin name="Scale In" datatype="float" private="true" parameterId="0"/>
+			<Pin name="AnimationIn" datatype="float" private="true" parameterId="0" parameterField="Normalized"/>
+			<Pin name="Scaled" datatype="float" direction="out"/>
+			<Pin name="Animation Position" datatype="float" direction="out"/>
+			<Pin name="HexIn" datatype="string" private="true" parameterId="1"/>
+			<Pin name="Hex" datatype="string" direction="out"/>
+		</GUI>
     </Plugin>
 </PluginList>
