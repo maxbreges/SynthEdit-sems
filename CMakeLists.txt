@@ -57,6 +57,8 @@ endif()
 include(plugin_helper.cmake)
 
 # here is where you list your modules
-add_subdirectory(AnimPosToHex)
+add_subdirectory(ShowTextGui)
+add_subdirectory(ShowFloatGui)
+
 
 

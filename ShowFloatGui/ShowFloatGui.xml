@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Show Float" name="Show Float Gui" category="mx/Show">
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Float" datatype="float"/>
+            <Pin name="TextColor" datatype="string" isMinimised="true"/>
+            <Pin name="Font" datatype="string" default="Georgia" isMinimised="true"/>
+			<Pin name="Text" datatype="string" private="true"/>
+			<Pin name="Decimal Places" datatype="int" default="2"/>
+        </GUI>
+    </Plugin>
+</PluginList>

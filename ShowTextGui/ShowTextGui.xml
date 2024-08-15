@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Show Text" name="Show Text Gui" category="mx/Show">
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Text" datatype="string"/>
+			<Pin name="TextColor" datatype="string" isMinimised="true"/>
+			<Pin name="Font" datatype="string" default="Georgia" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
