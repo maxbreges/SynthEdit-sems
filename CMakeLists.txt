@@ -57,8 +57,8 @@ endif()
 include(plugin_helper.cmake)
 
 # here is where you list your modules
-add_subdirectory(ShowTextGui)
-add_subdirectory(ShowFloatGui)
+add_subdirectory(ShowIntGui)
+
 
 
 
