@@ -1,7 +1,5 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
-#define _USE_MATH_DEFINES
-#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.10150.0\ucrt\math.h"
 #include <iomanip>
 #include <sstream>
 
@@ -242,8 +240,8 @@ public:
 		auto brushBackground = g.CreateSolidColorBrush(Color::FromHexString(pinHexIn));
 
 		const float startAngle = 35.0f; // angle between "straight-down" and start of arc. In degrees.
-		const float startAngleRadians = startAngle * M_PI / 180.f; // angle between "straight-down" and start of arc. In degrees.
-		const float quarterTurnClockwise = M_PI * 0.5f;
+		const float startAngleRadians = startAngle * (3.14159265358979323846) / 180.f; // angle between "straight-down" and start of arc. In degrees.
+		const float quarterTurnClockwise = (3.14159265358979323846) * 0.5f;
 
 		StrokeStyleProperties strokeStyleProperties;
 		strokeStyleProperties.setCapStyle(CapStyle::Round);
@@ -252,11 +250,11 @@ public:
 
 		Point startPoint(center.x + radius * cosf(quarterTurnClockwise + startAngleRadians), center.y + radius * sinf(quarterTurnClockwise + startAngleRadians));
 		Point midPoint(center.x, center.y - radius);
-		float sweepAngle = (M_PI * 2.0f - startAngleRadians * 2.0f);
+		float sweepAngle = ((3.14159265358979323846) * 2.0f - startAngleRadians * 2.0f);
 		Point endPoint(center.x + radius * cosf(quarterTurnClockwise + startAngleRadians + sweepAngle), center.y + radius * sinf(quarterTurnClockwise + startAngleRadians + sweepAngle));
 
 		float nomalised = pinAnimationPosition;
-		sweepAngle = nomalised * (static_cast<float>(M_PI) * 2.0f - startAngleRadians * 2.0f);
+		sweepAngle = nomalised * (static_cast<float>(3.14159265358979323846) * 2.0f - startAngleRadians * 2.0f);
 		Point movingPoint(center.x + radius * cosf(quarterTurnClockwise + startAngleRadians + sweepAngle), center.y + radius * sinf(quarterTurnClockwise + startAngleRadians + sweepAngle));
 
 		Size circleSize(radius, radius);
