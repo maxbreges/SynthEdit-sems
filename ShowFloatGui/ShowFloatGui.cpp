@@ -18,6 +18,7 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 
 		pinText = res;
 		invalidateRect();
+		pinFloatR=pinFloat;
 	}
 
  	void onSetTextColor()
@@ -39,6 +40,7 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 	}
 
  	FloatGuiPin pinFloat;
+	FloatGuiPin pinFloatR;
  	StringGuiPin pinTextColor;
  	StringGuiPin pinFont;
 	StringGuiPin pinText;
@@ -48,6 +50,7 @@ public:
 	ShowFloatGui()
 	{
 		initializePin( pinFloat, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloat));
+		initializePin( pinFloatR, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloat));
 		initializePin( pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetTextColor));
 		initializePin( pinFont, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFont));
 		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetText));
