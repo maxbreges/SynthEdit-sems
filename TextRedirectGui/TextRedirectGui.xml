@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="TextRedirect" name="Text Redirect" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Text" datatype="string" direction="in"/>
+			<Pin name="Text" datatype="string" direction="in"/>
+        </GUI>
+    </Plugin>
+</PluginList>
