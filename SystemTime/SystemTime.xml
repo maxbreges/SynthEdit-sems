@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Clock" name="System Time" category="mx/Show">
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="BgColor" datatype="string" default="FF000000" private="true"/>
+            <Pin name="Font" datatype="string" default="Georgia" isMinimised="true"/>
+			<Pin name="FontColor" datatype="string" default="FFFFFFFF" isMinimised="true"/>
+			<Pin name="Text" datatype="string" private="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
