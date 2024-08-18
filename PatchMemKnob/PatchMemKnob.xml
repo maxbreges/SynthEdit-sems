@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="WirelessPatchMem" name="PatchMemKnob" category="mx/Sub-Controls">
+    <Plugin id="PatchMemKnob" name="PatchMemKnob" category="mx/Sub-Controls">
         <Parameters>
             <Parameter id="0" datatype="float" name=""/>
 			<Parameter id="1" datatype="string" name=""/>
@@ -10,8 +10,7 @@
             <Pin name="AnimationIn" datatype="float" parameterId="0" parameterField="Normalized"/>
             <Pin name="Scaled" datatype="float" direction="out"/>
             <Pin name="Animation Position" datatype="float" direction="in"/>
-			<Pin name="HexIn" datatype="string" private="true"/>
-			<Pin name="ColorAdj" datatype="bool" isMinimised="true"/>
+			<Pin name="HexIn" datatype="string" direction="in"/>
 			<Pin name="Hex" datatype="string" parameterId="1"/>
         </GUI>
     </Plugin>
