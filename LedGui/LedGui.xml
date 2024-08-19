@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+	<Plugin id="LedCircle" name="LedGui" category="mx/Sub-Controls">
+		<GUI graphicsApi="GmpiGui">
+			<Pin name="Background Color" datatype="string" default="FF000000" isMinimised="true"/>
+			<Pin name="TopCircleSize" datatype="float" default="0.88" isMinimised="true"/>
+			<Pin name="Top Color" datatype="string" default="CCFFFFFF" isMinimised="true"/>
+			<Pin name="Bottom Color" datatype="string" default="11FFFFFF" isMinimised="true"/>
+			<Pin name="DotCircleSize" datatype="float" default="0.5" isMinimised="true"/>
+			<Pin name="Top Color1" datatype="string" default="CCFFFFFF" isMinimised="true"/>
+			<Pin name="Bottom Color1" datatype="string" default="11FFFFFF" isMinimised="true"/>
+			<Pin name="Bool" datatype="bool"/>
+			<Pin name="TopColor" datatype="string" default="FF00FF00" isMinimised="false"/>
+			<Pin name="BottomColor" datatype="string" default="DD00FF00" isMinimised="false"/>
+		</GUI>
+	</Plugin>
+</PluginList>

@@ -57,7 +57,8 @@ endif()
 include(plugin_helper.cmake)
 
 # here is where you list your modules
-add_subdirectory()
+add_subdirectory(LED)
+add_subdirectory(LedGui)
 
 
 
