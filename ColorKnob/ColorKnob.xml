@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="ColorKnob1" name="Color Knob" category="mx/Sub-Controls">
+		<Parameters>
+			<Parameter id="0" datatype="float" name=""/>
+			<Parameter id="2" datatype="string" name=""/>
+		</Parameters>
+        <GUI graphicsApi="GmpiGui">
+			<Pin name="Scale In" datatype="float" parameterId="0"/>
+			<Pin name="AnimationIn" datatype="float" parameterId="0" parameterField="Normalized"/>
+			<Pin name="Scaled" datatype="float" direction="out"/>
+			<Pin name="Animation Position" datatype="float" direction="in"/>
+			<Pin name="HexIn" datatype="string" private="true"/>
+			<Pin name="ColorAdj" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Hex" datatype="string" parameterId="2"/>
+        </GUI>
+    </Plugin>
+</PluginList>
