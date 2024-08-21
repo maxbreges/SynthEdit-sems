@@ -20,6 +20,7 @@
 			<Pin name="Mouse Down" datatype="bool"/>
 			<Pin name="Shift Key" datatype="bool" private="true"/>
 			<Pin name="Mouse Over" datatype="bool" private="true"/>
+			<Pin name="Reset Value" datatype="float" default="0.5" isMinimised="true"/>
         </GUI>
     </Plugin>
 </PluginList>
