@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="ColorKnob1" name="Color Knob" category="mx/Sub-Controls">
+    <Plugin id="ColorKnob1" name="Color Knob" category="mx/Sub-Controls" helpUrl="ColorKnob.htm">
 		<Parameters>
 			<Parameter id="0" datatype="float" name=""/>
 			<Parameter id="2" datatype="string" name=""/>
@@ -10,9 +10,16 @@
 			<Pin name="AnimationIn" datatype="float" parameterId="0" parameterField="Normalized"/>
 			<Pin name="Scaled" datatype="float" direction="out"/>
 			<Pin name="Animation Position" datatype="float" direction="in"/>
-			<Pin name="HexIn" datatype="string" private="true"/>
-			<Pin name="ColorAdj" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Hint" datatype="string" isMinimised="true" default=""/>
+			<Pin name="Hex Out" datatype="string" direction="out"/>
+			<Pin name="ColorAdj" datatype="bool" private="true"/>
+			<Pin name="Circle Size" datatype="float" default="1" isMinimised="true"/>
 			<Pin name="Hex" datatype="string" parameterId="2"/>
+			<Pin name="Line Thickness" datatype="float" default="5" isMinimised="true"/>
+			<Pin name="Line Color" datatype="string" default="FFFFFFFF" isMinimised="true"/>
+			<Pin name="Mouse Down" datatype="bool"/>
+			<Pin name="Shift Key" datatype="bool" private="true"/>
+			<Pin name="Mouse Over" datatype="bool" private="true"/>
         </GUI>
     </Plugin>
 </PluginList>
