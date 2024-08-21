@@ -76,6 +76,9 @@ class ColorKnob final : public gmpi_gui::MpGuiGfxBase
 	void onSetMouseOver()
 	{
 	}
+	void onSetResetValue()
+	{
+	}
 
 	FloatGuiPin pinScaleIn;
 	FloatGuiPin pinAnimationIn;
@@ -91,6 +94,7 @@ class ColorKnob final : public gmpi_gui::MpGuiGfxBase
 	BoolGuiPin pinMouseDown;
 	BoolGuiPin pinTest;
 	BoolGuiPin pinMouseOver;
+	FloatGuiPin pinResetValue;
 
 public:
 	ColorKnob()
@@ -109,6 +113,7 @@ public:
 		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&ColorKnob::onSetMouseDown));
 		initializePin(pinTest, static_cast<MpGuiBaseMemberPtr2>(&ColorKnob::onSetTest));
 		initializePin(pinMouseOver, static_cast<MpGuiBaseMemberPtr2>(&ColorKnob::onSetMouseOver));
+		initializePin(pinResetValue, static_cast<MpGuiBaseMemberPtr2>(&ColorKnob::onSetResetValue));
 	}
 
 	int32_t MP_STDCALL getToolTip(GmpiDrawing_API::MP1_POINT point, gmpi::IString* returnString) override
@@ -127,7 +132,7 @@ public:
 		}
 		if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) && (0x10))
 		{
-			pinAnimationPosition = 0.5f;
+			pinAnimationPosition = pinResetValue;
 		}
 		
 		pointPrevious = point;	// note first point.
