@@ -340,7 +340,9 @@ public:
 		calcDimensions(center, radius, thickness);
 
 		auto brushForeground = g.CreateSolidColorBrush(Color::FromHexString(pinLineColor));
-		auto brushBackground = g.CreateSolidColorBrush(Color::FromHexString(pinHexIn));
+		//auto brushBackground = g.CreateSolidColorBrush(Color::FromHexString(pinHexIn));
+		auto gradientBrush = g.CreateRadialGradientBrush(topCol, botCol, center, radius);
+
 
 		const float startAngle = 25.0f; // angle between "straight-down" and start of arc. In degrees.
 		const float startAngleRadians = (startAngle * (3.14159265358979323846) / 180.f); // angle between "straight-down" and start of arc. In degrees.
