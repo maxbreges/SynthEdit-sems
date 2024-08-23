@@ -35,5 +35,5 @@ public:
 
 namespace
 {
-	auto r = Register<FloatMultiplyGui>::withId(L"Float Multiply");
+	auto r = Register<FloatMultiplyGui>::withId(L"FloatMultiply");
 }
