@@ -16,7 +16,7 @@ class FloatMultiplyGui final : public SeGuiInvisibleBase
 
  	void onSetMultiplyby()
 	{
-		// pinMultiplyby changed
+		pinValueOut = pinValueIn.getValue() * pinMultiplyby.getValue();
 	}
 	 
 	FloatGuiPin pinValueIn; 	
