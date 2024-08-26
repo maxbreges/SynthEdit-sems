@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="SampleHold" name="Sample-n-Hold" category="mx/Modifiers">
+        <Audio>
+            <Pin name="Audio" datatype="float" rate="audio" default="0.8" linearInput="true"/>
+            <Pin name="Hold" datatype="float" rate="audio"/>
+			<Pin name="Output" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
