@@ -30,8 +30,8 @@ public:
 	int32_t  measure(GmpiDrawing_API::MP1_SIZE availableSize, GmpiDrawing_API::MP1_SIZE* returnDesiredSize) override
 	{
 		*returnDesiredSize = availableSize;
-		const float minSizeH = 24.f;
-		const float minSizeW = 80.f;
+		const float minSizeH = 32.f;
+		const float minSizeW = 120.f;
 		returnDesiredSize->height = (std::min)(returnDesiredSize->height, minSizeH);
 		returnDesiredSize->width = (std::min)(returnDesiredSize->width, minSizeW);
 		return gmpi::MP_OK;
