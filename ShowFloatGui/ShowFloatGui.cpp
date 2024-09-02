@@ -10,7 +10,7 @@ using namespace GmpiDrawing;
 
 class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 {
- 	void onSetFloat()
+	void onSetFloat()
 	{
 		std::stringstream ss;
 		ss << std::fixed << std::setprecision(pinDecimals) << pinFloat;
@@ -18,7 +18,7 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 
 		pinText = res;
 		invalidateRect();
-	
+
 	}
 	void onSetFloatR()
 	{
@@ -28,41 +28,43 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 
 		pinText = resR;
 		invalidateRect();
-	
+
 	}
 
- 	void onSetTextColor()
+	void onSetTextColor()
 	{
 		// pinTextColor changed
 	}
 
- 	void onSetFont()
+	void onSetFont()
 	{
 		// pinFont changed
 	}
 
 	void onSetText()
-	{		
+	{
+		pinFloatR = pinFloat;
+		invalidateRect();
 	}
 
 	void onSetDecimals()
 	{
 	}
 
- 	FloatGuiPin pinFloat;
+	FloatGuiPin pinFloat;
 	FloatGuiPin pinFloatR;
- 	StringGuiPin pinTextColor;
- 	StringGuiPin pinFont;
+	StringGuiPin pinTextColor;
+	StringGuiPin pinFont;
 	StringGuiPin pinText;
 	IntGuiPin pinDecimals;
 
 public:
 	ShowFloatGui()
 	{
-		initializePin( pinFloat, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloat));
-		initializePin( pinFloatR, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloatR));
-		initializePin( pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetTextColor));
-		initializePin( pinFont, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFont));
+		initializePin(pinFloat, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloat));
+		initializePin(pinFloatR, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloatR));
+		initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetTextColor));
+		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFont));
 		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetText));
 		initializePin(pinDecimals, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetDecimals));
 	}
