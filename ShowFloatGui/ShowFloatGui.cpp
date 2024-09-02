@@ -22,11 +22,11 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 	}
 	void onSetFloatR()
 	{
-		std::stringstream ss;
-		ss << std::fixed << std::setprecision(pinDecimals) << pinFloatR;
-		std::string res(ss.str());
+		std::stringstream ssR;
+		ssR << std::fixed << std::setprecision(pinDecimals) << pinFloatR;
+		std::string resR(ssR.str());
 
-		pinTextR = res;
+		pinText = resR;
 		invalidateRect();
 	
 	}
