@@ -26,7 +26,7 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 		ss << std::fixed << std::setprecision(pinDecimals) << pinFloatR;
 		std::string res(ss.str());
 
-		pinText = res;
+		pinTextR = res;
 		invalidateRect();
 	
 	}
