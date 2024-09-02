@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FloatRedirect" name="Float Redirect" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Float In" datatype="float"/>
+            <Pin name="Float Out" datatype="float"/>
+        </GUI>
+    </Plugin>
+</PluginList>
