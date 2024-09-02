@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="BoolAND" name="Bool AND" category="mx/Sub-Controls/Logic">
+        <GUI>
+            <Pin name="Bool In" datatype="bool"/>
+            <Pin name="Bool In" datatype="bool"/>
+            <Pin name="Bool Out" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>

@@ -3,7 +3,7 @@
     <Plugin id="FloatHold" name="Float Hold" category="mx/Sub-Controls">
         <GUI>
             <Pin name="Value In" datatype="float"/>
-            <Pin name="Hold" datatype="bool"/>
+            <Pin name="Hold" datatype="bool" direction="out"/>
             <Pin name="Value Out" datatype="float" direction="out"/>
         </GUI>
     </Plugin>
