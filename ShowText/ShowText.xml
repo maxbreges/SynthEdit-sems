@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="ShowText" name="Show Text" category="mx/Show">
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Mouse Down" datatype="bool"/>
+			<Pin name="Top Color" datatype="string" isMinimised="false"/>
+			<Pin name="Bottom Color" datatype="string" isMinimised="false"/>
+            <Pin name="Text Color" datatype="string" default="FF000000" isMinimised="false"/>
+            <Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
+            <Pin name="Text" datatype="string" private="false"/>
+        </GUI>
+    </Plugin>
+</PluginList>
