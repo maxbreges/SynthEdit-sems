@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="ShowFloat" name="Show Float" category="mx/Show">
+        <Parameters>
+            <Parameter id="0" datatype="float" name="patchValue" ignorePatchChange="true" persistant="false"/>
+        </Parameters>
+        <Audio>
+            <Pin name="Float In" datatype="float" linearInput="true"/>
+            <Pin name="patchValue" datatype="float" direction="out" private="true" parameterId="0"/>
+        </Audio>
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="patchValue" datatype="float" private="true" parameterId="0"/>
+			<Pin name="BgColor" datatype="string" default="FF000000" isMinimised="true"/>
+			<Pin name="TopColor" datatype="string" default="FF660000" isMinimised="true"/>
+            <Pin name="Text" datatype="string" direction="out" isMinimised="false"/>
+			<Pin name="Text Color" datatype="string" default="FF00FFFF" isMinimised="true"/>
+			<Pin name="Text Font" datatype="string" default="Times New Roman" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
