@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+	<Plugin id="mxSoloMute4" name="DSP_SoloMute8" category="mx/Tools">
+		<Parameters>
+			<Parameter id="0" datatype="float" name=""/>
+			<Parameter id="1" datatype="float" name=""/>
+			<Parameter id="2" datatype="float" name=""/>
+			<Parameter id="3" datatype="float" name=""/>
+			<Parameter id="4" datatype="float" name=""/>
+			<Parameter id="5" datatype="float" name=""/>
+			<Parameter id="6" datatype="float" name=""/>
+			<Parameter id="7" datatype="float" name=""/>
+		</Parameters>
+		<Audio>
+			<Pin name="ChannelM1" datatype="float" private="true" parameterId="0"/>
+			<Pin name="ChannelM2" datatype="float" private="true" parameterId="1"/>
+			<Pin name="ChannelM3" datatype="float" private="true" parameterId="2"/>
+			<Pin name="ChannelM4" datatype="float" private="true" parameterId="3"/>
+			<Pin name="ChannelM5" datatype="float" private="true" parameterId="4"/>
+			<Pin name="ChannelM6" datatype="float" private="true" parameterId="5"/>
+			<Pin name="ChannelM7" datatype="float" private="true" parameterId="6"/>
+			<Pin name="ChannelM8" datatype="float" private="true" parameterId="7"/>
+			
+			<Pin name="Audio In1" datatype="float" rate="audio" direction="in"/>
+			<Pin name="Audio In2" datatype="float" rate="audio" direction="in"/>
+			<Pin name="Audio In3" datatype="float" rate="audio" direction="in"/>
+			<Pin name="Audio In4" datatype="float" rate="audio" direction="in"/>
+			<Pin name="Audio In5" datatype="float" rate="audio" direction="in"/>
+			<Pin name="Audio In6" datatype="float" rate="audio" direction="in"/>
+			<Pin name="Audio In7" datatype="float" rate="audio" direction="in"/>
+			<Pin name="Audio In8" datatype="float" rate="audio" direction="in"/>
+			
+			<Pin name="Audio Out1" datatype="float" rate="audio" direction="out"/>
+			<Pin name="Audio Out2" datatype="float" rate="audio" direction="out"/>
+			<Pin name="Audio Out3" datatype="float" rate="audio" direction="out"/>
+			<Pin name="Audio Out4" datatype="float" rate="audio" direction="out"/>
+			<Pin name="Audio Out5" datatype="float" rate="audio" direction="out"/>
+			<Pin name="Audio Out6" datatype="float" rate="audio" direction="out"/>
+			<Pin name="Audio Out7" datatype="float" rate="audio" direction="out"/>
+			<Pin name="Audio Out8" datatype="float" rate="audio" direction="out"/>
+		</Audio>
+		<GUI>
+			<Pin name="ChannelM1" datatype="float" private="true" parameterId="0"/>
+			<Pin name="ChannelM2" datatype="float" private="true" parameterId="1"/>
+			<Pin name="ChannelM3" datatype="float" private="true" parameterId="2"/>
+			<Pin name="ChannelM4" datatype="float" private="true" parameterId="3"/>
+			<Pin name="ChannelM5" datatype="float" private="true" parameterId="4"/>
+			<Pin name="ChannelM6" datatype="float" private="true" parameterId="5"/>
+			<Pin name="ChannelM7" datatype="float" private="true" parameterId="6"/>
+			<Pin name="ChannelM8" datatype="float" private="true" parameterId="7"/>
+			
+			<Pin name="Channel 1" datatype="float" direction="out"/>
+			<Pin name="Channel 2" datatype="float" direction="out"/>
+			<Pin name="Channel 3" datatype="float" direction="out"/>
+			<Pin name="Channel 4" datatype="float" direction="out"/>
+			<Pin name="Channel 5" datatype="float" direction="out"/>
+			<Pin name="Channel 6" datatype="float" direction="out"/>
+			<Pin name="Channel 7" datatype="float" direction="out"/>
+			<Pin name="Channel 8" datatype="float" direction="out"/>
+		</GUI>
+	</Plugin>
+</PluginList>

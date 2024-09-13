@@ -57,8 +57,8 @@ endif()
 include(plugin_helper.cmake)
 
 # here is where you list your modules
-add_subdirectory(ShowFloat)
-add_subdirectory(ShowInt)
+add_subdirectory(DSP_SoloMute8.cpp)
+add_subdirectory(Gui_SoloMute8.cpp)
 
 
 
