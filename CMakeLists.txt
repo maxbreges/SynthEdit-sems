@@ -57,7 +57,7 @@ endif()
 include(plugin_helper.cmake)
 
 # here is where you list your modules
-#add_subdirectory(Float2FloatGui)
+add_subdirectory(ShowFloatGui)
 
 
 

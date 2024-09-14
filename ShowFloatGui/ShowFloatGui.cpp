@@ -43,7 +43,7 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 
 	void onSetText()
 	{
-		pinFloatR = pinFloat;
+		//pinFloatR = pinFloat;
 		invalidateRect();
 	}
 
