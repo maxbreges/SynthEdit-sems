@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Float2FloatGui" name="Float2FloatGui" category="mx/Conversion">
+        <Parameters>
+            <Parameter id="0" datatype="float" direction="out" name=""/>
+        </Parameters>
+        <Audio>
+            <Pin name="ChannelM1" datatype="float" direction="out" parameterId="0"/>
+            <Pin name="Float In" datatype="float" direction="in"/>
+        </Audio>
+        <GUI>
+            <Pin name="ChannelM1" datatype="float" private="true" parameterId="0"/>
+            <Pin name="Float Out" datatype="float" direction="out"/>
+            <Pin name="Float Out" datatype="float"/>
+        </GUI>
+    </Plugin>
+</PluginList>
