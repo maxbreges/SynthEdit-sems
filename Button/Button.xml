@@ -9,6 +9,7 @@
 			<Pin name="Bottom Right" datatype="bool" default="1" isMinimised="true"/>
 
 			<Pin name="AnimPos" datatype="float" default="1"/>
+			<Pin name="AnimPosOut" datatype="int" direction="out"/>
 			<Pin name="mDown" datatype="bool"/>
 
 			<Pin name="Color" datatype="string" default="ffff0000" private="true"/>
