@@ -27,6 +27,8 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 		}
 		previousState = pinAnimPos;
 		invalidateRect();
+
+		pinAnimPosOut = pinAnimPos;
 	} 	
 
  	void onSetMouseDown()
@@ -60,6 +62,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	BoolGuiPin pinBottomRight;
 
  	FloatGuiPin pinAnimPos;
+	IntGuiPin pinAnimPosOut;
 	BoolGuiPin pinMouseDown; 
 
 	StringGuiPin pinColor;	
@@ -87,6 +90,7 @@ public:
 		initializePin(pinBottomRight, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onRedraw));
 
 		initializePin( pinAnimPos, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAnimationPosition) );
+		initializePin(pinAnimPosOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAnimationPosition));
 		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseDown));
 
 		initializePin(pinColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onRedraw));
