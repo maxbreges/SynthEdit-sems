@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Button" name="Button" category="mx/Sub-Controls">
+        <GUI graphicsApi="GmpiGui">
+			<Pin name="Corner Radius" datatype="float" default="5" isMinimised="true"/>
+			<Pin name="Top Left" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Top Right" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Bottom Left" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Bottom Right" datatype="bool" default="1" isMinimised="true"/>
+
+			<Pin name="AnimPos" datatype="float" default="1"/>
+			<Pin name="mDown" datatype="bool"/>
+
+			<Pin name="Color" datatype="string" default="ffff0000" private="true"/>
+			<Pin name="ColorB" datatype="string" default="ff000000" private="true"/>
+			
+			<Pin name="botColor0" datatype="string" default="ff000000" isMinimised="true"/>
+			<Pin name="botColor1" datatype="string" default="ffffffff" isMinimised="true"/>
+			<Pin name="topColor0" datatype="string" default="ffff0000" isMinimised="true"/>
+			<Pin name="topColor1" datatype="string" default="ffff0000" isMinimised="true"/>
+
+			<Pin name="Text" datatype="string" default="btn" isMinimised="true"/>
+			<Pin name="Text Color" datatype="string" default="FF000000" />
+			<Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
+			<Pin name="Font Size" datatype="float" default="16" isMinimised="true"/>
+			<Pin name="Align" datatype="enum" metadata="Top, Bottom, Center" isMinimised="true"/>
+
+		</GUI>
+    </Plugin>
+</PluginList>
