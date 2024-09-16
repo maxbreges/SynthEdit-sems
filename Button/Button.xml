@@ -8,7 +8,7 @@
 			<Pin name="Bottom Left" datatype="bool" default="1" isMinimised="true"/>
 			<Pin name="Bottom Right" datatype="bool" default="1" isMinimised="true"/>
 
-			<Pin name="AnimPos" datatype="float" default="1"/>
+			<Pin name="AnimPos" datatype="float"/>
 			<Pin name="AnimPosOut" datatype="int" direction="out"/>
 			<Pin name="mDown" datatype="bool"/>
 
@@ -17,7 +17,7 @@
 			
 			<Pin name="botColor0" datatype="string" default="ff000000" isMinimised="true"/>
 			<Pin name="botColor1" datatype="string" default="ffffffff" isMinimised="true"/>
-			<Pin name="topColor0" datatype="string" default="ffff0000" isMinimised="true"/>
+			<Pin name="topColor0" datatype="string" default="ffaa0000" isMinimised="true"/>
 			<Pin name="topColor1" datatype="string" default="ffff0000" isMinimised="true"/>
 
 			<Pin name="Text" datatype="string" default="btn" isMinimised="true"/>
