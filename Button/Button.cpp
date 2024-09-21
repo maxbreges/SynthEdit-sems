@@ -59,7 +59,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 	void onSetResponse()
 	{
-		int mResponse[] = { Clicked, Stepped };
+		int mResponse[] = { Stepped, Clicked };
 		SetResponse = (mResponse[pinResponse.getValue()]);
 		invalidateRect();
 	}
@@ -121,8 +121,9 @@ public:
 	bool previousState = false;
 	bool SetResponse = 1;
 
-	int Clicked = 0;
 	int Stepped = 1;
+	int Clicked = 0;
+	
 	
 	
 	int32_t onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point)

@@ -25,7 +25,7 @@
 			<Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
 			<Pin name="Font Size" datatype="float" default="16" isMinimised="true"/>
 			<Pin name="Align" datatype="enum" metadata="Center, Top, Bottom" isMinimised="true"/>
-			<Pin name="Mouse Response" datatype="enum" metadata="Clicked, Stepped" isMinimised="true"/>
+			<Pin name="Mouse Response" datatype="enum" metadata="Stepped, Clicked" isMinimised="true"/>
 		</GUI>
     </Plugin>
 </PluginList>
