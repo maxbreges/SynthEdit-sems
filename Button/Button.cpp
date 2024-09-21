@@ -4,6 +4,7 @@
 #include <math.h>
 
 using namespace gmpi;
+using namespace gmpi_gui;
 using namespace GmpiDrawing;
 
 class ButtonGui final : public gmpi_gui::MpGuiGfxBase
@@ -33,6 +34,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
  	void onSetMouseDown()
 	{	
+		onSetAnimationPosition();
 		invalidateRect();
 	}
 
@@ -52,6 +54,13 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	}
 	void onSetAlignV()
 	{
+		invalidateRect();
+	}
+
+	void onSetResponse()
+	{
+		int mResponse[] = { Clicked, Stepped };
+		SetResponse = (mResponse[pinResponse.getValue()]);
 		invalidateRect();
 	}
 
@@ -78,7 +87,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	StringGuiPin pinFont;
 	FloatGuiPin pinFontSize;
 	IntGuiPin pinAlignV;
-
+	IntGuiPin pinResponse;
 
 public:
 	ButtonGui()
@@ -105,15 +114,21 @@ public:
 		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetStyle));
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onRedraw));
 		initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignV));
+		initializePin(pinResponse, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetResponse));
 
 	}
 
 	bool previousState = false;
+	bool SetResponse = 1;
+
+	int Clicked = 0;
+	int Stepped = 1;
+	
 	
 	int32_t onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 	{
 		// Let host handle right-clicks.
-		if ((flags & 0x10) == 0)
+		if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
 		{
 			return gmpi::MP_OK; // Indicate successful hit, so right-click menu can show.
 		}
@@ -122,12 +137,18 @@ public:
 
 		pinMouseDown = true;
 
-		
+		if (SetResponse == 0)
+		{
+			pinAnimPos = pinMouseDown;
+		}
+
+		else
+		{
 			bool newState = !previousState;
 			previousState = newState;
 			pinAnimPos = previousState;
-		
-
+		}
+			
 		return gmpi::MP_OK;
 	}
 
@@ -141,6 +162,11 @@ public:
 		releaseCapture();
 
 		pinMouseDown = false;
+
+		if (SetResponse == 0)
+		{
+			pinAnimPos = pinMouseDown;
+		}
 		
 		return gmpi::MP_OK;
 	}
@@ -165,11 +191,11 @@ public:
 		int width = r.right - r.left;
 		int height = r.bottom - r.top;
 
-		auto topCol = FromHexStringBackwardCompatible(pinColorB);
+		auto topCol = FromHexStringBackwardCompatible(pinColor);
 		auto botCol = topCol;
-		if (!pinColor.getValue().empty())
+		if (!pinColorB.getValue().empty())
 		{
-			botCol = FromHexStringBackwardCompatible(pinColor);
+			botCol = FromHexStringBackwardCompatible(pinColorB);
 		}
 
 		int radius = (int)pinCornerRadius;
@@ -269,7 +295,7 @@ public:
 		const char* fontFace = str.c_str();
 		TextFormat textFormat = g.GetFactory().CreateTextFormat(font_size, fontFace);
 
-		ParagraphAlignment alignV[] = { ParagraphAlignment::Near, ParagraphAlignment::Far, ParagraphAlignment::Center };
+		ParagraphAlignment alignV[] = { ParagraphAlignment::Center, ParagraphAlignment::Near, ParagraphAlignment::Far };
 		
 		textFormat.SetParagraphAlignment(alignV[pinAlignV.getValue()]);
 
@@ -278,6 +304,9 @@ public:
 		auto brush = g.CreateSolidColorBrush(Color::FromHexString(pinTextColor));
 
 		g.DrawTextU(pinText, textFormat, getRect(), brush, 0);
+
+		//===================================
+				
 
 		return gmpi::MP_OK;
 	}
