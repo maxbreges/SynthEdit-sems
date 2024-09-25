@@ -58,7 +58,7 @@ include(plugin_helper.cmake)
 
 # here is where you list your modules
 add_subdirectory(MIDIToFloatGui)
-add_subdirectory(NoteToHue)
+#add_subdirectory(NoteToHue)
 
 
 
