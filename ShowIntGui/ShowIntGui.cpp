@@ -31,7 +31,8 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 	}
 
 	void onSetText()
-	{		
+	{	
+		onSetFloat();
 	}
 
  	IntGuiPin pinFloat;
