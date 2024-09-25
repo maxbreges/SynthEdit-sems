@@ -17,9 +17,20 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 		std::string res(ss.str());
 
 		pinText = res;
+		pinFloatR = pinFloat;
 		invalidateRect();
 	}
 
+	void onSetFloatR()
+	{
+		std::stringstream ss;
+		ss << std::fixed << pinFloatR;
+		std::string res(ss.str());
+
+		pinText = res;
+		pinFloat = pinFloatR;
+		invalidateRect();
+	}
  	void onSetTextColor()
 	{
 		// pinTextColor changed
@@ -31,10 +42,12 @@ class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
 	}
 
 	void onSetText()
-	{		
+	{	
+		onSetFloat();
 	}
 
  	IntGuiPin pinFloat;
+	IntGuiPin pinFloatR;
  	StringGuiPin pinTextColor;
  	StringGuiPin pinFont;
 	StringGuiPin pinText;
@@ -43,6 +56,7 @@ public:
 	ShowFloatGui()
 	{
 		initializePin( pinFloat, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloat));
+		initializePin( pinFloatR, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloatR));
 		initializePin( pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetTextColor));
 		initializePin( pinFont, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFont));
 		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetText));
@@ -51,7 +65,7 @@ public:
 	int32_t  measure(GmpiDrawing_API::MP1_SIZE availableSize, GmpiDrawing_API::MP1_SIZE* returnDesiredSize) override
 	{
 		*returnDesiredSize = availableSize;
-		const float minSizeH = 24.f;
+		const float minSizeH = 32.f;
 		const float minSizeW = 64.f;
 		returnDesiredSize->height = (std::min)(returnDesiredSize->height, minSizeH);
 		returnDesiredSize->width = (std::min)(returnDesiredSize->width, minSizeW);

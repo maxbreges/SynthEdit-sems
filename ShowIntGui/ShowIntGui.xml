@@ -3,6 +3,7 @@
     <Plugin id="ShowIntGui" name="Show Int Gui" category="mx/Show">
         <GUI graphicsApi="GmpiGui">
             <Pin name="Int" datatype="int"/>
+		<Pin name="Int" datatype="int" direction="out"/>
             <Pin name="TextColor" datatype="string" isMinimised="true"/>
             <Pin name="Font" datatype="string" default="Georgia" isMinimised="true"/>
 			<Pin name="Text" datatype="string" private="true"/>
