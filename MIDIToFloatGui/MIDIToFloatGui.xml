@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="MIDIToFloatGui" name="MIDI to FloatGui" category="mx/MIDI">
+		<Parameters>
+			<Parameter id="0" datatype="float" name=""/>
+		<Parameter id="1" datatype="float" name=""/>
+		<Parameter id="2" datatype="float" name=""/>
+			<Parameter id="3" datatype="float" name=""/>
+		</Parameters>
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+			<Pin name="Chan" datatype="float" direction="out" parameterId="0"/>
+            <Pin name="Note#" datatype="float" direction="out" parameterId="1"/>
+			<Pin name="Velocity" datatype="float" direction="out" parameterId="2"/>
+            <Pin name="Gate" datatype="bool" direction="out" parameterId="3"/>
+		</Audio>
+		<GUI>
+			<Pin name="Chan" datatype="float" parameterId="0"/>
+            <Pin name="Note#" datatype="float" parameterId="1"/>
+			<Pin name="Velocity" datatype="float" parameterId="2"/>
+            <Pin name="Gate" datatype="bool" parameterId="3"/>
+			
+			<Pin name="Chan" datatype="float" direction="out"/>
+            <Pin name="Note#" datatype="float" direction="out"/>
+			<Pin name="Velocity" datatype="float" direction="out"/>
+            <Pin name="Gate" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>

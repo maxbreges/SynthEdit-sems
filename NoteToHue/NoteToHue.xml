@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="ModulusGui" name="Note# To Hue" category="mx/Math">
+        <GUI>
+            <Pin name="Note#" datatype="float"/>
+            <Pin name="Hue" datatype="float" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
