@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="PatchMemoryFloat" name="ScalerFloatGuiToFloat" category="mx/Math">
+        <Parameters>
+            <Parameter id="0" datatype="float" name="" direction="out" private="true"/>
+        </Parameters>
+		<GUI>
+			<Pin name="AnimationOut" datatype="float" parameterId="0"/>
+			<Pin name="Animation Position" datatype="float" direction="out"/>
+		</GUI>
+		<Audio>
+			<Pin name="Value In" datatype="float" direction="in" parameterId="0"/>
+			<Pin name="Scaled" datatype="float" direction="out"/>
+			
+			<Pin name="Max" datatype="float" direction="in" default="8"/>
+			<Pin name="Min" datatype="float" direction="in" default="2"/>
+		</Audio>        
+    </Plugin>
+</PluginList>
