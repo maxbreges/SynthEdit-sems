@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+	<Plugin id="FloatKnob" name="Display Knob" category="mx/Controls" helpUrl="DisplayKnob.htm">
+		<Parameters>
+			<Parameter id="0" datatype="float" name=""/>
+			<Parameter id="2" datatype="string" name=""/>
+		</Parameters>
+		<Audio>
+			<Pin name="ValueIn" datatype="float" private="true" parameterId="0"/>
+			<Pin name="Float Out" datatype="float" direction="out"/>
+		</Audio>
+		<GUI graphicsApi="GmpiGui">
+			<Pin name="Hint" datatype="string" isMinimised="true" default=""/>
+			<Pin name="ValueOut" datatype="float" private="true" parameterId="0"/>
+			<Pin name="BgColor" datatype="string" default="FF000000" private="true"/>
+			<Pin name="TopColor" datatype="string" default="FF660000" private="true"/>
+			<Pin name="Text" datatype="string" direction="out" private="true"/>
+			<Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="true"/>
+			<Pin name="Text Font" datatype="string" default="Times New Roman" isMinimised="true"/>
+			<Pin name="AnimationIn" datatype="float" parameterId="0" parameterField="Normalized"/>
+			<Pin name="Animation Position" datatype="float" direction="in" private="true"/>
+			<Pin name="Hex In" datatype="string" direction="out" private="true"/>
+			<Pin name="Hex" datatype="string" parameterId="2"/>
+			<Pin name="ColorAdj" datatype="bool" private="true"/>
+			<Pin name="Mouse Down" datatype="bool" private="true"/>
+		</GUI>
+	</Plugin>
+</PluginList>
+
