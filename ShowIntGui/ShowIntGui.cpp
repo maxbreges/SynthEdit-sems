@@ -7,59 +7,58 @@ using namespace gmpi;
 using namespace std;
 using namespace GmpiDrawing;
 
+int pinInt;
 
-class ShowFloatGui final : public gmpi_gui::MpGuiGfxBase
+class ShowIntGui final : public gmpi_gui::MpGuiGfxBase
 {
- 	void onSetFloat()
+	void onSetInt()
 	{
 		std::stringstream ss;
-		ss << std::fixed << pinFloat;
+		ss << std::fixed << pinInt;
 		std::string res(ss.str());
-
-		pinText = res;
-		pinFloatR = pinFloat;
+		pinText = res;	
 		invalidateRect();
 	}
-
-	void onSetFloatR()
+	void onSetIntL()
 	{
-		std::stringstream ss;
-		ss << std::fixed << pinFloatR;
-		std::string res(ss.str());
-
-		pinText = res;
-		pinFloat = pinFloatR;
-		invalidateRect();
+		pinInt = pinIntL;
+		onSetInt();
 	}
- 	void onSetTextColor()
+
+	void onSetIntR()
+	{
+		pinInt = pinIntR;
+		onSetInt();
+	}
+	void onSetTextColor()
 	{
 		// pinTextColor changed
 	}
 
- 	void onSetFont()
+	void onSetFont()
 	{
 		// pinFont changed
 	}
 
 	void onSetText()
-	{	
-		onSetFloat();
+	{
+		onSetInt();
 	}
-
- 	IntGuiPin pinFloat;
-	IntGuiPin pinFloatR;
- 	StringGuiPin pinTextColor;
- 	StringGuiPin pinFont;
+	
+	IntGuiPin pinIntL;
+	IntGuiPin pinIntR;
+	StringGuiPin pinTextColor;
+	StringGuiPin pinFont;
 	StringGuiPin pinText;
 
 public:
-	ShowFloatGui()
+	ShowIntGui()
 	{
-		initializePin( pinFloat, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloat));
-		initializePin( pinFloatR, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFloatR));
-		initializePin( pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetTextColor));
-		initializePin( pinFont, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetFont));
-		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&ShowFloatGui::onSetText));
+		initializePin(pinIntL, static_cast<MpGuiBaseMemberPtr2>(&ShowIntGui::onSetIntL));
+		initializePin(pinIntR, static_cast<MpGuiBaseMemberPtr2>(&ShowIntGui::onSetIntR));
+		initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&ShowIntGui::onSetTextColor));
+		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&ShowIntGui::onSetFont));
+		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&ShowIntGui::onSetText));
 	}
 
 	int32_t  measure(GmpiDrawing_API::MP1_SIZE availableSize, GmpiDrawing_API::MP1_SIZE* returnDesiredSize) override
@@ -101,5 +100,5 @@ public:
 
 namespace
 {
-	auto r = Register<ShowFloatGui>::withId(L"ShowIntGui");
+	auto r = Register<ShowIntGui>::withId(L"ShowIntGui");
 }
