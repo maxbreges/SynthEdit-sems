@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="StringLength" name="String Length" category="mx/Sub-Controls" helpUrl="">
+        <GUI>
+			<Pin name="BothIns" datatype="string" private="true"/>
+            <Pin name="String" datatype="string" direction="out"/>
+			<Pin name="String" datatype="string" direction="in"/>
+            <Pin name="Length" datatype="int" direction="out"/>
+			<Pin name="Length" datatype="int" direction="in"/>
+        </GUI>
+    </Plugin>
+</PluginList>
