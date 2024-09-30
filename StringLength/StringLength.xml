@@ -2,7 +2,6 @@
 <PluginList>
     <Plugin id="StringLength" name="String Length" category="mx/Sub-Controls" helpUrl="">
         <GUI>
-			<Pin name="BothIns" datatype="string" private="true"/>
             <Pin name="String" datatype="string" direction="out"/>
 			<Pin name="String" datatype="string" direction="in"/>
             <Pin name="Length" datatype="int" direction="out"/>
