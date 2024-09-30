@@ -3,10 +3,11 @@
 using namespace std;
 using namespace gmpi;
 
-std::string String;
-
 class StringLength final : public SeGuiInvisibleBase
 {
+	std::string String;
+	int pinLengthBothOuts;
+
 	void onString()
 	{
 		std::string str = { String };
@@ -40,21 +41,21 @@ class StringLength final : public SeGuiInvisibleBase
 		pinLengthLeftOut = pinLengthBothOuts;
 	}
 
+	//StringGuiPin String;
  	StringGuiPin pinString;
 	StringGuiPin pinStringIn;
  	IntGuiPin pinLength;
-	IntGuiPin pinLengthLeftOut;
-	IntGuiPin pinLengthBothOuts;
+	IntGuiPin pinLengthLeftOut;	
 
 public:
 
 	StringLength()
 	{
+		//initializePin(String, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onString));
 		initializePin( pinString, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onSetString) );
 		initializePin(pinStringIn, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onSetStringIn));
 		initializePin( pinLength, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onSetBothOuts) );
 		initializePin(pinLengthLeftOut, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onSetBothOuts));
-		initializePin(pinLengthBothOuts, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onSetBothOuts));
 	}		
 };
 
