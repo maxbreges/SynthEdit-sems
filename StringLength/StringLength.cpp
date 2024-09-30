@@ -6,7 +6,7 @@ using namespace gmpi;
 class StringLength final : public SeGuiInvisibleBase
 {
 	std::string String;
-	int pinLengthBothOuts;
+	int pinLengthBothOuts = 0;
 
 	void onString()
 	{
@@ -41,7 +41,6 @@ class StringLength final : public SeGuiInvisibleBase
 		pinLengthLeftOut = pinLengthBothOuts;
 	}
 
-	//StringGuiPin String;
  	StringGuiPin pinString;
 	StringGuiPin pinStringIn;
  	IntGuiPin pinLength;
@@ -51,7 +50,6 @@ public:
 
 	StringLength()
 	{
-		//initializePin(String, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onString));
 		initializePin( pinString, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onSetString) );
 		initializePin(pinStringIn, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onSetStringIn));
 		initializePin( pinLength, static_cast<MpGuiBaseMemberPtr2>(&StringLength::onSetBothOuts) );
