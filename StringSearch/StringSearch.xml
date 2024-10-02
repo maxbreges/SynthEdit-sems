@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="StringSearch" name="String Search" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="String In" datatype="string" direction="out" />
+			<Pin name="String In" datatype="string" />
+            <Pin name="Search" datatype="string" direction="out" />
+			<Pin name="Search" datatype="string" />
+            <Pin name="Position" datatype="int" direction="out" />
+            <Pin name="Position" datatype="int" />
+        </GUI>
+    </Plugin>
+</PluginList>
