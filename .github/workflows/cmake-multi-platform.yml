@@ -20,8 +20,8 @@ jobs:
         include:
         #  - name: Linux
         #    os: ubuntu-22.04
-         # - name: macOS
-          #  os: macos-latest
+          - name: macOS
+            os: macos-latest
           - name: Windows
             os: windows-latest
     steps:
