@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<PluginList>
+	<!-- GUI Switches -->
+	<Plugin id="GuiSwitch &gt; (Bool)" name="Switch &gt; (Bool)" category="Switches/GUI" >
+		<GUI>
+			<Pin name="Choice" datatype="int" default="0"/>
+			<Pin name="Value" datatype="bool" />
+			<Pin name="Spare" datatype="bool" direction="out" autoRename="true" autoDuplicate="true"/>
+		</GUI>
+	</Plugin>
+	<Plugin id="GuiSwitch &gt; (Float)" name="Switch &gt; (Float)" category="Switches/GUI" >
+		<GUI>
+			<Pin name="Choice" datatype="int" default="0"/>
+			<Pin name="Value" datatype="float" />
+			<Pin name="Spare" datatype="float" direction="out" autoRename="true" autoDuplicate="true"/>
+		</GUI>
+	</Plugin>
+	<Plugin id="GuiSwitch &gt; (Blob)" name="Switch &gt; (Blob)" category="Switches/GUI" >
+		<GUI>
+			<Pin name="Choice" datatype="int" default="0"/>
+			<Pin name="Value" datatype="blob"  />
+			<Pin name="Spare" datatype="blob" direction="out" autoRename="true" autoDuplicate="true" />
+		</GUI>
+	</Plugin>
+	<Plugin id="GuiSwitch &gt; (Int)" name="Switch &gt; (Int)" category="Switches/GUI" >
+		<GUI>
+			<Pin name="Choice" datatype="int" default="0"/>
+			<Pin name="Value" datatype="int" />
+			<Pin name="Spare" datatype="int" direction="out" autoRename="true" autoDuplicate="true" />
+		</GUI>
+	</Plugin>
+	<Plugin id="GuiSwitch &gt; (Text)" name="Switch &gt; (Text)" category="Switches/GUI" >
+		<GUI>
+			<Pin name="Choice" datatype="int" default="0"/>
+			<Pin name="Value" datatype="string" />
+			<Pin name="Spare" datatype="string" direction="out" autoRename="true" autoDuplicate="true" />
+		</GUI>
+	</Plugin>
+</PluginList>
