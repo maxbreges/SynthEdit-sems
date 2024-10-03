@@ -1,5 +1,5 @@
-#ifndef GUISWITCHTEXT_H_INCLUDED
-#define GUISWITCHTEXT_H_INCLUDED
+#ifndef GUISWITCHES_H_INCLUDED
+#define GUISWITCHES_H_INCLUDED
 
 #include <vector>
 #include "mp_sdk_gui2.h"
