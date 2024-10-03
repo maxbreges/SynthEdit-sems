@@ -1,4 +1,4 @@
-#include "GuiSwitchText.h"
+#include "GuiSwitches.h"
 #include <string>
 
 using namespace gmpi;
