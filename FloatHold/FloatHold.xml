@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
     <Plugin id="FloatHold" name="Float Hold" category="mx/Sub-Controls">
+		<Parameters>
+			<Parameter id="0" datatype="float" name="" private="true"/>
+		</Parameters>
         <GUI>
             <Pin name="Value In" datatype="float"/>
             <Pin name="Hold" datatype="bool" direction="out"/>
             <Pin name="Value Out" datatype="float" direction="out"/>
+			<Pin name="HoldFloat" datatype="float" parameterId="0"/>
         </GUI>
     </Plugin>
 </PluginList>

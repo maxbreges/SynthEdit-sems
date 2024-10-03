@@ -13,23 +13,20 @@ class FloatHoldGui final : public SeGuiInvisibleBase
 	{
 		if (pinHold)
 		{
-			pinValueOut = pinValueIn;
+			pinFloatHold = pinValueIn;
 		}
-		/*if (!pinHold)
-		{
-			pinValueOut = pinValueOut;
-		}*/
-
+	
 	}
 
  	void onSetValueOut()
 	{
-		// pinValueOut changed
+		pinValueOut = pinFloatHold;
 	}
 
  	FloatGuiPin pinValueIn;
  	BoolGuiPin pinHold;
  	FloatGuiPin pinValueOut;
+	FloatGuiPin pinFloatHold;
 
 public:
 	FloatHoldGui()
@@ -37,6 +34,7 @@ public:
 		initializePin( pinValueIn, static_cast<MpGuiBaseMemberPtr2>(&FloatHoldGui::onSetValueIn) );
 		initializePin( pinHold, static_cast<MpGuiBaseMemberPtr2>(&FloatHoldGui::onSetHold) );
 		initializePin( pinValueOut, static_cast<MpGuiBaseMemberPtr2>(&FloatHoldGui::onSetValueOut) );
+		initializePin(pinFloatHold, static_cast<MpGuiBaseMemberPtr2>(&FloatHoldGui::onSetValueOut));
 	}
 
 };

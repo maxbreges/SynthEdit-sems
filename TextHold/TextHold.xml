@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="TextHold" name="Text Hold" category="mx/Sub-Controls">
+		<Parameters>
+			<Parameter id="0" datatype="string" name="" private="true"/>
+		</Parameters>
+        <GUI>
+            <Pin name="Text In" datatype="string" direction="out"/>
+            <Pin name="Hold" datatype="bool" direction="out"/>
+            <Pin name="Text Out" datatype="string" direction="out"/>
+			<Pin name="holdstring" datatype="string" parameterId="0"/>
+        </GUI>
+    </Plugin>
+</PluginList>
