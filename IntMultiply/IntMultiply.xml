@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="IntMultiply" name="Int Multiply" category="mx/Sub-Controls/Math">
+        <GUI>
+            <Pin name="Value In" datatype="int"/>
+            <Pin name="Subtract" datatype="int"/>
+            <Pin name="Value Out" datatype="int" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
