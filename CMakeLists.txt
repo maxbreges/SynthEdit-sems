@@ -59,7 +59,7 @@ include(plugin_helper.cmake)
 # here is where you list your modules
 #add_subdirectory(DisplayKnob)
 #add_subdirectory(TextHold)
-add_subdirectory(IntAdd)
+add_subdirectory(IntDivide)
 
 
 
