@@ -1,5 +1,5 @@
 #include "mp_sdk_audio.h"
-#include "C:\modules\se_sdk3\mp_midi.h"
+#include "mp_midi.h"
 #include <array>
 //#include <climits>
 
