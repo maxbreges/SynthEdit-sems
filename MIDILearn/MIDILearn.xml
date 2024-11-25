@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="MIDI Learn" name="MIDI Learn" category="mx/MIDI">
+		<Parameters>
+			<Parameter id="0" datatype="bool" name=""/>
+			<Parameter id="1" datatype="bool" name=""/>
+		</Parameters>
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+            <Pin name="Note" datatype="enum" direction="out"/>
+			<Pin name="Gate" datatype="bool" parameterId="0"/>
+			<Pin name="GateOut" datatype="bool" direction="out" parameterId="1"/>
+        </Audio>
+        <GUI>
+            <Pin name="Animation Position" datatype="float" direction="out"/>
+			<Pin name="Gate" datatype="bool" parameterId="0"/>
+			<Pin name="GateOut" datatype="bool" parameterId="1"/>
+        </GUI>
+    </Plugin>
+</PluginList>
