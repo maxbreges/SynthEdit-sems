@@ -18,7 +18,7 @@ using namespace GmpiDrawing;
 GmpiDrawing_API::MP1_POINT pointPrevious;
 GmpiGui::PopupMenu nativeMenu;
 
-class EnumKnobGui final : public gmpi_gui::MpGuiGfxBase
+class DisplayList final : public gmpi_gui::MpGuiGfxBase
 {
  	void onSetHint()
 	{
@@ -122,23 +122,23 @@ class EnumKnobGui final : public gmpi_gui::MpGuiGfxBase
 	BoolGuiPin pinColorAdj;
 
 public:
-	EnumKnobGui()
+	DisplayList()
 	{
-		initializePin( pinHint, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetHint) );
-		initializePin( pinBgColor, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetBgColor) );
-		initializePin( pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetTopColor) );
-		initializePin( pinText, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetText) );
-		initializePin( pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetTextColor) );
-		initializePin( pinFont, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetTextFont) );
-		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetFontSize));
-		initializePin(pinAnimationPosition, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetAnimationPosition));
-		initializePin( pinHexIn, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetAnimationPosition) );
-		initializePin( pinHex, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetAnimationPosition) );
-		initializePin(pinListIndex, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetList));
-		initializePin( pinListItems, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetList) );		
-		initializePin(pinListSize, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetListSize));
-		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetMouseDown));		
-		initializePin(pinColorAdj, static_cast<MpGuiBaseMemberPtr2>(&EnumKnobGui::onSetAnimationPosition));
+		initializePin( pinHint, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetHint) );
+		initializePin( pinBgColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetBgColor) );
+		initializePin( pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTopColor) );
+		initializePin( pinText, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetText) );
+		initializePin( pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextColor) );
+		initializePin( pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextFont) );
+		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetFontSize));
+		initializePin(pinAnimationPosition, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
+		initializePin( pinHexIn, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition) );
+		initializePin( pinHex, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition) );
+		initializePin(pinListIndex, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
+		initializePin( pinListItems, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList) );		
+		initializePin(pinListSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetListSize));
+		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetMouseDown));		
+		initializePin(pinColorAdj, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 	}
 
 	//========================================
@@ -541,5 +541,5 @@ public:
 
 namespace
 {
-	auto r = Register<EnumKnobGui>::withId(L"EnumKnob");
+	auto r = Register<DisplayList>::withId(L"DisplayList");
 }
