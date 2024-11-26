@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="EnumKnob" name="Display List" category="mx/Controls">
+    <Plugin id="DisplayList" name="Display List" category="mx/Controls">
 	    <Parameters>
 			<Parameter id="2" datatype="string" name="" private="true"/>
         </Parameters>
