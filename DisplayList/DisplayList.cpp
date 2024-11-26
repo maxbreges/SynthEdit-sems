@@ -2,7 +2,7 @@
 #include "Drawing.h"
 //#include "..\shared\unicode_conversion.h"
 //#include ".\SubControlsXp\TextSubcontrol.h"
-//#include "..\se_sdk3\mp_gui.h"
+#include "..\se_sdk3\mp_gui.h"
 #include <sstream>
 #include <iomanip>
 //#include <algorithm>
@@ -13,7 +13,7 @@ using namespace std;
 using namespace gmpi;
 using namespace gmpi_gui;
 using namespace GmpiDrawing;
-using namespace JmUnicodeConversions;
+//using namespace JmUnicodeConversions;
 
 GmpiDrawing_API::MP1_POINT pointPrevious;
 GmpiGui::PopupMenu nativeMenu;
