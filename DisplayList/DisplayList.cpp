@@ -2,13 +2,10 @@
 #include "Drawing.h"
 #include "..\shared\it_enum_list.h"
 #include "..\shared\unicode_conversion.h"
-//#include "C:\SynthEditSdk\SubControlsXp\TextSubcontrol.h"
 #include "..\se_sdk3\mp_gui.h"
 #include <sstream>
 #include <iomanip>
-//#include <algorithm>
-//#include <string>
-//#include <iostream>
+
 
 using namespace std;
 using namespace gmpi;

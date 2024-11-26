@@ -19,7 +19,7 @@
 			<Pin name="List Items" datatype="string" direction="in" />
 			<Pin name="List Size" datatype="int" direction="in" />
 			<Pin name="Mouse Down" datatype="bool" private="false"/>
-			<Pin name="Shift" datatype="bool" private="false"/>
+			<Pin name="Shift+Drag" datatype="bool" private="false"/>
         </GUI>
     </Plugin>
 </PluginList>
