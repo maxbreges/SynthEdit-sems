@@ -2,6 +2,7 @@
 #include "Drawing.h"
 #include "..\shared\unicode_conversion.h"
 //#include ".\SubControlsXp\TextSubcontrol.h"
+#include "..\shared\FontCache.h"
 #include "..\se_sdk3\mp_gui.h"
 #include <sstream>
 #include <iomanip>
