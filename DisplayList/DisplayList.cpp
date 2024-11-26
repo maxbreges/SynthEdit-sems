@@ -2,7 +2,7 @@
 #include "Drawing.h"
 #include "..\shared\it_enum_list.h"
 #include "..\shared\unicode_conversion.h"
-#include "..\shared\TextSubcontrol.h"
+#include "TextSubcontrol.h"
 #include "..\se_sdk3\mp_gui.h"
 #include <sstream>
 #include <iomanip>
