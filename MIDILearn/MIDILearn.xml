@@ -7,14 +7,15 @@
 		</Parameters>
         <Audio>
             <Pin name="MIDI In" datatype="midi"/>
-            <Pin name="Note" datatype="enum" direction="out"/>
+            <Pin name="Note lo/hi" datatype="enum" direction="out"/>			
 			<Pin name="Gate" datatype="bool" parameterId="0"/>
 			<Pin name="GateOut" datatype="bool" direction="out" parameterId="1"/>
+			<Pin name="Note#" datatype="int" direction="out"/>
         </Audio>
         <GUI>
             <Pin name="Animation Position" datatype="float" direction="out"/>
 			<Pin name="Gate" datatype="bool" parameterId="0"/>
-			<Pin name="GateOut" datatype="bool" parameterId="1"/>
+			<Pin name="GateIn" datatype="bool" parameterId="1"/>
         </GUI>
     </Plugin>
 </PluginList>

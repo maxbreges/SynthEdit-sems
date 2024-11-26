@@ -18,9 +18,9 @@ class MIDILearn final : public MpBase2
 	EnumOutPin pinNote;
 	BoolInPin pinGate;
 	BoolOutPin pinGateOut;
+	IntOutPin pinIntOut;
 
-	std::array<bool, 128> keyStates;
-	int retriggerCounter_ = 0;
+
 	gmpi::midi_2_0::MidiConverter2 midiConverter;
 
 	int messageSize = 0;
@@ -41,6 +41,7 @@ public:
 		initializePin( pinNote );
 		initializePin(pinGate);
 		initializePin(pinGateOut);
+		initializePin(pinIntOut);
 	}
 
 	int32_t open() override
@@ -79,7 +80,7 @@ public:
 				const auto note = gmpi::midi_2_0::decodeNote(msg);
 				pinNote = (int)(uint8_t)note.noteNumber;
 				pinGateOut = false;
-				
+				pinIntOut = pinNote;
 			}
 			break;
 
