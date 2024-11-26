@@ -1,13 +1,14 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
 #include "..\shared\unicode_conversion.h"
-#include "C:\Users\Jeff\Documents\new_module\se_sdk3\SubControlsXp\TextSubcontrol.h"
+//#include ".\SubControlsXp\TextSubcontrol.h"
 #include "..\se_sdk3\mp_gui.h"
 #include <sstream>
 #include <iomanip>
 //#include <algorithm>
 //#include <string>
 //#include <iostream>
+
 
 using namespace std;
 using namespace gmpi;
