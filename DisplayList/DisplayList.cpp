@@ -1,9 +1,8 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
-#include "..\shared\it_enum_list.h"
-#include "..\shared\unicode_conversion.h"
-#include "C:\Users\Max\Documents\new_module_cmake\build\_deps\syntheditsdk-src\syntheditsdk-src\SubControlsXp\TextSubcontrol.h"
-#include "..\se_sdk3\mp_gui.h"
+#include "unicode_conversion.h"
+#include "TextSubcontrol.h"
+#include "mp_gui.h"
 #include <sstream>
 #include <iomanip>
 //#include <algorithm>
