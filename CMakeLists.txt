@@ -61,8 +61,8 @@ include(plugin_helper.cmake)
 #add_subdirectory(TextHold)
 #add_subdirectory(IntRGBToHex)
 #add_subdirectory(MIDILearn)
-#add_subdirectory(DisplayList) 
-add_subdirectory(Modulus)
+add_subdirectory(DisplayList) 
+#add_subdirectory(Modulus)
 
 
 
