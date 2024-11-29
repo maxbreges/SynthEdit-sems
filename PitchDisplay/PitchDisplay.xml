@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="PitchDisplay" name="PitchDisplay" category="mx/MIDI">
+        <Parameters>
+            <Parameter id="0" datatype="int" name=""/>
+        </Parameters>
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+            <Pin name="Pitch" datatype="int" parameterId="0" direction="out"/>
+        </Audio>
+        <GUI>
+            <Pin name="Pitch In" datatype="int" parameterId="0"/>
+			<!--
+			<Pin name="Octave#" datatype="int" direction="out"/>
+			<Pin name="Note#" datatype="int" direction="out"/>
+			<Pin name="Semi" datatype="int" direction="out"/>
+			-->
+			<Pin name="Text" datatype="string" direction="out"/>
+			<Pin name="♯/♭" datatype="bool"/>
+        </GUI>
+    </Plugin>
+</PluginList>
