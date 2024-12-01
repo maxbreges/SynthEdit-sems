@@ -1,7 +1,6 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
 #include "..\shared\unicode_conversion.h"
-#include "it_enum_list.h"
 #include "..\SubControlsXp\TextSubcontrol.h"
 #include "..\se_sdk3\mp_gui.h"
 #include <sstream>
@@ -13,37 +12,35 @@ using namespace gmpi_gui;
 using namespace GmpiDrawing;
 using namespace JmUnicodeConversions;
 
-
 GmpiDrawing_API::MP1_POINT pointPrevious;
 GmpiGui::PopupMenu nativeMenu;
 
-
 class DisplayList final : public gmpi_gui::MpGuiGfxBase
 {
- 	void onSetHint()
+	void onSetHint()
 	{
 		// pinHint changed
 	}
 
- 	void onSetBgColor()
+	void onSetBgColor()
 	{
 		// pinBgColor changed
 	}
- 	void onSetTopColor()
+	void onSetTopColor()
 	{
 		// pinTopColor changed
 	}
- 	void onSetText()
+	void onSetText()
 	{
 		//pinText = pinListItems;
 	}
 
- 	void onSetTextColor()
+	void onSetTextColor()
 	{
 		invalidateRect();
 	}
 
- 	void onSetTextFont()
+	void onSetTextFont()
 	{
 		invalidateRect();
 	}
@@ -72,7 +69,7 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 		invalidateRect();
 	}
 
- 	void onSetList()
+	void onSetList()
 	{
 		//pinText = getDisplayText();	
 
@@ -87,12 +84,12 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 		{
 			pinText = it.CurrentItem()->text;
 		}
-		
-		listsize_ = listsize-1;
+
+		listsize_ = listsize - 1;
 		pinListSize = listsize;
-		invalidateRect();		
+		invalidateRect();
 	}
-	 
+
 	void onSetMouseDown()
 	{
 	}
@@ -102,19 +99,19 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	}
 
 	int listsize_ = 0;
-	
- 	StringGuiPin pinHint;
- 	StringGuiPin pinBgColor;
- 	StringGuiPin pinTopColor;
- 	StringGuiPin pinText;
- 	StringGuiPin pinTextColor;
- 	StringGuiPin pinFont;
+
+	StringGuiPin pinHint;
+	StringGuiPin pinBgColor;
+	StringGuiPin pinTopColor;
+	StringGuiPin pinText;
+	StringGuiPin pinTextColor;
+	StringGuiPin pinFont;
 	IntGuiPin pinFontSize;
 	FloatGuiPin pinAnimationPosition;
- 	StringGuiPin pinHexIn;
- 	StringGuiPin pinHex;
+	StringGuiPin pinHexIn;
+	StringGuiPin pinHex;
 	IntGuiPin pinListIndex;
-	StringGuiPin pinListItems; 
+	StringGuiPin pinListItems;
 	IntGuiPin pinListSize;
 	BoolGuiPin pinMouseDown;
 	BoolGuiPin pinColorAdj;
@@ -122,20 +119,20 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 public:
 	DisplayList()
 	{
-		initializePin( pinHint, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetHint) );
-		initializePin( pinBgColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetBgColor) );
-		initializePin( pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTopColor) );
-		initializePin( pinText, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetText) );
-		initializePin( pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextColor) );
-		initializePin( pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextFont) );
+		initializePin(pinHint, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetHint));
+		initializePin(pinBgColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetBgColor));
+		initializePin(pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTopColor));
+		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetText));
+		initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextColor));
+		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextFont));
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetFontSize));
 		initializePin(pinAnimationPosition, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
-		initializePin( pinHexIn, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition) );
-		initializePin( pinHex, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition) );
+		initializePin(pinHexIn, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
+		initializePin(pinHex, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 		initializePin(pinListIndex, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
-		initializePin( pinListItems, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList) );		
+		initializePin(pinListItems, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
 		initializePin(pinListSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetListSize));
-		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetMouseDown));		
+		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetMouseDown));
 		initializePin(pinColorAdj, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 	}
 
@@ -163,7 +160,7 @@ public:
 		return gmpi::MP_OK;
 	}
 
-	
+
 	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
 	{
 		float new_pos = pinListIndex;
@@ -172,13 +169,13 @@ public:
 			new_pos = 0.f;
 		if (new_pos > listsize_)
 			new_pos = listsize_;
-	
+
 		pinListIndex = new_pos;
 
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
 		{
 			pinColorAdj = true;
-			pinAnimationPosition = float (1.f / listsize_) * pinListIndex;
+			pinAnimationPosition = float(1.f / listsize_) * pinListIndex;
 			onSetAnimationPosition();
 
 		}
@@ -234,7 +231,7 @@ public:
 			new_pos = 1.f;
 
 		pinAnimationPosition = new_pos;
-	
+
 		pointPrevious = point;
 
 		invalidateRect();
