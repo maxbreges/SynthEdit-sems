@@ -87,7 +87,7 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 
 		listsize_ = listsize - 1;
 		pinListSize = listsize;
-		invalidateRect();
+		//invalidateRect();
 	}
 
 	void onSetMouseDown()
@@ -239,7 +239,7 @@ public:
 		return gmpi::MP_OK;
 	}
 
-	int32_t onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point)
+	int32_t onPointerUp(int32_t flags,struct GmpiDrawing_API::MP1_POINT point)
 	{
 		if (getCapture())
 		{
