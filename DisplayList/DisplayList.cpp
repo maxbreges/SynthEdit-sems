@@ -244,6 +244,11 @@ public:
 
 	int32_t onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 	{
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
+		{
+			goto pass_filter;
+		}
+
 		if (getCapture())
 		{
 			releaseCapture();
@@ -297,6 +302,7 @@ public:
 
 			nativeMenu.ShowAsync([this](int32_t result) -> void { this->OnPopupComplete(result); });
 		}
+	pass_filter:
 
 		if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) == 0)
 		{
