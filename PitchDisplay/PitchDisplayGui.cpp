@@ -5,23 +5,23 @@ using namespace gmpi;
 
 class PitchDisplayGui final : public SeGuiInvisibleBase
 {
+	std::string acc;
 
  	void onSetPitchIn()
 	{	
 		if (pinSwitch)
 		{
+			wchar_t accsh[] = { L'♯', L'\0' };
+			pinAccidentals = accsh;;
 			Note2CharSharps();
 		}
 
 		if (!pinSwitch)
 		{
+			wchar_t accfl[] = { L'♭', L'\0' };
+			pinAccidentals = accfl;
 			Note2CharFlats();
-		}
-		//int modulus = (pinPitchIn / 12);
-		//pinOctave = modulus -1;
-		//pinNote = pinPitchIn;
-		//pinSemi = (((pinOctave+1) * 12) - pinNote) * (-1);
-		
+		}		
 	}
 
 	void onSetpinSwitch()
@@ -29,22 +29,18 @@ class PitchDisplayGui final : public SeGuiInvisibleBase
 		onSetPitchIn();
 	}
 
- 	IntGuiPin pinPitchIn;
-	//IntGuiPin pinOctave;
-	//IntGuiPin pinNote;
-	//IntGuiPin pinSemi;
+ 	IntGuiPin pinPitchIn; //receives dsp side
 	StringGuiPin pinText;
 	BoolGuiPin pinSwitch;
+	StringGuiPin pinAccidentals;	
 
 public:
 	PitchDisplayGui()
 	{
 		initializePin(pinPitchIn, static_cast<MpGuiBaseMemberPtr2>(&PitchDisplayGui::onSetPitchIn) );
-		//initializePin(pinOctave, static_cast<MpGuiBaseMemberPtr2>(&PitchDisplayGui::onSetPitchIn) );
-		//initializePin(pinNote, static_cast<MpGuiBaseMemberPtr2>(&PitchDisplayGui::onSetPitchIn));
-		//initializePin(pinSemi, static_cast<MpGuiBaseMemberPtr2>(&PitchDisplayGui::onSetPitchIn));
-		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&PitchDisplayGui::onSetPitchIn));
+		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&PitchDisplayGui::onSetPitchIn));	
 		initializePin(pinSwitch, static_cast<MpGuiBaseMemberPtr2>(&PitchDisplayGui::onSetpinSwitch));
+		initializePin(pinAccidentals, static_cast<MpGuiBaseMemberPtr2>(&PitchDisplayGui::onSetPitchIn));
 	}
 
 	//char32_t ch0{ U266D};
@@ -58,27 +54,67 @@ public:
 	int32_t Note2CharSharps ()
 	{
 		int mi = pinPitchIn;
-		signed int oct_v = mi / 12 - 1;
-		std::string notes[] = { "C","C#","D","D#","E","F","F#","G","G#","A","A#","B" };
-		std::string nt = notes[mi % 12];
+		signed int oct_v = mi / 12 - 1;		
+
+		std::string nt3;
+		acc = pinAccidentals;
+		// with switch
+		switch (mi % 12)
+		{
+		case 0: nt3 = "C"; break;
+		case 1: nt3 = "C" + acc; break;
+		case 2: nt3 = "D"; break;
+		case 3: nt3 = "D" + acc; break;
+		case 4: nt3 = "E"; break;
+		case 5: nt3 = "F"; break;
+		case 6: nt3 = "F" + acc; break;
+		case 7: nt3 = "G"; break;
+		case 8: nt3 = "G" + acc; break;
+		case 9: nt3 = "A"; break;
+		case 10: nt3 = "A" + acc; break;
+		case 11: nt3 = "B"; break;
+		}
+
 		std::stringstream oct;		
 		oct << std::fixed << oct_v;
 		std::string oct_(oct.str());
 
-		pinText = nt + oct_;
-	}
+		pinText = nt3 + oct_;
+
+		return 0;
+	}	
 
 	int32_t Note2CharFlats()
 	{
 		int mi = pinPitchIn;
 		signed int oct_v = mi / 12 - 1;
-		std::string notes[] = { "C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B" };
-		std::string nt = notes[mi % 12];
+		
+		std::string nt3;
+		acc = pinAccidentals;
+		// with switch
+		switch (mi % 12)
+		{
+		case 0: nt3 = "C"; break;
+		case 1: nt3 = "D"+acc; break;
+		case 2: nt3 = "D"; break;
+		case 3: nt3 = "E" + acc; break;
+		case 4: nt3 = "E"; break;
+		case 5: nt3 = "F"; break;
+		case 6: nt3 = "G" + acc; break;
+		case 7: nt3 = "G"; break;
+		case 8: nt3 = "A" + acc; break;
+		case 9: nt3 = "A"; break;
+		case 10: nt3 = "B" + acc; break;
+		case 11: nt3 = "B"; break;
+		}
+
 		std::stringstream oct;
 		oct << std::fixed << oct_v;
 		std::string oct_(oct.str());
+		
+		pinText = nt3 + oct_;
 
-		pinText = nt + oct_;
+		return 0;
 	}
 
 };
