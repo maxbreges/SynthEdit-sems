@@ -47,7 +47,7 @@ class MIDILearnGui final : public SeGuiInvisibleBase
 	
 	void onSetSwitch()
 	{
-
+		onSetNoteIn();
 	}
  	
  	FloatGuiPin pinAnimationPosition;
