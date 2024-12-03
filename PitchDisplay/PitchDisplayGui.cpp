@@ -9,14 +9,14 @@ class PitchDisplayGui final : public SeGuiInvisibleBase
 
  	void onSetPitchIn()
 	{	
-		if (pinSwitch)
+		if (!pinSwitch)
 		{
 			wchar_t accsh[] = { L'♯', L'\0' };
 			pinAccidentals = accsh;;
 			Note2CharSharps();
 		}
 
-		if (!pinSwitch)
+		if (pinSwitch)
 		{
 			wchar_t accfl[] = { L'♭', L'\0' };
 			pinAccidentals = accfl;

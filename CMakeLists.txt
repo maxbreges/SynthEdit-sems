@@ -60,10 +60,10 @@ include(plugin_helper.cmake)
 #add_subdirectory(DisplayKnob)
 #add_subdirectory(TextHold)
 #add_subdirectory(IntRGBToHex)
-add_subdirectory(MIDILearn2)
+#add_subdirectory(MIDILearn2)
 #add_subdirectory(DisplayList) 
 #add_subdirectory(Modulus)
-#add_subdirectory (PitchDisplay)
+add_subdirectory (PitchDisplay)
 
 
 
