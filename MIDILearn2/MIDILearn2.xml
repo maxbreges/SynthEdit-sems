@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="MIDI Learn2" name="MIDI Learn" category="mx/MIDI">
+    <Plugin id="MIDI Learn2" name="MIDI Learn2" category="mx/MIDI">
 		<Parameters>
 			<Parameter id="0" datatype="bool" name=""/>
 			<Parameter id="1" datatype="bool" name=""/>
