@@ -161,83 +161,87 @@ public:
 	void onMidi2Message(const midi::message_view& msg)
 	{
 		const auto header = gmpi::midi_2_0::decodeHeader(msg);
-		//pinChannelOut = static_cast<uint8_t>(msg[1] & 0x0f) + 1;
+		int chan = 0;
+		chan = static_cast<uint8_t>(msg[1] & 0x0f);
 
 		messageSize = (int)(size_t)msg.size();
 		// only 8-byte messages supported. only 16 channels supported
 		if (header.messageType != gmpi::midi_2_0::ChannelVoice64)
-			return;
+			return;		
 
-		const auto note = gmpi::midi_2_0::decodeNote(msg);
-		Note = (int)(uint8_t)note.noteNumber;
-		Velocity = (float)(1.f * note.velocity);
-		
-		switch (header.status)
+		if ((chan == pinChannel) || (pinChannel == -1))
+
 		{
-		case gmpi::midi_2_0::NoteOn:
-		{
-			int i = Note;
+			const auto note = gmpi::midi_2_0::decodeNote(msg);
+			Note = (int)(uint8_t)note.noteNumber;
+			Velocity = (float)(1.f * note.velocity);
 
-			switch (i)
+			switch (header.status)
 			{
-			case 36: pinKickTrig = true; pinKickVel = Velocity; break;
-			case 38: pinSnareTrig = true; pinSnareVel = Velocity; break;
-			case 42: pinHHTrig = true; pinHHVel = Velocity; pinHHDecay = pinClosedHHDecay; break;
-			case 44: pinHHTrig = true; pinHHVel = Velocity; pinHHDecay = pinPedalHHDecay; break;
-			case 46: pinHHTrig = true; pinHHVel = Velocity; pinHHDecay = pinOpenHHDecay; break;
-			case 45: pinTom1Trig = true; pinTom1Vel = Velocity; break;
-			case 47: pinTom2Trig = true; pinTom2Vel = Velocity; break;
-			case 50: pinTom3Trig = true; pinTom3Vel = Velocity; break;
-			case 39: pinClapTrig = true; pinClapVel = Velocity; break;
-			case 56: pinCowbellTrig = true; pinCowbellVel = Velocity; break;
-			case 49: pinCrashTrig = true; pinCrashVel = Velocity; break;
-			case 51: pinRideTrig = true; pinRideVel = Velocity; break;
-			case 54: pinTambTrig = true; pinTambVel = Velocity; break;
-			}
+			case gmpi::midi_2_0::NoteOn:
+			{
+				int i = Note;
 
-			if (Note == pinUser1Note)
-			{
-				pinUser1Trig = true;
-				pinUser1Vel = Velocity;
+				switch (i)
+				{
+				case 36: pinKickTrig = true; pinKickVel = Velocity; break;
+				case 38: pinSnareTrig = true; pinSnareVel = Velocity; break;
+				case 42: pinHHTrig = true; pinHHVel = Velocity; pinHHDecay = pinClosedHHDecay; break;
+				case 44: pinHHTrig = true; pinHHVel = Velocity; pinHHDecay = pinPedalHHDecay; break;
+				case 46: pinHHTrig = true; pinHHVel = Velocity; pinHHDecay = pinOpenHHDecay; break;
+				case 45: pinTom1Trig = true; pinTom1Vel = Velocity; break;
+				case 47: pinTom2Trig = true; pinTom2Vel = Velocity; break;
+				case 50: pinTom3Trig = true; pinTom3Vel = Velocity; break;
+				case 39: pinClapTrig = true; pinClapVel = Velocity; break;
+				case 56: pinCowbellTrig = true; pinCowbellVel = Velocity; break;
+				case 49: pinCrashTrig = true; pinCrashVel = Velocity; break;
+				case 51: pinRideTrig = true; pinRideVel = Velocity; break;
+				case 54: pinTambTrig = true; pinTambVel = Velocity; break;
+				}
+
+				if (Note == pinUser1Note)
+				{
+					pinUser1Trig = true;
+					pinUser1Vel = Velocity;
+				}
+				if (Note == pinUser2Note)
+				{
+					pinUser2Trig = true;
+					pinUser2Vel = Velocity;
+				}
+				if (Note == pinUser3Note)
+				{
+					pinUser3Trig = true;
+					pinUser3Vel = Velocity;
+				}
+				if (Note == pinUser4Note)
+				{
+					pinUser4Trig = true;
+					pinUser4Vel = Velocity;
+				}
 			}
-			if (Note == pinUser2Note)
+			break;
+			case gmpi::midi_2_0::NoteOff:
 			{
-				pinUser2Trig = true;
-				pinUser2Vel = Velocity;
-			}
-			if (Note == pinUser3Note)
-			{
-				pinUser3Trig = true;
-				pinUser3Vel = Velocity;
-			}
-			if (Note == pinUser4Note)
-			{
-				pinUser4Trig = true;
-				pinUser4Vel = Velocity;
-			}		
-		}	
-		break;
-		case gmpi::midi_2_0::NoteOff:
-		{			
 				pinKickTrig = false;
 				pinSnareTrig = false;
-				pinHHTrig= false;				
-				pinCowbellTrig= false;
-				pinTom1Trig= false;				
-				pinTom2Trig= false;				
-				pinTom3Trig= false;				
-				pinClapTrig= false;				
-				pinCrashTrig= false;				
-				pinTambTrig= false;				
-				pinRideTrig= false;				
-				pinUser1Trig= false;				
-				pinUser2Trig= false;				
-				pinUser3Trig= false;				
-				pinUser4Trig= false;				
-		}
-		break;
-		};
-	
+				pinHHTrig = false;
+				pinCowbellTrig = false;
+				pinTom1Trig = false;
+				pinTom2Trig = false;
+				pinTom3Trig = false;
+				pinClapTrig = false;
+				pinCrashTrig = false;
+				pinTambTrig = false;
+				pinRideTrig = false;
+				pinUser1Trig = false;
+				pinUser2Trig = false;
+				pinUser3Trig = false;
+				pinUser4Trig = false;
+			}
+			break;
+			}
+		};	
 	}
 
 	/*void subProcess(int sampleFrames)
