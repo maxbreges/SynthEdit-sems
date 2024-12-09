@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="DrumTrigger" name="Drum Trigger" category="MIDI">
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+			 <Pin name="Channel" datatype="enum" default="-1" ignorePatchChange="true" metadata="All=-1,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16"/>
+			 <Pin name="Open HH Decay" datatype="float" default="5"/>
+            <Pin name="Pedal HH Decay" datatype="float" default="3.5"/>
+            <Pin name="Closed HH Decay" datatype="float" default="2.5"/>
+			
+           <Pin name="Kick Trig" datatype="bool" direction="out"/>
+            <Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="Snare Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="Hi Hat Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+			<Pin name="Hi Hat Decay" datatype="float" direction="out"/>
+
+			<Pin name="Cowbell Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="Tom1 Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="Tom2 Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="Tom3 Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="Clap Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="Crash Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="Tamb Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="Ride Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="User1 Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="User2 Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="User3 Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="User4 Trig" datatype="bool" direction="out"/>
+			<Pin name="Vel" datatype="float" direction="out"/>
+
+			<Pin name="User1 Note#" datatype="int" isMinimised="true" default="62"/>
+			<Pin name="User2 Note#" datatype="int" isMinimised="true" default="64"/>
+			<Pin name="User3 Note#" datatype="int" isMinimised="true" default="70"/>
+			<Pin name="User4 Note#" datatype="int" isMinimised="true" default="37"/>
+			
+        </Audio>
+    </Plugin>
+</PluginList>
