@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="NoteName" name="NoteName" category="mx/MIDI">
+        <Parameters>
+            <Parameter id="0" datatype="int" name=""/>
+			<Parameter id="1" datatype="bool" name=""/>
+        </Parameters>
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+            <Pin name="Pitch" datatype="int" parameterId="0" direction="out"/>
+			<Pin name="NoteOff" datatype="bool" parameterId="1" direction="out"/>
+			<Pin name="Transport Run" datatype="bool"/>
+			<Pin name="Channel" datatype="int" default="1"/>
+		</Audio>
+        <GUI>
+            <Pin name="Pitch In" datatype="int" parameterId="0"/>
+			<Pin name="Text" datatype="string" direction="out"/>
+			<Pin name="♯/♭" datatype="bool" isMinimised="false"/>
+			<Pin name="Accidentals" datatype="string" direction="out" private="true"/>
+			<Pin name="Note# Out" datatype="int"/>
+			<Pin name="NoteOff" datatype="bool" parameterId="1"/>
+        </GUI>
+    </Plugin>
+</PluginList>

@@ -64,7 +64,8 @@ include(plugin_helper.cmake)
 #add_subdirectory(DisplayList) 
 #add_subdirectory(Modulus)
 #add_subdirectory (PitchDisplay)
-add_subdirectory (DrumTrigger)
+#add_subdirectory (DrumTrigger)
+add_subdirectory (NoteName)
 
 
 
