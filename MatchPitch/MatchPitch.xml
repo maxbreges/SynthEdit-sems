@@ -4,7 +4,7 @@
         <Audio>
             <Pin name="Volts In" datatype="float" rate="audio"/>
             <Pin name="Value" datatype="float" rate="audio"/>
-			<Pin name="Gate" datatype="float" rate="audio" direction="out" default="false"/>
+			<Pin name="Gate" datatype="float" rate="audio" direction="out" default="0"/>
         </Audio>
     </Plugin>
 </PluginList>
