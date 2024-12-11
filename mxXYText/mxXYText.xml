@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="mxXYText" name="mx XY Text" category="mx/Sub-Controls">
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Text" datatype="string"/>
+            <Pin name="Position X" datatype="float"/>
+			<Pin name="Position Y" datatype="float" isMinimised="true"/>
+            <Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
+            <Pin name="Font Size" datatype="float" default="20" isMinimised="true"/>
+			<Pin name="Line Size" datatype="float" default="3" isMinimised="true"/>
+			<Pin name="Height" datatype="float" default="40" isMinimised="true"/>
+			<Pin name="Width" datatype="float" default="40" isMinimised="true"/>
+			<Pin name="Font Y Adjust" datatype="float" default="0" isMinimised="true"/>
+			<Pin name="Shape" datatype="bool" isMinimised="true"/>
+			<Pin name="Line ARGB" datatype="string" default="FF000000" isMinimised="true"/>
+			<Pin name="Shape ARGB" datatype="string" default="FFFFFFFF" isMinimised="true"/>
+			<Pin name="Font ARGB" datatype="string" default="FF000000" isMinimised="true"/>
+			<Pin name="Mouse Down" datatype="bool" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
