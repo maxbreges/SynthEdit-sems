@@ -13,22 +13,22 @@ class PitchDisplayGui final : public SeGuiInvisibleBase
 
 		if (pinNoteOff)
 		{
-			pinText = "transp";
+			pinText = "";
 		}
 
 		if (!pinNoteOff)
 		{		
 			if (!pinSwitch)
 			{
-				//wchar_t accsh[] = { L'♯', L'\0' };
-				pinAccidentals = "#";// accsh;
+				wchar_t accsh[] = { L'♯', L'\0' };
+				pinAccidentals = accsh;
 				Note2CharSharps();
 			}
 
 			if (pinSwitch)
 			{
-				//wchar_t accfl[] = { L'♭', L'\0' };
-				pinAccidentals = "b";// accfl;
+				wchar_t accfl[] = { L'♭', L'\0' };
+				pinAccidentals = accfl;
 				Note2CharFlats();
 			}
 		}
@@ -37,7 +37,7 @@ class PitchDisplayGui final : public SeGuiInvisibleBase
 	void onSetpinSwitch()
 	{
 		onSetPitchIn();
-		pinText = "transp";
+		pinText = "";
 	}
 
  	IntGuiPin pinPitchIn; //receives dsp side
@@ -96,7 +96,7 @@ public:
 
 		if (pinPitchIn == 0)
 		{
-			pinText = "transp";
+			pinText = "";
 		}
 
 		else
@@ -135,7 +135,7 @@ public:
 		
 		if (pinPitchIn == 0)
 		{
-			pinText = "transp";
+			pinText = "";
 		}
 
 		else
