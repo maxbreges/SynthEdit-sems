@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="MatchPitch" name="Match Pitch" category="mx/Logic">
+        <Audio>
+            <Pin name="Volts In" datatype="float" rate="audio"/>
+            <Pin name="Value" datatype="float" rate="audio"/>
+			<Pin name="Gate" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
