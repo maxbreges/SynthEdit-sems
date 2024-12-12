@@ -3,6 +3,7 @@
 //#include "../shared/it_enum_list.h"
 #include "../shared/unicode_conversion.h"
 #include <cmath>
+#include <string>
 
 using namespace std;
 using namespace gmpi;
@@ -14,6 +15,19 @@ class mxXYTextGui final : public gmpi_gui::MpGuiGfxBase
 {
  	void onSetText()
 	{
+        std::string pattern ( "" );
+        std::string text = pinText;
+
+        if (text == pattern)
+        {
+            pinShapeARGB = "00000000";
+            pinLineARGB = "00000000";
+        }
+        if (text != pattern)
+        {
+            pinShapeARGB = "FFFFFFFF";
+            pinLineARGB = "FF000000";
+        }
         invalidateRect();
 	}
 
