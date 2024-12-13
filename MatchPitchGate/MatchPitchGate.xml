@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="MatchPitchGate" name="Match Pitch Gate" category="mx/Logic">
+        <Audio>
+			<Pin name="Gate In" datatype="float" rate="audio"/>
+            <Pin name="Pitch In" datatype="float" rate="audio"/>
+            <Pin name="Value" datatype="float" rate="audio"/>
+			<Pin name="Gate" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
