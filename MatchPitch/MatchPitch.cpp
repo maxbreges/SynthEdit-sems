@@ -27,8 +27,8 @@ public:
 		{
 			// TODO: Signal processing goes here.
 
-			int in = *input * 100;
-			int val = *value * 100;
+			int in = *input * 1000;
+			int val = *value * 1000;
 			float gat = *gate;
 
 			if (in == val)
