@@ -66,8 +66,9 @@ include(plugin_helper.cmake)
 #add_subdirectory (PitchDisplay)
 #add_subdirectory (DrumTrigger)
 #add_subdirectory (NoteName)
-add_subdirectory (mxXYText)
+#add_subdirectory (mxXYText)
 #add_subdirectory (MatchPitchGate)
+add_subdirectory (XText)
 
 
 

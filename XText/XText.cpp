@@ -1,0 +1,191 @@
+#include "mp_sdk_gui2.h"
+#include "Drawing.h"
+#include <cmath>
+#include <string>
+
+using namespace std;
+using namespace gmpi;
+using namespace GmpiDrawing;
+
+class XTextGui final : public gmpi_gui::MpGuiGfxBase
+{
+ 	void onSetText()
+	{
+		std::string pattern("");
+		std::string text = pinText;
+
+		if (text == pattern)
+		{
+			pinShapeARGB = "00000000";
+			pinLineARGB = "00000000";
+		}
+		if (text != pattern)
+		{
+			pinShapeARGB = "FFFFFFFF";
+			pinLineARGB = "FF000000";
+		}
+		invalidateRect();
+	}
+
+
+ 	void onSetPositionX()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetFont()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetFontSize()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetLineSize()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetHeight()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetWidth()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetFontYAdjust()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetShape()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetLineARGB()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetShapeARGB()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetFontARGB()
+	{
+		invalidateRect();
+	}
+
+ 	void onSetMouseDown()
+	{
+		invalidateRect();
+	}
+
+ 	StringGuiPin pinText;
+ 	FloatGuiPin pinPositionX;
+    FloatGuiPin pinPositionY;
+ 	StringGuiPin pinFont;
+ 	FloatGuiPin pinFontSize;
+ 	FloatGuiPin pinLineSize;
+ 	FloatGuiPin pinHeight;
+ 	FloatGuiPin pinWidth;
+ 	FloatGuiPin pinFontYAdjust;
+ 	BoolGuiPin pinShape;
+ 	StringGuiPin pinLineARGB;
+ 	StringGuiPin pinShapeARGB;
+ 	StringGuiPin pinFontARGB;
+ 	BoolGuiPin pinMouseDown;
+
+public:
+	XTextGui()
+	{
+		initializePin( pinText, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetText) );
+		initializePin( pinPositionX, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetPositionX) );
+        initializePin(pinPositionY, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetPositionX));
+		initializePin( pinFont, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetFont) );
+		initializePin( pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetFontSize) );
+		initializePin( pinLineSize, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetLineSize) );
+		initializePin( pinHeight, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetHeight) );
+		initializePin( pinWidth, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetWidth) );
+		initializePin( pinFontYAdjust, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetFontYAdjust) );
+		initializePin( pinShape, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetShape) );
+		initializePin( pinLineARGB, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetLineARGB) );
+		initializePin( pinShapeARGB, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetShapeARGB) );
+		initializePin( pinFontARGB, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetFontARGB) );
+		initializePin( pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&XTextGui::onSetMouseDown) );
+	}
+
+	int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext ) override
+    {
+        Graphics g(drawingContext);
+        ClipDrawingToBounds z(g, getRect());
+        Rect r = getRect();
+
+        // Get control dimensions
+        float lineSize = pinLineSize.getValue();
+        float halfLineSize = lineSize * 0.5f;
+        float textboxwidth = pinWidth.getValue() - lineSize;
+        float textboxheight = pinHeight.getValue() - lineSize;
+        float tboxwidthhlf = textboxwidth * .5f;
+        float tboxheighthlf = textboxheight * .5f;
+        // Ensure normalized positions
+        float normalisedX = (max)(0.0f, (min)(1.0f, pinPositionX.getValue()));
+        float normalisedY = 1.0f - (max)(0.0f, (min)(1.0f, pinPositionY.getValue()));
+        // Adjust for padding and border size
+        float adjustedWidth = r.getWidth() - (textboxwidth + halfLineSize * 2.0f);
+        float adjustedHeight = r.getHeight() - (textboxheight + halfLineSize * 2.0f);
+        float x = halfLineSize + normalisedX * adjustedWidth;
+        float y = halfLineSize + normalisedY * adjustedHeight;
+        // Rectangle for the text box
+        GmpiDrawing::Rect dest_rect(x, y, x + textboxwidth, y + textboxheight);
+        // Rectangle for text (with vertical adjustment if needed)
+        GmpiDrawing::Rect text_rect(x, pinFontYAdjust + y, x + textboxwidth, pinFontYAdjust + y + textboxheight);
+        // Draw rectangle with correct line size
+        auto brushrectline = g.CreateSolidColorBrush(Color::FromHexString(pinLineARGB));
+        auto brushshape = g.CreateSolidColorBrush(Color::FromHexString(pinShapeARGB));
+
+        if (!pinShape)
+        {
+            Point center = { x + tboxwidthhlf,y + tboxheighthlf };
+            GmpiDrawing::Ellipse circle(center, tboxwidthhlf, tboxheighthlf);
+            g.FillEllipse(circle, brushshape);
+            g.DrawEllipse(circle, brushrectline, pinLineSize);
+        }
+        else
+        {
+
+            g.FillRectangle(dest_rect, brushshape);
+            g.DrawRectangle(dest_rect, brushrectline, pinLineSize);
+        }
+
+        // Start Font Draw: setting QUICK AND DIRTY!!! YOU CAN USE STYLES FROM META DATA!!
+        std::string str = pinFont;
+        int font_size_ = pinFontSize.getValue();
+        GmpiDrawing_API::MP1_FONT_WEIGHT fontWeight = GmpiDrawing_API::MP1_FONT_WEIGHT_HEAVY;
+        const char* fontFace = str.c_str();
+        float dipFontSize = (max(font_size_, 1.f));
+        TextFormat textFormat = g.GetFactory().CreateTextFormat(dipFontSize, fontFace, fontWeight);
+        textFormat.SetTextAlignment(TextAlignment::Center);
+        textFormat.SetParagraphAlignment(ParagraphAlignment::Center);
+        textFormat.SetImprovedVerticalBaselineSnapping();
+        textFormat.SetWordWrapping(WordWrapping::Wrap);
+        auto brushfont = g.CreateSolidColorBrush(Color::FromHexString(pinFontARGB));
+        g.DrawTextW(pinText, textFormat, text_rect, brushfont, (int32_t)DrawTextOptions::Clip);
+        // End FONT Draw //
+
+
+        return MP_OK;
+    }
+};
+
+namespace
+{
+	auto r = Register<XTextGui>::withId(L"XText");
+}
