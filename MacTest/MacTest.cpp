@@ -11,72 +11,86 @@ class MacTestGui final : public gmpi_gui::MpGuiGfxBase
 {
  	void onSetText()
 	{
-		// pinText changed
+		std::string pattern("");
+		std::string text = pinText;
+
+		if (text == pattern)
+		{
+			pinShapeARGB = "00000000";
+			pinLineARGB = "00000000";
+		}
+		if (text != pattern)
+		{
+			pinShapeARGB = "FFFFFFFF";
+			pinLineARGB = "FF000000";
+		}
+		invalidateRect();
 	}
+
 
  	void onSetPositionX()
 	{
-		// pinPositionX changed
+		invalidateRect();
 	}
 
  	void onSetPositionY()
 	{
-		// pinPositionY changed
+		invalidateRect();
 	}
 
  	void onSetFont()
 	{
-		// pinFont changed
+		invalidateRect();
 	}
 
  	void onSetFontSize()
 	{
-		// pinFontSize changed
+		invalidateRect();
 	}
 
  	void onSetLineSize()
 	{
-		// pinLineSize changed
+		invalidateRect();
 	}
 
  	void onSetHeight()
 	{
-		// pinHeight changed
+		invalidateRect();
 	}
 
  	void onSetWidth()
 	{
-		// pinWidth changed
+		invalidateRect();
 	}
 
  	void onSetFontYAdjust()
 	{
-		// pinFontYAdjust changed
+		invalidateRect();
 	}
 
  	void onSetShape()
 	{
-		// pinShape changed
+		invalidateRect();
 	}
 
  	void onSetLineARGB()
 	{
-		// pinLineARGB changed
+		invalidateRect();
 	}
 
  	void onSetShapeARGB()
 	{
-		// pinShapeARGB changed
+		invalidateRect();
 	}
 
  	void onSetFontARGB()
 	{
-		// pinFontARGB changed
+		invalidateRect();
 	}
 
  	void onSetMouseDown()
 	{
-		// pinMouseDown changed
+		invalidateRect();
 	}
 
  	StringGuiPin pinText;
@@ -130,7 +144,18 @@ public:
 		float y = halfLineSize + normalisedY * adjustedHeight;
 
 		GmpiDrawing::Rect text_rect(x, pinFontYAdjust + y, x + textboxwidth, pinFontYAdjust + y + textboxheight);
+		
+		auto brushrectline = g.CreateSolidColorBrush(Color::FromHexString(pinLineARGB));
+		auto brushshape = g.CreateSolidColorBrush(Color::FromHexString(pinShapeARGB));
+		float tboxwidthhlf = textboxwidth * .5f;
+		float tboxheighthlf = textboxheight * .5f;
 
+		{
+			Point center = { x + tboxwidthhlf,y + tboxheighthlf };
+			GmpiDrawing::Ellipse circle(center, tboxwidthhlf, tboxheighthlf);
+			g.FillEllipse(circle, brushshape);
+			g.DrawEllipse(circle, brushrectline, pinLineSize);
+		}
 		auto textFormat = GetGraphicsFactory().CreateTextFormat();
 		auto brush = g.CreateSolidColorBrush(Color::Black);
 		auto brushfont = g.CreateSolidColorBrush(Color::FromHexString(pinFontARGB));
