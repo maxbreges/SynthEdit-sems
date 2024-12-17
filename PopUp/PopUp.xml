@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Pop-Up" name="Pop-Up" category="mx/Controls">
+        <Parameters>
+            <Parameter id="2" datatype="string" name="" private="true"/>
+        </Parameters>
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Hint" datatype="string" isMinimised="true"/>
+            <Pin name="BgColor" datatype="string" default="FF000000" private="true"/>
+            <Pin name="Color" datatype="string" default="FF660000"/>
+            <Pin name="Text" datatype="string" direction="out" private="true"/>
+            <Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="true"/>
+            <Pin name="Text Font" datatype="string" default="Times New Roman" isMinimised="true"/>
+            <Pin name="Font Size" datatype="int" default="16" isMinimised="true"/>
+            <Pin name="Animation Position" datatype="float" private="true"/>
+            <Pin name="Hex Out" datatype="string"/>
+            <Pin name="HexMem" datatype="string" private="true" parameterId="2"/>
+            <Pin name="Choice" datatype="int"/>
+            <Pin name="List Items" datatype="string"/>
+            <Pin name="List Size" datatype="int"/>
+            <Pin name="Mouse Down" datatype="bool"/>
+            <Pin name="Shift+Drag" datatype="bool"/>
+            <Pin name="Corner Radius" datatype="int" default="5" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>

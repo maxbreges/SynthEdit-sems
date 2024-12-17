@@ -68,8 +68,7 @@ add_subdirectory(DisplayList)
 #add_subdirectory (NoteName)
 #add_subdirectory (mxXYText)
 #add_subdirectory (MatchPitchGate)
-#add_subdirectory (XText)
-#add_subdirectory (MacTest)
+add_subdirectory (PopUp)
 
 
 
