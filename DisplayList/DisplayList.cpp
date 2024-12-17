@@ -1,8 +1,8 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
 //#include "..\shared\unicode_conversion.h"
-#include "..\SubControlsXp\TextSubcontrol.h"
-#include "..\se_sdk3\mp_gui.h"
+//#include "..\SubControlsXp\TextSubcontrol.h"
+#include "mp_gui.h"
 #include <sstream>
 #include <iomanip>
 
@@ -53,18 +53,18 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	void onSetAnimationPosition()
 	{
 		//----------------------------------
-		/*if (pinColorAdj)
+		if (pinColorAdj)
 		{
 			AnimPosToHex();
 
-			pinHex = pinHexIn;
-			pinTopColor = pinHexIn;
+			pinHexMem = pinHexOut;
+			pinTopColor = pinHexOut;
 		}
 		if (!pinColorAdj)
 		{
-			pinHexIn = pinHex;
-			pinTopColor = pinHex;
-		}*/
+			pinHexOut = pinHexMem;
+			pinTopColor = pinHexMem;
+		}
 		//==========================
 		invalidateRect();
 	}
@@ -113,8 +113,8 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	StringGuiPin pinFont;
 	IntGuiPin pinFontSize;
 	FloatGuiPin pinAnimationPosition;
-	StringGuiPin pinHexIn;
-	StringGuiPin pinHex;
+	StringGuiPin pinHexOut;
+	StringGuiPin pinHexMem;
 	IntGuiPin pinListIndex;
 	StringGuiPin pinListItems;
 	IntGuiPin pinListSize;
@@ -133,8 +133,8 @@ public:
 		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextFont));
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetFontSize));
 		initializePin(pinAnimationPosition, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
-		initializePin(pinHexIn, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
-		initializePin(pinHex, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
+		initializePin(pinHexOut, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
+		initializePin(pinHexMem, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 		initializePin(pinListIndex, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
 		initializePin(pinListItems, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
 		initializePin(pinListSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetListSize));
@@ -248,6 +248,11 @@ public:
 
 	int32_t onPointerUp(int32_t flags,struct GmpiDrawing_API::MP1_POINT point)
 	{
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
+		{
+			goto pass_filter;
+		}
+			
 		if (getCapture())
 		{
 			releaseCapture();
@@ -301,7 +306,7 @@ public:
 
 			nativeMenu.ShowAsync([this](int32_t result) -> void { this->OnPopupComplete(result); });
 		}
-
+	pass_filter:
 		if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) == 0)
 		{
 			pinColorAdj = false;
@@ -390,7 +395,7 @@ public:
 		ssB << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << B;
 		std::string resB(ssB.str());
 
-		pinHexIn = resA + resR + resG + resB;
+		pinHexOut = resA + resR + resG + resB;
 
 		return gmpi::MP_OK;
 	}
