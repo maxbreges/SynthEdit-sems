@@ -1,6 +1,9 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
+#include <cmath>
+#include <string>
 
+using namespace std;
 using namespace gmpi;
 using namespace GmpiDrawing;
 
@@ -113,11 +116,26 @@ public:
 	int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext ) override
 	{
 		Graphics g(drawingContext);
+		Rect r = getRect();
+		float lineSize = pinLineSize.getValue();
+		float textboxwidth = pinWidth.getValue() - lineSize;
+		float textboxheight = pinHeight.getValue() - lineSize;
+		float halfLineSize = lineSize * 0.5f;
+		float normalisedX = (max)(0.0f, (min)(1.0f, pinPositionX.getValue()));
+		float normalisedY = 1.0f - (max)(0.0f, (min)(1.0f, pinPositionY.getValue()));
+		float adjustedWidth = r.getWidth() - (textboxwidth + halfLineSize * 2.0f);
+		float adjustedHeight = r.getHeight() - (textboxheight + halfLineSize * 2.0f);
+
+		float x = halfLineSize + normalisedX * adjustedWidth;
+		float y = halfLineSize + normalisedY * adjustedHeight;
+
+		GmpiDrawing::Rect text_rect(x, pinFontYAdjust + y, x + textboxwidth, pinFontYAdjust + y + textboxheight);
 
 		auto textFormat = GetGraphicsFactory().CreateTextFormat();
-		auto brush = g.CreateSolidColorBrush(Color::Red);
+		auto brush = g.CreateSolidColorBrush(Color::Black);
+		auto brushfont = g.CreateSolidColorBrush(Color::FromHexString(pinFontARGB));
+		g.DrawTextW(pinText, textFormat, text_rect, brushfont, (int32_t)DrawTextOptions::Clip);
 
-		g.DrawTextU("Hello World!", textFormat, 0.0f, 0.0f, brush);
 
 		return gmpi::MP_OK;
 	}
