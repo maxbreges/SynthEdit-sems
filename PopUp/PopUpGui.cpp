@@ -62,17 +62,32 @@ class PopUpGui final : public gmpi_gui::MpGuiGfxBase
 
  	void onSetChoice()
 	{
-		// pinChoice changed
+		invalidateRect();
 	}
 
  	void onSetListItems()
 	{
-		// pinListItems changed
+		invalidateRect();
 	}
 
+	int listsize_ = 0;
  	void onSetListSize()
 	{
-		// pinListSize changed
+		it_enum_list it(pinListItems.getValue());
+		it.FindValue(pinChoice);
+		int listsize = it.size(); // This would get the size of the list or number of list items total it.size()
+		if (it.IsDone())
+		{
+			pinText = std::string();
+		}
+		else
+		{
+			pinText = it.CurrentItem()->text;
+		}
+
+		listsize_ = listsize - 1;
+		pinListSize = listsize;
+		invalidateRect();
 	}
 
  	void onSetMouseDown()
@@ -87,7 +102,7 @@ class PopUpGui final : public gmpi_gui::MpGuiGfxBase
 
  	void onSetCornerRadius()
 	{
-		// pinCornerRadius changed
+		invalidateRect();
 	}
 
  	StringGuiPin pinHint;
@@ -126,6 +141,21 @@ public:
 		initializePin( pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&PopUpGui::onSetMouseDown) );
 		initializePin( pinShiftDrag, static_cast<MpGuiBaseMemberPtr2>(&PopUpGui::onSetShiftDrag) );
 		initializePin( pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&PopUpGui::onSetCornerRadius) );
+	}
+
+	int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
+	{
+		// Let host handle right-clicks.
+		if ((flags & 0x10) == 0)
+		{
+			return gmpi::MP_OK; // Indicate successful hit, so right-click menu can show.
+		}
+
+		pointPrevious = point;	// note first point.
+		pinMouseDown = true;
+		setCapture();
+
+		return gmpi::MP_OK;
 	}
 
 	int32_t onPointerUp(int32_t flags, struct GmpiDrawing_API::MP1_POINT point)
