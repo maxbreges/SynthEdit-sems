@@ -158,6 +158,8 @@ public:
 		}
 		auto textFormat = GetGraphicsFactory().CreateTextFormat();
 		auto brush = g.CreateSolidColorBrush(Color::Black);
+		textFormat.SetTextAlignment(TextAlignment::Center);
+		textFormat.SetParagraphAlignment(ParagraphAlignment::Center);
 		auto brushfont = g.CreateSolidColorBrush(Color::FromHexString(pinFontARGB));
 		g.DrawTextW(pinText, textFormat, text_rect, brushfont, (int32_t)DrawTextOptions::Clip);
 
