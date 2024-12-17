@@ -68,7 +68,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (NoteName)
 #add_subdirectory (mxXYText)
 #add_subdirectory (MatchPitchGate)
-add_subdirectory (XText)
+#add_subdirectory (XText)
+add_subdirectory (MacTest)
 
 
 
