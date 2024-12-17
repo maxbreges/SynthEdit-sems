@@ -10,5 +10,4 @@ build_gmpi_plugin(
 	  DisplayList.cpp
 	${se_sdk_folder}/it_enum_list.h
             ${se_sdk_folder}/it_enum_list.cpp
- 		${SubControlsXp_folder}/TextSubcontrol.h
 )
