@@ -156,7 +156,11 @@ public:
 			g.FillEllipse(circle, brushshape);
 			g.DrawEllipse(circle, brushrectline, pinLineSize);
 		}
-		auto textFormat = GetGraphicsFactory().CreateTextFormat();
+		float font_size = pinFontSize;
+		std::string str = { pinFont };
+		const char* fontFace = str.c_str();
+		
+		auto textFormat = GetGraphicsFactory().CreateTextFormat(font_size, fontFace);
 		auto brush = g.CreateSolidColorBrush(Color::Black);
 		textFormat.SetTextAlignment(TextAlignment::Center);
 		textFormat.SetParagraphAlignment(ParagraphAlignment::Center);
