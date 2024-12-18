@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
 	<Plugin id="DisplayList" name="Display List" category="mx/Controls">
-		<Parameters>
-			<Parameter id="2" datatype="string" name="" private="true"/>
-		</Parameters>
 		<GUI graphicsApi="GmpiGui">
 			<Pin name="Hint" datatype="string" isMinimised="true"/>
 			<Pin name="BgColor" datatype="string" default="FF000000" private="true"/>
@@ -12,9 +9,8 @@
 			<Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="true"/>
 			<Pin name="Text Font" datatype="string" default="Times New Roman" isMinimised="true"/>
 			<Pin name="Font Size" datatype="int" default="16" isMinimised="true" />
-			<Pin name="Animation Position" datatype="float" direction="in" private="true"/>
-			<Pin name="Hex Out" datatype="string" direction="in" private="false"/>
-			<Pin name="HexMem" datatype="string" private="true" parameterId="2"/>
+			<Pin name="AnimPos+Shift" datatype="float" direction="in"/>
+			<Pin name="AnimPos+Ctrl" datatype="float" direction="in"/>
 			<Pin name="Choice" datatype="int" direction="in" />
 			<Pin name="List Items" datatype="string" direction="in" />
 			<Pin name="List Size" datatype="int" direction="in" />

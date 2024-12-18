@@ -52,26 +52,12 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 
 	void onSetAnimationPosition()
 	{
-		//----------------------------------
-		if (pinColorAdj)
-		{
-			AnimPosToHex();
-
-			pinHexMem = pinHexOut;
-			pinTopColor = pinHexOut;
-		}
-		if (!pinColorAdj)
-		{
-			pinHexOut = pinHexMem;
-			pinTopColor = pinHexMem;
-		}
-		//==========================
+		
 		invalidateRect();
 	}
 
 	void onSetList()
 	{
-		//pinText = getDisplayText();	
 
 		it_enum_list it(pinListItems.getValue());
 		it.FindValue(pinListIndex);
@@ -101,7 +87,7 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	{
 		invalidateRect();
 	}
-	
+
 
 	int listsize_ = 0;
 
@@ -112,9 +98,8 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	StringGuiPin pinTextColor;
 	StringGuiPin pinFont;
 	IntGuiPin pinFontSize;
-	FloatGuiPin pinAnimationPosition;
-	StringGuiPin pinHexOut;
-	StringGuiPin pinHexMem;
+	FloatGuiPin pinAnimPosShift;
+	FloatGuiPin pinAnimPosCtrl;
 	IntGuiPin pinListIndex;
 	StringGuiPin pinListItems;
 	IntGuiPin pinListSize;
@@ -132,9 +117,8 @@ public:
 		initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextColor));
 		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextFont));
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetFontSize));
-		initializePin(pinAnimationPosition, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
-		initializePin(pinHexOut, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
-		initializePin(pinHexMem, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
+		initializePin(pinAnimPosShift, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
+		initializePin(pinAnimPosCtrl, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 		initializePin(pinListIndex, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
 		initializePin(pinListItems, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
 		initializePin(pinListSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetListSize));
@@ -182,7 +166,7 @@ public:
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
 		{
 			pinColorAdj = true;
-			pinAnimationPosition = float(1.f / listsize_) * pinListIndex;
+			pinAnimPosShift = float(1.f / listsize_) * pinListIndex;
 			onSetAnimationPosition();
 
 		}
@@ -206,38 +190,61 @@ public:
 		// ignore horizontal scrolling
 		if (0 != (flags & gmpi_gui_api::GG_POINTER_KEY_ALT))
 			return gmpi::MP_UNHANDLED;
-		if ((flags & gmpi_gui_api::GG_POINTER_KEY_ALT) == 0)
-		{
-			pinColorAdj = false;
-		}
 
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
 		{
-			pinColorAdj = true;
+
+			/*if ((flags & gmpi_gui_api::GG_POINTER_KEY_ALT) == 0)
+			{
+				pinColorAdj = false;
+			}
+
+			if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
+			{
+				pinColorAdj = true;
+			}
+			if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) == 0)
+			{
+				pinColorAdj = false;
+			}*/
+
+			Point offset(point.x - pointPrevious.x, point.y - pointPrevious.y); // TODO overload subtraction.
+
+			float coarseness = 0.004f;
+
+			//		if (modifier_keys::isHeldCtrl()) // <cntr> key magnifies
+			/*if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) // <cntr> key magnifies
+				coarseness = 0.001f;*/
+
+			float new_pos = pinAnimPosShift;
+			new_pos = new_pos - coarseness * (float)offset.y;
+
+			if (new_pos < 0.f)
+				new_pos = 0.f;
+
+			if (new_pos > 1.f)
+				new_pos = 1.f;
+
+			pinAnimPosShift = new_pos;
 		}
-		if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) == 0)
+
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 		{
-			pinColorAdj = false;
+			Point offset(point.x - pointPrevious.x, point.y - pointPrevious.y); // TODO overload subtraction.
+
+			float coarseness = 0.004f;
+
+			float new_pos = pinAnimPosCtrl;
+			new_pos = new_pos - coarseness * (float)offset.y;
+
+			if (new_pos < 0.f)
+				new_pos = 0.f;
+
+			if (new_pos > 1.f)
+				new_pos = 1.f;
+
+			pinAnimPosCtrl = new_pos;
 		}
-
-		Point offset(point.x - pointPrevious.x, point.y - pointPrevious.y); // TODO overload subtraction.
-
-		float coarseness = 0.005f;
-
-		//		if (modifier_keys::isHeldCtrl()) // <cntr> key magnifies
-		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) // <cntr> key magnifies
-			coarseness = 0.001f;
-
-		float new_pos = pinAnimationPosition;
-		new_pos = new_pos - coarseness * (float)offset.y;
-
-		if (new_pos < 0.f)
-			new_pos = 0.f;
-
-		if (new_pos > 1.f)
-			new_pos = 1.f;
-
-		pinAnimationPosition = new_pos;
 
 		pointPrevious = point;
 
@@ -246,13 +253,17 @@ public:
 		return gmpi::MP_OK;
 	}
 
-	int32_t onPointerUp(int32_t flags,struct GmpiDrawing_API::MP1_POINT point)
+	int32_t onPointerUp(int32_t flags, struct GmpiDrawing_API::MP1_POINT point)
 	{
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
 		{
 			goto pass_filter;
 		}
-			
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
+		{
+			goto pass_filter;
+		}
+
 		if (getCapture())
 		{
 			releaseCapture();
@@ -315,89 +326,10 @@ public:
 		pinColorAdj = false;
 		pinMouseDown = false;
 
+		releaseCapture();
+
 		return gmpi::MP_OK;
 		//invalidateRect();
-	}
-
-	int32_t AnimPosToHex()
-	{
-		int x = pinAnimationPosition * 1535;
-		int R = 0;
-		int G = 0;
-		int B = 0;
-		//--------------------------------
-
-		if ((x >= 255) && (x < 768))
-			G = 255;
-		if (x > 1023)
-			G = 0;
-
-		if ((x >= 1279) || (x < 255))
-			R = 255;
-		if ((x > 510) && (x <= 1024))
-			R = 0;
-
-		if ((x >= 767) && (x < 1280))
-			B = 255;
-		if (x <= 511)
-			B = 0;
-
-		//-----------------------------
-
-		if ((x >= 0) && (x <= 255))
-		{
-			G = x;
-		}
-		//-------------------
-
-		if ((x >= 256) && (x <= 511))
-		{
-			R = 255 - (x - 256);
-		}
-
-		//-------------------
-		if ((x >= 512) && (x <= 767))
-		{
-			B = x - 512;
-		}
-
-		//-------------------
-		if ((x >= 768) && (x <= 1023))
-		{
-			G = 255 - (x - 768);
-		}
-
-		//-------------------
-
-		if ((x >= 1024) && (x <= 1279))
-		{
-			R = x - 1024;
-		}
-
-		//-------------------
-		if ((x >= 1280) && (x <= 1535))
-		{
-			B = 255 - (x - 1280);
-		}
-
-
-		std::string resA = "ff";
-
-		std::stringstream ssR;
-		ssR << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << R;
-		std::string resR(ssR.str());
-
-		std::stringstream ssG;
-		ssG << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << G;
-		std::string resG(ssG.str());
-
-		std::stringstream ssB;
-		ssB << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << B;
-		std::string resB(ssB.str());
-
-		pinHexOut = resA + resR + resG + resB;
-
-		return gmpi::MP_OK;
 	}
 
 
@@ -538,7 +470,6 @@ public:
 			}
 #endif
 			pinListIndex = nativeMenu.GetSelectedId();
-
 		}
 
 		nativeMenu.setNull(); // release it.
