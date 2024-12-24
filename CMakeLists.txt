@@ -70,6 +70,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (MatchPitchGate)
 #add_subdirectory (PopUp)
 #add_subdirectory (MIDITranspose)
+add_subdirectory (MIDIDelta)
 
 
 

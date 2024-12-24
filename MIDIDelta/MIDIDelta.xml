@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="MIDIDelta" name="MIDI Delta" category="mx/MIDI">
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+            <Pin name="Delta" datatype="int" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
