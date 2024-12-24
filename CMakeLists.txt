@@ -69,7 +69,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (mxXYText)
 #add_subdirectory (MatchPitchGate)
 #add_subdirectory (PopUp)
-add_subdirectory (MIDI Transpose)
+add_subdirectory (MIDITranspose)
 
 
 
