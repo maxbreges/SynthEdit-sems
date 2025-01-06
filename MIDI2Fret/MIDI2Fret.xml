@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="MIDI2Fret" name="MIDI2Fret" category="mx/MIDI">
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+			<Pin name="String" datatype="enum" metadata="G=0,D=1,A=2,E=3"/>
+            <Pin name="1" datatype="bool" direction="out"/>
+            <Pin name="2" datatype="bool" direction="out"/>
+		    <Pin name="3" datatype="bool" direction="out"/>
+	    	<Pin name="4" datatype="bool" direction="out"/>
+        	<Pin name="5" datatype="bool" direction="out"/>
+            <Pin name="6" datatype="bool" direction="out"/>
+            <Pin name="7" datatype="bool" direction="out"/>
+            <Pin name="8" datatype="bool" direction="out"/>
+            <Pin name="9" datatype="bool" direction="out"/>
+            <Pin name="10" datatype="bool" direction="out"/>
+            <Pin name="11" datatype="bool" direction="out"/>
+            <Pin name="12" datatype="bool" direction="out"/>
+            <Pin name="13" datatype="bool" direction="out"/>
+            <Pin name="14" datatype="bool" direction="out"/>
+            <Pin name="15" datatype="bool" direction="out"/>
+            <Pin name="16" datatype="bool" direction="out"/>
+            <Pin name="17" datatype="bool" direction="out"/>
+   		    <Pin name="18" datatype="bool" direction="out"/>
+	        <Pin name="19" datatype="bool" direction="out"/>
+            <Pin name="20" datatype="bool" direction="out"/>
+		<Pin name="Transport Run" datatype="bool"/>
+			<Pin name="Channel" datatype="enum" metadata="All=-1,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16"/>
+        </Audio>
+    </Plugin>
+</PluginList>

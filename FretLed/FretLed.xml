@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FretLed" name="Fret Led" category="mx/Sub-Controls">
+		<Parameters>
+			<Parameter id="0" datatype="bool" name=""/>
+		</Parameters>
+		<Audio>
+			<Pin name="Gate" datatype="bool"/>
+			<Pin name="Gate" datatype="bool" direction="out" parameterId="0"/>
+		</Audio>
+        <GUI graphicsApi="GmpiGui">
+			<Pin name="Gate" datatype="bool" parameterId="0"/>
+            <Pin name="Color" datatype="string" isMinimised="true"/>
+			<Pin name="Line Color" datatype="string" isMinimised="true"/>
+			<Pin name="Line Size" datatype="float" default="3" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
