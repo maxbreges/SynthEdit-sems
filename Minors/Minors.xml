@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="minors" name="Key Signatures" category="mx/MIDI">
+        <GUI>
+			<Pin name="Delta" datatype="int"/>
+			<Pin name="0=Minors,1=Majors" datatype="int"/>
+			<Pin name="Keys" datatype="string"/>
+            <Pin name="Index" datatype="int"/>
+            <Pin name="List" datatype="string"/>
+        </GUI>
+    </Plugin>
+</PluginList>
