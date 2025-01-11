@@ -1,8 +1,8 @@
 #include "mp_sdk_gui2.h"
-#include <string>
+//#include <numeric>
+//#include <vector>
 
 using namespace gmpi;
-using namespace std;
 
 class MinorsGui final : public SeGuiInvisibleBase
 {
@@ -29,7 +29,7 @@ class MinorsGui final : public SeGuiInvisibleBase
 
  	void onSetIndex()
 	{
-		if (!pinScale)
+		if (!pinScale) //minors both ascending and descending
 		{
 			switch (pinIndex)
 			{
@@ -41,14 +41,14 @@ class MinorsGui final : public SeGuiInvisibleBase
 			case 5: pinList = "C,D♭,D♮,E♭,E♮,F,G♭,G,A♭,A♮,B♭,B♮"; break;
 			case 6: pinList = "B♯,C♯,D,D♯,E,E♯,F♯,G♮,G♯,A,A♯,B"; break;
 			case 7: pinList = "C,C♯,D,E♭,E♮,F,F♯,G,A♭,A,B♭,B♮"; break;
-			case 8: pinList = "B♯,C♯,C♯♯,D♯,E,E♯,F,F♯,G♯,A♮,A♯,B"; break;
+			case 8: pinList = "B♯,C♯,C♯♯,D♯,E,E♯,F♯,F♯♯,G♯,A♮,A♯,B"; break;
 			case 9: pinList = "C,C♯,D,D♯,E,F,F♯,G,G♯,A,B♭,B"; break;
 			case 10: pinList = "C,D♭,D♮,E♭,E♮,F,G♭,G♮,A♭,A♮,B♭,C♭"; break;
 			case 11: pinList = "C♮,C♯,D,D♯,E,E♯,F♯,G,G♯,A,A♯,B"; break;
 			}
 		}
 
-		if (pinScale)
+		if (pinScale) //majors
 		{
 			switch (pinDelta)
 			{
@@ -87,16 +87,18 @@ class MinorsGui final : public SeGuiInvisibleBase
 				case 9: pinList = "B♯,C♯,D,D♯,E,E♯,F♯,G♮,G♯,A,A♯,B"; break;
 				case 10: pinList = "C,C♯,D,E♭,E♮,F,F♯,G,A♭,A,B♭,B♮"; break;
 				case 11: pinList = "B♯,C♯,C♯♯,D♯,E,E♯,F♯,F♯♯,G♯,A♮,A♯,B"; break;
-				}; break;			
-			
-			}
-			
+				}; break;						
+			}			
 		}
 	}
 
 	void onSetChar()
 	{
+		/*std::vector<std::string> acc = {"D\xf0\x90\x84\xAB","\xe2\x9a\x81","\xe2\x9a\x82","\xe2\x9a\x83","\xf0\x90\x84\xAB"};
+		
+		std::string s = std::accumulate(acc.begin(), acc.end(), std::string{});
 
+		pinChar = s;*/
 	}
 
 	IntGuiPin pinDelta;
@@ -104,7 +106,7 @@ class MinorsGui final : public SeGuiInvisibleBase
 	StringGuiPin pinKeys;
  	IntGuiPin pinIndex;
  	StringGuiPin pinList;
-	StringGuiPin pinChar;
+	//StringGuiPin pinChar;
 
 public:
 	MinorsGui()
@@ -114,7 +116,7 @@ public:
 		initializePin(pinKeys, static_cast<MpGuiBaseMemberPtr2>(&MinorsGui::onSetKeys));
 		initializePin( pinIndex, static_cast<MpGuiBaseMemberPtr2>(&MinorsGui::onSetIndex) );
 		initializePin( pinList, static_cast<MpGuiBaseMemberPtr2>(&MinorsGui::onSetScale) );
-		initializePin(pinChar, static_cast<MpGuiBaseMemberPtr2>(&MinorsGui::onSetChar));
+	//	initializePin(pinChar, static_cast<MpGuiBaseMemberPtr2>(&MinorsGui::onSetChar));
 	}
 };
 
