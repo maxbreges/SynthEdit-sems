@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="IntArray" name="Int Array" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Index" datatype="int"/>
+			<Pin name="Value" datatype="int"/>
+			<Pin name="Value Out" datatype="int" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>

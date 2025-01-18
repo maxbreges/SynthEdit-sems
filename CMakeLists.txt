@@ -73,7 +73,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (MIDIDelta)
 #add_subdirectory (MIDI2Fret)
 #add_subdirectory (FretLed)
-add_subdirectory (Minors)
+#add_subdirectory (Minors)
+add_subdirectory (IntArray)
 
 
 
