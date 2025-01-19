@@ -4,6 +4,8 @@
         <GUI>
             <Pin name="Index" datatype="int"/>
 			<Pin name="Value" datatype="int"/>
+			<Pin name="Size In" datatype="int" direction="out"/>
+			<Pin name="Size In" datatype="int"/>
 			<Pin name="Value Out" datatype="int" direction="out"/>
         </GUI>
     </Plugin>

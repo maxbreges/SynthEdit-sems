@@ -7,10 +7,19 @@ class StringArrayGui final : public SeGuiInvisibleBase
 	int arr[' '] = {};
 	int i = 0;
 	int value = 0;
+	int size = 0;
 
  	void onSetIndex()
 	{
 		i = pinIndex;
+		if (i > size)
+		{
+			i = size;
+		}
+		if (i < 0)
+		{
+			i = 0;
+		}
 		pinStringOut = arr[i];
 	}
 
@@ -21,8 +30,20 @@ class StringArrayGui final : public SeGuiInvisibleBase
 		pinStringOut = arr[i];
 	}
 
+	void onSetSize()
+	{
+		size = pinSize;
+	}
+
+	void onSetSizeL()
+	{
+		size = pinSizeL;
+	}
+
  	IntGuiPin pinIndex;
  	IntGuiPin pinString;
+	IntGuiPin pinSize;
+	IntGuiPin pinSizeL;
 	IntGuiPin pinStringOut;
 
 public:
@@ -30,6 +51,8 @@ public:
 	{
 		initializePin( pinIndex, static_cast<MpGuiBaseMemberPtr2>(&StringArrayGui::onSetIndex) );
 		initializePin( pinString, static_cast<MpGuiBaseMemberPtr2>(&StringArrayGui::onSetString) );
+		initializePin(pinSize, static_cast<MpGuiBaseMemberPtr2>(&IntArrayGui::onSetSize));
+		initializePin(pinSizeL, static_cast<MpGuiBaseMemberPtr2>(&IntArrayGui::onSetSizeL));
 		initializePin(pinStringOut, static_cast<MpGuiBaseMemberPtr2>(&StringArrayGui::onSetIndex));
 	}
 };
