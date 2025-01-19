@@ -51,8 +51,8 @@ public:
 	{
 		initializePin( pinIndex, static_cast<MpGuiBaseMemberPtr2>(&StringArrayGui::onSetIndex) );
 		initializePin( pinString, static_cast<MpGuiBaseMemberPtr2>(&StringArrayGui::onSetString) );
-		initializePin(pinSize, static_cast<MpGuiBaseMemberPtr2>(&IntArrayGui::onSetSize));
-		initializePin(pinSizeL, static_cast<MpGuiBaseMemberPtr2>(&IntArrayGui::onSetSizeL));
+		initializePin(pinSize, static_cast<MpGuiBaseMemberPtr2>(&StringArrayGui::onSetSize));
+		initializePin(pinSizeL, static_cast<MpGuiBaseMemberPtr2>(&StringArrayGui::onSetSizeL));
 		initializePin(pinStringOut, static_cast<MpGuiBaseMemberPtr2>(&StringArrayGui::onSetIndex));
 	}
 };
