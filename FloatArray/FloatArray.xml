@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FloatArray" name="Float Array" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Index" datatype="int"/>
+            <Pin name="Value In" datatype="float"/>
+			<Pin name="Value In" datatype="float" direction="out"/>
+			<Pin name="Size In" datatype="int" direction="out"/>
+            <Pin name="Value Out" datatype="float" direction="out"/>
+			<Pin name="Value Out" datatype="float"/>
+        </GUI>
+    </Plugin>
+</PluginList>
