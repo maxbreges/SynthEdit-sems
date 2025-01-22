@@ -2,11 +2,11 @@
 <PluginList>
     <Plugin id="Increment" name="Increment" category="mx/Sub-Controls">
         <GUI>
-            <Pin name="Incr" datatype="bool" direction="out"/>
-			<Pin name="Decr" datatype="bool" direction="out"/>
-			<Pin name="List Size In" datatype="int" direction="out"/>
-            <Pin name="Choice" datatype="int"/>
+			<Pin name="List Size" datatype="int" direction="out"/>
 			<Pin name="Wrap" datatype="bool"/>
+			<Pin name="Choice" datatype="int"/>
+            <Pin name="Incr" datatype="bool" direction="out"/>
+			<Pin name="Decr" datatype="bool" direction="out"/>    			
         </GUI>
     </Plugin>
 </PluginList>
