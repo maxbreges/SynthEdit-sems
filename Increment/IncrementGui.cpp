@@ -7,81 +7,76 @@ class IncrementGui final : public SeGuiInvisibleBase
 	int value = {};
 	int size = {};
 
+	void onSetWrap()
+	{
+		if (pinWrap)
+		{
+			if (value >= size)
+			{
+				value = 0;
+			}
+			if (value <= -1)
+			{
+				value = size -1;
+			}
+		}
+
+		if (!pinWrap)
+		{
+			if (value <= 0)
+			{
+				value = 0;
+			}
+			if (value >= size)
+			{
+				value = size -1;
+			}			
+		}		
+	}
+
 	void onSetIncr()
 	{
 		if (pinIncr)
 		{
 			value++;
-
-			if (pinWrap)
-			{
-				if (value >= size)
-				{
-					value = 0;
-				}
-			}
-			if (!pinWrap)
-			{
-				if (value >= size)
-				{
-					value = size -1;
-				}
-			}
+			onSetWrap();
+			pinChoice = value;
 		}
-		pinInt = value;
 	}
 	void onSetDecr()
 	{
 		if (pinDecr)
 		{
 			value--;
-
-			if (pinWrap)
-			{
-				if (value <= 0)
-				{
-					value = size;
-				}
-				pinInt = value - 1;
-			}
-			if (!pinWrap)
-			{
-				if (value <= 0)
-				{
-					value = 0;
-				}
-				pinInt = value;
-			}
-		}
-		
+			onSetWrap();
+			pinChoice = value;
+		}		
 	}
 	void onSetListSize()
 	{
 		size = pinListSize;
 	}
 
-	void onSetInt()
+	void onSetChoice()
 	{
+		value = pinChoice;
 	}
-
-	void onSetWrap()
-	{
-	}
-
+	
+	IntGuiPin pinListSize;
+	BoolGuiPin pinWrap;
+	IntGuiPin pinChoice;
  	BoolGuiPin pinIncr;
 	BoolGuiPin pinDecr;
- 	IntGuiPin pinListSize;
-	IntGuiPin pinInt;
-	BoolGuiPin pinWrap;
+	
 
 public:
 	IncrementGui()
 	{
-		initializePin( pinIncr, static_cast<MpGuiBaseMemberPtr2>(&IncrementGui::onSetIncr) );
-		initializePin(pinDecr, static_cast<MpGuiBaseMemberPtr2>(&IncrementGui::onSetDecr));
 		initializePin(pinListSize, static_cast<MpGuiBaseMemberPtr2>(&IncrementGui::onSetListSize));
-		initializePin( pinInt, static_cast<MpGuiBaseMemberPtr2>(&IncrementGui::onSetInt) );
 		initializePin(pinWrap, static_cast<MpGuiBaseMemberPtr2>(&IncrementGui::onSetWrap));
+		initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&IncrementGui::onSetChoice));
+		initializePin( pinIncr, static_cast<MpGuiBaseMemberPtr2>(&IncrementGui::onSetIncr) );
+		initializePin(pinDecr, static_cast<MpGuiBaseMemberPtr2>(&IncrementGui::onSetDecr));				
 	}
 };
 
