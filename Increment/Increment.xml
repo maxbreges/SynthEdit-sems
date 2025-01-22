@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Increment" name="Increment" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Incr" datatype="bool" direction="out"/>
+			<Pin name="Decr" datatype="bool" direction="out"/>
+			<Pin name="List Size In" datatype="int" direction="out"/>
+            <Pin name="Choice" datatype="int"/>
+			<Pin name="Wrap" datatype="bool"/>
+        </GUI>
+    </Plugin>
+</PluginList>

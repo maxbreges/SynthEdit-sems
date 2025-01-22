@@ -74,7 +74,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (MIDI2Fret)
 #add_subdirectory (FretLed)
 #add_subdirectory (Minors)
-add_subdirectory (IntArray)
+#add_subdirectory (IntArray)
+add_subdirectory (Increment)
 
 
 
