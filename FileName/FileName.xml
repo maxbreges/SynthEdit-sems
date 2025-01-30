@@ -5,6 +5,7 @@
             <Pin name="Path" datatype="string"/>
             <Pin name="File Name" datatype="string" direction="out"/>
 			<Pin name="Ext" datatype="string" direction="out"/>
+			<Pin name="Relative Path" datatype="string" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>
