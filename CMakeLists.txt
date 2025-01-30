@@ -75,7 +75,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (FretLed)
 #add_subdirectory (Minors)
 #add_subdirectory (IntArray)
-add_subdirectory (Increment)
+#add_subdirectory (Increment)
+add_subdirectory (FileName)
 
 
 
