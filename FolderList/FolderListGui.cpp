@@ -41,7 +41,6 @@ class FolderListGui final : public SeGuiInvisibleBase
                     {
                         buffer << entry.path().filename().stem().string() << "," << std::endl; // Add path to buffer
                         ++fileCount;
-
                     }
                 }
                 if (!pinHideExtension)
@@ -50,7 +49,6 @@ class FolderListGui final : public SeGuiInvisibleBase
                     {
                         buffer << entry.path().filename().string() << "," << std::endl; // Add path to buffer
                         ++fileCount;
-
                     }
                 }                   
 
@@ -67,7 +65,7 @@ class FolderListGui final : public SeGuiInvisibleBase
         // Use a std::stringstream to create the file list
         std::string fileList = buffer.str();
         pinFolderList = fileList; // Assuming pinFolderList is defined as std::string or similar
-        pinListSize = fileCount;
+        pinListSize = fileCount-1;
         return 0; // Success
     }
 

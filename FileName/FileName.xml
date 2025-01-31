@@ -2,7 +2,8 @@
 <PluginList>
     <Plugin id="FileName" name="FileName" category="mx/Sub-Controls">
         <GUI>
-            <Pin name="Path" datatype="string"/>
+            <Pin name="File Name Path" datatype="string"/>
+			<Pin name="Directory" datatype="string" direction="out"/>
             <Pin name="File Name" datatype="string" direction="out"/>
 			<Pin name="Ext" datatype="string" direction="out"/>
 			<Pin name="Relative Path" datatype="string" direction="out"/>

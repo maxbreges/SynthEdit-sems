@@ -2,10 +2,10 @@
 <PluginList>
     <Plugin id="FolderList" name="FolderList" category="mx/Sub-Controls">
         <GUI>
-            <Pin name="Path" datatype="string"/>
+            <Pin name="Directory" datatype="string"/>
 			<Pin name="Hide Extension" datatype="bool"/>
-			<Pin name="List Size" datatype="int" direction="out"/>
-            <Pin name="Folder List" datatype="string" direction="out"/>			
+			<Pin name="List Size Out" datatype="int" direction="out"/>
+            <Pin name="List Items" datatype="string" direction="out"/>			
         </GUI>
     </Plugin>
 </PluginList>
