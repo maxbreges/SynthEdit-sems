@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FolderList" name="FolderList" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Path" datatype="string"/>
+			<Pin name="Hide Extension" datatype="bool"/>
+			<Pin name="List Size" datatype="int" direction="out"/>
+            <Pin name="Folder List" datatype="string" direction="out"/>			
+        </GUI>
+    </Plugin>
+</PluginList>
