@@ -15,7 +15,7 @@ class FolderListGui final : public SeGuiInvisibleBase
 		FolderList();
 	}
 
-    void onSetHideExt()
+    void onSetShowExt()
     {
     }
 
@@ -25,6 +25,7 @@ class FolderListGui final : public SeGuiInvisibleBase
 
         std::string path = pinPath; // Ensure pinPath is defined somewhere.
 
+        int totalFiles = 0;
         int fileCount = 0;
 
         // Check if the path exists and is a directory
@@ -35,21 +36,39 @@ class FolderListGui final : public SeGuiInvisibleBase
 
         try 
         {
-                if (pinHideExtension)
+                if (!pinShowExtension)
                 {
                     for (const auto& entry : fs::directory_iterator(path))
                     {
-                        buffer << entry.path().filename().stem().string() << "," << std::endl; // Add path to buffer
-                        ++fileCount;
+                        ++totalFiles;
                     }
+                    for (const auto& entry : fs::directory_iterator(path))
+                    {
+                        buffer << entry.path().filename().stem().string() << std::endl; // Add path to buffer
+                        ++fileCount;
+                        if (fileCount < totalFiles)
+                        {
+                            buffer << "," << std::endl;
+                        }
+                    }
+                    
                 }
-                if (!pinHideExtension)
+                if (pinShowExtension)
                 {
                     for (const auto& entry : fs::directory_iterator(path))
                     {
-                        buffer << entry.path().filename().string() << "," << std::endl; // Add path to buffer
-                        ++fileCount;
+                        ++totalFiles;
                     }
+                    for (const auto& entry : fs::directory_iterator(path))
+                    {
+                        buffer << entry.path().filename().string() << std::endl; // Add path to buffer
+                        ++fileCount;
+                        if (fileCount < totalFiles)
+                        {
+                            buffer << "," << std::endl;
+                        }
+                    }
+                   
                 }                   
 
         }
@@ -70,7 +89,7 @@ class FolderListGui final : public SeGuiInvisibleBase
     }
 
  	StringGuiPin pinPath;
-    BoolGuiPin pinHideExtension;
+    BoolGuiPin pinShowExtension;
     IntGuiPin pinListSize;
  	StringGuiPin pinFolderList;
 
@@ -78,7 +97,7 @@ public:
 	FolderListGui()
 	{
 		initializePin( pinPath, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetPath) );
-        initializePin(pinHideExtension, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetHideExt));
+        initializePin(pinShowExtension, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetShowExt));
         initializePin(pinListSize, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetPath));
 		initializePin( pinFolderList, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetPath) );
 	}

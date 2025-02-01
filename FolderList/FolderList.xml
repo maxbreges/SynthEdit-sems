@@ -3,8 +3,8 @@
     <Plugin id="FolderList" name="FolderList" category="mx/Sub-Controls">
         <GUI>
             <Pin name="Directory" datatype="string"/>
-			<Pin name="Hide Extension" datatype="bool"/>
-			<Pin name="List Size Out" datatype="int" direction="out"/>
+			<Pin name="Show Extension" datatype="bool"/>
+			<Pin name="List Size Out" datatype="int" direction="out" private="true"/>
             <Pin name="List Items" datatype="string" direction="out"/>			
         </GUI>
     </Plugin>
