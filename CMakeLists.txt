@@ -78,6 +78,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (Increment)
 #add_subdirectory (FileName)
 #add_subdirectory (FolderList)
+add_subdirectory (LocateFolder)
 
 
 

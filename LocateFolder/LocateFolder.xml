@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="LocateFolder" name="Locate Folder" category="mx/Sub-Controls">
+        <GUI>
+			<Pin name="Trigger" datatype="bool" direction="out"/>
+			<Pin name="Directory" datatype="string" direction="in"/>          
+            <Pin name="Items List Ext" datatype="string" direction="in" private="true"/>
+			<Pin name="Items List" datatype="string" direction="in"/>
+			<Pin name="Choice" datatype="int" direction="in"/>
+			<Pin name="Extension" datatype="string" direction="out"/>
+		</GUI>
+    </Plugin>
+</PluginList>
