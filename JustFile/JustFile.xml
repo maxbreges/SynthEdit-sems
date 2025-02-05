@@ -6,10 +6,6 @@
             <Pin name="File Extension" datatype="string" private="fasle"/>
             <Pin name="Trigger" datatype="bool" direction="out"/>
             <Pin name="Save Mode" datatype="bool" private="true"/>
-			<Pin name="Selection" datatype="string" direction="out" private="true"/>
-			<Pin name="Choice" datatype="int" direction="in" private="true"/>
-			<Pin name="List Items" datatype="string" direction="out" private="true"/>
-			<Pin name="Directory" datatype="string" direction="in" private="true"/>
         </GUI>
     </Plugin>
 </PluginList>

@@ -1,12 +1,6 @@
 #include "mp_sdk_gui2.h"
 #include "mp_gui.h"
 
-#include <sstream>
-#include <filesystem>
-#include <vector>
-
-namespace fs = std::filesystem;
-
 using namespace gmpi;
 using namespace gmpi_gui;
 
@@ -14,7 +8,6 @@ class JustFileGui final : public SeGuiInvisibleBase
 {
 	bool m_prev_trigger = false;
 	GmpiGui::FileDialog nativeFileDialog;
-	std::vector<std::string> files;
 
  	void onSetFileName()
 	{
@@ -76,53 +69,10 @@ class JustFileGui final : public SeGuiInvisibleBase
 		// pinSaveMode changed
 	}
 
-	std::string lastKnownDirectory; // A class-level static variable
-
-	void onSetChoice()
-	{
-		if (pinChoice >= 0 && pinChoice < files.size())
-		{
-			std::string dir;
-			std::string nam;
-			std::string con;
-			dir = pinDirectory;
-
-			pinSelection = files[pinChoice];
-			nam = pinSelection;
-			con = dir + nam;
-
-			// Update pinFileName with the filename corresponding to pinChoice
-			pinFileName = con; // Use the full filename with extension
-
-			// Update last known directory if the directory is valid
-			if (!dir.empty()) {
-				lastKnownDirectory = pinDirectory;
-			}
-			// Check if pinDirectory was cleared and, if so, set it to the last known directory
-			if (dir.empty()) {
-				pinDirectory = lastKnownDirectory;
-			}
-			
-		}
-	}
-	void onSetSelection()
-	{
-	}
-	void onSetListItems()
-	{
-	}
-	void onSetDirectory()
-	{
-	}
-
  	StringGuiPin pinFileName;
  	StringGuiPin pinFileExtension;
  	BoolGuiPin pinTrigger;
  	BoolGuiPin pinSaveMode;
-	StringGuiPin pinSelection;
-	IntGuiPin pinChoice;
-	StringGuiPin pinListItems;
-	StringGuiPin pinDirectory;
 
 public:
 	JustFileGui()
@@ -131,10 +81,6 @@ public:
 		initializePin( pinFileExtension, static_cast<MpGuiBaseMemberPtr2>(&JustFileGui::onSetFileExtension) );
 		initializePin( pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&JustFileGui::onSetTrigger) );
 		initializePin( pinSaveMode, static_cast<MpGuiBaseMemberPtr2>(&JustFileGui::onSetSaveMode) );
-		initializePin(pinSelection, static_cast<MpGuiBaseMemberPtr2>(&JustFileGui::onSetSelection));
-		initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&JustFileGui::onSetChoice));
-		initializePin(pinListItems, static_cast<MpGuiBaseMemberPtr2>(&JustFileGui::onSetListItems));
-		initializePin(pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&JustFileGui::onSetDirectory));
 	}
 
 	std::string getDefaultFolder(std::wstring extension)
@@ -152,60 +98,6 @@ public:
 			auto filepath = nativeFileDialog.GetSelectedFilename();
 			auto fileext = GetExtension(filepath);
 			const char* fileclass = nullptr;
-
-			// Retrieve the directory from the file path
-			fs::path filePath(filepath);
-			fs::path directory = filePath.parent_path(); // Get the directory
-			std::string filename = filePath.filename().string(); // Get the file name
-
-			// Convert directory to string
-			std::string dirStr = directory.string();
-
-			// Ensure directory ends with a backslash
-			if (!dirStr.empty() && dirStr.back() != '\\')
-			{
-				dirStr += '\\'; // Append backslash if it's not already there
-			}			
-
-			pinDirectory = dirStr; // Set pinDirectory with ensured trailing backslash
-			pinFileName = dirStr + filename; // Update pinFileName with full path
-			pinSelection = filename;
-
-			// Check if the directory exists
-			if (!fs::exists(directory) || !fs::is_directory(directory))
-			{
-				return -1; // Indicate that the directory is invalid
-			}	
-
-			files.clear(); // Add this line to clear previous files
-
-			// List all files in the directory
-			for (const auto& entry : fs::directory_iterator(directory))
-			{
-				if (fs::is_regular_file(entry))
-				{
-					files.push_back(entry.path().filename().string()); // Store full filename
-				}
-			}
-
-			// Initialize or clear pinChoice
-			pinChoice = -1; // Default value indicating not found
-
-			// Search for the file and set pinChoice
-			auto it = std::find(files.begin(), files.end(), filename);
-			if (it != files.end())
-			{
-				pinChoice = std::distance(files.begin(), it); // Update the index
-			}
-			
-
-			// Prepare the pinListItems for external visibility (if needed)
-			std::ostringstream oss;
-			for (const auto& file : files)
-			{
-				oss << file << ",";
-			}
-			pinListItems = oss.str();
 
 			// File classification based on extension
 			if (fileext == "sf2" || fileext == "sfz") {
@@ -230,8 +122,6 @@ public:
 					filepath = shortName;
 				}
 			}
-
-			//pinFileName = filepath;
 		}
 
 		nativeFileDialog.setNull(); // release it.
