@@ -8,3 +8,7 @@ build_gmpi_plugin(
 	SOURCE_FILES
 	  LocateFolderGui.cpp
 )
+if (APPLE)
+    find_library(COCOA_LIBRARY Cocoa)
+    target_link_libraries(your_target_name ${COCOA_LIBRARY})
+endif()
