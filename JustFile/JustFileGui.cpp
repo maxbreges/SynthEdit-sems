@@ -1,22 +1,14 @@
 #include "mp_sdk_gui2.h"
 #include "mp_gui.h"
 
-#include "C:\modules\shared\unicode_conversion.h"
-#include "C:\modules\shared\it_enum_list.h"
-#include "C:\modules\shared\string_utilities.h"
-#include "MpString.h"
 #include <sstream>
 #include <filesystem>
 #include <vector>
-#include <algorithm>
-#include <iterator>
 
 namespace fs = std::filesystem;
 
 using namespace gmpi;
 using namespace gmpi_gui;
-using namespace gmpi_sdk;
-using namespace JmUnicodeConversions;
 
 class JustFileGui final : public SeGuiInvisibleBase
 {
