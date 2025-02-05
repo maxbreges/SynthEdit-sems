@@ -2,8 +2,6 @@
 #include <filesystem>
 #include <sstream>
 #include <vector>
-#include <Cocoa/Cocoa.h>  // Include Cocoa framework
-
 
 using namespace gmpi;
 namespace fs = std::filesystem;
@@ -75,22 +73,20 @@ public:
 
 	std::wstring openFileDialog()
 {
-    // Create an NSOpenPanel
-    NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-    [openPanel setAllowedFileTypes:@[(NSString *)kUTTypeAll]];
-    [openPanel setCanChooseFiles:YES];
-    [openPanel setCanChooseDirectories:NO];
-    [openPanel setAllowsMultipleSelection:NO];
+	OPENFILENAME ofn;
+	WCHAR szFileName[MAX_PATH] = L"";
+	ZeroMemory(&ofn, sizeof(ofn));
 
-    // Run the open panel modally and retrieve the selected file
-    if ([openPanel runModal] == NSModalResponseOK)
-    {
-        NSURL *selectedFileURL = [[openPanel URLs] firstObject];
-        NSString *filePath = [selectedFileURL path]; // Get the string path
-        return std::wstring(filePath.UTF8String); // Convert to std::wstring
-    }
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = nullptr;
+	ofn.lpstrFile = szFileName;
+	ofn.nMaxFile = sizeof(szFileName) / sizeof(WCHAR);
+	ofn.lpstrFilter = L"All Files\0*.*\0Text Files\0*.txt\0";
+	ofn.nFilterIndex = 1;
+	//ofn.lpstrInitialDir = currentDirectory.empty() ? nullptr : currentDirectory.c_str();
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;		
 
-    return L""; // return an empty string if cancelled
+	return (GetOpenFileName(&ofn) == TRUE) ? std::wstring(ofn.lpstrFile) : L"";
 }
 
 	void updateItemsList(const fs::path& directory)
