@@ -72,22 +72,22 @@ public:
 	}
 
 	std::wstring openFileDialog()
-	{
-		OPENFILENAME ofn;
-		WCHAR szFileName[MAX_PATH] = L"";
-		ZeroMemory(&ofn, sizeof(ofn));
+{
+	OPENFILENAME ofn;
+	WCHAR szFileName[MAX_PATH] = L"";
+	ZeroMemory(&ofn, sizeof(ofn));
 
-		ofn.lStructSize = sizeof(OPENFILENAME);
-		ofn.hwndOwner = nullptr;
-		ofn.lpstrFile = szFileName;
-		ofn.nMaxFile = sizeof(szFileName) / sizeof(WCHAR);
-		ofn.lpstrFilter = L"All Files\0*.*\0Text Files\0*.txt\0";
-		ofn.nFilterIndex = 1;
-		//ofn.lpstrInitialDir = currentDirectory.empty() ? nullptr : currentDirectory.c_str();
-		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;		
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = nullptr;
+	ofn.lpstrFile = szFileName;
+	ofn.nMaxFile = sizeof(szFileName) / sizeof(WCHAR);
+	ofn.lpstrFilter = L"All Files\0*.*\0Text Files\0*.txt\0";
+	ofn.nFilterIndex = 1;
+	//ofn.lpstrInitialDir = currentDirectory.empty() ? nullptr : currentDirectory.c_str();
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;		
 
-		return (GetOpenFileName(&ofn) == TRUE) ? std::wstring(ofn.lpstrFile) : L"";
-	}
+	return (GetOpenFileName(&ofn) == TRUE) ? std::wstring(ofn.lpstrFile) : L"";
+}
 
 	void updateItemsList(const fs::path& directory)
 	{
