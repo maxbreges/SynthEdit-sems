@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="GuiTextToText" name="GuiTextToText" category="mx/Sub-Controls">
+        <Parameters>
+            <Parameter id="0" datatype="string" name=""/>
+        </Parameters>
+        <Audio>
+            <Pin name="Value In" datatype="string" private="true" parameterId="0"/>
+            <Pin name="Text Out" datatype="string" direction="out" autoConfigureParameter="false"/>
+        </Audio>
+        <GUI>
+            <Pin name="Value In" datatype="string" private="true" parameterId="0"/>
+            <Pin name="Name In" datatype="string" private="true" parameterId="0" parameterField="ShortName"/>
+            <Pin name="File Extension" datatype="string" private="true" parameterId="0" parameterField="FileExtension"/>
+            <Pin name="Menu Items" datatype="string" private="true" parameterId="0" parameterField="MenuItems"/>
+            <Pin name="Menu Selection" datatype="int" private="true" parameterId="0" parameterField="MenuSelection"/>
+            <Pin name="Text In" datatype="string" direction="in"/>
+        </GUI>
+    </Plugin>
+</PluginList>
