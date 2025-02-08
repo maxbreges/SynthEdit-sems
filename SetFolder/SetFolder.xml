@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="SetFolder" name="Set Folder" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Trigger" datatype="bool" direction="out"/>			
+            <Pin name="Directory" datatype="string"/>
+			<Pin name="Add backslash" datatype="bool" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
