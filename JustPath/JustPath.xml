@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="JustPath" name="Just Path" category="mx/Sub-Controls">
+        <GUI>            
+            <Pin name="Trigger" datatype="bool" direction="out"/>
+			<Pin name="Directory" datatype="string"/>
+        </GUI>
+    </Plugin>
+</PluginList>
