@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FilesFilter" name="Files Filter" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Trigger" datatype="bool" direction="out"/>
+			<Pin name="Directory Out" datatype="string"/>
+			<Pin name="Text Search" datatype="string" direction="out"/>
+            <Pin name="Items List" datatype="string" direction="out"/>
+		    <Pin name="Case-sensitive" datatype="bool" isMinimised="false"/>
+        </GUI>
+    </Plugin>
+</PluginList>
