@@ -1,7 +1,5 @@
 #include "mp_sdk_gui2.h"
 #include "mp_gui.h"
-#include <string>
-#include <sstream>
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -62,23 +60,14 @@ public:
 		{
 			fileNameString = nativeFileDialog.GetSelectedFilename(); // Assume this returns std::string
 
-			Directory();
+			pinDirectory = (fs::path(fileNameString).parent_path());
 		}		
 
 		nativeFileDialog.setNull(); // Release it.
 		
 		return 0;
 	}
-		
-	int32_t Directory()
-	{
-		// Extracting directory path
-		std::stringstream Directory;
-		Directory << fs::path(fileNameString).parent_path().string() + "\\";
-		std::string directory(Directory.str());
-		pinDirectory = directory;
-		return 0;
-	}
+
 };
 
 namespace
