@@ -83,7 +83,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (JustFile)
 #add_subdirectory (SetFolder)
 #add_subdirectory (JustPath)
-add_subdirectory (FilesFilter)
+#add_subdirectory (FilesFilter)
 
 
 
