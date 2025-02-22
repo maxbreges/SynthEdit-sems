@@ -27,6 +27,7 @@ class FloatAnimationGui final : public SeGuiInvisibleBase
     IntGuiPin pinSpeed;
     IntGuiPin pinMode;
 
+
     // --- Helper Functions ---
     void startAnimation()
     {
@@ -155,7 +156,7 @@ class FloatAnimationGui final : public SeGuiInvisibleBase
 
             auto end = std::chrono::steady_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-            auto targetDelay = std::chrono::milliseconds(33); // About 30 FPS
+            auto targetDelay = std::chrono::milliseconds(10); // About 30 FPS
             auto sleepDuration = targetDelay - elapsed;
 
             if (sleepDuration.count() > 0 && !animationStopped)
