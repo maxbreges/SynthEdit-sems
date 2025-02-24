@@ -85,6 +85,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (JustPath)
 #add_subdirectory (FilesFilter)
 #add_subdirectory (FloatAnimation)
+add_subdirectory (FretFormula)
 
 
 
