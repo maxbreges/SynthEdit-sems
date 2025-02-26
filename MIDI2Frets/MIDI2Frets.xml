@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="MIDI2Frets" name="MIDI To Frets" category="mx/MIDI">
+        <Parameters>
+		</Parameters>
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+			<Pin name="Fret Count" datatype="int" default="24"/>
+			<Pin name="String Count" datatype="int" default="6"/>
+
+			<Pin name="PinY1" datatype="int" direction="out"/>
+			<Pin name="PinY2" datatype="int" direction="out"/>
+			<Pin name="PinY3" datatype="int" direction="out"/>
+			<Pin name="PinY4" datatype="int" direction="out"/>
+			<Pin name="PinY5" datatype="int" direction="out"/>
+			<Pin name="PinY6" datatype="int" direction="out"/>
+		</Audio>
+        <GUI>
+        </GUI>
+    </Plugin>
+</PluginList>

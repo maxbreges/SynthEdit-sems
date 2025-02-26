@@ -86,6 +86,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (FilesFilter)
 #add_subdirectory (FloatAnimation)
 #add_subdirectory (FretFormula)
+add_subdirectory (MIDI2Frets)
 
 
 
