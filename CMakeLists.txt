@@ -88,7 +88,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (FretFormula)
 #add_subdirectory (MIDI2Frets)
 #add_subdirectory (MidiToBlobs)
-add_subdirectory (BooleanOR)
+#add_subdirectory (BooleanOR)
 
 
 
