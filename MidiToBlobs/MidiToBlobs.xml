@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="MidiToBlobs" name="Midi To Blobs" category="mx/MIDI">
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+            <Pin name="Fret Count" datatype="int" default="24"/>
+            <Pin name="String Count" datatype="int" default="6"/>
+            <Pin name="PinX" datatype="blob" direction="out" isPolyphonic="true"/>
+            <Pin name="PinY" datatype="blob" direction="out" isPolyphonic="true"/>
+        </Audio>
+        <GUI/>
+    </Plugin>
+</PluginList>
