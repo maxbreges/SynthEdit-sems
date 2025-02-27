@@ -7,6 +7,6 @@ build_gmpi_plugin(
 	HAS_DSP
 	HAS_GUI
 	SOURCE_FILES
-	  MidiToBlobs.cpp
 	  MidiToBlobsGui.cpp
+	  MidiToBlobsGuiGui.cpp
 )

@@ -52,7 +52,7 @@ END
 // GMPXML
 //
 
-IDR_GMPXML1             GMPXML                  "MidiToBlobs.xml"
+IDR_GMPXML1             GMPXML                  "MidiToBlobsGui.xml"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
