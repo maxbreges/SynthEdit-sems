@@ -90,7 +90,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (MIDI2Frets)
 #add_subdirectory (MidiToBlobs)
 #add_subdirectory (BooleanOR)
-add_subdirectory (MidiToBlobsGui)
+#add_subdirectory (MidiToBlobsGui)
 
 
 
