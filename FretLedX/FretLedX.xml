@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FretLedX" name="FretLedX" category="mx/MIDI" >
+        <Parameters>
+			<Parameter id="0" direction="out" datatype="blob" persistant="false" ignorePatchChange="true" />
+			<Parameter id="1" direction="out" datatype="blob" persistant="false" ignorePatchChange="true" />
+			<!-- <Parameter id="2" direction="out" datatype="string" persistant="false" ignorePatchChange="true" /> -->
+		</Parameters>
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+			<Pin name="PinX" direction="out" datatype="blob" parameterId="0" private="true"/>
+			<Pin name="PinX" direction="out" datatype="blob" parameterId="1" private="true"/>
+			<!-- <Pin name="Debug" direction="out" datatype="string" parameterId="2" private="true"/> -->
+		</Audio>
+		<GUI graphicsApi="GmpiGui">
+			<Pin name="PinX" datatype="blob" parameterId="0"/>
+			<Pin name="PinY" datatype="blob" parameterId="1"/>
+			<!-- <Pin name="Debug" datatype="string" parameterId="2"/> -->
+			<Pin name="PinX Out" datatype="blob" direction="out"/>
+			<Pin name="PinY Out" datatype="blob" direction="out"/>
+			<!-- <Pin name="Debug Out" datatype="string" direction="out"/> -->			
+		</GUI>
+    </Plugin>
+</PluginList>
