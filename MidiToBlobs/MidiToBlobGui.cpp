@@ -8,12 +8,15 @@ class MidiToBlobsGui final : public SeGuiInvisibleBase
 	{
 		pinX = pinXIn;
 		pinY = pinYIn;
+	//	pinDebugOut = pinDebug;
 	}
 
 	BlobGuiPin pinXIn;
 	BlobGuiPin pinYIn;
 	BlobGuiPin pinX;
 	BlobGuiPin pinY;
+	//StringGuiPin pinDebug;
+	//StringGuiPin pinDebugOut;
 
 public:
 	MidiToBlobsGui()
@@ -22,6 +25,8 @@ public:
 		initializePin(pinYIn, static_cast<MpGuiBaseMemberPtr2>(&MidiToBlobsGui::onSetNoteIn));
 		initializePin(pinX, static_cast<MpGuiBaseMemberPtr2>(&MidiToBlobsGui::onSetNoteIn));
 		initializePin(pinY, static_cast<MpGuiBaseMemberPtr2>(&MidiToBlobsGui::onSetNoteIn));
+	//	initializePin(pinDebug, static_cast<MpGuiBaseMemberPtr2>(&MidiToBlobsGui::onSetNoteIn));
+	//	initializePin(pinDebugOut, static_cast<MpGuiBaseMemberPtr2>(&MidiToBlobsGui::onSetNoteIn));
 	}
 };
 

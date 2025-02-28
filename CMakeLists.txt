@@ -80,7 +80,6 @@ include(plugin_helper.cmake)
 #add_subdirectory (FolderList)
 #add_subdirectory (LocateFolder)
 #add_subdirectory (GuiTextToText)
-
 #add_subdirectory (JustFile)
 #add_subdirectory (SetFolder)
 #add_subdirectory (JustPath)
@@ -90,7 +89,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (MIDI2Frets)
 #add_subdirectory (MidiToBlobs)
 #add_subdirectory (BooleanOR)
-#add_subdirectory (MidiToBlobsGui)
+add_subdirectory (MidiToBlobsGui)
 
 
 

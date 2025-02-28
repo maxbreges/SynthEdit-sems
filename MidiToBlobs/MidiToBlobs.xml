@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
     <Plugin id="MidiToBlobs" name="Midi To Blobs" category="mx/MIDI">
+		<Parameters>
+			<Parameter id="0" datatype="blob" persistant="false" ignorePatchChange="true" />
+			<Parameter id="1" datatype="blob" persistant="false" ignorePatchChange="true" />
+			<!--	<Parameter id="2" datatype="string" persistant="false" ignorePatchChange="true" /> -->
+		</Parameters>
         <Audio>
             <Pin name="MIDI In" datatype="midi"/>
-            <Pin name="Fret Count" datatype="int" default="24"/>
-            <Pin name="String Count" datatype="int" default="6"/>
-            <Pin name="PinX" datatype="blob" direction="out" isPolyphonic="true"/>
-            <Pin name="PinY" datatype="blob" direction="out" isPolyphonic="true"/>
+        <!--<Pin name="Fret Count" datatype="int" default="24"/>
+            <Pin name="String Count" datatype="int" default="6"/> -->
+			<Pin name="PinX" direction="out" datatype="blob" parameterId="0" private="true" autoConfigureParameter="true"/>
+			<Pin name="PinY" direction="out" datatype="blob" parameterId="1" private="true" autoConfigureParameter="true"/>
+			<!-- <Pin name="Debug" direction="out" datatype="string" parameterId="2" private="true" autoConfigureParameter="true"/>-->
         </Audio>
-        <GUI/>
+		<GUI>
+			<Pin name="PinX" direction="in" datatype="blob" parameterId="0" />
+			<Pin name="PinY" direction="in" datatype="blob" parameterId="1" />
+			<Pin name="PinX" direction="out" datatype="blob"/>
+			<Pin name="PinY" direction="out" datatype="blob"/>
+			<!-- <Pin name="Debug" direction="in" datatype="string" parameterId="2" /> 
+			<Pin name="Debug Out" direction="out" datatype="string"/> -->
+		</GUI>
     </Plugin>
 </PluginList>
