@@ -3,18 +3,14 @@
     <Plugin id="setPin" name="setPin" category="mx/MIDI">
         <Parameters>
             <Parameter id="0" datatype="blob" name="" ignorePatchChange="true" persistant="false"/>
-            <Parameter id="1" datatype="blob" name="" ignorePatchChange="true" persistant="false"/>
         </Parameters>
         <Audio>
             <Pin name="MIDI In" datatype="midi"/>
-            <Pin name="PinX" datatype="blob" direction="out" private="true" parameterId="0"/>
-            <Pin name="PinY" datatype="blob" direction="out" private="true" parameterId="1"/>
+            <Pin name="PinGui" datatype="blob" direction="out" private="true" parameterId="0"/>
         </Audio>
         <GUI graphicsApi="GmpiGui">
-            <Pin name="PinX" datatype="blob" private="true" parameterId="0"/>
-            <Pin name="PinY" datatype="blob" private="true" parameterId="1"/>
-            <Pin name="PinX Out" datatype="blob" direction="out"/>
-            <Pin name="PinY Out" datatype="blob" direction="out"/>
+            <Pin name="PinGui" datatype="blob" private="true" parameterId="0"/>
+            <Pin name="Pin Debug" datatype="string" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>
