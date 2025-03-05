@@ -81,13 +81,14 @@ public:
 		
 		switch (pinOctave)
 		{
-		case 0: Note = Note - 24;  break;
-		case 1: Note = Note -12; break;
-		case 2: Note = Note; break;
-		case 3: Note = Note + 12; break;
-		case 4: Note = Note + 24; break;
-		case 5: Note = Note + 36; break;
-		case 6: Note = Note + 48; break;
+		case 0: Note = Note - 36;  break;
+		case 1: Note = Note -24; break;
+		case 2: Note = Note -12; break;
+		case 3: Note = Note; break;
+		case 4: Note = Note + 12; break;
+		case 5: Note = Note + 24; break;
+		case 6: Note = Note + 36; break;
+		case 7: Note = Note + 48; break;
 		}
 
 		switch (pinSemi)
