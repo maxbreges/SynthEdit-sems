@@ -92,7 +92,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (MidiToBlobs)
 #add_subdirectory (FretLedX)
 #add_subdirectory (setPin)
-add_subdirectory (DoubleClick)
+#add_subdirectory (DoubleClick)
 
 
 
