@@ -69,7 +69,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (mxXYText)
 #add_subdirectory (MatchPitchGate)
 #add_subdirectory (PopUp)
-add_subdirectory (MIDITranspose)
+#add_subdirectory (MIDITranspose)
 #add_subdirectory (MIDIDelta)
 #add_subdirectory (MIDI2Fret)
 #add_subdirectory (FretLed)
@@ -92,6 +92,7 @@ add_subdirectory (MIDITranspose)
 #add_subdirectory (MidiToBlobs)
 #add_subdirectory (FretLedX)
 #add_subdirectory (setPin)
+add_subdirectory (DoubleClick)
 
 
 
