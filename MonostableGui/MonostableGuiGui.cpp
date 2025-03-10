@@ -1,26 +1,32 @@
 #include "mp_sdk_gui2.h"
 #include <chrono>
 #include <thread>
-//#include <mutex>    // To handle thread safety
 
 using namespace gmpi;
 
 class MonostableGuiGui final : public SeGuiInvisibleBase
 {
 private:
-	int count = 0;
-	//std::mutex mtx;
+    int count = 0;
+    bool processing = false;  // Flag to indicate if processing is ongoing
 
 public:
-
- 	void onSetMouseDown()
+    void onSetMouseDown()
     {
         if (pinMouseDown)
         {
-           // std::lock_guard<std::mutex> lock(mtx);
+            // Check if we are already processing
+            if (processing)
+            {
+                return; // Ignore further clicks while processing
+            }
+
+            processing = true; // Set flag to indicate processing has started
+
+            // Increment count
             ++count;
 
-            // Update pinClickCount immediately to reflect increment
+            // Update pinBoolOut immediately to reflect the new count
             pinBoolOut = count;
 
             int countDown = pinTime;
@@ -30,43 +36,34 @@ public:
                     for (int i = countDown; i >= 0; --i)
                     {
                         std::this_thread::sleep_for(std::chrono::milliseconds(1));
-                        {
-                           // std::lock_guard<std::mutex> lock(mtx);
-                        }
                     }
 
-                    // Reset count when countdown is finished
-                    {
-                      //  std::lock_guard<std::mutex> lock(mtx);
-                        count = 0;
-                        pinBoolOut = count; // Reset pinClickCount
-                    }
-                }
-            ).detach();
+                    // Reset count and flag when countdown is finished
+                    count = 0;
+                    pinBoolOut = count; // Reset output pin
+
+                    // Reset the processing flag to allow future clicks
+                    processing = false;
+                }).detach(); // Detach the thread to allow it to run independently
         }
-
     }
 
- 	void onSetTime()
-	{
-		// pinTimems changed
-	}
+    void onSetTime() { /* pinTimems changed */ }
 
+    BoolGuiPin pinMouseDown;
+    IntGuiPin pinTime;
+    BoolGuiPin pinBoolOut;
 
- 	BoolGuiPin pinMouseDown;
- 	IntGuiPin pinTime;
- 	BoolGuiPin pinBoolOut;
- 	
 public:
-	MonostableGuiGui()
-	{
-		initializePin( pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&MonostableGuiGui::onSetMouseDown) );
-		initializePin( pinTime, static_cast<MpGuiBaseMemberPtr2>(&MonostableGuiGui::onSetTime) );
-		initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&MonostableGuiGui::onSetMouseDown) );
-	}
+    MonostableGuiGui()
+    {
+        initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&MonostableGuiGui::onSetMouseDown));
+        initializePin(pinTime, static_cast<MpGuiBaseMemberPtr2>(&MonostableGuiGui::onSetTime));
+        initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&MonostableGuiGui::onSetMouseDown));
+    }
 };
 
 namespace
 {
-	auto r = Register<MonostableGuiGui>::withId(L"MonostableGui");
+    auto r = Register<MonostableGuiGui>::withId(L"MonostableGui");
 }
