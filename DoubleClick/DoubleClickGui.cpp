@@ -1,8 +1,6 @@
 #include "mp_sdk_gui2.h"
 #include <chrono>
 #include <thread>
-#include <atomic>
-#include <iostream> // For outputting the countdown
 #include <mutex>    // To handle thread safety
 
 using namespace gmpi;
@@ -10,90 +8,81 @@ using namespace gmpi;
 class DoubleClickGui final : public SeGuiInvisibleBase
 {
 private:
-    std::mutex stateMutex; // Mutex to protect shared state
-    BoolGuiPin pinMouseDown; // Input for mouse down event
-    IntGuiPin pinCountdownNumber; // Input for countdown time in milliseconds
-    IntGuiPin pinIntOut; // Output for remaining time    
-    FloatGuiPin pinAnimationPosition;
-    FloatGuiPin pinResetValue;
-
-    std::atomic<bool> countdownActive{ false }; // Track countdown state
-    bool new_state = false; // Track state change
+    int count = 0;
+    std::mutex mtx;
 
 public:
-    DoubleClickGui()
-    {
-        // Initialize pins
-        initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetMouseDown));
-        initializePin(pinCountdownNumber, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetTime));
-        initializePin(pinIntOut, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetIntOut));
-        initializePin(pinAnimationPosition, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetAnimPos));
-        initializePin(pinResetValue, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetMouseDown));
-    }
-
-    void onSetAnimPos()
-    {
-        // Implement animation position handling here if needed
-    }
-
     void onSetMouseDown()
     {
-        std::lock_guard<std::mutex> lock(stateMutex); // Protect shared state
-
         if (pinMouseDown)
         {
-            // Start countdown when mouse is pressed
-            countdownActive = true;
+            std::lock_guard<std::mutex> lock(mtx);
+            ++count;
 
-            // Get the countdown time from pinCountdownNumber
-            int countdownNumber = pinCountdownNumber;
-            pinIntOut = countdownNumber; // Initialize output with the starting value
+            // Update pinClickCount immediately to reflect increment
+            pinClickCount = count;
 
+            int countDown = pinTime;
             // Start countdown in a separate thread
-            std::thread([this, countdownNumber]()
+            std::thread([this, countDown]()
                 {
-                    for (int remaining = countdownNumber; remaining >= 0; --remaining)
+                    for (int i = countDown; i >= 0; --i)
                     {
+                        std::this_thread::sleep_for(std::chrono::milliseconds(1));
                         {
-                            // Lock for accessing shared state
-                            std::lock_guard<std::mutex> lock(stateMutex);
-                            pinIntOut = remaining; // Update output pin with remaining time
-                        }
-                        std::this_thread::sleep_for(std::chrono::milliseconds(1)); // Update every 1 ms
-
-                        {
-                            // Lock for accessing shared state
-                            std::lock_guard<std::mutex> lock(stateMutex);
-                            if (!pinMouseDown)
-                            {
-                                new_state = true;
-                            }
-
-                            if (new_state && pinMouseDown)
-                            {
-                                pinAnimationPosition = pinResetValue;
-                            }
+                            std::lock_guard<std::mutex> lock(mtx);
+                            pinIntOut = i;
                         }
                     }
-                    countdownActive = false; // End countdown when done
-                    pinIntOut = 0; // Ensure the output is zero at the end 
-                    new_state = false;
-                }).detach(); // Detach the thread                
+
+                    // Reset count when countdown is finished
+                    {
+                        std::lock_guard<std::mutex> lock(mtx);
+                        count = 0;
+                        pinClickCount = count; // Reset pinClickCount
+                    }
+                }
+            ).detach();
+        }
+
+        {
+            std::lock_guard<std::mutex> lock(mtx); // Lock for thread safety
+            if (pinClickCount == 2)
+            {
+                pinAnimPos = pinResetValue;
+                pinClickCount = 0; // Reset to avoid repeated actions
+            }
         }
     }
 
-    void onSetTime()
-    {
-        // Placeholder for handling time changes if necessary
-    }
+ 	void onSetTime()	{   }
 
-    void onSetIntOut()
-    {
-        // Placeholder for handling int output changes if necessary
-    }
+ 	void onSetIntOut()	{	}
+
+ 	void onSetAnimPos()	{	}
+
+ 	void onSetResetValue()	{	}
+
+ 	BoolGuiPin pinMouseDown;
+ 	IntGuiPin pinTime;
+ 	IntGuiPin pinIntOut;
+	IntGuiPin pinClickCount;
+ 	FloatGuiPin pinAnimPos;
+ 	FloatGuiPin pinResetValue;
+
+public:
+	DoubleClickGui()
+	{
+		initializePin( pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetMouseDown) );
+		initializePin( pinTime, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetTime) );
+		initializePin( pinIntOut, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetIntOut) );
+		initializePin(pinClickCount, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetMouseDown));
+		initializePin( pinAnimPos, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetAnimPos) );
+		initializePin( pinResetValue, static_cast<MpGuiBaseMemberPtr2>(&DoubleClickGui::onSetResetValue) );
+	}
 };
 
 namespace
 {
-    auto r = Register<DoubleClickGui>::withId(L"Double-Click");
+	auto r = Register<DoubleClickGui>::withId(L"DoubleClick");
 }

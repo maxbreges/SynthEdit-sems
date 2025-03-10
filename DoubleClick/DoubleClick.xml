@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="Double-Click" name="Double-Click" category="mx/Sub-Controls">
+    <Plugin id="DoubleClick" name="Double Click" category="mx/Sub-Controls">
         <GUI>
             <Pin name="Mouse Down" datatype="bool" direction="out"/>
-            <Pin name="Time ms" datatype="int" default="250"/>
-			<Pin name="Int Out" datatype="int" direction="out"/>
-			<Pin name="AnimPos" datatype="float" direction="out"/>
-			<Pin name="Reset Value" datatype="float" default="0.5" />
+            <Pin name="Time ms" datatype="int" default="186"/>
+            <Pin name="Countdown Out" datatype="int" direction="out"/>
+			<Pin name="Click Count" datatype="int" direction="out"/>
+            <Pin name="AnimPos" datatype="float" direction="out"/>
+            <Pin name="Reset Value" datatype="float" default="0.5"/>
         </GUI>
     </Plugin>
 </PluginList>
