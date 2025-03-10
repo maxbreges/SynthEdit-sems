@@ -3,7 +3,7 @@
     <Plugin id="Double-Click" name="Double-Click" category="mx/Sub-Controls">
         <GUI>
             <Pin name="Mouse Down" datatype="bool" direction="out"/>
-            <Pin name="Time ms" datatype="int" default="25"/>
+            <Pin name="Time ms" datatype="int" default="250"/>
 			<Pin name="Int Out" datatype="int" direction="out"/>
 			<Pin name="AnimPos" datatype="float" direction="out"/>
 			<Pin name="Reset Value" datatype="float" default="0.5" />
