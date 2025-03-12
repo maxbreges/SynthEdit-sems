@@ -3,8 +3,9 @@
     <Plugin id="MonostableGui" name="MonostableGui" category="mx/Sub-Controls/Logic">
         <GUI>
             <Pin name="Mouse Down" datatype="bool" direction="out"/>
-            <Pin name="Time ms" datatype="int" default="186"/>
+            <Pin name="Time ms" datatype="int" default="100"/>
             <Pin name="Bool Out" datatype="bool" direction="out"/>
+	<!--	<Pin name="Countdown" datatype="int" direction="out"/> -->
         </GUI>
     </Plugin>
 </PluginList>
