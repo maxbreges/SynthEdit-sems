@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="ColorKnob1" name="Color Knob" category="mx/Sub-Controls" helpUrl="ColorKnob.htm">
+    <Plugin id="BlobKnob" name="Color Knob" category="mx/Sub-Controls">
 		<Parameters>
-			<Parameter id="0" datatype="float" name=""/>
+			<Parameter id="0" datatype="float" name="" autoConfigureParameter="true"/>
 			<Parameter id="2" datatype="string" name=""/>
 		</Parameters>
         <GUI graphicsApi="GmpiGui">
-			<Pin name="Scale In" datatype="float" parameterId="0"/>
-			<Pin name="AnimationIn" datatype="float" parameterId="0" parameterField="Normalized"/>
-			<Pin name="Scaled" datatype="float" direction="out"/>
-			<Pin name="Animation Position" datatype="float" direction="in"/>
-			<Pin name="Hint" datatype="string" isMinimised="true" default=""/>
-			<Pin name="Hex Out" datatype="string" direction="out"/>
-			<Pin name="ColorAdj" datatype="bool" private="true"/>
-			<Pin name="Circle Size" datatype="float" default="1" isMinimised="true"/>
+			<Pin name="AnimationIn" datatype="float" parameterId="0"/>
+            <Pin name="Animation Position" datatype="float"/>
+			<Pin name="Category" datatype="string" default="Oscillator" isMinimised="true"/>
+            <Pin name="Hint" datatype="string" default="Volume" isMinimised="true"/>
+            <Pin name="Mouse Down" datatype="bool"/>
+			<Pin name="Mouse Over" datatype="bool" direction="out"/>
+            <Pin name="Background" datatype="string" default="FF000000" isMinimised="false" private="true"/>
+			<Pin name="Circle Size" datatype="float" default="0.8"/>
+			<Pin name="Line Thickness" datatype="float" default="4"/>
+			<Pin name="Color Adjust" datatype="bool" private="true"/>
 			<Pin name="Hex" datatype="string" parameterId="2"/>
-			<Pin name="Line Thickness" datatype="float" default="5" isMinimised="true"/>
+			<Pin name="Hex In" datatype="string" default="ffff6b00" private="true"/>
+			<Pin name="Line Style" datatype="enum" metadata="Flat,Square,Round,Triangle" default="2" isMinimised="true"/>
 			<Pin name="Line Color" datatype="string" default="FFFFFFFF" isMinimised="true"/>
-			<Pin name="Mouse Down" datatype="bool"/>
-			<Pin name="Shift Key" datatype="bool" private="true"/>
-			<Pin name="Mouse Over" datatype="bool" private="true"/>
+			<Pin name="Text Out" datatype="string" direction="out"/>
+			<Pin name="Hex Out" datatype="string" direction="out"/>
 			<Pin name="Reset Value" datatype="float" default="0.5" isMinimised="true"/>
         </GUI>
     </Plugin>
