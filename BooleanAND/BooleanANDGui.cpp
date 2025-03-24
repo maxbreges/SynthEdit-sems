@@ -3,12 +3,19 @@
 using namespace std;
 using namespace gmpi;
 
-class BooleanANDGui final : public SeGuiInvisibleBase
+class BooleanANDxGui final : public SeGuiInvisibleBase
 {
-    IntGuiPin pinIntIn;
-  //  IntGuiPin pinIntOut;
-    BoolGuiPin pinBoolOut;               // Output pin
-    vector<BoolGuiPin> pinSpareIn;       // Vector to hold input pins
+   // IntGuiPin pinIntIn;             // This pin allows user input (can be ignored for auto allocation)
+    BoolGuiPin pinBoolOut;          // Output pin
+    vector<BoolGuiPin> pinSpareIn;  // Vector to hold input pins
+
+public:
+    BooleanANDxGui()
+    {
+        // Initialize output pin
+     //   initializePin(pinIntIn, static_cast<MpGuiBaseMemberPtr2>(&BooleanANDxGui::onSetSpareIn));
+        initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&BooleanANDxGui::onSetSpareIn));
+    }
 
     void onSetSpareIn()
     {
@@ -19,39 +26,36 @@ class BooleanANDGui final : public SeGuiInvisibleBase
         for (size_t i = 0; i < pinSpareIn.size(); i++)
         {
             bool inputValue = pinSpareIn[i]; // Get the value from the current input pin
-
-            // Perform AND operation
             result = result && inputValue; // AND all inputs together
-           // pinIntOut = i+1;
         }
 
         // Transmit the result to the output pin
-        pinBoolOut = result;        
-    }
-
-public:
-    BooleanANDGui()
-    {
-        // Initialize output pin
-        initializePin(pinIntIn, static_cast<MpGuiBaseMemberPtr2>(&BooleanANDGui::onSetSpareIn));
-     //   initializePin(pinIntOut, static_cast<MpGuiBaseMemberPtr2>(&BooleanANDGui::onSetSpareIn));
-        initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&BooleanANDGui::onSetSpareIn));
+        pinBoolOut = result;
     }
 
     int32_t initialize() override
     {
-        // Define how many input pins to allocate. Assume we'll use 2 as an example.
-        const int numInputPins = pinIntIn;
-       
+        // Retrieve total number of pins from the host
+        int32_t pinCount = 0;
+        // Access the base host interface (IMpUserInterfaceHost) to obtain pin count
+        gmpi::IMpUserInterfaceHost* host = nullptr;
+        if (getHost()->queryInterface(gmpi::MP_IID_UI_HOST, (void**)&host) == gmpi::MP_OK)
+        {
+            host->getPinCount(pinCount); // Safely call getPinCount
+            host->release(); // Release the host interface when done
+        }
+
+        // Assuming that we reserve at least 2 pins (one output and one internal)
+        const int numInputPins = max(0, pinCount - 1);
+
         try
         {
             pinSpareIn.resize(numInputPins); // Resize vector to hold input pins
 
-            // Initialize each input pin
+            // Initialize each input pin in the vector
             for (size_t i = 0; i < numInputPins; ++i)
             {
-                initializePin(pinSpareIn[i], static_cast<MpGuiBaseMemberPtr2>(&BooleanANDGui::onSetSpareIn));
-                
+                initializePin(pinSpareIn[i], static_cast<MpGuiBaseMemberPtr2>(&BooleanANDxGui::onSetSpareIn));
             }
         }
         catch (const std::exception& e)
@@ -60,7 +64,7 @@ public:
             return MP_FAIL; // Indicate failure
         }
 
-        return MP_OK; // Indicate successful initialization
+        return SeGuiInvisibleBase::initialize(); // Ensure to call base class's initialize method
     }
 
     int32_t setPin(int32_t pinId, int32_t voice, int32_t size, const void* data) override
@@ -80,5 +84,5 @@ public:
 
 namespace
 {
-    auto r = Register<BooleanANDGui>::withId(L"BooleanAND");
+    auto r = Register<BooleanANDxGui>::withId(L"BooleanAND");
 }

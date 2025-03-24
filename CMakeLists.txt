@@ -95,7 +95,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (DoubleClick)
 #add_subdirectory (MonostableGui)
 #add_subdirectory(ColorKnob)
-#add_subdirectory (BooleanAND)
+add_subdirectory (BooleanAND)
 
 
 
