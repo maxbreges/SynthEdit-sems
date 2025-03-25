@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by TextAppend.rc
+// Used by test_plugin.rc
 //
 #define IDR_GMPXML1                     1
 
