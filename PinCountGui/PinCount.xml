@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="PinCountGui" name="Pin Count &lt; &gt;" category="mx/Sub-Controls">
+        <GUI>
+			<Pin name="Pin Count" datatype="int" direction="out"/>
+            <Pin name="Text Out" datatype="string" direction="out"/>
+            <Pin name="Text In" datatype="string" autoDuplicate="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
