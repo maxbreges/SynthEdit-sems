@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+	<Plugin id="TextAppend" name="Text Append" category="mx/Text">
+		<Audio>
+			<Pin name="Text Out" datatype="string" direction="out" />
+			<Pin name="Spare" datatype="string" autoRename="true" autoDuplicate="true" />
+		</Audio>
+	</Plugin>
+</PluginList>

@@ -96,9 +96,9 @@ include(plugin_helper.cmake)
 #add_subdirectory (MonostableGui)
 #add_subdirectory(ColorKnob)
 #add_subdirectory (BooleanAND)
-#add_subdirectory (TextAppendGui)
+add_subdirectory (TextAppend)
 #add_subdirectory (TextAppendGuiL)
-add_subdirectory (PinCountGui)
+#add_subdirectory (PinCountGui)
 
 
 
