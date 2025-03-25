@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="TextAppendGui" name="Text Append" category="mx/Sub-Controls">
+    <Plugin id="TextAppendGui" name="Text Append  &gt; " category="mx/Sub-Controls">
         <GUI>
             <Pin name="Text Out" datatype="string" direction="out"/>
-            <Pin name="Text In" datatype="string" direction="out" autoDuplicate="true"/>
+            <Pin name="Text In" datatype="string" direction="in" autoDuplicate="true"/>
         </GUI>
     </Plugin>
 </PluginList>
