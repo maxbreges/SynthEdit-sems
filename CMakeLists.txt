@@ -100,6 +100,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (TextAppendGuiL)
 #add_subdirectory (PinCountGui)
 #add_subdirectory (BooleanNOT)
+add_subdirectory (AutoFixedValuesInt)
 
 
 

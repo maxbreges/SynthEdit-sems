@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="AutoFixedValuesInt" name="Auto Fixed Values (int)" category="mx/Controls">
+        <Audio>
+            <Pin name="Int Out" datatype="int" direction="out" autoRename="true" autoDuplicate="true"/>
+        </Audio>
+    </Plugin>
+</PluginList>
