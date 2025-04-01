@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="AutoFixedValues" name="Auto Fixed Values (floats)" category="mx/Controls">
+        <Audio>
+			<Pin name="Out" datatype="float" direction="out" autoDuplicate="true" autoRename="true"/>
+        </Audio>
+    </Plugin>
+</PluginList>
