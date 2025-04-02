@@ -22,7 +22,7 @@ public:
     auto value = getBuffer(pinValue);
     auto gate = getBuffer(pinGate);
 
-    const float epsilon = 0.001f; // Define a small tolerance
+    const float epsilon = 0.0001f; // Define a small tolerance
 
     for( int s = sampleFrames; s > 0; --s )
     {
