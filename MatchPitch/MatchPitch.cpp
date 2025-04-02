@@ -17,34 +17,27 @@ public:
 	}
 
 	void subProcess( int sampleFrames )
-	{
-		// get pointers to in/output buffers.
-		auto input = getBuffer(pinInput);
-		auto value = getBuffer(pinValue);
-		auto gate = getBuffer(pinGate);
+{
+    auto input = getBuffer(pinInput);
+    auto value = getBuffer(pinValue);
+    auto gate = getBuffer(pinGate);
 
-		for( int s = sampleFrames; s > 0; --s )
-		{
-			// TODO: Signal processing goes here.
+    const float epsilon = 0.001f; // Define a small tolerance
 
-			int in = *input * 1000;
-			int val = *value * 1000;
-			float gat = *gate;
+    for( int s = sampleFrames; s > 0; --s )
+    {
+        float in = *input; // Keep them as floats
+        float val = *value;
 
-			if (in == val)
-			{
-			 gat = 1.f;
-			}
-			else
-			{
-				gat = 0.f;
-			}
-			// Increment buffer pointers.
-			++input;
-			++value;
-			*gate++ = gat;
-		}
-	}
+        // Use epsilon for comparison
+        float gat = (fabs(in - val) < epsilon) ? 1.f : 0.f;
+
+        // Increment buffer pointers.
+        ++input;
+        ++value;
+        *gate++ = gat;
+    }
+}
 
 	void onSetPins() override
 	{
