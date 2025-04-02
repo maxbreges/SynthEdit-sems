@@ -34,14 +34,12 @@ public:
 			//bool gatein = *gateinput;
 			float in = *input; 
 			float val = *value;
-			float gat = *gate;
-
+			
 			        // Use epsilon for comparison
         float gat = (fabs(in - val) < epsilon && pinGateIn) ? 1.f : 0.f;
 
         // Store the result in the output gate buffer
         *gate++ = gat;
-
 			// Increment buffer pointers.
 			++input;
 			++value;
