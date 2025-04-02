@@ -26,33 +26,34 @@ public:
 		auto value = getBuffer(pinValue);
 		auto gate = getBuffer(pinGate);
 
+		const float epsilon = 0.0001f; // Define a small tolerance for comparison
+
 		for( int s = sampleFrames; s > 0; --s )
 		{
 			// TODO: Signal processing goes here.
 			//bool gatein = *gateinput;
-			int in = *input * 1000;
-			int val = *value * 1000;
+			float in = *input; 
+			float val = *value;
 			float gat = *gate;
 
-			if ((in == val) && (pinGateIn))
-			{
-			 gat = 1.f;
-			}
-			else
-			{
-				gat = 0.f;
-			}
+			        // Use epsilon for comparison
+        float gat = (fabs(in - val) < epsilon && pinGateIn) ? 1.f : 0.f;
+
+        // Store the result in the output gate buffer
+        *gate++ = gat;
+
 			// Increment buffer pointers.
 			++input;
 			++value;
-			*gate++ = gat;
 		}
 	}
 
 	void onSetPins() override
 	{
 		// Check which pins are updated.
-		
+		if( pinGateIn.isStreaming() )
+		{
+		}		
 		if( pinInput.isStreaming() )
 		{
 		}
