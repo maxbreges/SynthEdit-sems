@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="SpinCtrl" name="Spin Control" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Choice" datatype="int"/>
+            <Pin name="Item List" datatype="string"/>
+			<Pin name="Selection" datatype="string"/>
+            <Pin name="Decr" datatype="bool" direction="out"/>
+			<Pin name="Incr" datatype="bool" direction="out"/>
+			<Pin name="Wrap" datatype="bool" />
+			<Pin name="Hold Delay" datatype="int" default="600" isMinimised="true"/>
+			<Pin name="Repeat Rate" datatype="int" default="120" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
