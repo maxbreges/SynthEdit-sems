@@ -105,6 +105,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (AutoFixedValues)
 #add_subdirectory (SpinCtrl)
 #add_subdirectory (MonoMode)
+add_subdirectory (SwitchFloat)
 
 
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="SwitchFloat" name="Switch &gt; (Float)" category="Switches/GUI">
+        <GUI>
+            <Pin name="Choice" datatype="int"/>
+            <Pin name="Value" datatype="float" />
+            <Pin name="Spare" datatype="float" direction="out" autoRename="true" autoDuplicate="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
