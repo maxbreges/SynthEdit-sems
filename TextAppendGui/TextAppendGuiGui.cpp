@@ -48,7 +48,7 @@ public:
         }
 
         // Assuming that we reserve at least 2 pins (one output and one internal)
-        const int numInputPins = max(0, pinCount - 2);
+        const int numInputPins = max(0, pinCount - 1);
 
         try
         {
