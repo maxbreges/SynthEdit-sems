@@ -1,5 +1,5 @@
-#ifndef TEXTAPPENDGUI_H_INCLUDED
-#define TEXTAPPENDGUI_H_INCLUDED
+#ifndef TEXTAPPENDGUIR_H_INCLUDED
+#define TEXTAPPENDGUIR_H_INCLUDED
 
 #include <vector>
 #include <string>
