@@ -1,76 +1,75 @@
 #include "mp_sdk_gui2.h"
+#include <vector>
+#include <string>
 
 using namespace std;
 using namespace gmpi;
 
 class TextAppendGuiGui final : public SeGuiInvisibleBase
 {
-
- 	void onSetTextOut()
-	{
-		// pinTextOut changed
-	}
-
-    void onSetTextIn()
-    {
-        if (pinTextIn.size()) // 
-        {
-            wstring out;
-
-            for (int i = 0; i < pinTextIn.size(); i++)
-            {
-                out += pinTextIn[i].getValue() + L' '; // You can use '+' to append strings
-            }
-
-            pinTextOut = out;
-        }
-    }
-
- 	StringGuiPin pinTextOut;
-    vector<StringGuiPin> pinTextIn;
+    static const int nonRepeatingPinCount = 1; // Only one output pin
+    MpGuiPin<std::string> pinTextOut; // Output pin
+    std::vector<std::string> inValues; // Input values
 
 public:
-	TextAppendGuiGui()
-	{
-		initializePin( pinTextOut, static_cast<MpGuiBaseMemberPtr2>(&TextAppendGuiGui::onSetTextOut) );
-	}
+    TextAppendGuiGui()
+    {
+        initializePin(pinTextOut, static_cast<MpGuiBaseMemberPtr2>(&TextAppendGuiGui::onSetTextIn));
+    }
+
+    virtual int32_t MP_STDCALL setPin(int32_t pinId, int32_t voice, int32_t size, const void* data) override
+    {
+        // Call the base implementation to handle the pin setting
+        int32_t r = SeGuiInvisibleBase::setPin(pinId, voice, size, data);
+
+        // Determine the index for the input pin
+        int inputIdx = pinId - nonRepeatingPinCount;
+        if (inputIdx >= 0)
+        {
+            // Ensure we have enough space in inValues
+            std::string defaultValue;
+            while (inputIdx >= inValues.size())
+            {
+                inValues.push_back(defaultValue);
+            }
+
+            // Convert incoming raw data to std::string
+            std::string value;
+            VariableFromRaw(size, data, value);
+
+            // Store the input string
+            inValues[inputIdx] = value;
+
+            // Call onSetTextIn to update output whenever an input is changed
+            onSetTextIn();
+        }
+
+        return r; // Return the result
+    }
+
+private:
+    void onSetTextIn()
+    {
+        // Clear and build a new concatenated output string
+        std::string result;
+
+        for (const auto& str : inValues)
+        {
+            result += str; // Concatenate input strings without any delimiter
+        }
+
+        // Transmit the concatenated output string
+        getHost()->pinTransmit(pinTextOut.getId(), result.size(), result.data());
+    }
 
     int32_t initialize() override
     {
-        // Retrieve total number of pins from the host
-        int32_t pinCount = 0;
-        // Access the base host interface (IMpUserInterfaceHost) to obtain pin count
-        gmpi::IMpUserInterfaceHost* host = nullptr;
-        if (getHost()->queryInterface(gmpi::MP_IID_UI_HOST, (void**)&host) == gmpi::MP_OK)
-        {
-            host->getPinCount(pinCount); // Safely call getPinCount
-            host->release(); // Release the host interface when done
-        }
-
-        // Assuming that we reserve at least 2 pins (one output and one internal)
-        const int numInputPins = max(0, pinCount - 1);
-
-        try
-        {
-            pinTextIn.resize(numInputPins); // Resize vector to hold input pins
-
-            // Initialize each input pin in the vector
-            for (size_t i = 0; i < numInputPins; ++i)
-            {
-                initializePin(pinTextIn[i], static_cast<MpGuiBaseMemberPtr2>(&TextAppendGuiGui::onSetTextIn));
-            }
-        }
-        catch (const std::exception& e)
-        {
-            // Log or handle the exception if pin initialization fails
-            return MP_FAIL; // Indicate failure
-        }
-
-        return SeGuiInvisibleBase::initialize(); // Ensure to call base class's initialize method
+        // Initial setup if needed can be added here
+        return SeGuiInvisibleBase::initialize();
     }
 };
 
 namespace
 {
-	auto r = Register<TextAppendGuiGui>::withId(L"TextAppendGui");
+    auto r = Register<TextAppendGuiGui>::withId(L"TextAppendGui");
 }
