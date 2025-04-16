@@ -52,7 +52,7 @@ END
 // GMPXML
 //
 
-IDR_GMPXML1             GMPXML                  "TextAppendGuiL.xml"
+IDR_GMPXML1             GMPXML                  "TextAppendGuiR.xml"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
