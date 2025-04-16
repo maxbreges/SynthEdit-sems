@@ -1,4 +1,4 @@
-#include "./TextAppendGui.h"
+#include "./TextAppendGuiR.h"
 #include <string>
 
 using namespace gmpi;
