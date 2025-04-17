@@ -7,13 +7,13 @@
 		</Parameters>
         <GUI graphicsApi="GmpiGui">
             <Pin name="Text" datatype="string" private="false"/>
-            <Pin name="Style" datatype="string" default="normal" isMinimised="true"/>
+            <Pin name="Style" datatype="string" default="heading 1" isMinimised="true"/>
             <Pin name="Multiline" datatype="bool" isMinimised="true"/>
             <Pin name="Writeable" datatype="bool" default="1" isMinimised="true"/>
-            <Pin name="Greyed" datatype="bool" isMinimised="true"/>
+            <Pin name="Greyed" datatype="bool" default="1" isMinimised="true"/>
             <Pin name="Hint" datatype="string" isMinimised="true"/>
             <Pin name="Mouse Down" datatype="bool" direction="out" private="true"/>
-            <Pin name="Mouse Down" datatype="bool" isMinimised="true"/>
+            <Pin name="Mouse Down" datatype="bool" isMinimised="true" private="true"/>
             <Pin name="Int" datatype="int" />
             <Pin name="Int Out" datatype="int" direction="out"/>
 			<Pin name="Int" datatype="int" parameterId="0"/>
