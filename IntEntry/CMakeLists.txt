@@ -8,4 +8,6 @@ build_gmpi_plugin(
 	SOURCE_FILES
 	IntEntryGui.h
 	  IntEntryGui.cpp
+	${se_sdk_folder}/it_enum_list.h
+        ${se_sdk_folder}/it_enum_list.cpp
 )
