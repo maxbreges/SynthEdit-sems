@@ -107,6 +107,9 @@ include(plugin_helper.cmake)
 #add_subdirectory (MonoMode)
 #add_subdirectory (SwitchFloat)
 add_subdirectory (IntEntry)
+#add_subdirectory (FloatEntry)
+
+
 
 
 
