@@ -13,7 +13,7 @@
             <Pin name="Greyed" datatype="bool" isMinimised="true"/>
             <Pin name="Hint" datatype="string" isMinimised="true"/>
             <Pin name="Mouse Down" datatype="bool" direction="out" private="true"/>
-            <Pin name="Mouse Down" datatype="bool" isMinimised="true"/>
+            <Pin name="Mouse Down" datatype="bool" isMinimised="true" private="true"/>
             <Pin name="Float" datatype="float"/>
             <Pin name="Float Out" datatype="float" direction="out"/>
             <Pin name="Float" datatype="float" private="true" parameterId="0"/>
