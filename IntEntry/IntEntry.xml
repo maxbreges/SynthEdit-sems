@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="IntEntry" name="Int Entry" category="mx/Sub-Controls">
+		<Parameters>
+			<Parameter id="0" datatype="int" name=""/>
+			<Parameter id="2" datatype="string" name=""/>
+		</Parameters>
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Text" datatype="string" private="false"/>
+            <Pin name="Style" datatype="string" default="normal" isMinimised="true"/>
+            <Pin name="Multiline" datatype="bool" isMinimised="true"/>
+            <Pin name="Writeable" datatype="bool" default="1" isMinimised="true"/>
+            <Pin name="Greyed" datatype="bool" isMinimised="true"/>
+            <Pin name="Hint" datatype="string" isMinimised="true"/>
+            <Pin name="Mouse Down" datatype="bool" direction="out" private="true"/>
+            <Pin name="Mouse Down" datatype="bool" isMinimised="true"/>
+            <Pin name="Int" datatype="int" />
+            <Pin name="Int Out" datatype="int" direction="out"/>
+			<Pin name="Int" datatype="int" parameterId="0"/>
+			<Pin name="Hex" datatype="string" parameterId="2"/>
+        </GUI>
+    </Plugin>
+</PluginList>
