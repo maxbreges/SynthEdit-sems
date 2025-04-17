@@ -10,6 +10,6 @@ build_gmpi_plugin(
 	  IntEntryGui.cpp
 	${se_sdk_folder}/it_enum_list.h
         ${se_sdk_folder}/it_enum_list.cpp
-	${se_sdk_folder}/FontCache.h
-	${se_sdk_folder}/FontCache.cpp
+	${se_shared_folder}/FontCache.h
+	${se_shared_folder}/FontCache.cpp
 )
