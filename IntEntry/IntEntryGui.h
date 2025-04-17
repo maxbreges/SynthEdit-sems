@@ -1,7 +1,7 @@
 #ifndef INTENTRYGUI_H_INCLUDED
 #define INTENTRYGUI_H_INCLUDED
 
-#include "../SubControlsXp/TextSubcontrol.h"
+#include "TextSubcontrol.h"
 #include "FontCache.h"
 
 class IntEntryGui : public TextSubcontrol
