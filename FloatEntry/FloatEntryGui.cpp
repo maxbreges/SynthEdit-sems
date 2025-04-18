@@ -173,15 +173,15 @@ void FloatEntryGui::OnTextEnteredComplete(int32_t result)
         // Try to parse inputText as a float
         try {
             float floatValue = std::stof(inputText);
-            pinFloatOut = floatValue; // Assign to pinFloatOut
+            pinFloatIn = floatValue; // Assign to pinFloatOut
         }
         catch (const std::invalid_argument&) {
             // Not a valid float, do nothing or set to 0.0f
-            pinFloatOut = 0.0f; // Optional: reset if invalid
+            pinFloatIn = 0.0f; // Optional: reset if invalid
         }
         catch (const std::out_of_range&) {
             // The number is out of range, handle accordingly
-            pinFloatOut = (inputText.front() == '-') ? -FLT_MAX : FLT_MAX; // Optional: assign max float value
+            pinFloatIn = (inputText.front() == '-') ? -FLT_MAX : FLT_MAX; // Optional: assign max float value
         }
 
         pinFloatOut = pinFloatIn;
