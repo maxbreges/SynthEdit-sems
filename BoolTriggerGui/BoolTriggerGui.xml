@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="BoolTriggerGui" name="Bool Trigger Gui" category="mx/Sub-Controls" >
+        <GUI>
+            <Pin name="On/Off" datatype="bool"/>
+            <Pin name="Rate Hz (1-60)" datatype="int"/>
+			<Pin name="Bool Val" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>

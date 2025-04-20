@@ -109,6 +109,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (IntEntry)
 #add_subdirectory (FloatEntry)
 #add_subdirectory (MidiToHex)
+add_subdirectory (BoolTriggerGui)
 
 
 
