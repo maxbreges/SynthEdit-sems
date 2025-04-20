@@ -4,6 +4,7 @@
         <GUI>
             <Pin name="On/Off" datatype="int"/>
 			<Pin name="Animation Position" datatype="float" direction="out"/>
+			<Pin name="PatchMem" datatype="float" private="true"/>
 			<Pin name="Speed (0.1s)" datatype="int" default="10"/>            
 			<Pin name="Up, Down, Up/Down" datatype="int" default="1"/>
         </GUI>

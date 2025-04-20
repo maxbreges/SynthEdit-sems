@@ -24,9 +24,9 @@ class FloatAnimationGui final : public SeGuiInvisibleBase
     // Pin Definitions
     IntGuiPin pinOnOff;
     FloatGuiPin pinFrameNumber;
+    FloatGuiPin pinPatchMem;
     IntGuiPin pinSpeed;
-    IntGuiPin pinMode;
-
+    IntGuiPin pinMode;    
 
     // --- Helper Functions ---
     void startAnimation()
@@ -49,11 +49,6 @@ class FloatAnimationGui final : public SeGuiInvisibleBase
             {
                 animationThread.join(); // Wait for the thread to finish
             }
-            // Reset variables AFTER the thread has joined
-            std::lock_guard<std::mutex> lock(pinMutex);
-            animationPosition = 0.0f;
-            pinFrameNumber = animationPosition; // Set Frame Number.
-            animationStopped = false; // reset stopped flag.
         }
     }
 
@@ -70,11 +65,6 @@ class FloatAnimationGui final : public SeGuiInvisibleBase
         }
     }
 
-    void onSetAnimationPosition()
-    {
-        // Unused
-    }
-
     void onSetSpeed()
     {
         int newSpeed = pinSpeed; // Read the pin's value
@@ -88,7 +78,7 @@ class FloatAnimationGui final : public SeGuiInvisibleBase
         int newMode = pinMode;
         if (newMode == 2)
         {
-            animationDirection = 1;
+            animationDirection = 1; // Ensure direction is reset if needed
         }
     }
 
@@ -101,7 +91,6 @@ class FloatAnimationGui final : public SeGuiInvisibleBase
         {
             auto start = std::chrono::steady_clock::now();
 
-            // Retrieve animation speed safely inside the loop
             int currentSpeed;
             {
                 std::lock_guard<std::mutex> lock(speedMutex); // Lock to protect internalAnimationSpeed
@@ -110,10 +99,9 @@ class FloatAnimationGui final : public SeGuiInvisibleBase
 
             std::lock_guard<std::mutex> lock(pinMutex); // Lock to protect animationPosition
 
-            // Read mode
             int mode = pinMode;
-
             float speedFactor = static_cast<float>(currentSpeed) / 300.0f; // 30 is the FPS rate
+
             switch (mode)
             {
             case 0: // Loop
@@ -151,9 +139,10 @@ class FloatAnimationGui final : public SeGuiInvisibleBase
                 }
                 break;
             }
-
-            pinFrameNumber = animationPosition;
-
+            
+            pinFrameNumber = animationPosition; // Update the pin with the current animation position
+            pinPatchMem = pinFrameNumber;
+            
             auto end = std::chrono::steady_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
             auto targetDelay = std::chrono::milliseconds(10); // About 30 FPS
@@ -171,9 +160,12 @@ public:
     FloatAnimationGui()
     {
         initializePin(pinOnOff, static_cast<MpGuiBaseMemberPtr2>(&FloatAnimationGui::onSetOnOff));
-        initializePin(pinFrameNumber, static_cast<MpGuiBaseMemberPtr2>(&FloatAnimationGui::onSetAnimationPosition));
+        initializePin(pinFrameNumber);
+        initializePin(pinPatchMem);
         initializePin(pinSpeed, static_cast<MpGuiBaseMemberPtr2>(&FloatAnimationGui::onSetSpeed));
-        initializePin(pinMode, static_cast<MpGuiBaseMemberPtr2>(&FloatAnimationGui::onSetMode));
+        initializePin(pinMode, static_cast<MpGuiBaseMemberPtr2>(&FloatAnimationGui::onSetMode));  
+       
+        //pinFrameNumber = pinPatchMem.getValue();
     }
 
     ~FloatAnimationGui() {
