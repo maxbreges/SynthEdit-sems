@@ -6,7 +6,7 @@
             <Parameter id="2" datatype="string" name=""/>
         </Parameters>
         <GUI graphicsApi="GmpiGui">
-            <Pin name="Text" datatype="string" isMinimised="true"/>
+            <Pin name="Text" datatype="string" private="true"/>
             <Pin name="Style" datatype="string" default="normal" isMinimised="true"/>
             <Pin name="Multiline" datatype="bool" isMinimised="true"/>
             <Pin name="Writeable" datatype="bool" default="1" isMinimised="true"/>
