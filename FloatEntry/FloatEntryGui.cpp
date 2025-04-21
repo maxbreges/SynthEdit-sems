@@ -7,6 +7,7 @@
 #include <sstream>
 #include <cstdlib> // For std::strtof
 #include <cmath> // For std::fabs
+#include "Drawing_API.h"
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -18,6 +19,9 @@ using namespace gmpi_gui_api;
 
 GMPI_REGISTER_GUI(MP_SUB_TYPE_GUI2, FloatEntryGui, L"FloatEntry");
 SE_DECLARE_INIT_STATIC_FILE(FloatEntry_Gui);
+
+const int32_t MIN_WIDTH = 40;
+const int32_t MIN_HEIGHT = 20;
 
 FloatEntryGui::FloatEntryGui()
 {
@@ -34,6 +38,15 @@ FloatEntryGui::FloatEntryGui()
     initializePin(pinFloatOut, static_cast<MpGuiBaseMemberPtr2>(&FloatEntryGui::redraw));
     initializePin(pinFloat, static_cast<MpGuiBaseMemberPtr2>(&FloatEntryGui::onSetText));
     initializePin(pinString, static_cast<MpGuiBaseMemberPtr2>(&FloatEntryGui::onSetText));
+    initializePin(pinWidth, static_cast<MpGuiBaseMemberPtr2>(&FloatEntryGui::onSetWidth));
+
+/*    // Initializing cursor position variables
+    lastDragPoint.x = 0;
+    lastDragPoint.y = 0;*/
+}
+void FloatEntryGui::onSetWidth()
+{
+    invalidateRect();
 }
 
 void FloatEntryGui::onSetText()
@@ -83,7 +96,7 @@ void FloatEntryGui::onSetStyle()
     TextSubcontrol::onSetStyle();
 }
 
-// Overridden to support multiline text.
+// Render function to draw text
 int32_t FloatEntryGui::OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext)
 {
     GmpiDrawing::Graphics g(drawingContext);
@@ -92,7 +105,7 @@ int32_t FloatEntryGui::OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContex
     Rect textRect(r);
     textRect.Deflate((float)border, (float)border);
 
-    // Background Fill
+    // Background fill
     auto brush = g.CreateSolidColorBrush(fontmetadata->getBackgroundColor());
     g.FillRectangle(textRect, brush);
 
@@ -101,6 +114,7 @@ int32_t FloatEntryGui::OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContex
     else
         brush.SetColor(fontmetadata->getColor());
 
+    // Vertical snap (optional)
     if (fontmetadata->verticalSnapBackwardCompatibilityMode)
     {
         auto directXOffset = fontmetadata->getLegacyVerticalOffset();
@@ -108,7 +122,12 @@ int32_t FloatEntryGui::OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContex
         textRect.bottom += directXOffset;
     }
 
-    g.DrawTextU(getDisplayText(), textFormat, textRect, brush, (int32_t)DrawTextOptions::Clip);
+    // Calculate yOffset dynamically based on the height of the control
+    float yOffset = (textRect.bottom - textRect.top - fontmetadata->pixelHeight_) / 2;
+
+    // Ensure textRect accounts for the yOffset
+    Rect adjustedTextRect(textRect.left, textRect.top + yOffset, textRect.right, textRect.bottom);
+    g.DrawTextU(getDisplayText(), textFormat, adjustedTextRect, brush, (int32_t)DrawTextOptions::Clip);
 
     return gmpi::MP_OK;
 }
@@ -121,19 +140,51 @@ int32_t FloatEntryGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT p
         return gmpi::MP_OK; // Indicate successful hit
     }
 
-    setCapture();
+    setCapture(); // Capture the pointer
 
-    pinMouseDown = true;
+    pinMouseDown = true; // Start tracking mouse down
     pinMouseDown_LEGACY = true;
+
+/*    // Store the last drag position
+    lastDragPoint.x = point.x;
+    lastDragPoint.y = point.y;*/
 
     return gmpi::MP_OK;
 }
+
+/*// Implement `onPointerMove` to handle resizing based on drag
+int32_t FloatEntryGui::onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point)
+{
+    if (!pinMouseDown)
+    {
+        return gmpi::MP_UNHANDLED; // Do nothing if the mouse is not pressed
+    }
+
+    // Calculate the mouse movement delta
+    int32_t deltaX = point.x - lastDragPoint.x;
+    int32_t deltaY = point.y - lastDragPoint.y;
+
+    // Update control's size based on drag delta
+    auto currentRect = getRect();
+
+    int32_t newWidth = std::max<int32_t>(currentRect.right - currentRect.left + deltaX, MIN_WIDTH);
+    int32_t newHeight = std::max<int32_t>(currentRect.bottom - currentRect.top + deltaY, MIN_HEIGHT);
+
+    // Set the new dimensions
+    int setSize();
+
+    // Update last drag point
+    lastDragPoint.x = point.x;
+    lastDragPoint.y = point.y;
+
+    return gmpi::MP_OK;
+}*/
 
 int32_t FloatEntryGui::onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 {
     if (!getCapture())
     {
-        return gmpi::MP_UNHANDLED;
+        return gmpi::MP_UNHANDLED; // If not captured, do nothing
     }
 
     releaseCapture();
@@ -141,8 +192,11 @@ int32_t FloatEntryGui::onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT poi
     pinMouseDown_LEGACY = false;
 
     if (pinWriteable == false)
-        return gmpi::MP_OK;
+    {
+        return gmpi::MP_OK; // If not writable, skip edit control creation
+    }
 
+    // Handle text editing as before
     GmpiGui::GraphicsHost host(getGuiHost());
     nativeEdit = host.createPlatformTextEdit(getRect());
     nativeEdit.SetAlignment(fontmetadata->getTextAlignment(), pinMultiline.getValue() ? WordWrapping::Wrap : WordWrapping::NoWrap);
@@ -188,4 +242,45 @@ void FloatEntryGui::OnTextEnteredComplete(int32_t result)
     }
 
     nativeEdit.setNull(); // Release the native edit instance
+}
+
+// Measure function to determine the size of the FloatEntryGui
+int32_t FloatEntryGui::measure(GmpiDrawing_API::MP1_SIZE availableSize, GmpiDrawing_API::MP1_SIZE* returnDesiredSize)
+{
+    // Initialize minimum dimensions
+    returnDesiredSize->width = MIN_WIDTH; // Ensure minimum width is always respected
+    returnDesiredSize->height = MIN_HEIGHT; // Ensure minimum height is always respected
+
+    // Default width for testing; replace with calculated values later
+    const int32_t defaultTextWidth = pinWidth; // A smaller default width
+
+    // Check if font metadata is available and update the width using a sensible default
+    if (fontmetadata)
+    {
+        // Sample size calculation, which could be adjusted later for actual text width later when MeasureString becomes available
+        returnDesiredSize->width = std::max<int32_t>(MIN_WIDTH, defaultTextWidth); // Default width of box
+        returnDesiredSize->height = std::max<int32_t>(returnDesiredSize->height, fontmetadata->pixelHeight_ + 8); // Maintain height based on font metrics plus padding
+    }
+
+    return gmpi::MP_OK; // Indicate success
+}
+
+// Arrange function to layout the FloatEntryGui
+int32_t FloatEntryGui::arrange(GmpiDrawing_API::MP1_RECT finalRect_s)
+{
+    Rect finalRect(finalRect_s);
+    // Call base class arrange if necessary
+    MpGuiGfxBase::arrange(finalRect);
+
+    // Adjust text section drawing to fit inside the new dimensions while allowing for padding
+    if (fontmetadata)
+    {
+        float yOffset = 5; // Top offset for text
+        float xOffset = 5; // Left and right padding
+        Rect textRect(finalRect.left + xOffset, finalRect.top + yOffset, finalRect.right - xOffset, finalRect.bottom - yOffset);
+
+        // Store or use the calculated text rectangle directly for rendering
+    }
+
+    return gmpi::MP_OK;
 }

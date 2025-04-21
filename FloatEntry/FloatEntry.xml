@@ -6,18 +6,19 @@
             <Parameter id="2" datatype="string" name=""/>
         </Parameters>
         <GUI graphicsApi="GmpiGui">
-            <Pin name="Text" datatype="string"/>
+            <Pin name="Text" datatype="string" isMinimised="true"/>
             <Pin name="Style" datatype="string" default="normal" isMinimised="true"/>
             <Pin name="Multiline" datatype="bool" isMinimised="true"/>
             <Pin name="Writeable" datatype="bool" default="1" isMinimised="true"/>
-            <Pin name="Greyed" datatype="bool" isMinimised="true"/>
+            <Pin name="Greyed" datatype="bool" default="0" isMinimised="true"/>
             <Pin name="Hint" datatype="string" isMinimised="true"/>
             <Pin name="Mouse Down" datatype="bool" direction="out" private="true"/>
-            <Pin name="Mouse Down" datatype="bool" isMinimised="true" private="true"/>
+            <Pin name="Mouse Down" datatype="bool" isMinimised="true"/>
             <Pin name="Float" datatype="float"/>
             <Pin name="Float Out" datatype="float" direction="out"/>
             <Pin name="Float" datatype="float" private="true" parameterId="0"/>
             <Pin name="String" datatype="string" private="true" parameterId="2"/>
+			<Pin name="Width" datatype="int" default="50" isMinimised="true"/>
         </GUI>
     </Plugin>
 </PluginList>
