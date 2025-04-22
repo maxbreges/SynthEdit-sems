@@ -61,7 +61,7 @@ include(plugin_helper.cmake)
 #add_subdirectory(TextHold)
 #add_subdirectory(IntRGBToHex)
 #add_subdirectory(MIDILearn2)
-add_subdirectory(DisplayList) 
+#add_subdirectory(DisplayList) 
 #add_subdirectory(Modulus)
 #add_subdirectory (PitchDisplay)
 #add_subdirectory (DrumTrigger)
@@ -110,7 +110,7 @@ add_subdirectory(DisplayList)
 #add_subdirectory (FloatEntry)
 #add_subdirectory (MidiToHex)
 #add_subdirectory (BoolTriggerGui)
-add_subdirectory (FileDialog)
+#add_subdirectory (FileDialog)
 
 
 
