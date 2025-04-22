@@ -3,7 +3,7 @@
     <Plugin id="FileDialog" name="File Dialog" category="mx/Sub-Controls">
         <GUI>
             <Pin name="File Name" datatype="string"/>
-            <Pin name="File Extension" default=".wav" datatype="string"/>
+            <Pin name="File Extension" default="wav" datatype="string"/>
 			<Pin name="Choice" datatype="int"/>
 			<Pin name="Items List" datatype="string"/>			
             <Pin name="Trigger" datatype="bool" direction="out"/>
