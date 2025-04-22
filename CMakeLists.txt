@@ -110,6 +110,7 @@ add_subdirectory(DisplayList)
 #add_subdirectory (FloatEntry)
 #add_subdirectory (MidiToHex)
 #add_subdirectory (BoolTriggerGui)
+add_subdirectory (FileDialog)
 
 
 
