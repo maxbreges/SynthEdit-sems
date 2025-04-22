@@ -17,7 +17,9 @@ class MidiToHex final : public MpBase2
 public:
 	MidiToHex() :
 		midiConverter(
-			[this](const midi::message_view& msg, int) {
+			// provide a lambda to accept converted MIDI 2.0 messages
+			[this](const midi::message_view& msg, int offset)
+			{
 				onMidi2Message(msg);
 			}
 		)
@@ -28,10 +30,26 @@ public:
 		initializePin(pinGate);
 	}
 
+	int32_t open() override
+	{
+		MpBase2::open();	// always call the base class
+
+		return gmpi::MP_OK;
+	}
+
+	// passes all MIDI to the converter.
 	void onMidiMessage(int pin, unsigned char* midiMessage, int size) override
 	{
-		midiConverter.processMidi(midi::message_view((const uint8_t*)midiMessage, size), -1);
+		midi::message_view msg((const uint8_t*)midiMessage, size);
+
+		// convert everything to MIDI 2.0
+		midiConverter.processMidi(msg, -1);
 	}
+
+/*	void onMidiMessage(int pin, unsigned char* midiMessage, int size) override
+	{
+		midiConverter.processMidi(midi::message_view((const uint8_t*)midiMessage, size), -1);
+	}*/
 
 	void onMidi2Message(const midi::message_view& msg)
 	{
