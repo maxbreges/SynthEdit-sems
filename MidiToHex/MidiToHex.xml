@@ -4,6 +4,7 @@
         <Parameters>
             <Parameter id="0" datatype="int" name=""/>
 			<Parameter id="1" datatype="bool" name=""/>
+			<Parameter id="2" datatype="string" name=""/>
         </Parameters>
         <Audio>
             <Pin name="MIDI In" datatype="midi"/>
@@ -19,6 +20,7 @@
 			<Pin name="Note#" datatype="int" direction="out"/>
 			<Pin name="Degree" datatype="int" direction="out"/>		
 			<Pin name="Color Picker" datatype="string" />
+			<Pin name="Color" datatype="string" private="true" parameterId="2"/>
         </GUI>
     </Plugin>
 </PluginList>

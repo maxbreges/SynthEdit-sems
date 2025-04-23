@@ -14,18 +14,18 @@ class MidiToHexGui final : public SeGuiInvisibleBase
     };
 
     Color defaultColors[12] = {
-    {255, 255, 0, 0},    // C     - Red
-    {255, 255, 127, 0},  // C#    - Orange
-    {255, 255, 255, 0},  // D     - Yellow
-    {255, 127, 255, 0},  // D#    - Yellow-Green
-    {255, 0, 255, 0},    // E     - Green
-    {255, 0, 255, 127},  // F     - Cyan-Green
-    {255, 0, 255, 255},  // F#    - Cyan
-    {255, 0, 127, 255},  // G     - Blue-Cyan
-    {255, 0, 0, 255},    // G#    - Blue
-    {255, 127, 0, 255},  // A     - Violet
-    {255, 255, 0, 255},  // A#    - Magenta
-    {255, 255, 0, 127}   // B     - Pink
+        {255, 255, 0, 0},   // C     - Red
+        {255, 255, 127, 0}, // C#    - Orange
+        {255, 255, 255, 0}, // D     - Yellow
+        {255, 127, 255, 0}, // D#    - Yellow-Green
+        {255, 0, 255, 0},   // E     - Green
+        {255, 0, 255, 127}, // F     - Cyan-Green
+        {255, 0, 255, 255}, // F#    - Cyan
+        {255, 0, 127, 255}, // G     - Blue-Cyan
+        {255, 0, 0, 255},   // G#    - Blue
+        {255, 127, 0, 255}, // A     - Violet
+        {255, 255, 0, 255}, // A#    - Magenta
+        {255, 255, 0, 127}  // B     - Pink
     };
 
     std::unordered_map<int, Color> customColors; // Store custom colors for notes
@@ -92,13 +92,89 @@ class MidiToHexGui final : public SeGuiInvisibleBase
             {
                 int alpha, red, green, blue;
                 hexToRgb(customColor, alpha, red, green, blue);
-                customColors[pitch] = { alpha, red, green, blue }; // Store in customColors map
+                customColors[pitch] = { alpha, red, green, blue };
+
+                // Serialize and save to patch memory
+                pinCustomColor = serializeColors();
             }
 
             // Call to update pinHex based on the new color
             onSetPitchIn(); // Recalculate pinHex after setting the custom color
-
             pinLearn = false; // Reset learning state
+        }
+    }
+
+    std::string serializeColors() const
+    {
+        std::ostringstream oss;
+
+        for (const auto& pair : customColors) {
+            int pitch = pair.first;
+            Color color = pair.second;
+            oss << pitch << "," << color.alpha << ","
+                << color.red << "," << color.green << ","
+                << color.blue << ";";
+        }
+
+        return oss.str();
+    }
+
+    void deserializeColors(const std::string& data)
+    {
+        customColors.clear(); // Clear any existing colors before loading new ones
+        std::istringstream iss(data);
+        std::string segment;
+
+        while (std::getline(iss, segment, ';')) {
+            if (segment.empty()) continue;
+
+            std::istringstream colorStream(segment);
+            std::string pitchStr, alphaStr, redStr, greenStr, blueStr;
+
+            // Check if we can read each component safely
+            if (!std::getline(colorStream, pitchStr, ',') ||
+                !std::getline(colorStream, alphaStr, ',') ||
+                !std::getline(colorStream, redStr, ',') ||
+                !std::getline(colorStream, greenStr, ',') ||
+                !std::getline(colorStream, blueStr, ',')) {
+                // Handle error
+                continue; // Skip this segment
+            }
+
+            try {
+                int pitch = std::stoi(pitchStr);
+                int alpha = std::stoi(alphaStr);
+                int red = std::stoi(redStr);
+                int green = std::stoi(greenStr);
+                int blue = std::stoi(blueStr);
+
+                // Validation check to prevent out-of-range values
+                if (pitch < 0 || pitch >= 12) continue; // Only allow pitches 0 to 11
+                customColors[pitch] = { alpha, red, green, blue };
+            }
+            catch (const std::invalid_argument& e) {
+                // Handle conversion error
+                continue; // Skip this entry if conversion fails
+            }
+            catch (const std::out_of_range& e) {
+                // Handle out-of-range error
+                continue; // Skip this entry if out of range
+            }
+        }
+    }
+
+    void onLoadPatch()
+    {
+        std::string customColorValue = pinCustomColor;
+        if (!customColorValue.empty())
+        {
+            //std::cout << "Loading custom colors from pin." << std::endl;
+            deserializeColors(customColorValue);
+            onSetPitchIn(); // Update outputs after loading
+        }
+        else
+        {
+           // std::cout << "No custom color data to load." << std::endl;
         }
     }
 
@@ -109,6 +185,7 @@ class MidiToHexGui final : public SeGuiInvisibleBase
     IntGuiPin pinNote;
     IntGuiPin pinDegree;
     StringGuiPin pinColorPicker;
+    StringGuiPin pinCustomColor;
 
 public:
     MidiToHexGui()
@@ -120,8 +197,10 @@ public:
         initializePin(pinNote, static_cast<MpGuiBaseMemberPtr2>(&MidiToHexGui::onSetPitchIn));
         initializePin(pinDegree, static_cast<MpGuiBaseMemberPtr2>(&MidiToHexGui::onSetPitchIn));
         initializePin(pinColorPicker, static_cast<MpGuiBaseMemberPtr2>(&MidiToHexGui::onSetPitchIn));
+        initializePin(pinCustomColor, static_cast<MpGuiBaseMemberPtr2>(&MidiToHexGui::onLoadPatch));
 
-        // Optionally initialize pinHex here or through a default method.
+        // Load the patch state if applicable
+        onLoadPatch();
     }
 };
 
