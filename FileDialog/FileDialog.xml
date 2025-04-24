@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="FileDialog" name="FileDialog" category="mx/Sub-Controls">
+    <Plugin id="FileDialog" name="File Dialog" category="mx/Sub-Controls">
+		<Parameters>
+			<Parameter id="0" datatype="string"/>
+		</Parameters>
         <GUI>
             <Pin name="File Name" datatype="string"/>
-            <Pin name="File Extension" datatype="string"/>
+            <Pin name="File Extension" default="wav" datatype="string"/>
+			<Pin name="Choice" datatype="int"/>
+			<Pin name="Items List" datatype="string"/>			
             <Pin name="Trigger" datatype="bool" direction="out"/>
             <Pin name="Save Mode" datatype="bool"/>
-			<Pin name="Directory" datatype="string" direction="out"/>
-			<Pin name="List Items" datatype="string" direction="in"/>
-			<Pin name="Choice" datatype="int" direction="in"/>
-			<Pin name="Selection" datatype="string" direction="out"/>
+			<Pin name="Directory" datatype="string" direction="in"/>
+			<Pin name="Debug" datatype="string" direction="out" private="false"/>
+			<Pin name="ParentPath" direction="in" datatype="string" parameterId="0" />
         </GUI>
     </Plugin>
 </PluginList>

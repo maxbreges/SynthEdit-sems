@@ -1,9 +1,10 @@
-# pragma once
 #ifndef FILEDIALOGGUI_H_INCLUDED
 #define FILEDIALOGGUI_H_INCLUDED
 
-#include "mp_sdk_gui2.h"
-#include "mp_gui.h"
+#include "../se_sdk3/mp_sdk_gui2.h"
+#include "../se_sdk3/mp_gui.h"
+#include <vector>
+#include <string>
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -11,9 +12,8 @@ namespace fs = std::filesystem;
 class FileDialogGui : public SeGuiInvisibleBase
 {
 	bool m_prev_trigger;
-	std::vector<std::wstring> m_fileNames;// Store the list of files for index tracking
-	std::vector<std::wstring> m_fileNamesEx;// Store the list of files for index tracking
 	GmpiGui::FileDialog nativeFileDialog;
+	std::vector<std::wstring> m_fileNames;
 
 public:
 	FileDialogGui();
@@ -23,20 +23,21 @@ public:
 private:
 	void onSetTrigger();
 	void OnFileDialogComplete(int32_t result);
-	void onSetPath();
-	void updateItemsList(const fs::path& directory);
-	void onSetSelectedFile();
-	
-	std::string getDefaultFolder(std::wstring extension);		
+	std::string getDefaultFolder(std::wstring extension);
+	void onSetChoice();
+	void updateItemsList(const fs::path& directory); // Correctly defined in the class
+	void onSetSelectedFile(); 
+	void onSetItemsList();
 
 	StringGuiPin pinFileName;
 	StringGuiPin pinFileExtension;
+	IntGuiPin pinChoice;
+	StringGuiPin pinItemsList;
 	BoolGuiPin pinTrigger;
 	BoolGuiPin pinSaveMode;
 	StringGuiPin pinDirectory;
-	StringGuiPin pinListItems;
-	IntGuiPin pinChoice;
-	StringGuiPin pinSelection;
+	StringGuiPin pinDebug;
+	StringGuiPin pinItemsListIn;
 };
 
 #endif
