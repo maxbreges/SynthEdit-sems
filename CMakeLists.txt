@@ -111,6 +111,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (MidiToHex)
 #add_subdirectory (BoolTriggerGui)
 #add_subdirectory (FileDialog)
+add_subdirectory (StepCounterGui)
 
 
 

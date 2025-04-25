@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="StepCounterGui" name="Step Counter Gui" category="mx/Sub-Controls/Logic">
+        <GUI>
+            <Pin name="Clock" datatype="bool"/>
+			<Pin name="Reset" datatype="bool"/>
+            <Pin name="Out" datatype="bool" direction="out" autoDuplicate="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
