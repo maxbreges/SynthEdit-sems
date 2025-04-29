@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="StringRight" name="String Right" category="mx/Sub-Controls" >
+        <GUI>
+            <Pin name="String In" datatype="string"/>
+            <Pin name="String Length" datatype="int" default="6"/>
+			<Pin name="String Out" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
