@@ -113,6 +113,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (FileDialog)
 #add_subdirectory (StepCounterGui)
 #add_subdirectory (StringRight)
+add_subdirectory (GrayscaleHex)
 
 
 

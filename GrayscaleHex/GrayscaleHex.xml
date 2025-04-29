@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="GrayscaleHex" name="GrayscaleHex" category="mx/Sub-Controls">
+        <GUI>            
+            <Pin name="AnimPos" datatype="float" direction="out"/>
+			<Pin name="HexOut" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
