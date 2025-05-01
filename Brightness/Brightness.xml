@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Brightness" name="Brightness" category="mx/Sub-Controls">
+        <GUI>
+			<Pin name="Hex In" datatype="string"/>
+            <Pin name="Brightness" datatype="float" />
+            <Pin name="Hex Out" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
