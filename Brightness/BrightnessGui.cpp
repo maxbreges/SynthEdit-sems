@@ -9,6 +9,7 @@ using namespace gmpi;
 class BrightnessGui final : public SeGuiInvisibleBase
 {
     StringGuiPin pinHexIn;
+    FloatGuiPin pinOpacity;
     FloatGuiPin pinBrightness; // brightness control (0..1)
     StringGuiPin pinHexOut;
 
@@ -76,17 +77,34 @@ class BrightnessGui final : public SeGuiInvisibleBase
         if (brightness < 0.0f) brightness = 0.0f;
         if (brightness > 1.0f) brightness = 1.0f;
 
-        // Adjust color
+        // Adjust color brightness
         uint32_t adjustedColor = adjustBrightness(color, brightness);
 
-        // Convert to hex string
-        std::string resultHex = uint32ToHexString(adjustedColor, 6);
+        // Convert adjusted color to hex string (8 hex digits)
+        std::string resultHex = uint32ToHexString(adjustedColor, 8);
+
+        // Map opacity (pinOpacity) from [0,1] to [00,FF]
+        uint8_t opacityHex = static_cast<uint8_t>(pinOpacity * 255.0f);
+        std::stringstream ss;
+        ss << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(opacityHex);
+        std::string opacityStr = ss.str();
+
+        // Replace first two characters with opacity
+        if (resultHex.size() >= 8)
+        {
+            resultHex.replace(0, 2, opacityStr);
+        }
 
         // Output
         pinHexOut = resultHex;
     }
 
     void onSetHexIn()
+    {
+        updateColor();
+    }
+
+    void onSetOpacity()
     {
         updateColor();
     }
@@ -100,6 +118,7 @@ public:
     BrightnessGui()
     {
         initializePin(pinHexIn, static_cast<MpGuiBaseMemberPtr2>(&BrightnessGui::onSetHexIn));
+        initializePin(pinOpacity, static_cast<MpGuiBaseMemberPtr2>(&BrightnessGui::onSetOpacity));
         initializePin(pinBrightness, static_cast<MpGuiBaseMemberPtr2>(&BrightnessGui::onSetBrightness));
         initializePin(pinHexOut);
     }

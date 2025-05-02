@@ -3,7 +3,8 @@
     <Plugin id="Brightness" name="Brightness" category="mx/Sub-Controls">
         <GUI>
 			<Pin name="Hex In" datatype="string"/>
-            <Pin name="Brightness" datatype="float" />
+			<Pin name="Opacity" datatype="float" default="1" />
+            <Pin name="Brightness" datatype="float" default="1"/>
             <Pin name="Hex Out" datatype="string" direction="out"/>
         </GUI>
     </Plugin>
