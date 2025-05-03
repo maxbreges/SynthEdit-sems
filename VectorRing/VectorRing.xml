@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="VectorRing" name="Vector Ring" category="mx/Sub-Controls">
+        <GUI graphicsApi="GmpiGui">
+			<Pin name="Outer Color" datatype="string" default="00000000"/>
+            <Pin name="Color" datatype="string" default="FF005555"/>
+		    <Pin name="Thickness" datatype="float" default="0.5"/>
+			<Pin name="Graient Stop" datatype="float" default="0.5"/>
+        </GUI>
+    </Plugin>
+</PluginList>
