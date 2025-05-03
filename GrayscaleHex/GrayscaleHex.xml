@@ -2,7 +2,8 @@
 <PluginList>
     <Plugin id="GrayscaleHex" name="GrayscaleHex" category="mx/Sub-Controls">
         <GUI>            
-            <Pin name="AnimPos" datatype="float"/>
+            <Pin name="AnimPos" datatype="float" direction="in"/>
+			<Pin name="Gray Scale" datatype="bool" default="1"/>
 			<Pin name="HexOut" datatype="string" direction="out"/>
         </GUI>
     </Plugin>
