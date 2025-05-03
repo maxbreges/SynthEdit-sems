@@ -115,7 +115,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (StringRight)
 #add_subdirectory (GrayscaleHex)
 #add_subdirectory (Brightness)
-add_subdirectory (VectorRing)
+#add_subdirectory (VectorRing)
 
 
 
