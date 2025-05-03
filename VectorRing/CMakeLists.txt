@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 
-project(VectorCircle)
+project(VectorRing)
 
 build_gmpi_plugin(
 	PROJECT_NAME ${PROJECT_NAME}
