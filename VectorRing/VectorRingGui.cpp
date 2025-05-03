@@ -19,7 +19,7 @@ class VectorRingGui final : public gmpi_gui::MpGuiGfxBase
 		invalidateRect();
 	}
 
-	void onSetIntensity()
+	void onSetGradientStop()
 	{
 		invalidateRect();
 	}
@@ -27,7 +27,7 @@ class VectorRingGui final : public gmpi_gui::MpGuiGfxBase
 	StringGuiPin pinOuterColor;
  	StringGuiPin pinColor;
 	FloatGuiPin pinThickness;
-	FloatGuiPin pinIntensity;
+	FloatGuiPin pinGradientStop;
 
 public:
 	VectorRingGui()
@@ -35,7 +35,7 @@ public:
 		initializePin(pinOuterColor, static_cast<MpGuiBaseMemberPtr2>(&VectorRingGui::onSetColor));
 		initializePin( pinColor, static_cast<MpGuiBaseMemberPtr2>(&VectorRingGui::onSetColor) );
 		initializePin(pinThickness, static_cast<MpGuiBaseMemberPtr2>(&VectorRingGui::onSetThickness));
-		initializePin(pinIntensity, static_cast<MpGuiBaseMemberPtr2>(&VectorRingGui::onSetIntensity));
+		initializePin(pinGradientStop, static_cast<MpGuiBaseMemberPtr2>(&VectorRingGui::onSetGradientStop));
 	}
 
 	void calcDimensions(Point& center, float& radius, float& thickness)
@@ -71,17 +71,17 @@ public:
 
 		auto PinColor = FromHexStringBackwardCompatible(pinColor);
 		auto outerColor = FromHexStringBackwardCompatible(pinOuterColor);
-
+		float PinGradientStop = pinGradientStop / 2 + 0.5f;
 		// Gradient stops setup
 		GradientStop gradientStops[]
 		{
 			{ 0.f, outerColor },
-			{ pinIntensity, PinColor }
+			{ PinGradientStop, PinColor }
 		};		
 
 		// Calculate the adjusted radius to make stroke appear outside
 		float adjustedRadius = radius + (thickness / 2.0f);
-		float adjustedRadius1 = radius + (thickness / pinIntensity + 0.5f);
+		float adjustedRadius1 = (radius + (thickness / 2.0f)) * 1.4f;
 
 		auto gradientStopCollection = g.CreateGradientStopCollection(gradientStops);
 		RadialGradientBrushProperties radialGradientProps(center, adjustedRadius1);
