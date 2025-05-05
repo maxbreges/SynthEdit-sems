@@ -15,6 +15,7 @@ class JoystickImageGui : public ImageBase
 	BoolGuiPin pinMouseDown2;
 	FloatGuiPin pinResetValue;
 	BoolGuiPin pinMouseOver;
+	StringGuiPin pinHintOut;
 
 public:
 	JoystickImageGui();

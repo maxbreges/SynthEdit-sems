@@ -31,11 +31,13 @@ JoystickImageGui::JoystickImageGui()
 	initializePin(pinJumpToMouse);
 	initializePin(pinResetValue);
 	initializePin(pinMouseOver);
+	initializePin(pinHintOut);
 }
 
 int32_t JoystickImageGui::setHover(bool isMouseOverMe)
 {
 	pinMouseOver = isMouseOverMe;
+	pinHintOut = pinHint;
 	return gmpi::MP_OK;
 }
 
