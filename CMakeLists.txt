@@ -117,7 +117,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (Brightness)
 #add_subdirectory (VectorRing)
 #add_subdirectory (ImageX)
-#add_subdirectory (JoystickImage)
+add_subdirectory (JoystickImage)
 
 
 
