@@ -28,11 +28,13 @@ ImageXGui::ImageXGui(bool useMouseResponsePin) :
 	if (useMouseResponsePin_)
 		initializePin(9, pinMouseResponse);
 	initializePin(10, pinMouseOver);
+	initializePin(11, pinHintOut);
 }
 
 int32_t ImageXGui::setHover(bool isMouseOverMe)
 {
 	pinMouseOver = isMouseOverMe;
+	pinHintOut = pinHint;
 	return gmpi::MP_OK;
 }
 

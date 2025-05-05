@@ -12,6 +12,7 @@ protected:
 	IntGuiPin pinMouseResponse;
 	bool useMouseResponsePin_;
 	BoolGuiPin pinMouseOver;
+	StringGuiPin pinHintOut;
 
 public:
 	ImageXGui(bool useMouseResponsePin = true);
@@ -22,7 +23,7 @@ public:
 	void setAnimationPos(float p) override;
 	void onLoaded() override;
 	std::wstring getHint() override
-	{
+	{		
 		return pinHint;
 	}
 	int getMouseResponse() override;
