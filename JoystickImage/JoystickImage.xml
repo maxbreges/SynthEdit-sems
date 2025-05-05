@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="JoystickImage" name="Joystick Image" category="mx/Sub-Controls">
+    <Plugin id="JoystickImage" name="Joystick ImageX" category="Sub-Controls">
         <GUI graphicsApi="GmpiGui">
             <Pin name="Animation Position" datatype="float"/>
             <Pin name="Filename" datatype="string" default="joystick_knob" isFilename="true" metadata="bmp"/>
