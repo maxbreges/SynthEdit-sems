@@ -1,4 +1,4 @@
-#include "./TextXGui.h"
+#include "./TextEntryGui.h"
 #include "unicode_conversion.h"
 #include "it_enum_list.h"
 #include "../se_sdk3/MpString.h"

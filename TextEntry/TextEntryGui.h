@@ -1,5 +1,5 @@
-#ifndef TEXTXGUI_H_INCLUDED
-#define TEXTXGUI_H_INCLUDED
+#ifndef TEXTENTRYGUI_H_INCLUDED
+#define TEXTENTRYGUI_H_INCLUDED
 
 //#include <functional>
 #include "TextSubcontrol.h"
