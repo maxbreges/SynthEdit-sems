@@ -118,6 +118,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (VectorRing)
 #add_subdirectory (ImageX)
 #add_subdirectory (JoystickImage)
+add_subdirectory (TextEntry)
 
 
 
