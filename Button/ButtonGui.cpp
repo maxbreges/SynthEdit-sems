@@ -5,7 +5,6 @@
 #include <iomanip>
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <d2d1.h>
 
 using namespace gmpi;
 using namespace gmpi_gui;
