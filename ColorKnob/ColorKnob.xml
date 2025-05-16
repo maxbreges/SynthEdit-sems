@@ -7,7 +7,7 @@
 		</Parameters>
         <GUI graphicsApi="GmpiGui">
 			<Pin name="AnimationIn" datatype="float" parameterId="0"/>
-            <Pin name="Animation Position" datatype="float"/>
+            <Pin name="Animation Position" datatype="float" direction="out"/>
 			<Pin name="Category" datatype="string" default="Oscillator" isMinimised="true"/>
             <Pin name="Hint" datatype="string" default="Volume" isMinimised="true"/>
             <Pin name="Mouse Down" datatype="bool"/>
