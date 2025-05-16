@@ -5,6 +5,7 @@
 #include <iomanip>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <d2d1.h>
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -12,12 +13,13 @@ using namespace GmpiDrawing;
 
 class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 {
-
 	bool previousState = false;
 	bool SetResponse = 1;
 
 	int Clicked = 0;
 	int Stepped = 1;	
+
+	int radius = 5;
 
 	std::wstring HintColor = L"ffffffff";
 
@@ -55,37 +57,32 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	{
 		invalidateRect();
 	}
-
 	void onSetHint()
 	{
 		pinHintOut = pinHint;
 		invalidateRect();
 	}
-
 	void onSetCornerRadius()
 	{
 		invalidateRect();
 	}
-
 	void onSetColor()
 	{
 		updateColor();
 		invalidateRect();
 	}
-
 	void onSetGradient()
 	{
 		invalidateRect();
 	}
-
 	void onSetRadial()
 	{
 		if (pinRadial)
 		{
-			pinCornerRadius = 100;
+			radius = 100;
 		}
 		else
-			pinCornerRadius = 5;
+			radius = 5;
 		invalidateRect();
 	}
 
@@ -113,6 +110,15 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 	void onSetAlignV()
 	{
+		invalidateRect();
+	}
+
+	// Define padding (in pixels)
+	int padding = 0;
+
+	void onSetAlignY()
+	{
+		padding = pinAlignY;
 		invalidateRect();
 	}
 
@@ -146,6 +152,8 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	StringGuiPin pinFont;
 	IntGuiPin pinAlignV;
 
+	FloatGuiPin pinAlignY;
+
 public:
 	ButtonGui()
 	{
@@ -174,6 +182,8 @@ public:
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetFontSize));
 		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetFont));
 		initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignV));
+
+		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignY));;
 	}
 
 	int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
@@ -324,12 +334,9 @@ public:
 	{
 		Graphics g(drawingContext);
 		auto r = getRect();
-		//Point center = Point(0.5f * r.right, 0.5f * r.bottom);
 
 		int width = r.right - r.left;
 		int height = r.bottom - r.top;
-
-		int radius = pinCornerRadius;
 
 		radius = (std::min)(radius, width / 2);
 		radius = (std::min)(radius, height / 2);
@@ -422,8 +429,8 @@ public:
 		auto gradientStopCollectionR = g.CreateGradientStopCollection(gradientStopsR);
 
 		// Create the radial gradient brush
-		float radiusR = std::min<>(r.getWidth()*0.5f, r.getHeight()*0.5f);
-		RadialGradientBrushProperties radialGradientProps(gradientCenter, radiusR);
+		//float radiusR = std::min<>(r.getWidth()*0.5f, r.getHeight()*0.5f);
+		RadialGradientBrushProperties radialGradientProps(gradientCenter, radius);
 		auto BrushR = g.CreateRadialGradientBrush(radialGradientProps, BrushProperties(), gradientStopCollectionR);
 
 		auto Brush = g.CreateLinearGradientBrush(gradientStopCollection, point1, point2);
@@ -433,6 +440,7 @@ public:
 		if (pinRadial)
 		{	
 			g.FillGeometry(geometry, BrushR);
+			onSetRadial();
 		}
 		else	
 
@@ -473,13 +481,23 @@ public:
 			// Set alignment
 			ParagraphAlignment alignV[] = { ParagraphAlignment::Center, ParagraphAlignment::Near, ParagraphAlignment::Far };
 			textFormat.SetParagraphAlignment(alignV[pinAlignV.getValue()]);
-
 			textFormat.SetTextAlignment(TextAlignment::Center);
+
+			// Original rect
+			auto rect = getRect(); // GmpiDrawing::Rect
+
+			// Create inset rect as GmpiDrawing::Rect
+			GmpiDrawing::Rect textRect(
+				rect.left,
+				rect.top + padding,
+				rect.right,
+				rect.bottom - padding
+			);
 
 			auto brush = g.CreateSolidColorBrush(Color::FromHexString(HintColor));
 
 			// Draw text within the button rect
-			g.DrawTextU(pinHint, textFormat, getRect(), brush, 1);
+			g.DrawTextU(pinHint, textFormat, textRect, brush, 1);
 		}
 
 		//===================================

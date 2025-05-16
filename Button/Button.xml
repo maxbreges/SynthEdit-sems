@@ -27,6 +27,9 @@
 			<Pin name="Font Size" datatype="int" default="16" isMinimised="true"/>
 			<Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
 			<Pin name="Align" datatype="enum" metadata="Center, Top, Bottom" isMinimised="true"/>
+
+			<Pin name="Align Top/Bottom" datatype="float" default="4" isMinimised="true" />
+
 		</GUI>
     </Plugin>
 </PluginList>
