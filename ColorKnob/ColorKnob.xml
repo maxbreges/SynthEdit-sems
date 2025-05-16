@@ -13,8 +13,8 @@
             <Pin name="Mouse Down" datatype="bool"/>
 			<Pin name="Mouse Over" datatype="bool" direction="out"/>
             <Pin name="Background" datatype="string" default="FF000000" isMinimised="false" private="true"/>
-			<Pin name="Circle Size" datatype="float" default="0.8"/>
-			<Pin name="Line Thickness" datatype="float" default="4"/>
+			<Pin name="Circle Size" datatype="float" default="0.8" isMinimised="true"/>
+			<Pin name="Line Thickness" datatype="float" default="4" isMinimised="true"/>
 			<Pin name="Color Adjust" datatype="bool" private="true"/>
 			<Pin name="Hex" datatype="string" parameterId="2"/>
 			<Pin name="Hex In" datatype="string" default="ffff6b00" private="true"/>
