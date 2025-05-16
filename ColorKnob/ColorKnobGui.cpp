@@ -30,6 +30,7 @@ class BlobKnobGui final : public gmpi_gui::MpGuiGfxBase
 
     void onSetAnimationPosition() {
         pinAnimationIn = pinAnimationPosition;
+pinAnimationPositionOut = pinAnimationPosition;
         onSetBlob();
 
         if (pinColorAdj) {
@@ -172,6 +173,7 @@ public:
     StringGuiPin pinDebug;
     StringGuiPin pinHexOut;
     FloatGuiPin pinResetValue;
+FloatGuiPin pinAnimationPositionOut;
 
 public:
     BlobKnobGui() {
@@ -193,6 +195,7 @@ public:
         initializePin(pinDebug, static_cast<MpGuiBaseMemberPtr2>(&BlobKnobGui::onSetBlob));
         initializePin(pinHexOut, static_cast<MpGuiBaseMemberPtr2>(&BlobKnobGui::onSetBlob));
         initializePin(pinResetValue, static_cast<MpGuiBaseMemberPtr2>(&BlobKnobGui::onSetMouseDown));
+initializePin(pinAnimationPositionOut, static_cast<MpGuiBaseMemberPtr2>(&BlobKnobGui::onSetAnimationPosition));
     }
 
     int32_t MP_STDCALL setHover(bool isMouseOverMe) override {
