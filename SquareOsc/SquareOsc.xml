@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="SquareOsc" name="Square Osc" category="mx/Waveform">
+        <Audio>
+            <Pin name="Gate In" datatype="float" rate="audio"/>
+            <Pin name="Pitch" datatype="float" rate="audio" default="5"/>
+            <Pin name="Audio Out" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>

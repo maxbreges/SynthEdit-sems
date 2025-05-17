@@ -120,8 +120,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (JoystickImage)
 #add_subdirectory (TextEntry)
 #add_subdirectory (Button)
-add_subdirectory (PulseGen)
-
+#add_subdirectory (PulseGen)
+add_subdirectory (SquareOsc)
 
 
 
