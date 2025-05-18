@@ -52,7 +52,7 @@ END
 // GMPXML
 //
 
-IDR_GMPXML1             GMPXML                  "Monostable.xml"
+IDR_GMPXML1             GMPXML                  "MonostableX.xml"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
