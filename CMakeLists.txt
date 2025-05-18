@@ -122,6 +122,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (Button)
 #add_subdirectory (PulseGen)
 #add_subdirectory (SquareOsc)
+add_subdirectory (MonostableGui)
 
 
 

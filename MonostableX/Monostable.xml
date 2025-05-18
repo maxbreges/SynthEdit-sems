@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<PluginList>
+	<Plugin id="Polystable" name="MonostableX" category="mx/Logic" >
+		<Audio>
+			<Pin name="Gate" datatype="float" rate="audio"/>
+			<Pin name="Pulse Length ms" datatype="float" rate="audio" default="50"/>
+			<Pin name="Signal Out" datatype="float" rate="audio" direction="out" />
+		</Audio>
+	</Plugin>
+</PluginList>
