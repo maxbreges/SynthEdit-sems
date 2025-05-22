@@ -152,6 +152,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	IntGuiPin pinAlignV;
 
 	FloatGuiPin pinAlignY;
+	FloatGuiPin pinOpacity;
 
 public:
 	ButtonGui()
@@ -183,6 +184,8 @@ public:
 		initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignV));
 
 		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignY));;
+		initializePin(pinOpacity, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));;
+
 	}
 
 	int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
@@ -308,7 +311,7 @@ public:
 		std::string resultHexGlow = uint32ToHexString(adjustedColorGlow, 8);
 
 		// Map opacity (pinOpacity) from [0,1] to [00,FF]
-		uint8_t opacityHex = static_cast<uint8_t>(1 * 255.0f);
+		uint8_t opacityHex = static_cast<uint8_t>(pinOpacity * 255.0f);
 		std::stringstream ss;
 		ss << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(opacityHex);
 		std::string opacityStr = ss.str();

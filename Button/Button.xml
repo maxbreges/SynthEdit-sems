@@ -29,7 +29,7 @@
 			<Pin name="Align" datatype="enum" metadata="Center, Top, Bottom" isMinimised="true"/>
 
 			<Pin name="Align Top/Bottom" datatype="float" default="4" isMinimised="true" />
-
+			<Pin name="Opacity" datatype="float" default="1" isMinimised="false" />
 		</GUI>
     </Plugin>
 </PluginList>
