@@ -46,7 +46,7 @@ public:
 	}
 
     // Custom handler for MIDI2 messages
-    void TimestampMidi::onMidi2Message(const midi::message_view& msg)
+    void onMidi2Message(const midi::message_view& msg)
     {
         const auto header = gmpi::midi_2_0::decodeHeader(msg);
         int chan = msg[1] & 0x0f; // Extract channel number
