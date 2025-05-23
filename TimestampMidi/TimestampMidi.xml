@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="TimestampMidi" name="TimestampMidi" category="mx/MIDI">
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+            <Pin name="Timestamp" datatype="string" direction="out"/>
+        </Audio>
+        <GUI/>
+    </Plugin>
+</PluginList>

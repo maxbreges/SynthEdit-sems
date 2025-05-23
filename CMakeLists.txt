@@ -123,7 +123,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (PulseGen)
 #add_subdirectory (SquareOsc)
 #add_subdirectory (MonostableX)
-#add_subdirectory (QueLoader)
+#add_subdirectory (QueLoader) //failed
+add_subdirectory (TimestampMidi)
 
 
 
