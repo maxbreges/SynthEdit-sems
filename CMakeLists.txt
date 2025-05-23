@@ -125,7 +125,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (MonostableX)
 #add_subdirectory (QueLoader) //failed
 #add_subdirectory (TimestampMidi)
-add_subdirectory (StringLeft)
+#add_subdirectory (StringLeft)
 
 
 
