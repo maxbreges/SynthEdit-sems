@@ -3,9 +3,9 @@
     <Plugin id="BooleanOR" name="Boolean OR" category="mx/Sub-Controls/Logic">
         <GUI>
 			<Pin name="Debug Inputs" datatype="string" direction="out" private="true"/>
-			<Pin name="Debug Inputs" datatype="string" direction="out" private="true"/>
-			<Pin name="Index Out" datatype="int" direction="out" isMinimised=true/>
-            <Pin name="Bool Out" datatype="bool" direction="in"/>
+			<Pin name="Debug Inputs" datatype="string" direction="out" isMinimised="true"/>
+			<Pin name="Index Out" datatype="int" direction="out" isMinimised="true"/>
+            <Pin name="Bool Out" datatype="bool" />
             <Pin name="Spare In" datatype="bool" direction="out" autoRename="true" autoDuplicate="true"/>
         </GUI>
     </Plugin>
