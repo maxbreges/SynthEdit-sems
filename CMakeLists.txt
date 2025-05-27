@@ -89,7 +89,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (FretFormula)
 #add_subdirectory (MIDI2Frets)
 #add_subdirectory (MidiToBlobs)
-add_subdirectory (BooleanOR)
+#add_subdirectory (BooleanOR)
 #add_subdirectory (MidiToBlobs)
 #add_subdirectory (FretLedX)
 #add_subdirectory (setPin)
@@ -126,6 +126,7 @@ add_subdirectory (BooleanOR)
 #add_subdirectory (QueLoader) //failed
 #add_subdirectory (TimestampMidi)
 #add_subdirectory (StringLeft)
+add_subdirectory (ORGateGui)
 
 
 

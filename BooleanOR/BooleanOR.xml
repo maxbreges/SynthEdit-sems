@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="BooleanOR" name="Boolean OR" category="mx/Sub-Controls/Logic">
+    <Plugin id="BooleanOR" name="BooleanOR" category="mx/Sub-Controls/Logic">
         <GUI>
-			<Pin name="Debug Inputs" datatype="string" direction="out" private="true"/>
-			<Pin name="Debug Inputs" datatype="string" direction="out" private="true"/>
-			<Pin name="Index Out" datatype="int" direction="out" isMinimised="true"/>
-            <Pin name="Bool Out" datatype="bool" />
+            <Pin name="Debug Inputs" datatype="string" direction="out" private="true"/>
+            <Pin name="Debug Inputs" datatype="string" direction="out" private="true"/>
+            <Pin name="Index Out" datatype="int" direction="out" private="true"/>
+            <Pin name="Bool Out" datatype="bool" direction="out" isMinimised="false"/>
             <Pin name="Spare In" datatype="bool" direction="out" autoRename="true" autoDuplicate="true"/>
         </GUI>
     </Plugin>
