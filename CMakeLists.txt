@@ -75,7 +75,6 @@ include(plugin_helper.cmake)
 #add_subdirectory (MIDI2Fret)
 #add_subdirectory (FretLed)
 #add_subdirectory (Minors)
-#add_subdirectory (IntArray)
 #add_subdirectory (Increment)
 #add_subdirectory (FileName)
 #add_subdirectory (FolderList)
@@ -88,8 +87,6 @@ include(plugin_helper.cmake)
 #add_subdirectory (FloatAnimation)
 #add_subdirectory (FretFormula)
 #add_subdirectory (MIDI2Frets)
-#add_subdirectory (MidiToBlobs)
-add_subdirectory (BooleanOR)
 #add_subdirectory (MidiToBlobs)
 #add_subdirectory (FretLedX)
 #add_subdirectory (setPin)
@@ -126,7 +123,9 @@ add_subdirectory (BooleanOR)
 #add_subdirectory (QueLoader) //failed
 #add_subdirectory (TimestampMidi)
 #add_subdirectory (StringLeft)
-add_subdirectory (ORGateGui)
+#add_subdirectory (ORGateGui)
+add_subdirectory (ORGateGuiR)
+
 
 
 
