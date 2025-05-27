@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="OR Gate GuiLR" name="OR Gate Gui &lt;&gt;" category="mx/Sub-Controls/Logic">
+        <GUI>
+            <Pin name="Bool Out" datatype="bool" direction="out"/>
+            <Pin name="Spare In" datatype="bool"  direction="in" autoRename="true" autoDuplicate="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
