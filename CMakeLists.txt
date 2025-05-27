@@ -124,7 +124,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (TimestampMidi)
 #add_subdirectory (StringLeft)
 #add_subdirectory (ORGateGui)
-add_subdirectory (ORGateGuiR)
+#add_subdirectory (ORGateGuiR)
 
 
 
