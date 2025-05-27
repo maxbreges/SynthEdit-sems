@@ -52,7 +52,7 @@ END
 // GMPXML
 //
 
-IDR_GMPXML1             GMPXML                  "ORGateGui.xml"
+IDR_GMPXML1             GMPXML                  "ORGateGuiR.xml"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
