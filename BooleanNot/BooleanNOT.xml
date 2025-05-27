@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<PluginList>
-    <Plugin id="BooleanNOT" name="Boolean NOT" category="mx/Sub-Controls/Logic">
-        <GUI>
-			<Pin name="In" datatype="bool" direction="out" />
-            <Pin name="Out" datatype="bool" direction="in"/>            
-        </GUI>
-    </Plugin>
-</PluginList>
