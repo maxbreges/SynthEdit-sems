@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="MIDI Learn" name="MIDI Learn" category="mx/MIDI">
+    <Plugin id="MidiLearnDSP" name="Midi Learn" category="mx/MIDI">
 		<Parameters>
-			<Parameter id="0" datatype="bool" name=""/>
-			<Parameter id="1" datatype="bool" name=""/>
+			<Parameter id="0" datatype="bool" private="true" name=""/>
+			<Parameter id="1" datatype="bool" private="true" name=""/>
+			
+			<Parameter id="3" datatype="int" private="true" name=""/>
 		</Parameters>
         <Audio>
+			<Pin name="Enable" datatype="bool" private="true" parameterId="0"/>
             <Pin name="MIDI In" datatype="midi"/>
-            <Pin name="Note lo/hi" datatype="enum" direction="out"/>			
-			<Pin name="Gate" datatype="bool" parameterId="0"/>
-			<Pin name="GateOut" datatype="bool" direction="out" parameterId="1"/>
-			<Pin name="Note#" datatype="int" direction="out"/>
+            <Pin name="MIDI Out" datatype="midi" direction="out"/>
+			<Pin name="Status" datatype="bool" direction="out"/>
+			<Pin name="GateOut" datatype="bool" direction="out" private="true" parameterId="1"/>
+
+			<Pin name="Stored" datatype="int" private="true" parameterId="3" />
+			<Pin name="Note Number" datatype="int" direction="out" private="true"/>
         </Audio>
-        <GUI>
-            <Pin name="Animation Position" datatype="float" direction="out"/>
-			<Pin name="Gate" datatype="bool" parameterId="0"/>
-			<Pin name="GateIn" datatype="bool" parameterId="1"/>
-        </GUI>
+		<GUI>
+			<Pin name="Animation Position" datatype="float" direction="out" />
+			<Pin name="Gate" datatype="bool" private="true" parameterId="0" />
+			<Pin name="GateIn" datatype="bool" private="true" parameterId="1" />
+
+			<Pin name="Stored" datatype="int" private="true" parameterId="3" />
+			<Pin name="Note Number" datatype="int" direction="in"/>
+		</GUI>
     </Plugin>
 </PluginList>

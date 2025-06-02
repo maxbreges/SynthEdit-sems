@@ -1,42 +1,49 @@
+#include "MidiLearnGui.h"
 #include "mp_sdk_gui2.h"
 
 using namespace gmpi;
 
-class MIDILearnGui final : public SeGuiInvisibleBase
-{ 	
+REGISTER_GUI_PLUGIN(MIDILearnDSPGui, L"MidiLearnDSP");
 
- 	void onSetAnimationPosition()
+MIDILearnDSPGui::MIDILearnDSPGui(IMpUnknown* host) : MpGuiBase(host)
+, MESSAGE_ID(2244), receivedValue(false)
+{
+	initializePin(pinAnimationPosition, static_cast<MpGuiBaseMemberPtr>(&MIDILearnDSPGui::onSetAnimationPosition));
+	initializePin(pinGate, static_cast<MpGuiBaseMemberPtr>(&MIDILearnDSPGui::onSetAnimationPosition));
+	initializePin(pinGateIn, static_cast<MpGuiBaseMemberPtr>(&MIDILearnDSPGui::onSetGateIn));
+
+	initializePin(pinStored, static_cast<MpGuiBaseMemberPtr>(&MIDILearnDSPGui::onSetStored));
+	initializePin(pinNote, static_cast<MpGuiBaseMemberPtr>(&MIDILearnDSPGui::onSetStored));
+	onSetStored();
+}
+
+	void MIDILearnDSPGui::onSetAnimationPosition()
 	{
-			pinGate = pinAnimationPosition;			
+		pinGate = pinAnimationPosition;
 	}
 
-	void onSetGate()
-	{ 
-
-	}
-
-	void onSetGateIn()
+	void MIDILearnDSPGui::onSetGateIn()
 	{
 		if (pinGateIn)
 			pinAnimationPosition = false;
-
 		onSetAnimationPosition();
-	}
- 	
- 	FloatGuiPin pinAnimationPosition;
-	BoolGuiPin pinGate;
-	BoolGuiPin pinGateIn;
+	}	
 
-public:
-	MIDILearnGui()
+	void MIDILearnDSPGui::onSetStored()
+	{		
+		pinStored = pinNote.getValue();
+	}
+
+	int32_t MIDILearnDSPGui::receiveMessageFromAudio(int32_t id, int32_t size, void* messageData)
 	{
-		initializePin( pinAnimationPosition, static_cast<MpGuiBaseMemberPtr2>(&MIDILearnGui::onSetAnimationPosition) );
-		initializePin(pinGate, static_cast<MpGuiBaseMemberPtr2>(&MIDILearnGui::onSetAnimationPosition));
-		initializePin(pinGateIn, static_cast<MpGuiBaseMemberPtr2>(&MIDILearnGui::onSetGateIn));
+		if (id == MESSAGE_ID && size >= sizeof(int))
+		{
+			int receivedValue = *(reinterpret_cast<int*>(messageData));
+			// Update your GUI pin or indicator here
+			pinNote = receivedValue; // 
+			pinStored = pinNote;
+			//pinAnimationPosition = false;
+		}
+		return gmpi::MP_OK;
 	}
-};
-
-namespace
-{
-	auto r = Register<MIDILearnGui>::withId(L"MIDI Learn");
-}
+;

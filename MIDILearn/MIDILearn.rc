@@ -52,7 +52,7 @@ END
 // GMPXML
 //
 
-IDR_GMPXML1             GMPXML                  "MIDILearn.xml"
+IDR_GMPXML1             GMPXML                  "MidiLearn.xml"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 

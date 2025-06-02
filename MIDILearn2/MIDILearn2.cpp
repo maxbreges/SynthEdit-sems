@@ -1,7 +1,6 @@
 #include "mp_sdk_audio.h"
 #include "mp_midi.h"
 #include <array>
-//#include <climits>
 
 SE_DECLARE_INIT_STATIC_FILE(mxMIDILearn2);
 
@@ -24,7 +23,8 @@ class MIDILearn final : public MpBase2
 	gmpi::midi_2_0::MidiConverter2 midiConverter;
 
 	int messageSize = 0;
-	
+private:
+	int lastNote = 0; // Store the last MIDI note
 
 public:
 	MIDILearn() :
@@ -48,6 +48,7 @@ public:
 	int32_t open() override
 	{
 		MpBase2::open();    // always call the base class
+		pinNote = lastNote; // restore last note on load
 		return gmpi::MP_OK;
 	}
 
@@ -72,29 +73,28 @@ public:
 
 		if (pinGate)
 		{
-			
-
 			switch (header.status)
 			{
 			case gmpi::midi_2_0::NoteOn:
 			{
 				const auto note = gmpi::midi_2_0::decodeNote(msg);
-				pinNote = (int)(uint8_t)note.noteNumber;
+				lastNote = (int)(uint8_t)note.noteNumber; // update last note
+				pinNote = lastNote;
 				pinGateOut = false;
-				pinIntOut = pinNote;
-				pinIntOutToGui = pinNote;
+				pinIntOut = lastNote;
+				pinIntOutToGui = lastNote;
 			}
 			break;
 
 			case gmpi::midi_2_0::NoteOff:
 			{
 				const auto note = gmpi::midi_2_0::decodeNote(msg);
-				pinNote = (int)(uint8_t)note.noteNumber;
-					pinGateOut = true;
+				lastNote = (int)(uint8_t)note.noteNumber; // update last note
+				pinNote = lastNote;
+				pinGateOut = true;
 			}
 			break;
 			}
-
 		};
 	}
 };
