@@ -2,27 +2,20 @@
 
 #include "mp_sdk_gui.h"
 
-class MIDILearnDSPGui : public MpGuiBase
+class MIDIGui : public MpGuiBase
 
 {
 public:
-	MIDILearnDSPGui(IMpUnknown* host);
+	MIDIGui(IMpUnknown* host);
 
 	// overrides
 	virtual int32_t MP_STDCALL receiveMessageFromAudio(int32_t id, int32_t size, void* messageData);
 	void onSetAnimationPosition();
-	void onSetGateIn();
-
-	void onSetStored();
 
 	FloatGuiPin pinAnimationPosition;
-	BoolGuiPin pinGate;
-	BoolGuiPin pinGateIn;
-
-	IntGuiPin pinStored;
 	IntGuiPin pinNote;
+	IntGuiPin pinNoteToDsp;
 
-	const int MESSAGE_ID;
-	int receivedValue;
-
-};
+	const int MESSAGE_ID_GATE;
+	const int MESSAGE_ID_NOTE;
+}; 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+	<Plugin id="MIDI_Learn" name="MIDI Learn" category="mx/MIDI" >
+		<Parameters>
+			<Parameter id="0" datatype="int" direction="out" private="true" name="Note Number" />
+		</Parameters>
+		<GUI>
+			<Pin name="Animation Position" datatype="float" direction="out"/>
+			<Pin name="Note" datatype="int" />
+			<Pin name="NoteToDSP" datatype="int" private="true" parameterId="0"/>
+		</GUI>
+        <Audio>
+            <Pin name="Input" datatype="midi"/>
+            <Pin name="Output" datatype="midi" direction="out"/>
+			<Pin name="Note" datatype="int" private="true" parameterId="0" metadata=",,127,0"/>
+			<Pin name="Note" datatype="int" direction="out"/> 
+			<Pin name="Status" datatype="bool" direction="out"/>
+		</Audio>
+    </Plugin>
+</PluginList>
+
