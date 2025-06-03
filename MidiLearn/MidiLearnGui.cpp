@@ -1,4 +1,4 @@
-#include "MIDI_LearnGui.h"
+#include "MidiLearnGui.h"
 #include "mp_sdk_gui2.h"
 
 using namespace gmpi;
