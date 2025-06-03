@@ -7,7 +7,7 @@ build_gmpi_plugin(
 	HAS_DSP
 	HAS_GUI
 	SOURCE_FILES
-	  MIDILearn.cpp
-	  MIDILearnGui.h
-	  MIDILearnGui.cpp
+	  MidiLearn.cpp
+	  MidiLearnGui.h
+	  MidiLearnGui.cpp
 )
