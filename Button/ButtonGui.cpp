@@ -215,7 +215,7 @@ public:
 				pinBoolOut = true;
 			}
 		}
-		: pass_filter
+		pass_filter:
 		{
 			pinBoolOutR = pinBoolOut;
 		}
