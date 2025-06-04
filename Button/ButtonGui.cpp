@@ -17,6 +17,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 	int Clicked = 0;
 	int Stepped = 1;	
+	int Off = 2;
 
 	int radius = 5;
 
@@ -24,7 +25,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
  	void onSetBoolOut()
 	{
-		pinBoolOutR = pinBoolOut;
+		//pinBoolOutR = pinBoolOut;
 		updateColor();
 		invalidateRect();
 	}
@@ -42,7 +43,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 	void onSetResponse()
 	{
-		int mResponse[] = { Clicked, Stepped };
+		int mResponse[] = { Clicked, Stepped, Off };
 		SetResponse = (mResponse[pinResponse.getValue()]);
 	}
 
@@ -190,21 +191,33 @@ public:
 
 	int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
 	{
-		// Let host handle right-clicks.
-		if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
+		if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) != 0)
 		{
-			return gmpi::MP_OK;
+			goto pass_filter;
 		}
 
-		setCapture();
+		if (pinResponse.getValue() != 2)
+		{
+			// Let host handle right-clicks.
+			if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
+			{
+				return gmpi::MP_OK;
+			}
 
-		if (pinResponse.getValue() == 1) // Stepped mode
-		{
-			pinBoolOut = !pinBoolOut; // toggle
+			setCapture();
+
+			if (pinResponse.getValue() == 1) // Stepped mode
+			{
+				pinBoolOut = !pinBoolOut; // toggle
+			}
+			else // Clicked mode
+			{
+				pinBoolOut = true;
+			}
 		}
-		else // Clicked mode
+		: pass_filter
 		{
-			pinBoolOut = true;
+			pinBoolOutR = pinBoolOut;
 		}
 
 		return gmpi::MP_OK;
@@ -212,19 +225,22 @@ public:
 
 	int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
 	{
-		if (!getCapture())
+		if (pinResponse.getValue() != 2)
 		{
-			return gmpi::MP_UNHANDLED;
+
+			if (!getCapture())
+			{
+				return gmpi::MP_UNHANDLED;
+			}
+
+			releaseCapture();
+
+			if (pinResponse.getValue() == 0) // Clicked mode
+			{
+				pinBoolOut = false;
+			}
+			// else, in Stepped mode, leave as is
 		}
-
-		releaseCapture();
-
-		if (pinResponse.getValue() == 0) // Clicked mode
-		{
-			pinBoolOut = false;
-		}
-		// else, in Stepped mode, leave as is
-
 		return gmpi::MP_OK;
 	}
 
