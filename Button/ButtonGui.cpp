@@ -217,7 +217,7 @@ public:
 		}
 		pass_filter:
 		{
-			pinBoolOutR = pinBoolOut;
+			pinBoolOutR = true;
 		}
 
 		return gmpi::MP_OK;
@@ -241,7 +241,10 @@ public:
 			}
 			// else, in Stepped mode, leave as is
 		}
-		return gmpi::MP_OK;
+
+		pinBoolOutR = false;
+
+		return gmpi::MP_OK;		
 	}
 
 	// Helper to convert hex string to uint32_t
