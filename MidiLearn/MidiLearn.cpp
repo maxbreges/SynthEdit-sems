@@ -26,8 +26,6 @@ public:
 
 	void onMidiMessage(int pin, unsigned char* midiMessage, int size)
 	{
-		pinStatus = boolSwitch;	
-
 		int status = midiMessage[1];
 		int b2 = midiMessage[2]; // extracts note number from every midi message
 
@@ -37,6 +35,8 @@ public:
 		if (b2 == learnedNote)
 			{
 				pinMIDIOut.send(midiMessage, size, getBlockPosition());
+
+				pinStatus = status - 128;
 			}	
 
 		if (boolSwitch)

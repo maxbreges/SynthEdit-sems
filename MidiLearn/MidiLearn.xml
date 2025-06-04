@@ -2,7 +2,7 @@
 <PluginList>
 	<Plugin id="MIDI_Learn" name="MIDI Learn" category="mx/MIDI" >
 		<Parameters>
-			<Parameter id="0" datatype="int" direction="out" private="true" name="Note Number" />
+			<Parameter id="0" datatype="int" direction="out" private="true" name="Note Number" metadata=",,127,0"/>
 		</Parameters>
 		<GUI>
 			<Pin name="Animation Position" datatype="float" direction="out"/>
@@ -12,9 +12,9 @@
         <Audio>
             <Pin name="Input" datatype="midi"/>
             <Pin name="Output" datatype="midi" direction="out"/>
-			<Pin name="Note" datatype="int" private="true" parameterId="0" metadata=",,127,0"/>
+			<Pin name="Note" datatype="int" private="true" parameterId="0" />
 			<Pin name="Note" datatype="int" direction="out"/> 
-			<Pin name="Status" datatype="bool" direction="out"/>
+			<Pin name="Gate" datatype="bool" direction="out"/>
 		</Audio>
     </Plugin>
 </PluginList>
