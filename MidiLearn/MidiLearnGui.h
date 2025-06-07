@@ -2,11 +2,11 @@
 
 #include "mp_sdk_gui.h"
 
-class MIDIGui : public MpGuiBase
+class MidiLearnGui : public MpGuiBase
 
 {
 public:
-	MIDIGui(IMpUnknown* host);
+	MidiLearnGui(IMpUnknown* host);
 
 	// overrides
 	virtual int32_t MP_STDCALL receiveMessageFromAudio(int32_t id, int32_t size, void* messageData);
@@ -18,4 +18,4 @@ public:
 
 	const int MESSAGE_ID_GATE;
 	const int MESSAGE_ID_NOTE;
-}; 
+};

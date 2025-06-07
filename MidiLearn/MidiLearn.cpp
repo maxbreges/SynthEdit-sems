@@ -3,22 +3,22 @@
 
 using namespace gmpi;
 
-class MIDI final : public MpBase2
+class MidiLearn final : public MpBase2
 {
 	int boolSwitch = 0;
 	int learnedNote = 36;
 
 	MidiInPin pinInput;
 	MidiOutPin pinMIDIOut;
-	IntInPin pinNoteIn; 
+	IntInPin pinNoteIn;
 	IntOutPin pinNoteOut;
 	BoolOutPin pinStatus;
 
 public:
-	MIDI()
+	MidiLearn()
 	{
-		initializePin( pinInput );
-		initializePin( pinMIDIOut );
+		initializePin(pinInput);
+		initializePin(pinMIDIOut);
 		initializePin(pinNoteIn);
 		initializePin(pinNoteOut);
 		initializePin(pinStatus);
@@ -33,11 +33,11 @@ public:
 		learnedNote = pinNoteIn;
 
 		if (b2 == learnedNote)
-			{
-				pinMIDIOut.send(midiMessage, size, getBlockPosition());
+		{
+			pinMIDIOut.send(midiMessage, size, getBlockPosition());
 
-				pinStatus = status - 128;
-			}	
+			pinStatus = status - 128;
+		}
 
 		if (boolSwitch)
 		{
@@ -46,7 +46,6 @@ public:
 			getHost()->sendMessageToGui(22323, sizeof(boolSwitch), &boolSwitch);
 			getHost()->sendMessageToGui(22324, sizeof(b2), &b2);
 		}
-
 	}
 
 	int32_t receiveMessageFromGui(int32_t id, int32_t size, void* messageData)
@@ -63,5 +62,5 @@ public:
 
 namespace
 {
-	auto r = Register<MIDI>::withId(L"MIDI_Learn");
+	auto r = Register<MidiLearn>::withId(L"MidiLearn");
 }
