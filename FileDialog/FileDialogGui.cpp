@@ -123,6 +123,11 @@ std::string fileext;
 
 void FileDialogGui::OnFileDialogComplete(int32_t result)
 {
+		if (result != gmpi::MP_OK)
+	{
+		return;
+	}
+	
 	if (result == gmpi::MP_OK)
 	{
 		// Trim filename if in default folder.
