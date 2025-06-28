@@ -17,6 +17,7 @@ public:
 	std::string getDisplayText() override;
 	void OnPopupComplete(int32_t result);
 	void onSetExt();
+	void onSetSelection();
 
 private:
 
@@ -27,6 +28,7 @@ private:
 	BoolGuiPin pinEnableSpecialStrings;
 	BoolGuiPin pinPopUpOpen;
 	BoolGuiPin pinOpenExt;
+	StringGuiPin pinSelection;
 };
 
 #endif
