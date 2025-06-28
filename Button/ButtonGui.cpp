@@ -16,22 +16,22 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	bool SetResponse = 1;
 
 	int Clicked = 0;
-	int Stepped = 1;	
+	int Stepped = 1;
 	int Off = 2;
 
 	int radius = 5;
 
 	std::wstring HintColor = L"ffffffff";
 
- 	void onSetBoolOut()
+	void onSetBoolOut()
 	{
 		//pinBoolOutR = pinBoolOut;
 		updateColor();
 		invalidateRect();
 	}
 
- 	void onSetMouseOver()
-	{	
+	void onSetMouseOver()
+	{
 	}
 
 	int32_t MP_STDCALL setHover(bool isMouseOverMe) override
@@ -126,15 +126,15 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	//hint
 	//appearance
 
- 	BoolGuiPin pinBoolOut;
- 	BoolGuiPin pinBoolOutR;
+	BoolGuiPin pinBoolOut;
+	BoolGuiPin pinBoolOutR;
 	BoolGuiPin pinMouseOver;
 	IntGuiPin pinResponse;
 
 	IntGuiPin pinCornerRadius;
- 	StringGuiPin pinColor;
-	StringGuiPin pinBottomColor;	
- 	
+	StringGuiPin pinColor;
+	StringGuiPin pinBottomColor;
+
 	StringGuiPin pinColorOut;
 	FloatGuiPin pinGradientStop; //not used
 	StringGuiPin pinColorGlow;
@@ -147,7 +147,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	StringGuiPin pinHint;
 	StringGuiPin pinHintOut;
 	StringGuiPin pinHintColor;
-	
+
 	IntGuiPin pinFontSize;
 	StringGuiPin pinFont;
 	IntGuiPin pinAlignV;
@@ -164,9 +164,9 @@ public:
 		initializePin(pinResponse, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetResponse));
 
 		initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCornerRadius));
-		initializePin( pinColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor) );
+		initializePin(pinColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
 		initializePin(pinBottomColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
-							
+
 		initializePin(pinColorOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
 		initializePin(pinGradientStop, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetGradient));
 		initializePin(pinColorGlow, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
@@ -179,7 +179,7 @@ public:
 		initializePin(pinHint, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetHint));
 		initializePin(pinHintOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
 		initializePin(pinHintColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetHintColor));
-		
+
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetFontSize));
 		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetFont));
 		initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignV));
@@ -191,60 +191,53 @@ public:
 
 	int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
 	{
-		if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) != 0)
+		if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
 		{
-			goto pass_filter;
+			return gmpi::MP_OK; // Let host handle
 		}
 
+		setCapture();
+
+	// Handle right-clicks or other non-primary button presses
 		if (pinResponse.getValue() != 2)
 		{
-			// Let host handle right-clicks.
-			if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
-			{
-				return gmpi::MP_OK;
-			}
-
-			setCapture();
-
 			if (pinResponse.getValue() == 1) // Stepped mode
 			{
 				pinBoolOut = !pinBoolOut; // toggle
 			}
 			else // Clicked mode
 			{
-				pinBoolOut = true;
+				pinBoolOut = true; // momentary ON
 			}
-		}
-		pass_filter:
-		{
-			pinBoolOutR = true;
 		}
 
 		return gmpi::MP_OK;
+
 	}
 
 	int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
 	{
-		if (pinResponse.getValue() != 2)
+
+		// Release control key
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 		{
-
-			if (!getCapture())
-			{
-				return gmpi::MP_UNHANDLED;
-			}
-
-			releaseCapture();
-
-			if (pinResponse.getValue() == 0) // Clicked mode
-			{
-				pinBoolOut = false;
-			}
-			// else, in Stepped mode, leave as is
+			pinBoolOutR = true;
+			pinBoolOutR = false;
 		}
 
-		pinBoolOutR = false;
+		// Ensure capture exists before releasing
+		if (getCapture())
+		{
+			releaseCapture();
+		}
 
-		return gmpi::MP_OK;		
+		if (pinResponse.getValue() == 0) // Clicked mode
+		{
+			pinBoolOut = false; // reset after click
+		}
+		// In stepped mode, keep toggle state until next press
+
+		return gmpi::MP_OK;
 	}
 
 	// Helper to convert hex string to uint32_t
@@ -351,7 +344,7 @@ public:
 		pinColorGlow = resultHexGlow;
 	}
 
-	int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext ) override
+	int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext) override
 	{
 		Graphics g(drawingContext);
 		auto r = getRect();
@@ -428,11 +421,11 @@ public:
 		auto botCol = GmpiDrawing::Color::FromHexString(pinBottomColor);
 		auto glowCol = GmpiDrawing::Color::FromHexString(pinColorGlow);
 
-		GradientStop gradientStops []
+		GradientStop gradientStops[]
 		{
 			{ 0.0f, topCol },
 			{ 0.33f, glowCol },
-			{ 0.5f, topCol },			
+			{ 0.5f, topCol },
 			{ 1.0f, botCol },
 		};
 		GradientStop gradientStopsR[]
@@ -459,13 +452,13 @@ public:
 		float thickness = 1.f;
 
 		if (pinRadial)
-		{	
+		{
 			g.FillGeometry(geometry, BrushR);
 			onSetRadial();
 		}
-		else	
+		else
 
-		g.FillGeometry(geometry, Brush);
+			g.FillGeometry(geometry, Brush);
 		g.DrawGeometry(geometry, outlineBrush, thickness);
 
 		//drawing text

@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
     <Plugin id="Button" name="Button" category="mx/Sub-Controls">
-        <GUI graphicsApi="GmpiGui">			
+        <GUI graphicsApi="GmpiGui">
             <Pin name="Bool" datatype="bool"/>
-			<Pin name="Ctrl+click" datatype="bool" direction="out"/>
-			<Pin name="mOver" datatype="bool" direction="out"/>
-			<Pin name="Mouse Response" datatype="enum" isMinimised="true" metadata="Clicked, Stepped, Off" private="false"/>
+            <Pin name="Ctrl+click" datatype="bool" direction="out"/>
+            <Pin name="mOver" datatype="bool" direction="out"/>
+            <Pin name="Mouse Response" datatype="enum" isMinimised="true" metadata="Clicked, Stepped, Off"/>
 			
-			<Pin name="Corner Radius" datatype="int" default="5" isMinimised="true" private="false"/>
+            <Pin name="Corner Radius" datatype="int" default="5" isMinimised="true"/>
             <Pin name="Color" datatype="string" default="ff00aa00"/>
-			<Pin name="Color Bottom" datatype="string" default="ff000000" isMinimised="true"/>			
-						
-           	<Pin name="ColorOut" datatype="string" direction="out" private="true"/>
-			<Pin name="Gradient Stop" datatype="float" default="0.5" private="true"/>
-			<Pin name="Color Glow" datatype="string" private="true"/>
-			<Pin name="Brightness" datatype="float" default="1" />
-			<Pin name="GradientX" datatype="float" default="0.5" isMinimised="true" private="true"/>
-			<Pin name="GradientY" datatype="float" default="0.5" isMinimised="true" private="true"/>
-			<Pin name="Linear/Radial" datatype="bool" isMinimised="true"/>
-
-			<Pin name="Display Hint" datatype="bool" default="1" isMinimised="true"/>
-			<Pin name="Hint" datatype="string" default="Hint"/>
-			<Pin name="Hint" datatype="string" direction="out"/>
-			<Pin name="Hint Color" datatype="string" default="ffffffff" isMinimised="true"/>
+            <Pin name="Color Bottom" datatype="string" default="ff000000" isMinimised="true"/>
 			
-			<Pin name="Font Size" datatype="int" default="16" isMinimised="true"/>
-			<Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
-			<Pin name="Align" datatype="enum" metadata="Center, Top, Bottom" isMinimised="true"/>
-
-			<Pin name="Align Top/Bottom" datatype="float" default="4" isMinimised="true" />
-			<Pin name="Opacity" datatype="float" default="1" isMinimised="false" />
-		</GUI>
+            <Pin name="ColorOut" datatype="string" direction="out" private="true"/>
+            <Pin name="Gradient Stop" datatype="float" default="0.5" private="true"/>
+            <Pin name="Color Glow" datatype="string" private="true"/>
+            <Pin name="Brightness" datatype="float" default="1"/>
+            <Pin name="GradientX" datatype="float" default="0.5" private="true" isMinimised="true"/>
+            <Pin name="GradientY" datatype="float" default="0.5" private="true" isMinimised="true"/>
+            <Pin name="Linear/Radial" datatype="bool" isMinimised="true"/>
+			
+            <Pin name="Display Hint" datatype="bool" default="1" isMinimised="true"/>
+            <Pin name="Hint" datatype="string" default="Hint"/>
+            <Pin name="Hint" datatype="string" direction="out"/>
+            <Pin name="Hint Color" datatype="string" default="ffffffff" isMinimised="true"/>
+			
+            <Pin name="Font Size" datatype="int" default="16" isMinimised="true"/>
+            <Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
+            <Pin name="Align" datatype="enum" isMinimised="true" metadata="Center, Top, Bottom"/>
+            <Pin name="Align Top/Bottom" datatype="float" default="4" isMinimised="true"/>
+			
+            <Pin name="Opacity" datatype="float" default="1"/>
+        </GUI>
     </Plugin>
 </PluginList>

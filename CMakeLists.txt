@@ -116,7 +116,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (ImageX)
 #add_subdirectory (JoystickImage)
 #add_subdirectory (TextEntry)
-#add_subdirectory (Button)
+add_subdirectory (Button)
 #add_subdirectory (PulseGen)
 #add_subdirectory (SquareOsc)
 #add_subdirectory (MonostableX)
@@ -127,7 +127,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (ORGateGuiR)
 #add_subdirectory (ORGateGuiLR)
 #add_subdirectory (WaveRecorderX)
-add_subdirectory (PopUpMenu)
+#add_subdirectory (PopUpMenu)
 
 
 
