@@ -8,4 +8,6 @@ build_gmpi_plugin(
 	SOURCE_FILES
 	  PopUpMenuGui.h
 	  PopUpMenuGui.cpp
+	  ${se_sdk_folder}/it_enum_list.h
+          ${se_sdk_folder}/it_enum_list.cpp
 )
