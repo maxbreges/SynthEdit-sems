@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="PopUpMenu" name="Pop-Up Menu" category="mx/Sub-Controls" graphicsApi="GmpiGui">
+		<GUI>
+			<Pin name="Choice" datatype="int" />
+			<Pin name="Item List" datatype="string" />
+			<Pin name="Style" datatype="string" default="normal" />
+			<Pin name="Writeable" datatype="bool" default="1" />
+			<Pin name="Greyed" datatype="bool" />
+			<Pin name="Hint" datatype="string" />
+			<Pin name="Menu Items" datatype="string" />
+			<Pin name="Menu Selection" datatype="int" />
+			<Pin name="Heading" datatype="string" />
+			<Pin name="Momentary" datatype="bool" />
+			<Pin name="Enable Special Strings" datatype="bool" private="true" default="1"/>
+			<Pin name="Pop-Up open" datatype="bool" direction="out"/>
+			<Pin name="Open externally" datatype="bool" />
+		</GUI>
+    </Plugin>
+</PluginList>

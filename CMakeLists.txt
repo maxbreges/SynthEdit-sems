@@ -127,6 +127,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (ORGateGuiR)
 #add_subdirectory (ORGateGuiLR)
 #add_subdirectory (WaveRecorderX)
+add_subdirectory (PopUpMenu)
 
 
 
