@@ -10,4 +10,8 @@ build_gmpi_plugin(
 	  PopUpMenuGui.cpp
 	  ${se_sdk_folder}/it_enum_list.h
           ${se_sdk_folder}/it_enum_list.cpp
+	${se_shared_folder}/FontCache.h
+	${se_shared_folder}/FontCache.cpp
+	${se_shared_folder}/ImageMetadata.h
+	${se_shared_folder}/ImageMetadata.cpp
 )
