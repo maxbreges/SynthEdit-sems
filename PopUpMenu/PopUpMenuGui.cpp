@@ -28,37 +28,46 @@ PopupMenuGui::PopupMenuGui()
 	initializePin(pinOpenExt, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::onSetExt));
 	initializePin(pinSelection, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::onSetSelection));
 }
+bool onSetExtFlag = false;
 
 void PopupMenuGui::onSetExt()
 {
-	if (!pinOpenExt)
+	if (pinPopUpOpen) return; // Prevent re-entrant opening
+
+	if (pinOpenExt)
 	{
-		if (pinPopUpOpen) return; // Prevent re-entrant opening
+		onSetExtFlag = true;
+	}
+
+	if (!pinOpenExt && onSetExtFlag == true)
+	{
+		
 		int32_t flags = GG_POINTER_FLAG_FIRSTBUTTON;
 		GmpiDrawing_API::MP1_POINT point = { 0, 0 };
 
 		setCapture();
 		onPointerUp(flags, point);
+		onSetExtFlag = false;
 	}
 }
 
 void PopupMenuGui::onSetSelection()
 {
-	bool found = false;
+//	bool found = false;
 	it_enum_list itr(pinItemList);
 	for (itr.First(); !itr.IsDone(); itr.Next())
 	{
 		if (itr.CurrentItem()->value == pinChoice)
 		{
 			pinSelection = itr.CurrentItem()->text;
-			found = true;
+		//	found = true;
 			break; // Exit loop once found
 		}
 	}
 
 	// Optional: if no match found, clear selection or set default
-	if (!found)
-		pinSelection = ""; // or some default value
+//	if (!found)
+	//	pinSelection = pinSelection; // or some default value
 }
 
 int32_t MP_STDCALL PopupMenuGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point)

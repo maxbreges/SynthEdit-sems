@@ -15,7 +15,7 @@
 			<Pin name="Enable Special Strings" datatype="bool" private="true" default="1"/>
 			<Pin name="Pop-Up open" datatype="bool" direction="out"/>
 			<Pin name="Open externally" datatype="bool" />
-			<Pin name="Selection" datatype="string" direction="out"/>
+			<Pin name="Selection" datatype="string" />
 		</GUI>
     </Plugin>
 </PluginList>
