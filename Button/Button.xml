@@ -2,7 +2,7 @@
 <PluginList>
     <Plugin id="Button" name="Button" category="mx/Sub-Controls">
         <GUI graphicsApi="GmpiGui">
-            <Pin name="Bool" datatype="bool"/>
+            <Pin name="Bool Out" datatype="bool"/>
             <Pin name="Ctrl+click" datatype="bool" direction="out"/>
             <Pin name="mOver" datatype="bool" direction="out"/>
             <Pin name="Mouse Response" datatype="enum" isMinimised="true" metadata="Clicked, Stepped, Off"/>
@@ -30,6 +30,7 @@
             <Pin name="Align Top/Bottom" datatype="float" default="4" isMinimised="true"/>
 			
             <Pin name="Opacity" datatype="float" default="1"/>
+			<Pin name="Bool In" datatype="bool" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>

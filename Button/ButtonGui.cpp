@@ -14,6 +14,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 {
 	bool previousState = false;
 	bool SetResponse = 1;
+	bool sharedState = 0;
 
 	int Clicked = 0;
 	int Stepped = 1;
@@ -25,9 +26,13 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 	void onSetBoolOut()
 	{
-		//pinBoolOutR = pinBoolOut;
+		pinBoolOut = sharedState;
 		updateColor();
 		invalidateRect();
+	}
+
+	void onSetCtrlClk()
+	{
 	}
 
 	void onSetMouseOver()
@@ -122,12 +127,19 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 		invalidateRect();
 	}
 
+	void onSetBoolIn()
+	{
+		sharedState = pinBoolIn;
+		updateColor();
+		invalidateRect();
+	}
+
 	//functionality
 	//hint
 	//appearance
 
 	BoolGuiPin pinBoolOut;
-	BoolGuiPin pinBoolOutR;
+	BoolGuiPin pinCtrlClk;
 	BoolGuiPin pinMouseOver;
 	IntGuiPin pinResponse;
 
@@ -155,11 +167,13 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	FloatGuiPin pinAlignY;
 	FloatGuiPin pinOpacity;
 
+	BoolGuiPin pinBoolIn;
+
 public:
 	ButtonGui()
 	{
 		initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolOut));
-		initializePin(pinBoolOutR, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolOut));
+		initializePin(pinCtrlClk, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCtrlClk));
 		initializePin(pinMouseOver, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
 		initializePin(pinResponse, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetResponse));
 
@@ -187,10 +201,18 @@ public:
 		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignY));;
 		initializePin(pinOpacity, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));;
 
+		initializePin(pinBoolIn, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolIn));
+
 	}
 
 	int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
 	{
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
+		{
+			setCapture();
+			goto bypass;
+		}
+
 		if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
 		{
 			return gmpi::MP_OK; // Let host handle
@@ -203,14 +225,16 @@ public:
 		{
 			if (pinResponse.getValue() == 1) // Stepped mode
 			{
-				pinBoolOut = !pinBoolOut; // toggle
+				sharedState = !sharedState; // toggle
 			}
 			else // Clicked mode
 			{
-				pinBoolOut = true; // momentary ON
+				sharedState = true; // momentary ON
 			}
 		}
 
+		onSetBoolOut();
+		bypass:
 		return gmpi::MP_OK;
 
 	}
@@ -221,8 +245,8 @@ public:
 		// Release control key
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 		{
-			pinBoolOutR = true;
-			pinBoolOutR = false;
+			pinCtrlClk = true;
+			pinCtrlClk = false;
 		}
 
 		// Ensure capture exists before releasing
@@ -233,10 +257,10 @@ public:
 
 		if (pinResponse.getValue() == 0) // Clicked mode
 		{
-			pinBoolOut = false; // reset after click
+			sharedState = false; // reset after click
 		}
 		// In stepped mode, keep toggle state until next press
-
+		onSetBoolOut();
 		return gmpi::MP_OK;
 	}
 
@@ -300,14 +324,14 @@ public:
 		float brightnessGlow = 0.7f * PinBrightness;
 
 		// Clamp brightness
-		if (!pinBoolOut)
+		if (!sharedState)
 		{
 			brightness = 0.55f * PinBrightness;
 			brightnessGlow = 0.75f * PinBrightness;
 			HintColor = pinHintColor;
 		}
 
-		if (pinBoolOut)
+		if (sharedState)
 		{
 			brightness = 0.85f * PinBrightness;
 			brightnessGlow = 1.0f * PinBrightness;
@@ -482,7 +506,7 @@ public:
 			}
 
 			// Adjust font size if pressed
-			if (pinBoolOut)
+			if (sharedState)
 			{
 				fontSize = std::max<>(minFontSize, fontSize - 1); // reduce size when pressed
 
