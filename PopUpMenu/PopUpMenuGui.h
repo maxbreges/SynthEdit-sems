@@ -18,6 +18,7 @@ public:
 	void OnPopupComplete(int32_t result);
 	void onSetExt();
 	void onSetSelection();
+	void onSetChoice();
 
 private:
 

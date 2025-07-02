@@ -13,7 +13,7 @@ SE_DECLARE_INIT_STATIC_FILE(PopUpMenu);
 PopupMenuGui::PopupMenuGui()
 {
 	// initialise pins.
-	initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::redraw));
+	initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::onSetChoice));
 	initializePin(pinItemList, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::redraw));
 	initializePin(pinStyle, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::onSetStyle));
 	initializePin(pinWriteable);
@@ -26,7 +26,7 @@ PopupMenuGui::PopupMenuGui()
 	initializePin(pinEnableSpecialStrings);
 	initializePin(pinPopUpOpen);
 	initializePin(pinOpenExt, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::onSetExt));
-	initializePin(pinSelection, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::onSetSelection));
+	initializePin(pinSelection, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::redraw));
 }
 bool onSetExtFlag = false;
 
@@ -51,13 +51,28 @@ void PopupMenuGui::onSetExt()
 	}
 }
 
+void PopupMenuGui::onSetChoice()
+{
+	it_enum_list itr(pinItemList);
+	for (itr.First(); !itr.IsDone(); itr.Next())
+	{
+		if (itr.CurrentItem()->value == pinChoice.getValue())
+		{
+			pinSelection = itr.CurrentItem()->text;
+			//	found = true;
+			break; // Exit loop once found
+		}
+	}
+}
+
 void PopupMenuGui::onSetSelection()
 {
+	pinSelection = pinSelection.getValue();
 //	bool found = false;
 	it_enum_list itr(pinItemList);
 	for (itr.First(); !itr.IsDone(); itr.Next())
 	{
-		if (itr.CurrentItem()->value == pinChoice)
+		if (itr.CurrentItem()->value == pinChoice.getValue())
 		{
 			pinSelection = itr.CurrentItem()->text;
 		//	found = true;
@@ -102,7 +117,7 @@ int32_t MP_STDCALL PopupMenuGui::onPointerUp(int32_t flags, GmpiDrawing_API::MP1
 		int vertical_size = 0; // for collumns on tall menus.
 		for (itr.First(); !itr.IsDone(); itr.Next())
 		{
-			int32_t flags = !pinMomentary.getValue() && itr.CurrentItem()->value == pinChoice ? gmpi_gui::MP_PLATFORM_MENU_TICKED : 0;
+			int32_t flags = !pinMomentary.getValue() && itr.CurrentItem()->value == pinChoice.getValue() ? gmpi_gui::MP_PLATFORM_MENU_TICKED : 0;
 			if (vertical_size++ == popupMenuWrapRowCount)
 			{
 				flags |= gmpi_gui::MP_PLATFORM_MENU_BREAK;
@@ -154,7 +169,7 @@ void PopupMenuGui::OnPopupComplete(int32_t result)
 	if (result == gmpi::MP_OK)
 	{
 		// Handle selection
-		if (pinMomentary.getValue() && nativeMenu.GetSelectedId() == pinChoice)
+		if (pinMomentary.getValue() && nativeMenu.GetSelectedId() == pinChoice.getValue())
 		{
 			pinChoice = -1;
 		}
