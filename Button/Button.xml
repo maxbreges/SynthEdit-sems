@@ -7,7 +7,7 @@
             <Pin name="mOver" datatype="bool" direction="out"/>
             <Pin name="Mouse Response" datatype="enum" isMinimised="true" metadata="Clicked, Stepped, Off"/>
 			
-            <Pin name="Corner Radius" datatype="int" default="5" isMinimised="true"/>
+            <Pin name="Corner Radius" datatype="int" default="5" isMinimised="true" private="true"/>
             <Pin name="Color" datatype="string" default="ff00aa00"/>
             <Pin name="Color Bottom" datatype="string" default="ff000000" isMinimised="true"/>
 			
