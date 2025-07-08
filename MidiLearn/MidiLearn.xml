@@ -5,8 +5,8 @@
             <Parameter id="0" datatype="int" name="Note Number" metadata=",,127,0" private="true"/>
         </Parameters>
         <Audio>
-            <Pin name="Input" datatype="midi"/>
-            <Pin name="Output" datatype="midi" direction="out"/>
+            <Pin name="MIDI In" datatype="midi"/>
+            <Pin name="MIDI Out" datatype="midi" direction="out"/>
             <Pin name="Note" datatype="int" private="true" parameterId="0"/>
             <Pin name="Note" datatype="int" direction="out"/>
             <Pin name="Gate" datatype="bool" direction="out"/>
@@ -15,6 +15,7 @@
             <Pin name="Animation Position" datatype="float" direction="out"/>
             <Pin name="Note" datatype="int"/>
             <Pin name="NoteToDSP" datatype="int" private="true" parameterId="0"/>
+			<Pin name="Note Name" datatype="string" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>
