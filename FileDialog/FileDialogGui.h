@@ -38,6 +38,7 @@ private:
 	StringGuiPin pinDirectory;
 	StringGuiPin pinDebug;
 	StringGuiPin pinItemsListIn;
+	BoolGuiPin pinOpened;
 };
 
 #endif
