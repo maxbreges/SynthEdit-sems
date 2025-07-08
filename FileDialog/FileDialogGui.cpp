@@ -125,6 +125,8 @@ std::string fileext;
 
 void FileDialogGui::OnFileDialogComplete(int32_t result)
 {
+	pinOpened = false;
+
 	if (result != gmpi::MP_OK)
 	{
 		return;
@@ -181,8 +183,7 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 
 	auto parentPath = fs::path(pinFileName).parent_path();
 	pinDirectory = parentPath;
-	updateItemsList(parentPath.string());
-	pinOpened = false;
+	updateItemsList(parentPath.string());	
 	nativeFileDialog.setNull(); // release it.
 }
 
