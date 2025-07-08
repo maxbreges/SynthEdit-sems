@@ -26,6 +26,7 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinDirectory);
 	initializePin(pinDebug);
 	initializePin(pinItemsListIn, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetItemsList));
+	initializePin(pinOpened);
 }
 
 void FileDialogGui::onSetItemsList()
@@ -93,6 +94,7 @@ void FileDialogGui::onSetTrigger()
 
 		if (dialogHost != 0)
 		{
+			pinOpened = true;
 			int dialogMode = (int)pinSaveMode;
 			dialogHost->createFileDialog(dialogMode, nativeFileDialog.GetAddressOf());
 
@@ -180,7 +182,7 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 	auto parentPath = fs::path(pinFileName).parent_path();
 	pinDirectory = parentPath;
 	updateItemsList(parentPath.string());
-	
+	pinOpened = false;
 	nativeFileDialog.setNull(); // release it.
 }
 
