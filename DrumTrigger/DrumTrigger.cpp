@@ -1,16 +1,21 @@
+//this code consumes more cpu than if using switch
 #include "mp_sdk_audio.h"
 #include "mp_midi.h"
+#include <unordered_map>
+#include <functional>
 
 using namespace gmpi;
 
 class DrumTrigger final : public MpBase2
 {
+    // MIDI input and control pins
     MidiInPin pinMIDIIn;
     IntInPin pinChannel;
     FloatInPin pinOpenHHDecay;
     FloatInPin pinPedalHHDecay;
     FloatInPin pinClosedHHDecay;
 
+    // Trigger output pins
     BoolOutPin pinKickTrig;
     AudioOutPin pinKickVel;
 
@@ -19,7 +24,7 @@ class DrumTrigger final : public MpBase2
 
     BoolOutPin pinHHTrig;
     AudioOutPin pinHHVel;
-    FloatInPin pinHHDecay;
+    AudioOutPin pinHHDecay;
 
     BoolOutPin pinCowbellTrig;
     AudioOutPin pinCowbellVel;
@@ -57,16 +62,20 @@ class DrumTrigger final : public MpBase2
     BoolOutPin pinUser4Trig;
     AudioOutPin pinUser4Vel;
 
+    // User note numbers (to be set accordingly)
     IntInPin pinUser1Note;
     IntInPin pinUser2Note;
     IntInPin pinUser3Note;
     IntInPin pinUser4Note;
 
+    // MIDI converter
     gmpi::midi_2_0::MidiConverter2 midiConverter;
 
+    // Velocities
     float VelocityKick = 0.0f;
     float VelocitySnare = 0.0f;
     float VelocityHHat = 0.0f;
+    float currentHhDecay = 0.0f;
     float VelocityTom1 = 0.0f;
     float VelocityTom2 = 0.0f;
     float VelocityTom3 = 0.0f;
@@ -80,17 +89,20 @@ class DrumTrigger final : public MpBase2
     float VelocityUser3 = 0.0f;
     float VelocityUser4 = 0.0f;
 
+    // Map for note handling
+    std::unordered_map<int, std::function<void(float)>> noteHandlers;
+
 public:
     DrumTrigger() :
-        // init the midi converter
+        // initialize the MIDI converter with a lambda
         midiConverter(
-            // provide a lambda to accept converted MIDI 2.0 messages
             [this](const midi::message_view& msg, int offset)
             {
                 onMidi2Message(msg);
             }
         )
     {
+        // Initialize pins
         initializePin(pinMIDIIn);
         initializePin(pinChannel);
         initializePin(pinOpenHHDecay);
@@ -147,6 +159,28 @@ public:
         initializePin(pinUser2Note);
         initializePin(pinUser3Note);
         initializePin(pinUser4Note);
+
+        // Initialize the note handlers map
+        noteHandlers = {
+            {36, [this](float velocity) { pinKickTrig = true; VelocityKick = velocity; }},
+            {38, [this](float velocity) { pinSnareTrig = true; VelocitySnare = velocity; }},
+            {42, [this](float velocity) { pinHHTrig = true; currentHhDecay = pinClosedHHDecay; VelocityHHat = velocity; }},
+            {44, [this](float velocity) { pinHHTrig = true; currentHhDecay = pinPedalHHDecay; VelocityHHat = velocity; }},
+            {46, [this](float velocity) { pinHHTrig = true; currentHhDecay = pinOpenHHDecay; VelocityHHat = velocity; }},
+            {45, [this](float velocity) { pinTom1Trig = true; VelocityTom1 = velocity; }},
+            {47, [this](float velocity) { pinTom2Trig = true; VelocityTom2 = velocity; }},
+            {50, [this](float velocity) { pinTom3Trig = true; VelocityTom3 = velocity; }},
+            {39, [this](float velocity) { pinClapTrig = true; VelocityClap = velocity; }},
+            {56, [this](float velocity) { pinCowbellTrig = true; VelocityCowbell = velocity; }},
+            {49, [this](float velocity) { pinCrashTrig = true; VelocityCrash = velocity; }},
+            {51, [this](float velocity) { pinRideTrig = true; VelocityRide = velocity; }},
+            {54, [this](float velocity) { pinTambTrig = true; VelocityTamb = velocity; }},
+            // User notes
+            {pinUser1Note, [this](float velocity) { pinUser1Trig = true; VelocityUser1 = velocity; }},
+            {pinUser2Note, [this](float velocity) { pinUser2Trig = true; VelocityUser2 = velocity; }},
+            {pinUser3Note, [this](float velocity) { pinUser3Trig = true; VelocityUser3 = velocity; }},
+            {pinUser4Note, [this](float velocity) { pinUser4Trig = true; VelocityUser4 = velocity; }}
+        };
     }
 
     int32_t open() override
@@ -160,6 +194,7 @@ public:
         auto outputKick = getBuffer(pinKickVel);
         auto outputSnare = getBuffer(pinSnareVel);
         auto outputHHVel = getBuffer(pinHHVel);
+        auto outputHHDecay = getBuffer(pinHHDecay);
         auto outputTom1Vel = getBuffer(pinTom1Vel);
         auto outputTom2Vel = getBuffer(pinTom2Vel);
         auto outputTom3Vel = getBuffer(pinTom3Vel);
@@ -178,6 +213,7 @@ public:
             *outputKick++ = VelocityKick;
             *outputSnare++ = VelocitySnare;
             *outputHHVel++ = VelocityHHat;
+            *outputHHDecay++ = currentHhDecay * 0.1f;
             *outputTom1Vel++ = VelocityTom1;
             *outputTom2Vel++ = VelocityTom2;
             *outputTom3Vel++ = VelocityTom3;
@@ -210,132 +246,50 @@ public:
         }
     }
 
-    // passes all MIDI to the converter.
+    // Handle incoming MIDI messages
     void onMidiMessage(int pin, unsigned char* midiMessage, int size) override
     {
         midi::message_view msg((const uint8_t*)midiMessage, size);
-        // convert everything to MIDI 2.0
         midiConverter.processMidi(msg, -1);
     }
 
-    // put your midi handling code in here.
+    // Process MIDI 2.0 messages
     void onMidi2Message(const midi::message_view& msg)
     {
         const auto header = gmpi::midi_2_0::decodeHeader(msg);
-        int chan = 0;
-        chan = static_cast<uint8_t>(msg[1] & 0x0f);
+        int chan = static_cast<uint8_t>(msg[1] & 0x0f);
 
-        int messageSize = (int)(size_t)msg.size();
-        // only 8-byte messages supported. only 16 channels supported
         if (header.messageType != gmpi::midi_2_0::ChannelVoice64)
             return;
 
         if ((chan == pinChannel) || (pinChannel == -1))
         {
             const auto note = gmpi::midi_2_0::decodeNote(msg);
-            int Note = (int)(uint8_t)note.noteNumber;
+            int noteNumber = (int)(uint8_t)note.noteNumber;
+            float velocity = (float)(1.f * note.velocity);
 
-            switch (header.status)
+            if (header.status == gmpi::midi_2_0::NoteOn)
             {
-            case gmpi::midi_2_0::NoteOn:
-            {
-                int i = Note;
-
-                switch (i)
-                {
-                case 36:
-                    pinKickTrig = true;
-                    VelocityKick = (float)(1.f * note.velocity);
-                    break;
-                case 38:
-                    pinSnareTrig = true;
-                    VelocitySnare = (float)(1.f * note.velocity);
-                    break;
-                case 42:
-                    pinHHTrig = true;
-                    pinHHDecay = pinClosedHHDecay;
-                    VelocityHHat = (float)(1.f * note.velocity);
-                    break;
-                case 44:
-                    pinHHTrig = true;
-                    pinHHDecay = pinPedalHHDecay;
-                    VelocityHHat = (float)(1.f * note.velocity);
-                    break;
-                case 46:
-                    pinHHTrig = true;
-                    pinHHDecay = pinOpenHHDecay;
-                    VelocityHHat = (float)(1.f * note.velocity);
-                    break;
-                case 45:
-                    pinTom1Trig = true;
-                    VelocityTom1 = (float)(1.f * note.velocity);
-                    break;
-                case 47:
-                    pinTom2Trig = true;
-                    VelocityTom2 = (float)(1.f * note.velocity);
-                    break;
-                case 50:
-                    pinTom3Trig = true;
-                    VelocityTom3 = (float)(1.f * note.velocity);
-                    break;
-                case 39:
-                    pinClapTrig = true;
-                    VelocityClap = (float)(1.f * note.velocity);
-                    break;
-                case 56:
-                    pinCowbellTrig = true;
-                    VelocityCowbell = (float)(1.f * note.velocity);
-                    break;
-                case 49:
-                    pinCrashTrig = true;
-                    VelocityCrash = (float)(1.f * note.velocity);
-                    break;
-                case 51:
-                    pinRideTrig = true;
-                    VelocityRide = (float)(1.f * note.velocity);
-                    break;
-                case 54:
-                    pinTambTrig = true;
-                    VelocityTamb = (float)(1.f * note.velocity);
-                    break;
-                }
-                // User notes
-                if (Note == pinUser1Note)
-                {
-                    pinUser1Trig = true;
-                    VelocityUser1 = (float)(1.f * note.velocity);
-                }
-                if (Note == pinUser2Note)
-                {
-                    pinUser2Trig = true;
-                    VelocityUser2 = (float)(1.f * note.velocity);
-                }
-                if (Note == pinUser3Note)
-                {
-                    pinUser3Trig = true;
-                    VelocityUser3 = (float)(1.f * note.velocity);
-                }
-                if (Note == pinUser4Note)
-                {
-                    pinUser4Trig = true;
-                    VelocityUser4 = (float)(1.f * note.velocity);
-                }
-
-                setSleep(false);
-                setSubProcess(&DrumTrigger::subProcess);
+                handleNoteOn(noteNumber, velocity);
             }
-            break;
+            // You can add handling for NoteOff if needed
+        }
+    }
 
-            case gmpi::midi_2_0::NoteOff:
-            {
-                // Handle note off if needed
-            }
-            break;
-            }
+    // Lookup and handle note on
+    void handleNoteOn(int noteNumber, float velocity)
+    {
+        auto it = noteHandlers.find(noteNumber);
+        if (it != noteHandlers.end())
+        {
+            it->second(velocity);
+            setSleep(false);
+            setSubProcess(&DrumTrigger::subProcess);
         }
     }
 };
 
+// Register class
 namespace
 {
     auto r = Register<DrumTrigger>::withId(L"DrumTrigger");

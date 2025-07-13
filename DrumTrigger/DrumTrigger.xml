@@ -13,7 +13,7 @@
             <Pin name="Vel" datatype="float" rate="audio" direction="out"/>
             <Pin name="Hi Hat Trig" datatype="bool" direction="out"/>
             <Pin name="Vel" datatype="float" rate="audio"  direction="out"/>
-            <Pin name="Hi Hat Decay" datatype="float" direction="out"/>
+            <Pin name="Hi Hat Decay" datatype="float" rate="audio" direction="out"/>
             <Pin name="Cowbell Trig" datatype="bool" direction="out"/>
             <Pin name="Vel" datatype="float" rate="audio"  direction="out"/>
             <Pin name="Tom1 Trig" datatype="bool" direction="out"/>
