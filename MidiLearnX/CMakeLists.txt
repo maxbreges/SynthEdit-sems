@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 
-project(MidiLearn)
+project(MidiLearnX)
 
 build_gmpi_plugin(
 	PROJECT_NAME ${PROJECT_NAME}
@@ -8,6 +8,5 @@ build_gmpi_plugin(
 	HAS_GUI
 	SOURCE_FILES
 	  MidiLearn.cpp
-	  MidiLearnGui.h
 	  MidiLearnGui.cpp
 )

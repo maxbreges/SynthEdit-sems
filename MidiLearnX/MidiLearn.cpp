@@ -102,7 +102,6 @@ public:
 
 			if (b2 == learnedNote)
 			{
-
 				const auto out = gmpi::midi_2_0::makeNoteOffMessage(
 					b2,
 					note.velocity

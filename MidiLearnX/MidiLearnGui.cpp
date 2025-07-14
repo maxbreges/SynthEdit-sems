@@ -4,7 +4,7 @@
 
 using namespace gmpi;
 
-REGISTER_GUI_PLUGIN(MidiLearnGui, L"MidiLearn");
+REGISTER_GUI_PLUGIN(MidiLearnGui, L"MidiLearnX");
 
 MidiLearnGui::MidiLearnGui(IMpUnknown* host) : MpGuiBase(host)
 , MESSAGE_ID_GATE(22323), MESSAGE_ID_NOTE(22324)
@@ -28,7 +28,7 @@ void MidiLearnGui::onSetAnimationPosition()
 
 void MidiLearnGui::onPatchChange()
 {
-	pinNoteToDsp = pinNote.getValue();
+	pinNoteToDsp = pinNote;
 	int mi = pinNote.getValue();
 	signed int oct_v = mi / 12 - 1;
 
