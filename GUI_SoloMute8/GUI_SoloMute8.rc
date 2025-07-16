@@ -52,7 +52,7 @@ END
 // GMPXML
 //
 
-IDR_GMPXML1             GMPXML                  "mxSOLOMUTE.xml"
+IDR_GMPXML1             GMPXML                  "GUI_SoloMute8.xml"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
