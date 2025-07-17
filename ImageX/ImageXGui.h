@@ -1,7 +1,7 @@
 #ifndef IMAGEXGUI_H_INCLUDED
 #define IMAGEXGUI_H_INCLUDED
 
-#include "../sharedLegacyWidgets/ImageBase.h"
+#include "ImageBase.h"
 
 class ImageXGui : public ImageBase
 {
@@ -13,6 +13,7 @@ protected:
 	bool useMouseResponsePin_;
 	BoolGuiPin pinMouseOver;
 	StringGuiPin pinHintOut;
+	BoolGuiPin pinCtrlClk;
 
 public:
 	ImageXGui(bool useMouseResponsePin = true);
@@ -22,14 +23,15 @@ public:
 	}
 	void setAnimationPos(float p) override;
 	void onLoaded() override;
+	void onSetHintOut();
 	std::wstring getHint() override
-	{		
+	{
 		return pinHint;
 	}
 	int getMouseResponse() override;
 	// overrides.
 	int32_t MP_STDCALL setHover(bool isMouseOverMe) override;
-//	int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext) override;
+	//	int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext) override;
 	int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override;
 	int32_t MP_STDCALL onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point) override;
 	int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point) override;
@@ -47,5 +49,3 @@ public:
 
 
 #endif
-
-
