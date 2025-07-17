@@ -1,3 +1,4 @@
+
 #include "./ImageXGui.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -17,7 +18,7 @@ ImageXGui::ImageXGui(bool useMouseResponsePin) :
 {
 	initializePin(0, pinAnimationPosition, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::calcDrawAt));
 	initializePin(1, pinFilename, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::onSetFilename));
-	initializePin(2, pinHint);
+	initializePin(2, pinHint, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::onSetHintOut));
 	initializePin(3, pinMenuItems);
 	initializePin(4, pinMenuSelection);
 	initializePin(5, pinMouseDown);
@@ -27,8 +28,9 @@ ImageXGui::ImageXGui(bool useMouseResponsePin) :
 
 	if (useMouseResponsePin_)
 		initializePin(9, pinMouseResponse);
-	initializePin(10, pinMouseOver);
-	initializePin(11, pinHintOut);
+	initializePin(10, pinMouseOver);	
+	initializePin(11, pinHintOut, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::onSetHintOut));
+	initializePin(12, pinCtrlClk);
 }
 
 int32_t ImageXGui::setHover(bool isMouseOverMe)
@@ -36,6 +38,10 @@ int32_t ImageXGui::setHover(bool isMouseOverMe)
 	pinMouseOver = isMouseOverMe;
 	pinHintOut = pinHint;
 	return gmpi::MP_OK;
+}
+void ImageXGui::onSetHintOut()
+{
+	pinHintOut = pinHint;
 }
 
 void ImageXGui::setAnimationPos(float p)
@@ -85,6 +91,11 @@ int32_t ImageXGui::onMouseWheel(int32_t flags, int32_t delta, GmpiDrawing_API::M
 
 int32_t ImageXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 {
+	if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
+	{
+		pinCtrlClk = true;
+	}
+
 	//	_RPT2(_CRT_WARN, "onPointerDown (%f,%f)\n", point.x, point.y);
 	if (!skinBitmap::bitmapHitTestLocal(point))
 		return MP_UNHANDLED;
@@ -156,8 +167,11 @@ int32_t ImageXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point
 
 	if (!bitmap_.isNull())
 	{
+		if (!pinCtrlClk)
+		{		
 		pinMouseDown = true;
 		pinMouseDownLegacy = true;
+		}
 	}
 
 	setCapture();
@@ -296,6 +310,8 @@ int32_t ImageXGui::onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point
 
 int32_t ImageXGui::onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 {
+	pinCtrlClk = false;
+
 	//	_RPT2(_CRT_WARN, "onPointerUp (%f,%f)\n", point.x, point.y);
 
 	if (!getCapture())
