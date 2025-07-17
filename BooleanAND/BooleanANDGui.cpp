@@ -85,5 +85,5 @@ public:
 namespace
 {
     auto r = Register<BooleanANDxGui>::withId(L"BooleanAND");
-    auto r = Register<BooleanANDxGui>::withId(L"BooleanANDL");
+    auto rL = Register<BooleanANDxGui>::withId(L"BooleanANDL");
 }
