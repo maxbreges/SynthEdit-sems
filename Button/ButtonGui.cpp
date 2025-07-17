@@ -25,8 +25,8 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	std::wstring HintColor = L"ffffffff";
 
 	void onSetBoolOut()
-	{
-		pinBoolOut = sharedState;
+	{		
+		//pinBoolOut = sharedState;
 		updateColor();
 		invalidateRect();
 	}
@@ -42,6 +42,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	int32_t MP_STDCALL setHover(bool isMouseOverMe) override
 	{
 		pinMouseOver = isMouseOverMe;
+
 		onSetHint();
 		return gmpi::MP_OK;
 	}
@@ -53,7 +54,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	}
 
 	int32_t MP_STDCALL getToolTip(GmpiDrawing_API::MP1_POINT point, gmpi::IString* returnString) override {
-		auto utf8String = (std::string)pinHint;
+		auto utf8String = (std::string)pinToolTip;
 		returnString->setData(utf8String.data(), (int32_t)utf8String.size());
 		return gmpi::MP_OK;
 	}
@@ -134,6 +135,15 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 		invalidateRect();
 	}
 
+
+	void onSetMouseYPos()
+	{
+	}
+
+	void onSetToolTip()
+	{
+	}
+
 	//functionality
 	//hint
 	//appearance
@@ -169,6 +179,9 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 	BoolGuiPin pinBoolIn;
 
+	FloatGuiPin pinMouseYPos;
+	StringGuiPin pinToolTip;
+
 public:
 	ButtonGui()
 	{
@@ -202,11 +215,21 @@ public:
 		initializePin(pinOpacity, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));;
 
 		initializePin(pinBoolIn, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolIn));
-
+		initializePin(pinMouseYPos, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseYPos));
+		initializePin(pinToolTip, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetToolTip));
 	}
+
+	float mult = 1.f;
+	float heightY = 1.f;
 
 	int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
 	{
+		Point offset(point);
+
+		mult = 1.f / heightY;
+
+		pinMouseYPos = mult * (1-(float)offset.y) + 1.f;
+
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 		{
 			setCapture();
@@ -233,7 +256,7 @@ public:
 			}
 		}
 
-		onSetBoolOut();
+		pinBoolOut = true;
 		bypass:
 		return gmpi::MP_OK;
 
@@ -260,7 +283,7 @@ public:
 			sharedState = false; // reset after click
 		}
 		// In stepped mode, keep toggle state until next press
-		onSetBoolOut();
+		pinBoolOut = sharedState;
 		return gmpi::MP_OK;
 	}
 
@@ -375,6 +398,7 @@ public:
 
 		int width = r.right - r.left;
 		int height = r.bottom - r.top;
+		heightY = height;
 
 		radius = (std::min)(radius, width / 2);
 		radius = (std::min)(radius, height / 2);
