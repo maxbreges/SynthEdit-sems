@@ -7,4 +7,11 @@
             <Pin name="In" datatype="bool" direction="out" autoDuplicate="true"/>
         </GUI>
     </Plugin>
+	<Plugin id="BooleanANDL" name="Boolean AND &lt;" category="mx/Sub-Controls/Logic">
+		<GUI>
+			<!--   <Pin name="Int In" datatype="int" direction="in"/> -->
+			<Pin name="Out" datatype="bool" direction="out"/>
+			<Pin name="In" datatype="bool" direction="in" autoDuplicate="true"/>
+		</GUI>
+	</Plugin>
 </PluginList>
