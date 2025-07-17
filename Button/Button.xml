@@ -19,10 +19,10 @@
             <Pin name="GradientY" datatype="float" default="0.5" private="true" isMinimised="true"/>
             <Pin name="Linear/Radial" datatype="bool" isMinimised="true"/>
 			
-            <Pin name="Display Hint" datatype="bool" default="1" isMinimised="true"/>
-            <Pin name="Hint" datatype="string" default="Hint"/>
-            <Pin name="Hint" datatype="string" direction="out"/>
-            <Pin name="Hint Color" datatype="string" default="ffffffff" isMinimised="true"/>
+            <Pin name="Display Text" datatype="bool" default="1" isMinimised="true"/>
+            <Pin name="Text" datatype="string" default="Hint"/>
+            <Pin name="Text" datatype="string" direction="out"/>
+            <Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="true"/>
 			
             <Pin name="Font Size" datatype="int" default="16" isMinimised="true"/>
             <Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
@@ -31,6 +31,9 @@
 			
             <Pin name="Opacity" datatype="float" default="1"/>
 			<Pin name="Bool In" datatype="bool" direction="out"/>
+
+			<Pin name="Mouse Y Pos" datatype="float" direction="in"/>
+			<Pin name="Hint" datatype="string" default="Hint" isMinimised="true"/>
         </GUI>
     </Plugin>
 </PluginList>
