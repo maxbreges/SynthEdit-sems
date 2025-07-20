@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="SubpanelKbd" name="SubpanelKbd" graphicsApi="GmpiGui" category="mx/MIDI">
+        <Audio>
+            <Pin name="MIDI Out" datatype="midi" direction="out" />
+			<Pin name="Note Number" datatype="int" direction="out" />
+        </Audio>
+        <GUI>
+      <!--      <Pin name="C" datatype="bool" direction="out"/>
+			<Pin name="C#" datatype="bool" direction="out"/>
+			<Pin name="D" datatype="bool" direction="out"/>
+			<Pin name="D#" datatype="bool" direction="out"/>
+			<Pin name="E" datatype="bool" direction="out"/>
+			<Pin name="F" datatype="bool" direction="out"/>
+			<Pin name="F#" datatype="bool" direction="out"/>
+			<Pin name="G" datatype="bool" direction="out"/>
+			<Pin name="G#" datatype="bool" direction="out"/>
+			<Pin name="A" datatype="bool" direction="out"/>
+			<Pin name="A#" datatype="bool" direction="out"/>
+			<Pin name="B" datatype="bool" direction="out"/> -->
+			<Pin name="Octave Down" datatype="bool" direction="out"/>
+			<Pin name="Octave Up" datatype="bool" direction="out"/>
+			<Pin name="note" datatype="int" direction="out" />
+			<Pin name="octave" datatype="int" direction="out" private="true"/>
+			<Pin name="Range" datatype="string" direction="in"/>
+        </GUI>
+    </Plugin>
+</PluginList>
