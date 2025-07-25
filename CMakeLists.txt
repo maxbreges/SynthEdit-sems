@@ -131,7 +131,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (PopUpMenu)
 #add_subdirectory (GUI_SoloMute8)
 #add_subdirectory (SubpanelKbd)
-add_subdirectory (GUIBoolGateVolts)
+#add_subdirectory (GUIBoolGateVolts)
 
 
 
