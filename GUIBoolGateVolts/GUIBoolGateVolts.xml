@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="GUIBoolGateVolts" name="GUIBoolGate (Volts)" category="mx/Conversion">
+        <Parameters>
+            <Parameter id="0" datatype="bool" name="From GUI to DSP" private="true" ignorePatchChange="true"/>
+        </Parameters>
+        <Audio>
+            <Pin name="FromGUI" datatype="bool" private="true" parameterId="0"/>
+			<Pin name="Signal In" datatype="float" rate="audio"/>
+            <Pin name="Signal Out" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+        <GUI>
+            <Pin name="To DSP" datatype="bool" private="true" parameterId="0"/>
+            <Pin name="Bool" datatype="bool"/>
+            <Pin name="Bool" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
