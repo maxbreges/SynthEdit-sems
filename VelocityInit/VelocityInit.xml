@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="VelocityInit" name="VelocityInit" category="mx/Math">
+        <Audio>
+            <Pin name="Signal in" datatype="float" rate="audio"/>
+            <Pin name="Signal Out" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
