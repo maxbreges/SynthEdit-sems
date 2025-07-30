@@ -116,7 +116,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (VectorRing)
 #add_subdirectory (ImageX)
 #add_subdirectory (JoystickImage)
-add_subdirectory (TextEntry)
+#add_subdirectory (TextEntry)
 #add_subdirectory (Button)
 #add_subdirectory (PulseGen)
 #add_subdirectory (SquareOsc)
@@ -132,7 +132,7 @@ add_subdirectory (TextEntry)
 #add_subdirectory (GUI_SoloMute8)
 #add_subdirectory (SubpanelKbd)
 #add_subdirectory (GUIBoolGateVolts)
-add_subdirectory (VelocityInit)
+#add_subdirectory (VelocityInit)
 
 
 
