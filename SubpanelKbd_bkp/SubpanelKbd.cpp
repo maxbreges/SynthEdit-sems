@@ -53,7 +53,7 @@ public:
             unsigned char baseStatus = noteOn ? (0x90 | channel) : (0x80 | channel);
             midi.data[0] = baseStatus;
             midi.data[1] = static_cast<unsigned char>(noteNumber);
-            float velocityFloat = 0.7812f; // your velocity
+            float velocityFloat = 0.5f; // your velocity
             unsigned char velocity = static_cast<unsigned char>(velocityFloat * 127);
             midi.data[2] = velocity;
 
