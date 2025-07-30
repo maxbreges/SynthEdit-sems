@@ -11,14 +11,14 @@
 			<Pin name="Font Size" datatype="int" default="16" isMinimised="true" />
 			<Pin name="AnimPos+Shift" datatype="float" direction="in" private="true"/>
 			<Pin name="AnimPos+Ctrl" datatype="float" direction="in" private="true"/>
-			
+
 			<Pin name="Choice" datatype="int" direction="in" />
 			<Pin name="List Items" datatype="string" direction="in" />
-			
+
 			<Pin name="List Size" datatype="int" direction="in" private="true"/>
-			
+
 			<Pin name="PopUp open" datatype="bool" direction="out"/>
-			
+
 			<Pin name="Shift+Drag" datatype="bool" private="true"/>
 			<Pin name="Corner Radius" datatype="int" isMinimised="true" default="5"/>
 			<Pin name="Selection" datatype="string" direction="in" />
