@@ -94,6 +94,7 @@ int32_t ImageXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point
 	if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 	{
 		pinCtrlClk = true;
+		goto pass;
 	}
 
 	//	_RPT2(_CRT_WARN, "onPointerDown (%f,%f)\n", point.x, point.y);
@@ -173,7 +174,7 @@ int32_t ImageXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point
 		pinMouseDownLegacy = true;
 		}
 	}
-
+	pass:
 	setCapture();
 
 	return gmpi::MP_OK;
