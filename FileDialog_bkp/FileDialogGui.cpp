@@ -87,7 +87,7 @@ void FileDialogGui::onSetTrigger()
 	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
 		std::wstring filename = pinFileName;
-		std::wstring file_extension = pinFileExtension;
+		//std::wstring file_extension = pinFileExtension;
 
 		IMpGraphicsHostBase* dialogHost = 0;
 		getHost()->queryInterface(SE_IID_GRAPHICS_HOST_BASE, reinterpret_cast<void**>(&dialogHost));
@@ -98,7 +98,7 @@ void FileDialogGui::onSetTrigger()
 			int dialogMode = (int)pinSaveMode;
 			dialogHost->createFileDialog(dialogMode, nativeFileDialog.GetAddressOf());
 
-			if ( ! nativeFileDialog.isNull())
+			if (!nativeFileDialog.isNull())
 			{
 				nativeFileDialog.AddExtensionList(pinFileExtension);
 
