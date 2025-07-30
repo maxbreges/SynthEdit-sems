@@ -38,10 +38,14 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	void onSetMouseOver()
 	{
 	}
+	void onSetMouseDown()
+	{
+	}
 
 	int32_t MP_STDCALL setHover(bool isMouseOverMe) override
 	{
 		pinMouseOver = isMouseOverMe;
+		pinMouseOverIn = isMouseOverMe;
 
 		onSetHint();
 		return gmpi::MP_OK;
@@ -144,6 +148,10 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	{
 	}
 
+	void onSetCtrlClkLatch()
+	{
+	}
+
 	//functionality
 	//hint
 	//appearance
@@ -181,6 +189,9 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 	FloatGuiPin pinMouseYPos;
 	StringGuiPin pinToolTip;
+	BoolGuiPin pinCtrlClkLatch;
+	BoolGuiPin pinMouseOverIn;
+	BoolGuiPin pinMouseDown;
 
 public:
 	ButtonGui()
@@ -217,6 +228,10 @@ public:
 		initializePin(pinBoolIn, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolIn));
 		initializePin(pinMouseYPos, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseYPos));
 		initializePin(pinToolTip, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetToolTip));
+
+		initializePin(pinCtrlClkLatch, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCtrlClkLatch));
+		initializePin(pinMouseOverIn, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
+		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseDown));
 	}
 
 	float mult = 1.f;
@@ -233,6 +248,7 @@ public:
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 		{
 			setCapture();
+			pinCtrlClkLatch = !pinCtrlClkLatch;
 			goto bypass;
 		}
 
@@ -257,6 +273,8 @@ public:
 		}
 
 		pinBoolOut = true;
+		pinMouseDown = true;
+		//pinCtrlClkLatch = false;
 		bypass:
 		return gmpi::MP_OK;
 
@@ -268,7 +286,7 @@ public:
 		// Release control key
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 		{
-			pinCtrlClk = true;
+			pinCtrlClk = true;			
 			pinCtrlClk = false;
 		}
 
@@ -284,6 +302,7 @@ public:
 		}
 		// In stepped mode, keep toggle state until next press
 		pinBoolOut = sharedState;
+		pinMouseDown = false;
 		return gmpi::MP_OK;
 	}
 

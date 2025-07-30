@@ -34,6 +34,9 @@
 
 			<Pin name="Mouse Y Pos" datatype="float" direction="in"/>
 			<Pin name="Hint" datatype="string" default="Hint" isMinimised="true"/>
+			<Pin name="Ctrl+clk latch" datatype="bool" direction="out"/>
+			<Pin name="mOver" datatype="bool" direction="in"/>
+			<Pin name="mDown" datatype="bool" direction="in"/>
         </GUI>
     </Plugin>
 </PluginList>
