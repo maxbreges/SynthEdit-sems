@@ -86,7 +86,9 @@ void FileDialogGui::onSetTrigger()
 	// trigger on mouse-up
 	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
-		pinDebug = "onSetTrigger called: ", pinTrigger, m_prev_trigger;
+		std::ostringstream oss;
+		oss << "onSetTrigger called: pinTrigger=" << pinTrigger << ", m_prev_trigger=" << m_prev_trigger << "\n";
+		pinDebug = oss.str();
 		std::wstring filename = pinFileName;
 		std::wstring file_extension = pinFileExtension;
 
