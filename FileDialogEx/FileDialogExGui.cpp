@@ -108,6 +108,8 @@ std::string uniformPath(std::string path)
 	return ret;
 }
 
+std::string fileext;
+
 void FileDialogExGui::OnFileDialogComplete(int32_t result)
 {
 	pinOpened = false;
@@ -220,9 +222,70 @@ void FileDialogExGui::OnFileDialogComplete(int32_t result)
 		pinFileName = filepath;
 	}
 
+	auto parentPath = fs::path(pinFileName).parent_path();
+	pinDirectory = parentPath;
+	updateItemsList(parentPath.string());
 	nativeFileDialog.setNull(); // release it.
 }
 
+void FileDialogExGui::updateItemsList(const fs::path& directory)
+{
+	m_fileNames.clear(); // Clear previous file names
+
+	if (fs::exists(directory) && fs::is_directory(directory))
+	{
+		for (const auto& entry : fs::directory_iterator(directory))
+		{
+			if (entry.is_regular_file())
+			{
+				auto file_extension = entry.path().extension().string().substr(1);
+
+				// Now check if the extension matches the requested one
+				if (file_extension == fileext) // no operator matches these operands 
+				{
+					// Store the full filename (with extension) in m_fileNames
+					m_fileNames.push_back(entry.path().stem().wstring()); // Store only the file name without extension
+				}
+			}
+		}
+	}
+
+	// Join file names into a comma-separated list for display
+	std::wstringstream ss;
+
+	for (size_t i = 0; i < m_fileNames.size(); ++i)
+	{
+		ss << m_fileNames[i];
+		if (i < m_fileNames.size() - 1)
+			ss << L","; // Add comma between items
+	}
+
+	pinItemsList = ss.str();
+	pinParentPath = pinItemsList;
+	onSetSelectedFile();
+}
+
+void FileDialogExGui::onSetSelectedFile()
+{
+	if (m_fileNames.empty())
+	{
+		pinChoice = -1; // Or another default value to indicate no selection
+		return;
+	}
+
+	std::wstring selectedFile = fs::path(pinFileName).stem().wstring();
+
+	auto it = std::find(m_fileNames.begin(), m_fileNames.end(), selectedFile);
+
+	if (it != m_fileNames.end())
+	{
+		pinChoice = static_cast<int>(std::distance(m_fileNames.begin(), it));
+	}
+	else
+	{
+		pinChoice = -1; // File not found, set to -1 (or appropriate value)
+	}
+}
 
  	void FileDialogExGui::onSetFileName()
 	{
