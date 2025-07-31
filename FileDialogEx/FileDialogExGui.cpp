@@ -5,6 +5,7 @@
 #include "../shared/string_utilities.h"
 #include "../se_sdk3/MpString.h"
 #include <sstream>
+#include <cctype>       // for ::tolower
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -12,6 +13,18 @@ using namespace gmpi_sdk;
 using namespace JmUnicodeConversions;
 
 GMPI_REGISTER_GUI(MP_SUB_TYPE_GUI2, FileDialogExGui, L"FileDialogEx");
+
+// Helper function for case-insensitive string comparison.
+// You might already have a similar utility in string_utilities.h
+bool iequals(const std::string & a, const std::string & b)
+{
+	return std::equal(a.begin(), a.end(),
+		b.begin(), b.end(),
+		[](char char_a, char char_b) {
+			return ::tolower(static_cast<unsigned char>(char_a)) ==
+				::tolower(static_cast<unsigned char>(char_b));
+		});
+}
 
 FileDialogExGui::FileDialogExGui() :
 	m_prev_trigger(false)
@@ -71,7 +84,7 @@ void FileDialogExGui::onSetChoice()
 		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
 	}
 
-	pinDebug = debugOutput;
+	//pinDebug = debugOutput;
 }
 
 void FileDialogExGui::onSetFileName()
@@ -87,8 +100,7 @@ void FileDialogExGui::updateItemsList(const fs::path& directory)
 	m_fileNames.clear(); // Clear previous file names
 
 	if (fs::exists(directory) && fs::is_directory(directory))
-	{
-		
+	{		
 		for (const auto& entry : fs::directory_iterator(directory))
 		{
 			if (entry.is_regular_file())
