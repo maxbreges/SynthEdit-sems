@@ -41,7 +41,9 @@ void FileDialogExGui::onSetTrigger()
 	// trigger on mouse-up
 	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
-		pinDebug = "onSetTrigger called: pinTrigger=%d, m_prev_trigger=%d\n", pinTrigger, m_prev_trigger;
+		std::ostringstream oss;
+		oss << "onSetTrigger called: pinTrigger=" << pinTrigger << ", m_prev_trigger=" << m_prev_trigger << "\n";
+		pinDebug = oss.str();
 
 		std::wstring filename = pinFileName;
 		std::wstring file_extension = pinFileExtension;
@@ -108,6 +110,13 @@ std::string uniformPath(std::string path)
 
 void FileDialogExGui::OnFileDialogComplete(int32_t result)
 {
+	pinOpened = false;
+
+	if (result != gmpi::MP_OK)
+	{
+		return;
+	}
+
 	if (result == gmpi::MP_OK)
 	{
 		// Trim filename if in default folder.
