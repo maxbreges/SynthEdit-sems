@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FileDialogEx" name="File Dialog Ex" category="mx/Sub-Controls">
+        <Parameters>
+            <Parameter id="0" datatype="string" name=""/>
+        </Parameters>
+        <GUI>
+            <Pin name="File Name" datatype="string"/>
+            <Pin name="File Extension" datatype="string" default="wav"/>
+            <Pin name="Choice" datatype="int"/>
+            <Pin name="Items List" datatype="string"/>
+            <Pin name="Trigger" datatype="bool" direction="out"/>
+            <Pin name="Save Mode" datatype="bool"/>
+            <Pin name="Directory" datatype="string"/>
+            <Pin name="Debug" datatype="string" direction="out" private="true"/>
+            <Pin name="ParentPath" datatype="string" private="true" parameterId="0"/>
+            <Pin name="Opened" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
