@@ -39,6 +39,7 @@ std::string FileDialogGui::getDefaultFolder(std::wstring extension)
 
 void FileDialogGui::onSetTrigger()
 {
+	pinOpened = pinTrigger;
 	// trigger on mouse-up
 	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
@@ -78,7 +79,7 @@ void FileDialogGui::onSetTrigger()
 	}
 
 	m_prev_trigger = pinTrigger;
-	pinOpened = m_prev_trigger;
+	//pinOpened = m_prev_trigger;
 }
 
 std::string fileext;
