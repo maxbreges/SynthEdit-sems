@@ -5,7 +5,9 @@
 #include "../shared/string_utilities.h"
 #include "../se_sdk3/MpString.h"
 #include <sstream>
+#include <algorithm>    // for std::equal
 #include <cctype>       // for ::tolower
+#include <system_error> // for std::error_code
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -63,9 +65,11 @@ void FileDialogExGui::onSetChoice()
 {
 	if (pinChoice >= 0 && pinChoice < m_fileNames.size())
 	{
-		std::wstring filenameOnly = pinDirectory.getValue() + L"\\" + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue(); // Append the extension
-
-		pinFileName = filenameOnly;
+		// FIX: Use std::filesystem for cross-platform path construction.
+		fs::path directoryPath(pinDirectory.getValue());
+		std::wstring filenameWithExt = m_fileNames[pinChoice] + L"." + pinFileExtension.getValue();
+		fs::path fullPath = directoryPath / filenameWithExt;
+		pinFileName = fullPath.wstring();
 	}
 	else
 	{
@@ -78,57 +82,67 @@ void FileDialogExGui::onSetChoice()
 	for (const auto& name : m_fileNames) {
 		debugStream << name << L","; // Adds a comma for separation
 	}
-
 	std::wstring debugOutput = debugStream.str();
 	if (!debugOutput.empty()) {
-		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
+		// FIX: Correctly remove the trailing comma.
+		debugOutput.pop_back();
 	}
-
-	//pinDebug = debugOutput;
+	pinDebug = debugOutput;
 }
 
 void FileDialogExGui::onSetFileName()
 {
-	auto parentPath = fs::path(pinFileName.getValue()).parent_path();
-	pinDirectory = parentPath;
-	updateItemsList(parentPath.string());
+	// FIX: Use fs::path consistently and be explicit with string conversions.
+	fs::path filePath(pinFileName.getValue());
+	auto parentPath = filePath.parent_path();
+	pinDirectory = parentPath.wstring();
+	updateItemsList(parentPath);
 }
 
 void FileDialogExGui::updateItemsList(const fs::path& directory)
 {
-	fileext = pinFileExtension;
-	m_fileNames.clear(); // Clear previous file names
+	// FIX: Get desired extension from pin and convert to a std::string for comparison.
+	std::string desired_ext = WStringToUtf8(pinFileExtension.getValue());
+	m_fileNames.clear();
 
 	if (fs::exists(directory) && fs::is_directory(directory))
-	{		
-		for (const auto& entry : fs::directory_iterator(directory))
+	{
+		// FIX: Use the non-throwing version of directory_iterator for safety.
+		std::error_code ec;
+		for (const auto& entry : fs::directory_iterator(directory, ec))
 		{
 			if (entry.is_regular_file())
 			{
-				auto file_extension = entry.path().extension().string().substr(1);
-				pinDebug = fileext;
-				// Now check if the extension matches the requested one
-				if (file_extension == fileext) // no operator matches these operands 
+				// FIX: Get extension and handle the leading dot.
+				std::string file_extension = entry.path().extension().string();
+				if (!file_extension.empty() && file_extension[0] == '.')
 				{
-					// Store the full filename (with extension) in m_fileNames
-					m_fileNames.push_back(entry.path().stem().wstring()); // Store only the file name without extension
-					
+					file_extension = file_extension.substr(1);
+				}
+
+				// FIX: Perform a case-insensitive comparison for file extensions.
+				if (iequals(file_extension, desired_ext))
+				{
+					// Store the file name stem as a wstring.
+					m_fileNames.push_back(entry.path().stem().wstring());
 				}
 			}
+		}
+		if (ec)
+		{
+			// Optional: Log the error if directory iteration fails.
+			// pinDebug = L"Error iterating directory: " + Utf8ToWstring(ec.message());
 		}
 	}
 
 	// Join file names into a comma-separated list for display
 	std::wstringstream ss;
-
 	for (size_t i = 0; i < m_fileNames.size(); ++i)
 	{
 		ss << m_fileNames[i];
 		if (i < m_fileNames.size() - 1)
 			ss << L","; // Add comma between items
-		
 	}
-
 	pinItemsList = ss.str();
 	pinParentPath = pinItemsList;
 	onSetSelectedFile();
