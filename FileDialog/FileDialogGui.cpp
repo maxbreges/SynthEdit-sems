@@ -31,6 +31,7 @@ FileDialogGui::FileDialogGui() :
 
 void FileDialogGui::onSetTriggerInit()
 {
+	if(pinTrigger)
 	pinOpened = pinTrigger;
 	onSetTrigger();
 }
@@ -102,7 +103,7 @@ void FileDialogGui::onSetItemsList()
 			m_fileNames.push_back(item);
 	}
 
-	pinDebug = L"onSetItemsList()";
+	//pinDebug = L"onSetItemsList()";
 	//onSetChoice();
 }
 
