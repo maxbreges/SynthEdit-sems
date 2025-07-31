@@ -19,10 +19,9 @@ public:
 	FileDialogGui();
 
 	// overrides.
-
-private:
-	void onSetTriggerInit();
 	void onSetTrigger();
+
+private:	
 	void OnFileDialogComplete(int32_t result);
 	std::string getDefaultFolder(std::wstring extension);
 	void onSetChoice();
@@ -34,7 +33,7 @@ private:
 	StringGuiPin pinFileExtension;
 	IntGuiPin pinChoice;
 	StringGuiPin pinItemsList;
-	BoolGuiPin pinTrigger;
+	FloatGuiPin pinTrigger;
 	BoolGuiPin pinSaveMode;
 	StringGuiPin pinDirectory;
 	StringGuiPin pinDebug;

@@ -21,7 +21,7 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinFileExtension);
 	initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetChoice));
 	initializePin(pinItemsList);
-	initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetTriggerInit));
+	initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetTrigger));
 	initializePin(pinSaveMode);
 	initializePin(pinDirectory);
 	initializePin(pinDebug);
@@ -29,12 +29,6 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinOpened);
 }
 
-void FileDialogGui::onSetTriggerInit()
-{
-	if(pinTrigger)
-	pinOpened = pinTrigger;
-	onSetTrigger();
-}
 
 std::string FileDialogGui::getDefaultFolder(std::wstring extension)
 {
@@ -47,7 +41,7 @@ void FileDialogGui::onSetTrigger()
 {
 	pinOpened = pinTrigger;
 	// trigger on mouse-up
-	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
+	if (!pinTrigger  && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
 		std::ostringstream oss;
 		oss << "onSetTrigger called: pinTrigger=" << pinTrigger << ", m_prev_trigger=" << m_prev_trigger << "\n";
