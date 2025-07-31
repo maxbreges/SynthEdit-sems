@@ -12,7 +12,7 @@
             <Pin name="Trigger" datatype="bool" direction="out"/>
             <Pin name="Save Mode" datatype="bool"/>
 			<Pin name="Directory" datatype="string" direction="in"/>
-			<Pin name="Debug" datatype="string" direction="out" private="true"/>
+			<Pin name="Debug" datatype="string" direction="out" private="false"/>
 			<Pin name="ParentPath" direction="in" datatype="string" parameterId="0" />
 			<Pin name="Opened" datatype="bool" direction="out"/>
         </GUI>
