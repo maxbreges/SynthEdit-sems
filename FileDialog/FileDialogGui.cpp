@@ -21,7 +21,7 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinFileExtension);
 	initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetChoice));
 	initializePin(pinItemsList);
-	initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetTrigger));
+	initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetTriggerInit));
 	initializePin(pinSaveMode);
 	initializePin(pinDirectory);
 	initializePin(pinDebug);
@@ -29,6 +29,11 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinOpened);
 }
 
+void FileDialogGui::onSetTriggerInit()
+{
+	pinOpened = pinTrigger;
+	onSetTrigger();
+}
 
 std::string FileDialogGui::getDefaultFolder(std::wstring extension)
 {
