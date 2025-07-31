@@ -41,9 +41,8 @@ void FileDialogExGui::onSetTrigger()
 	// trigger on mouse-up
 	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
-		std::ostringstream oss;
-		oss << "onSetTrigger called: pinTrigger=" << pinTrigger << ", m_prev_trigger=" << m_prev_trigger << "\n";
-		pinDebug = oss.str();
+		pinDebug = "onSetTrigger called: pinTrigger=%d, m_prev_trigger=%d\n", pinTrigger, m_prev_trigger;
+
 		std::wstring filename = pinFileName;
 		std::wstring file_extension = pinFileExtension;
 
@@ -107,12 +106,8 @@ std::string uniformPath(std::string path)
 	return ret;
 }
 
-std::string fileext;
-
 void FileDialogExGui::OnFileDialogComplete(int32_t result)
 {
-	pinOpened = false;
-
 	if (result == gmpi::MP_OK)
 	{
 		// Trim filename if in default folder.
@@ -214,11 +209,8 @@ void FileDialogExGui::OnFileDialogComplete(int32_t result)
 		}
 
 		pinFileName = filepath;
-		pinDebug = filepath;
 	}
-	auto parentPath = fs::path(pinFileName).parent_path();
-	pinDirectory = parentPath;
-	updateItemsList(parentPath.string());
+
 	nativeFileDialog.setNull(); // release it.
 }
 
@@ -235,30 +227,30 @@ void FileDialogExGui::OnFileDialogComplete(int32_t result)
 
  	void FileDialogExGui::onSetChoice()
 	{
-		if (pinChoice >= 0 && pinChoice < m_fileNames.size())
-		{
-			std::wstring filenameOnly = pinDirectory.getValue() + L"\\" + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue(); // Append the extension
+			if (pinChoice >= 0 && pinChoice < m_fileNames.size())
+	{
+		std::wstring filenameOnly = pinDirectory.getValue() + L"\\" + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue(); // Append the extension
 
-			pinFileName = filenameOnly;
-		}
-		else
-		{
-			// Possibly clear the filename if the choice is out of range
-			pinFileName = L"";
-		}
+		pinFileName = filenameOnly;
+	}
+	else
+	{
+		// Possibly clear the filename if the choice is out of range
+		pinFileName = L"";
+	}
 
-		// Combine file names into a single string for debug purposes
-		std::wstringstream debugStream;
-		for (const auto& name : m_fileNames) {
-			debugStream << name << L","; // Adds a comma for separation
-		}
+	// Combine file names into a single string for debug purposes
+	std::wstringstream debugStream;
+	for (const auto& name : m_fileNames) {
+		debugStream << name << L","; // Adds a comma for separation
+	}
 
-		std::wstring debugOutput = debugStream.str();
-		if (!debugOutput.empty()) {
-			debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
-		}
+	std::wstring debugOutput = debugStream.str();
+	if (!debugOutput.empty()) {
+		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
+	}
 
-		pinDebug = debugOutput;
+	pinDebug = debugOutput;
 	}
 
  	void FileDialogExGui::onSetItemsList()
@@ -301,65 +293,6 @@ void FileDialogExGui::OnFileDialogComplete(int32_t result)
  	void FileDialogExGui::onSetOpened()
 	{
 		// pinOpened changed
-	}
-
-	void FileDialogExGui::updateItemsList(const fs::path& directory)
-	{
-		m_fileNames.clear(); // Clear previous file names
-
-		if (fs::exists(directory) && fs::is_directory(directory))
-		{
-			for (const auto& entry : fs::directory_iterator(directory))
-			{
-				if (entry.is_regular_file())
-				{
-					auto file_extension = entry.path().extension().string().substr(1);
-
-					// Now check if the extension matches the requested one
-					if (file_extension == fileext) // no operator matches these operands 
-					{
-						// Store the full filename (with extension) in m_fileNames
-						m_fileNames.push_back(entry.path().stem().wstring()); // Store only the file name without extension
-					}
-				}
-			}
-		}
-
-		// Join file names into a comma-separated list for display
-		std::wstringstream ss;
-
-		for (size_t i = 0; i < m_fileNames.size(); ++i)
-		{
-			ss << m_fileNames[i];
-			if (i < m_fileNames.size() - 1)
-				ss << L","; // Add comma between items
-		}
-
-		pinItemsList = ss.str();
-		pinParentPath = pinItemsList;
-		onSetSelectedFile();
-	}
-
-	void FileDialogExGui::onSetSelectedFile()
-	{
-		if (m_fileNames.empty())
-		{
-			pinChoice = -1; // Or another default value to indicate no selection
-			return;
-		}
-
-		std::wstring selectedFile = fs::path(pinFileName).stem().wstring();
-
-		auto it = std::find(m_fileNames.begin(), m_fileNames.end(), selectedFile);
-
-		if (it != m_fileNames.end())
-		{
-			pinChoice = static_cast<int>(std::distance(m_fileNames.begin(), it));
-		}
-		else
-		{
-			pinChoice = -1; // File not found, set to -1 (or appropriate value)
-		}
 	}
 
 
