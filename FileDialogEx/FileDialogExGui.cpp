@@ -17,61 +17,16 @@ FileDialogExGui::FileDialogExGui() :
 	m_prev_trigger(false)
 {
 	// initialise pins.
-	initializePin(pinFileName);
-	initializePin(pinFileExtension);
+	initializePin(pinFileName, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetFileName));
+	initializePin(pinFileExtension, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetFileExtension));
 	initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetChoice));
-	initializePin(pinItemsList);
+	initializePin(pinItemsList, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetItemsList));
 	initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetTrigger));
-	initializePin(pinSaveMode);
-	initializePin(pinDirectory);
-	initializePin(pinDebug);
+	initializePin(pinSaveMode, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetSaveMode));
+	initializePin(pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetDirectory));
+	initializePin(pinDebug, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetDebug));
 	initializePin(pinParentPath, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetParentPath));
 	initializePin(pinOpened, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetOpened));
-}
-
-void FileDialogExGui::onSetItemsList()
-{
-	std::wstring itemsList = pinParentPath.getValue();
-	m_fileNames.clear();
-
-	std::wistringstream wss(itemsList);
-	std::wstring item;
-
-	while (std::getline(wss, item, L',')) {
-		if (!item.empty()) // Avoid empty entries
-			m_fileNames.push_back(item);
-	}
-
-	pinDebug = L"onSetItemsList()";
-	//onSetChoice();
-}
-
-void FileDialogExGui::onSetChoice()
-{
-	if (pinChoice >= 0 && pinChoice < m_fileNames.size())
-	{
-		std::wstring filenameOnly = pinDirectory.getValue() + L"\\" + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue(); // Append the extension
-
-		pinFileName = filenameOnly;
-	}
-	else
-	{
-		// Possibly clear the filename if the choice is out of range
-		pinFileName = L"";
-	}
-
-	// Combine file names into a single string for debug purposes
-	std::wstringstream debugStream;
-	for (const auto& name : m_fileNames) {
-		debugStream << name << L","; // Adds a comma for separation
-	}
-
-	std::wstring debugOutput = debugStream.str();
-	if (!debugOutput.empty()) {
-		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
-	}
-
-	pinDebug = debugOutput;
 }
 
 std::string FileDialogExGui::getDefaultFolder(std::wstring extension)
@@ -157,11 +112,6 @@ std::string fileext;
 void FileDialogExGui::OnFileDialogComplete(int32_t result)
 {
 	pinOpened = false;
-
-	if (result != gmpi::MP_OK)
-	{
-		return;
-	}
 
 	if (result == gmpi::MP_OK)
 	{
@@ -283,6 +233,50 @@ void FileDialogExGui::OnFileDialogComplete(int32_t result)
 		// pinFileExtension changed
 	}
 
+ 	void FileDialogExGui::onSetChoice()
+	{
+		if (pinChoice >= 0 && pinChoice < m_fileNames.size())
+		{
+			std::wstring filenameOnly = pinDirectory.getValue() + L"\\" + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue(); // Append the extension
+
+			pinFileName = filenameOnly;
+		}
+		else
+		{
+			// Possibly clear the filename if the choice is out of range
+			pinFileName = L"";
+		}
+
+		// Combine file names into a single string for debug purposes
+		std::wstringstream debugStream;
+		for (const auto& name : m_fileNames) {
+			debugStream << name << L","; // Adds a comma for separation
+		}
+
+		std::wstring debugOutput = debugStream.str();
+		if (!debugOutput.empty()) {
+			debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
+		}
+
+		pinDebug = debugOutput;
+	}
+
+ 	void FileDialogExGui::onSetItemsList()
+	{
+		std::wstring itemsList = pinParentPath.getValue();
+		m_fileNames.clear();
+
+		std::wistringstream wss(itemsList);
+		std::wstring item;
+
+		while (std::getline(wss, item, L',')) {
+			if (!item.empty()) // Avoid empty entries
+				m_fileNames.push_back(item);
+		}
+
+		pinDebug = L"onSetItemsList()";
+		//onSetChoice();
+	}
 
  	void FileDialogExGui::onSetSaveMode()
 	{
