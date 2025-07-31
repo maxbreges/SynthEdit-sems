@@ -21,6 +21,7 @@ public:
 	// overrides.
 
 private:
+	void onSetTriggerInit();
 	void onSetTrigger();
 	void OnFileDialogComplete(int32_t result);
 	std::string getDefaultFolder(std::wstring extension);
