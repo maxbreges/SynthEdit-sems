@@ -29,50 +29,6 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinOpened);
 }
 
-void FileDialogGui::onSetItemsList()
-{
-	std::wstring itemsList = pinItemsListIn.getValue();
-	m_fileNames.clear();
-
-	std::wistringstream wss(itemsList);
-	std::wstring item;
-
-	while (std::getline(wss, item, L',')) {
-		if (!item.empty()) // Avoid empty entries
-			m_fileNames.push_back(item);
-	}
-
-	pinDebug = L"onSetItemsList()";
-	//onSetChoice();
-}
-
-void FileDialogGui::onSetChoice()
-{
-	if (pinChoice >= 0 && pinChoice < m_fileNames.size())
-	{
-		std::wstring filenameOnly = pinDirectory.getValue() + L"\\" + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue(); // Append the extension
-
-		pinFileName = filenameOnly;
-	}
-	else
-	{
-		// Possibly clear the filename if the choice is out of range
-		pinFileName = L"";
-	}
-
-	// Combine file names into a single string for debug purposes
-	std::wstringstream debugStream;
-	for (const auto& name : m_fileNames) {
-		debugStream << name << L","; // Adds a comma for separation
-	}
-
-	std::wstring debugOutput = debugStream.str();
-	if (!debugOutput.empty()) {
-		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
-	}
-
-	pinDebug = debugOutput;
-}
 
 std::string FileDialogGui::getDefaultFolder(std::wstring extension)
 {
@@ -126,6 +82,51 @@ void FileDialogGui::onSetTrigger()
 }
 
 std::string fileext;
+
+void FileDialogGui::onSetItemsList()
+{
+	std::wstring itemsList = pinItemsListIn.getValue();
+	m_fileNames.clear();
+
+	std::wistringstream wss(itemsList);
+	std::wstring item;
+
+	while (std::getline(wss, item, L',')) {
+		if (!item.empty()) // Avoid empty entries
+			m_fileNames.push_back(item);
+	}
+
+	pinDebug = L"onSetItemsList()";
+	//onSetChoice();
+}
+
+void FileDialogGui::onSetChoice()
+{
+	if (pinChoice >= 0 && pinChoice < m_fileNames.size())
+	{
+		std::wstring filenameOnly = pinDirectory.getValue() + L"\\" + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue(); // Append the extension
+
+		pinFileName = filenameOnly;
+	}
+	else
+	{
+		// Possibly clear the filename if the choice is out of range
+		pinFileName = L"";
+	}
+
+	// Combine file names into a single string for debug purposes
+	std::wstringstream debugStream;
+	for (const auto& name : m_fileNames) {
+		debugStream << name << L","; // Adds a comma for separation
+	}
+
+	std::wstring debugOutput = debugStream.str();
+	if (!debugOutput.empty()) {
+		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
+	}
+
+	pinDebug = debugOutput;
+}
 
 void FileDialogGui::OnFileDialogComplete(int32_t result)
 {

@@ -108,7 +108,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (FloatEntry)
 #add_subdirectory (MidiToHex)
 #add_subdirectory (BoolTriggerGui)
-#add_subdirectory (FileDialog)
+add_subdirectory (FileDialog)
 #add_subdirectory (StepCounterGui)
 #add_subdirectory (StringRight)
 #add_subdirectory (GrayscaleHex)
@@ -133,7 +133,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (SubpanelKbd)
 #add_subdirectory (GUIBoolGateVolts)
 #add_subdirectory (VelocityInit)
-add_subdirectory (FileDialogEx)
+#add_subdirectory (FileDialogEx)
 
 
 
