@@ -9,8 +9,6 @@
             <Pin name="File Extension" datatype="string" default="wav"/>
             <Pin name="Choice" datatype="int"/>
             <Pin name="Items List" datatype="string"/>
-            <Pin name="Trigger" datatype="bool" direction="out"/>
-            <Pin name="Save Mode" datatype="bool"/>
             <Pin name="Directory" datatype="string"/>
             <Pin name="Debug" datatype="string" direction="out" private="false"/>
             <Pin name="ParentPath" datatype="string" private="true" parameterId="0"/>

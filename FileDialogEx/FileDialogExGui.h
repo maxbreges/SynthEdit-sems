@@ -21,27 +21,24 @@ public:
 	// overrides.
 
 private:
-	void onSetTrigger();
-	void OnFileDialogComplete(int32_t result);
-	std::string getDefaultFolder(std::wstring extension);
+
     void updateItemsList(const fs::path& directory); // Correctly defined in the class
     void onSetSelectedFile();
 
     void onSetFileName();
-    void onSetFileExtension();
+   // void onSetFileExtension();
     void onSetChoice();
     void onSetItemsList();
-    void onSetSaveMode();
-    void onSetDirectory();
-    void onSetDebug();
-    void onSetParentPath();
-    void onSetOpened();
+  //  void onSetDirectory();
+   // void onSetDebug();
+   // void onSetParentPath();
+   // void onSetOpened();
 
     StringGuiPin pinFileName;
     StringGuiPin pinFileExtension;
     IntGuiPin pinChoice;
     StringGuiPin pinItemsList;
-    BoolGuiPin pinTrigger;
+
     BoolGuiPin pinSaveMode;
     StringGuiPin pinDirectory;
     StringGuiPin pinDebug;
