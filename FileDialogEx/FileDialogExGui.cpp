@@ -79,7 +79,7 @@ void FileDialogExGui::onSetChoice()
 		// FIX: Correctly remove the trailing comma.
 		debugOutput.pop_back();
 	}
-	pinDebug = debugOutput;
+	//pinDebug = debugOutput;
 }
 
 void FileDialogExGui::onSetFileName()
@@ -123,7 +123,7 @@ void FileDialogExGui::updateItemsList(const fs::path& directory)
 		if (ec)
 		{
 			// Optional: Log the error if directory iteration fails.
-			// pinDebug = L"Error iterating directory: " + Utf8ToWstring(ec.message());
+			 pinDebug = L"Error iterating directory: " + Utf8ToWstring(ec.message());
 		}
 	}
 
