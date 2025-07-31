@@ -24,8 +24,8 @@ private:
 	void onSetTrigger();
 	void OnFileDialogComplete(int32_t result);
 	std::string getDefaultFolder(std::wstring extension);
-   // void updateItemsList(const fs::path& directory); // Correctly defined in the class
-  //  void onSetSelectedFile();
+    void updateItemsList(const fs::path& directory); // Correctly defined in the class
+    void onSetSelectedFile();
 
     void onSetFileName();
     void onSetFileExtension();
