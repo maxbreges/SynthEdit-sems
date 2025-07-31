@@ -97,7 +97,7 @@ void FileDialogGui::onSetTrigger()
 
 		if (dialogHost != 0)
 		{
-			pinOpened = true;
+			//pinOpened = true;
 			int dialogMode = (int)pinSaveMode;
 			dialogHost->createFileDialog(dialogMode, nativeFileDialog.GetAddressOf());
 
@@ -122,13 +122,14 @@ void FileDialogGui::onSetTrigger()
 	}
 
 	m_prev_trigger = pinTrigger;
+	pinOpened = m_prev_trigger;
 }
 
 std::string fileext;
 
 void FileDialogGui::OnFileDialogComplete(int32_t result)
 {
-	pinOpened = false;
+	//pinOpened = false;
 
 	if (result != gmpi::MP_OK)
 	{
