@@ -13,6 +13,7 @@ using namespace gmpi;
 #include <locale>
 #include <codecvt>
 #include <wchar.h>
+#include <strings.h> // For wcscasecmp
 #endif
 
 // Helper to list files with extension
@@ -43,7 +44,7 @@ std::vector<std::wstring> listFiles(const std::wstring& directory, const std::ws
     } while (FindNextFile(hFind, &findFileData) != 0);
     FindClose(hFind);
 #else
-    // POSIX implementation for macOS/Linux
+    // POSIX implementation
     std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
     std::string dir_utf8 = converter.to_bytes(directory);
 
@@ -65,7 +66,7 @@ std::vector<std::wstring> listFiles(const std::wstring& directory, const std::ws
             {
                 if (extension.empty() ||
                     (filename.length() >= extension.length() &&
-                        _wcsicmp(filename.substr(filename.length() - extension.length()).c_str(), extension.c_str()) == 0))
+                        wcscasecmp(filename.c_str() + filename.length() - extension.length(), extension.c_str()) == 0))
                 {
                     files.push_back(filename);
                 }
