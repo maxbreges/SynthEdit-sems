@@ -8,7 +8,11 @@ using namespace gmpi;
 #ifdef _WIN32
 #include <windows.h>
 #else
-// Platform-specific includes if needed
+#include <dirent.h>
+#include <sys/stat.h>
+#include <locale>
+#include <codecvt>
+#include <wchar.h>
 #endif
 
 // Helper to list files with extension
@@ -39,7 +43,36 @@ std::vector<std::wstring> listFiles(const std::wstring& directory, const std::ws
     } while (FindNextFile(hFind, &findFileData) != 0);
     FindClose(hFind);
 #else
-    // Implement for other platforms if needed
+    // POSIX implementation for macOS/Linux
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    std::string dir_utf8 = converter.to_bytes(directory);
+
+    DIR* dir = opendir(dir_utf8.c_str());
+    if (!dir)
+        return files;
+
+    struct dirent* entry;
+    while ((entry = readdir(dir)) != nullptr)
+    {
+        std::string filename_utf8(entry->d_name);
+        std::wstring filename = converter.from_bytes(filename_utf8);
+
+        std::wstring full_path = directory + L"/" + filename;
+        struct stat path_stat;
+        if (stat(converter.to_bytes(full_path).c_str(), &path_stat) == 0)
+        {
+            if (S_ISREG(path_stat.st_mode))
+            {
+                if (extension.empty() ||
+                    (filename.length() >= extension.length() &&
+                        _wcsicmp(filename.substr(filename.length() - extension.length()).c_str(), extension.c_str()) == 0))
+                {
+                    files.push_back(filename);
+                }
+            }
+        }
+    }
+    closedir(dir);
 #endif
 
     return files;
