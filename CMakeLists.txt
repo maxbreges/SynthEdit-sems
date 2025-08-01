@@ -83,7 +83,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (GuiTextToText)
 #add_subdirectory (JustFile)
 #add_subdirectory (SetFolder)
-#add_subdirectory (JustPath)
+add_subdirectory (JustPath)
 #add_subdirectory (FilesFilter)
 #add_subdirectory (FloatAnimation)
 #add_subdirectory (FretFormula)
@@ -133,7 +133,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (SubpanelKbd)
 #add_subdirectory (GUIBoolGateVolts)
 #add_subdirectory (VelocityInit)
-add_subdirectory (FileDialogEx)
+#add_subdirectory (FileDialogEx)
 
 
 

@@ -1,8 +1,8 @@
 #include "mp_sdk_gui2.h"
 #include "mp_gui.h"
-#include <filesystem>
+//#include <filesystem>
 
-namespace fs = std::filesystem;
+//namespace fs = std::filesystem;
 using namespace gmpi;
 using namespace gmpi_gui;
 
@@ -60,7 +60,7 @@ public:
 		{
 			fileNameString = nativeFileDialog.GetSelectedFilename(); // Assume this returns std::string
 
-			pinDirectory = (fs::path(fileNameString).parent_path());
+			pinDirectory = fileNameString;//(fs::path(fileNameString).parent_path());
 		}		
 
 		nativeFileDialog.setNull(); // Release it.
