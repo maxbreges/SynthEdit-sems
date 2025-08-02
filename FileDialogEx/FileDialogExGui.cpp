@@ -1,161 +1,203 @@
-#include "./FileDialogExGui.h"
-#include "../shared/unicode_conversion.h"
-#include "../shared/it_enum_list.h"
-#include "../shared/string_utilities.h"
-#include "../se_sdk3/MpString.h"
+#include "./FileDialogEx.h"
 #include <sstream>
-#include <algorithm>    // for std::equal
-#include <cctype>       // for ::tolower
-#include <system_error> // for std::error_code
+#include <algorithm>
 
 using namespace gmpi;
 using namespace gmpi_gui;
 using namespace gmpi_sdk;
-using namespace JmUnicodeConversions;
 
 GMPI_REGISTER_GUI(MP_SUB_TYPE_GUI2, FileDialogExGui, L"FileDialogEx");
 
-// Helper function for case-insensitive string comparison.
-// You might already have a similar utility in string_utilities.h
-bool iequals(const std::string& a, const std::string& b)
+FileDialogExGui::FileDialogExGui()
 {
-	return std::equal(a.begin(), a.end(),
-		b.begin(), b.end(),
-		[](char char_a, char char_b) {
-			return ::tolower(static_cast<unsigned char>(char_a)) ==
-				::tolower(static_cast<unsigned char>(char_b));
-		});
-}
-
-FileDialogExGui::FileDialogExGui() :
-	m_prev_trigger(false)
-{
-	// initialise pins.
-	initializePin(pinFileName, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetFileName));
-	initializePin(pinFileExtension);
+	// Initialize pins with their handlers, same pattern as DAM_GUIFileBrowser_Gui
+	initializePin(pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetDirectory));
+	initializePin(pinFileExtension, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetFileExtension));
+	initializePin(pinHideExt); // No handler, value is read directly
+	initializePin(pinRescan, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetRescan));
+	initializePin(pinParent, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetParent));
 	initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetChoice));
-	initializePin(pinItemsList);
-	initializePin(pinDirectory);
-	initializePin(pinDebug);
-	initializePin(pinParentPath, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetItemsList));
-	initializePin(pinOpened);
+	initializePin(pinItemsList); // Output only
+	initializePin(pinFileName, static_cast<MpGuiBaseMemberPtr2>(&FileDialogExGui::onSetFileName));
+	initializePin(pinNameOut);   // Output only
+
+	SetTimerIntervalMs(10);
 }
 
-void FileDialogExGui::onSetItemsList()
+bool FileDialogExGui::OnTimer()
 {
-	std::wstring itemsList = pinParentPath.getValue();
-	m_fileNames.clear();
-	std::wistringstream wss(itemsList);
-	std::wstring item;
-	while (std::getline(wss, item, L',')) {
-		if (!item.empty()) // Avoid empty entries
-			m_fileNames.push_back(item);
+	// next user selection (even at the same list index) is a new value and triggers onSetChoice.
+	pinChoice = -1;
+	return false; // Run timer only once
+}
+
+void FileDialogExGui::scanCurrentPath()
+{
+	std::wostringstream list;
+	std::wstring tmp;
+
+	bool add_comma = false;
+	const bool hide_ext = pinHideExt;
+	const std::wstring current_fname = pinFileName;
+
+	entryList.clear();
+	nItems = 0;
+
+	if (fs::exists(currentPath) && fs::is_directory(currentPath))
+	{
+		for (auto& entry : fs::directory_iterator(currentPath, fs::directory_options::skip_permission_denied))
+		{
+			if (add_comma)
+				list << L",";
+			add_comma = true;
+
+			const bool is_dir = entry.is_directory();
+			const bool extension_match = fileExtension.empty() || (entry.path().extension().compare(fileExtension) == 0);
+
+			if (is_dir || (entry.is_regular_file() && extension_match))
+			{
+				tmp = entry.path().filename().wstring();
+
+				if (hide_ext && !is_dir)
+				{
+					const size_t lastdot = tmp.find_last_of(L'.');
+					if (lastdot != std::wstring::npos)
+						tmp = tmp.substr(0, lastdot);
+				}
+
+				// Replace commas to avoid breaking the list format.
+				std::replace(tmp.begin(), tmp.end(), L',', L'_');
+
+				list << tmp;
+				entryList.push_back(entry);
+
+				if (is_dir)
+				{
+					list << L"/";
+				}
+				nItems++;
+
+				// Restore selection if the current item matches pinFileName.
+				if (!current_fname.empty() && entry.path().wstring() == current_fname)
+				{
+					pinChoice = nItems - 1;
+				}
+			}
+			else
+			{
+				add_comma = false;
+			}
+		}
+	}
+	pinItemsList = list.str();
+}
+
+void FileDialogExGui::onSetFileExtension()
+{
+	// Add leading dot for comparison with path().extension()
+	std::wstring ext = pinFileExtension;
+	if (ext.empty())
+	{
+		fileExtension = L"";
+	}
+	else
+	{
+		fileExtension = L".";
+		fileExtension.append(ext);
+	}
+
+	if (!currentPath.empty())
+	{
+		scanCurrentPath();
+	}
+}
+
+void FileDialogExGui::onSetDirectory()
+{
+	currentPath = pinDirectory.getValue();
+
+	if (!fs::exists(currentPath))
+	{
+		pinItemsList = L"Path not found.";
+		nItems = 0;
+		entryList.clear();
+		return;
+	}
+
+	// If a file path is passed, use its parent directory and set the file as output.
+	if (!fs::is_directory(currentPath))
+	{
+		pinFileName = currentPath.wstring();
+		pinNameOut = currentPath.filename().wstring();
+		currentPath = currentPath.parent_path();
+		pinDirectory = currentPath.wstring(); // Update pin to reflect just the path.
+	}
+
+	pinChoice = -1;
+	scanCurrentPath();
+}
+
+void FileDialogExGui::onSetRescan()
+{
+	if (pinRescan)
+	{
+		scanCurrentPath();
+		pinRescan = false; // Reset trigger
+	}
+}
+
+void FileDialogExGui::onSetParent()
+{
+	if (pinParent)
+	{
+		if (currentPath.has_parent_path() && currentPath.parent_path() != currentPath)
+		{
+			currentPath = currentPath.parent_path();
+			pinDirectory = currentPath.wstring();
+			pinChoice = -1;
+			scanCurrentPath();
+		}
+		pinParent = false; // Reset trigger
 	}
 }
 
 void FileDialogExGui::onSetChoice()
 {
-	if (pinChoice >= 0 && pinChoice < m_fileNames.size())
-	{
-		// FIX: Use std::filesystem for cross-platform path construction.
-		fs::path directoryPath(pinDirectory.getValue());
-		std::wstring filenameWithExt = m_fileNames[pinChoice] + L"." + pinFileExtension.getValue();
-		fs::path fullPath = directoryPath / filenameWithExt;
-		pinFileName = fullPath.wstring();
-	}
-	else
-	{
-		// Possibly clear the filename if the choice is out of range
-		pinFileName = L"";
-	}
+	int c = pinChoice;
 
-	// Combine file names into a single string for debug purposes
-	std::wstringstream debugStream;
-	for (const auto& name : m_fileNames) {
-		debugStream << name << L","; // Adds a comma for separation
+	if (c >= 0 && c < nItems)
+	{
+		fs::directory_entry entry = entryList[c];
+
+		if (entry.is_directory()) // Navigate to sub-dir
+		{
+			currentPath = entry.path();
+			pinDirectory = currentPath.wstring();
+			scanCurrentPath();
+			StartTimer(); // Use timer to reset choice pin to -1, allowing re-selection.
+		}
+		else // A file was chosen
+		{
+			pinFileName = entry.path().wstring();
+			pinNameOut = entry.path().filename().wstring();
+		}
 	}
-	std::wstring debugOutput = debugStream.str();
-	if (!debugOutput.empty()) {
-		// FIX: Correctly remove the trailing comma.
-		debugOutput.pop_back();
-	}
-	//pinDebug = debugOutput;
 }
 
 void FileDialogExGui::onSetFileName()
 {
-	// FIX: Use fs::path consistently and be explicit with string conversions.
-	fs::path filePath(pinFileName.getValue());
-	auto parentPath = filePath.parent_path();
-	pinDirectory = parentPath.wstring();
-	updateItemsList(parentPath);
-}
+	// This handler is for restoring selection state from the host.
+	const std::wstring fname = pinFileName;
 
-void FileDialogExGui::updateItemsList(const fs::path& directory)
-{
-	// FIX: Get desired extension from pin and convert to a std::string for comparison.
-	std::string desired_ext = WStringToUtf8(pinFileExtension.getValue());
-	m_fileNames.clear();
-
-	if (fs::exists(directory) && fs::is_directory(directory))
+	if (!fname.empty() && nItems > 0)
 	{
-		// FIX: Use the non-throwing version of directory_iterator for safety.
-		std::error_code ec;
-		for (const auto& entry : fs::directory_iterator(directory, ec))
+		for (int c = 0; c < nItems; ++c)
 		{
-			if (entry.is_regular_file())
+			if (entryList[c].path().wstring() == fname)
 			{
-				// FIX: Get extension and handle the leading dot.
-				std::string file_extension = entry.path().extension().string();
-				if (!file_extension.empty() && file_extension[0] == '.')
-				{
-					file_extension = file_extension.substr(1);
-				}
-
-				// FIX: Perform a case-insensitive comparison for file extensions.
-				if (iequals(file_extension, desired_ext))
-				{
-					// Store the file name stem as a wstring.
-					m_fileNames.push_back(entry.path().stem().wstring());
-				}
+				pinChoice = c;
+				break; // Found it.
 			}
 		}
-		if (ec)
-		{
-			// Optional: Log the error if directory iteration fails.
-			 pinDebug = L"Error iterating directory: " + Utf8ToWstring(ec.message());
-		}
-	}
-
-	// Join file names into a comma-separated list for display
-	std::wstringstream ss;
-	for (size_t i = 0; i < m_fileNames.size(); ++i)
-	{
-		ss << m_fileNames[i];
-		if (i < m_fileNames.size() - 1)
-			ss << L","; // Add comma between items
-	}
-	pinItemsList = ss.str();
-	pinParentPath = pinItemsList;
-	onSetSelectedFile();
-}
-
-void FileDialogExGui::onSetSelectedFile()
-{
-	if (m_fileNames.empty())
-	{
-		pinChoice = -1;
-		return;
-	}
-
-	std::wstring selectedFile = fs::path(pinFileName.getValue()).stem().wstring();
-	auto it = std::find(m_fileNames.begin(), m_fileNames.end(), selectedFile);
-	if (it != m_fileNames.end())
-	{
-		pinChoice = static_cast<int>(std::distance(m_fileNames.begin(), it));
-	}
-	else
-	{
-		pinChoice = -1;
 	}
 }
