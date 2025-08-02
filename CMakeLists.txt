@@ -133,8 +133,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (SubpanelKbd)
 #add_subdirectory (GUIBoolGateVolts)
 #add_subdirectory (VelocityInit)
-#add_subdirectory (FileDialogEx)
-add_subdirectory (ItemList)
+add_subdirectory (FileDialogEx)
+#add_subdirectory (ItemList)
 
 
 
