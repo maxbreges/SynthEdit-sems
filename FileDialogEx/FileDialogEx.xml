@@ -2,15 +2,11 @@
 <PluginList>
 	<Plugin id="FileDialogEx" name="File Dialog Ex" category="mx/Sub-Controls">
 		<GUI>
-			<Pin name="Path" datatype="string" />
+			<Pin name="File Name" datatype="string" />
 			<Pin name="Extension" datatype="string" />
-			<Pin name="Hide Extensions" datatype="bool" />
-			<Pin name="Rescan" datatype="bool" direction="out"/>
-			<Pin name="Parent" datatype="bool" direction="out" />
-			<Pin name="Choice" datatype="int" direction="out" />
-			<Pin name="Item List" datatype="string" direction="out" />
-			<Pin name="Full Filename Out" datatype="string"/>
-			<Pin name="Filename Out" datatype="string"/>
+			<Pin name="Trigger" datatype="bool" direction="out" />
+			<Pin name="Save Mode" datatype="bool" />
+			<Pin name="Directory" datatype="string" />
 		</GUI>
 	</Plugin>
 </PluginList>
