@@ -2,10 +2,8 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <filesystem> // For path manipulations
 
 using namespace gmpi;
-namespace fs = std::filesystem;
 
 #ifdef _WIN32
 #include <windows.h>
@@ -18,14 +16,7 @@ namespace fs = std::filesystem;
 #include <strings.h> // For wcscasecmp
 #endif
 
-// Helper to extract directory from a full file path
-std::wstring extractDirectory(const std::wstring& fullFilePath)
-{
-    fs::path p(fullFilePath);
-    return p.parent_path().wstring();
-}
-
-// Helper to list files with extension, from a directory path
+// Helper to list files with extension in a directory
 std::vector<std::wstring> listFiles(const std::wstring& directory, const std::wstring& extension)
 {
     std::vector<std::wstring> files;
@@ -90,18 +81,27 @@ std::vector<std::wstring> listFiles(const std::wstring& directory, const std::ws
 
 class ItemListGui final : public SeGuiInvisibleBase
 {
-    void onSetFullFileName()
+    void onSetFileName()
     {
-        auto fullFileName = pinFullFileName.getValue(); // full path to a file
+        auto fullFilePath = pinFileName.getValue(); // e.g., "C:\\Folder\\file.txt"
         auto extension = pinFileExtension.getValue(); // e.g., L".txt"
 
-        // Extract directory from full filename
-        auto dir = extractDirectory(fullFileName);
+        // Extract directory part from fullFilePath
+        size_t lastSlashPos = fullFilePath.find_last_of(L"\\/"); // handles both '/' and '\\'
+        std::wstring directory;
+        if (lastSlashPos != std::wstring::npos)
+        {
+            directory = fullFilePath.substr(0, lastSlashPos);
+        }
+        else
+        {
+            // If no slash found, assume current directory or handle as needed
+            directory = L".";
+        }
 
-        // List files in the extracted directory
-        auto files = listFiles(dir, extension);
+        auto files = listFiles(directory, extension);
 
-        // Prepare comma-separated list of filenames (not full paths)
+        // Prepare list of filenames (excluding path)
         std::wstringstream ss;
         for (size_t i = 0; i < files.size(); ++i)
         {
@@ -115,17 +115,17 @@ class ItemListGui final : public SeGuiInvisibleBase
     void onSetFileExtension()
     {
         // Optional: trigger listing again if extension changes
-        onSetFullFileName();
+        onSetFileName();
     }
 
-    StringGuiPin pinFullFileName;     // The full filename path
-    StringGuiPin pinFileExtension;    // Extension filter, e.g., L".txt"
-    StringGuiPin pinItemList;         // Output list of filenames
+    StringGuiPin pinFileName;       // Full path filename pin
+    StringGuiPin pinFileExtension;  // Extension filter
+    StringGuiPin pinItemList;
 
 public:
     ItemListGui()
     {
-        initializePin(pinFullFileName, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFullFileName));
+        initializePin(pinFileName, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFileName));
         initializePin(pinFileExtension, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFileExtension));
         initializePin(pinItemList);
     }
