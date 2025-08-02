@@ -2,8 +2,10 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <filesystem> // For path manipulations
 
 using namespace gmpi;
+namespace fs = std::filesystem;
 
 #ifdef _WIN32
 #include <windows.h>
@@ -16,7 +18,14 @@ using namespace gmpi;
 #include <strings.h> // For wcscasecmp
 #endif
 
-// Helper to list files with extension
+// Helper to extract directory from a full file path
+std::wstring extractDirectory(const std::wstring& fullFilePath)
+{
+    fs::path p(fullFilePath);
+    return p.parent_path().wstring();
+}
+
+// Helper to list files with extension, from a directory path
 std::vector<std::wstring> listFiles(const std::wstring& directory, const std::wstring& extension)
 {
     std::vector<std::wstring> files;
@@ -81,13 +90,18 @@ std::vector<std::wstring> listFiles(const std::wstring& directory, const std::ws
 
 class ItemListGui final : public SeGuiInvisibleBase
 {
-    void onSetDirectory()
+    void onSetFullFileName()
     {
-        auto dir = pinDirectory.getValue(); // std::wstring
+        auto fullFileName = pinFullFileName.getValue(); // full path to a file
         auto extension = pinFileExtension.getValue(); // e.g., L".txt"
 
+        // Extract directory from full filename
+        auto dir = extractDirectory(fullFileName);
+
+        // List files in the extracted directory
         auto files = listFiles(dir, extension);
 
+        // Prepare comma-separated list of filenames (not full paths)
         std::wstringstream ss;
         for (size_t i = 0; i < files.size(); ++i)
         {
@@ -101,17 +115,17 @@ class ItemListGui final : public SeGuiInvisibleBase
     void onSetFileExtension()
     {
         // Optional: trigger listing again if extension changes
-        onSetDirectory();
+        onSetFullFileName();
     }
 
-    StringGuiPin pinDirectory;
-    StringGuiPin pinFileExtension;
-    StringGuiPin pinItemList;
+    StringGuiPin pinFullFileName;     // The full filename path
+    StringGuiPin pinFileExtension;    // Extension filter, e.g., L".txt"
+    StringGuiPin pinItemList;         // Output list of filenames
 
 public:
     ItemListGui()
     {
-        initializePin(pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetDirectory));
+        initializePin(pinFullFileName, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFullFileName));
         initializePin(pinFileExtension, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFileExtension));
         initializePin(pinItemList);
     }
