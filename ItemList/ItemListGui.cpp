@@ -17,7 +17,22 @@ using namespace gmpi;
 #include <strings.h> // For wcscasecmp
 #endif
 
+bool wcsicmpequals(const wchar_t* s1, const wchar_t* s2)
+{
+    std::locale loc;
+    while (*s1 && *s2)
+    {
+        if (std::tolower(*s1, loc) != std::tolower(*s2, loc))
+            return false;
+        ++s1;
+        ++s2;
+    }
+    return *s1 == *s2;
+}
+
 std::vector<std::wstring> m_fileNames;
+
+
 
 // Helper to list files with extension in a directory
 std::vector<std::wstring> listFiles(const std::wstring& directory, const std::wstring& extension)
@@ -39,7 +54,7 @@ std::vector<std::wstring> listFiles(const std::wstring& directory, const std::ws
         {
             if (extension.empty() ||
                 (filename.length() >= extension.length() &&
-                    _wcsicmp(filename.substr(filename.length() - extension.length()).c_str(), extension.c_str()) == 0))
+                 _wcsicmp(filename.substr(filename.length() - extension.length()).c_str(), extension.c_str()) == 0))
             {
                 files.push_back(filename);
             }
@@ -69,7 +84,7 @@ std::vector<std::wstring> listFiles(const std::wstring& directory, const std::ws
             {
                 if (extension.empty() ||
                     (filename.length() >= extension.length() &&
-                        wcscasecmp(filename.c_str() + filename.length() - extension.length(), extension.c_str()) == 0))
+                     wcscasecmp(filename.c_str() + filename.length() - extension.length(), extension.c_str()) == 0))
                 {
                     files.push_back(filename);
                 }
@@ -161,7 +176,7 @@ public:
             // Optionally ensure extension matches
             if (!extension.empty() && filename.size() >= extension.size())
             {
-                if (!wcsicmp(filename.c_str() + filename.size() - extension.size(), extension.c_str()))
+                if (!wcsicmpequals(filename.c_str() + filename.size() - extension.size(), extension.c_str()))
                 {
                     fullFilename += extension;
                 }
