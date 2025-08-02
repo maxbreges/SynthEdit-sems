@@ -6,6 +6,7 @@
 			<Pin name="File Extension" datatype="string" default="wav"/>
 			<Pin name="Item List" datatype="string" />
 			<Pin name="Choice" datatype="int" />
+			<Pin name="Directory Out" datatype="string"/>
         </GUI>
     </Plugin>
 </PluginList>
