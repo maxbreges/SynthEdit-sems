@@ -161,7 +161,7 @@ public:
             // Optionally ensure extension matches
             if (!extension.empty() && filename.size() >= extension.size())
             {
-                if (_wcsicmp(filename.c_str() + filename.size() - extension.size(), extension.c_str()) != 0)
+                if (!wcsicmp(filename.c_str() + filename.size() - extension.size(), extension.c_str()))
                 {
                     fullFilename += extension;
                 }
