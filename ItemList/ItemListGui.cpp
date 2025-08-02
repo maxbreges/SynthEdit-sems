@@ -17,7 +17,7 @@ using namespace gmpi;
 #include <strings.h> // For wcscasecmp
 #endif
 
-bool wcsicmpequals(const wchar_t* s1, const wchar_t* s2)
+bool wcsicmp_equal(const wchar_t* s1, const wchar_t* s2)
 {
     std::locale loc;
     while (*s1 && *s2)
@@ -176,7 +176,7 @@ public:
             // Optionally ensure extension matches
             if (!extension.empty() && filename.size() >= extension.size())
             {
-                if (!wcsicmpequals(filename.c_str() + filename.size() - extension.size(), extension.c_str()))
+                if (!wcsicmp_equal(filename.c_str() + filename.size() - extension.size(), extension.c_str()))
                 {
                     fullFilename += extension;
                 }
