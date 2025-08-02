@@ -26,7 +26,7 @@ private:
 
 	// Core logic
 	void scanCurrentPath();
-	
+
 	// Member variables  
 	fs::path currentPath;
 	std::vector<fs::directory_entry> entryList;
