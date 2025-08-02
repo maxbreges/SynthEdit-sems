@@ -3,7 +3,7 @@
 	<Plugin id="FileDialogEx" name="File Dialog Ex" category="mx/Sub-Controls">
 		<GUI>
 			<Pin name="File Name" datatype="string" />
-			<Pin name="Extension" datatype="string" />
+			<Pin name="Extension" datatype="string" default="wav"/>
 			<Pin name="Trigger" datatype="bool" direction="out" />
 			<Pin name="Save Mode" datatype="bool" />
 			<Pin name="Directory" datatype="string" />

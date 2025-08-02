@@ -3,6 +3,7 @@
 
 #include "../se_sdk3/mp_sdk_gui2.h"
 #include "../se_sdk3/mp_gui.h"
+#include <filesystem>
 
 class FileDialogExGui : public SeGuiInvisibleBase
 {
