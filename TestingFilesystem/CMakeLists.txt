@@ -13,7 +13,3 @@ build_gmpi_plugin(
       TestingFilesystemGui.cpp
 )
 
-# After the macro, link stdc++fs if needed
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
-    target_link_libraries(${PROJECT_NAME} PRIVATE stdc++fs)
-endif()
