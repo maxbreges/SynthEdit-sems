@@ -17,21 +17,18 @@ class FilePathGui final : public SeGuiInvisibleBase
 
     void onSetTrigger()
     {
-        // When trigger pin is activated, open file dialog
         if (pinTrigger.getValue())  // Assuming true/false trigger
         {
-            // Reset trigger pin to false (assuming active-high trigger)
             pinTrigger = false;
 
 #ifdef __APPLE__
-            // Call to open native file dialog
-            NSString* filename = [self openFileDialog];
+            // Call the method directly
+            NSString* filename = openFileDialog();
             if (filename)
             {
                 // Convert NSString to std::wstring
                 const char* utf8Str = [filename UTF8String];
                 size_t len = strlen(utf8Str);
-                // Allocate buffer for wide string
                 std::wstring wfilename;
                 wfilename.resize(len);
                 mbstowcs(&wfilename[0], utf8Str, len);
@@ -73,7 +70,7 @@ private:
 
         return selectedFile;
     }
-#endif
+    #endif
 };
 
 // Register plugin
