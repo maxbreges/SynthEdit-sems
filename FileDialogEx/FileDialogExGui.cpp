@@ -147,9 +147,9 @@ void FileDialogExGui::OnFileDialogComplete(int32_t result)
 		{
 #if 0
 			// try to find a shorter filename that SynthEdit can find.
-			std::filesystem::path fullPath(filepath);
+			std::experimental::filesystem::path fullPath(filepath);
 
-			std::vector<std::filesystem::path> pathParts;
+			std::vector<std::experimental::filesystem::path> pathParts;
 			for (auto p : fullPath)
 			{
 				pathParts.push_back(p);
@@ -157,12 +157,12 @@ void FileDialogExGui::OnFileDialogComplete(int32_t result)
 
 			std::reverse(pathParts.begin(), pathParts.end());
 
-			std::filesystem::path shortName;
+			std::experimental::filesystem::path shortName;
 			for (auto p : pathParts)
 			{
 				shortName = shortName.empty() ? p : p / shortName;
 
-				const std::filesystem::path r = uiHost.FindResourceU(shortName.string().c_str(), fileclass);
+				const std::experimental::filesystem::path r = uiHost.FindResourceU(shortName.string().c_str(), fileclass);
 				if (filepath == r)
 				{
 					filepath = shortName.string();
