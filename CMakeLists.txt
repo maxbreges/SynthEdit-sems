@@ -135,7 +135,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (VelocityInit)
 #add_subdirectory (FileDialogEx)
 #add_subdirectory (ItemList)
-add_subdirectory (TestingFilesystem)
+#add_subdirectory (TestingFilesystem)
+add_subdirectory (FilePath)
 
 
 
