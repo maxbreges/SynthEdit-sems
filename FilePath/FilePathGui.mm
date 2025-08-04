@@ -32,7 +32,7 @@ class FilePathGui final : public SeGuiInvisibleBase
                 std::wstring wfilename;
                 wfilename.resize(len);
                 mbstowcs(&wfilename[0], utf8Str, len);
-                pinFilePath.setValue(wfilename);
+                pinFilePath = wfilename;
             }
 #endif
         }
