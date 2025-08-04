@@ -12,7 +12,7 @@ class FilePathGui final : public SeGuiInvisibleBase
     void onSetFilePath()
     {
         // Pin file name changed
-        // You can handle updates here if needed
+        // Handle update logic here if needed
     }
 
     void onSetTrigger()
@@ -28,8 +28,13 @@ class FilePathGui final : public SeGuiInvisibleBase
             NSString* filename = [self openFileDialog];
             if (filename)
             {
-                // Convert NSString to std::wstring or std::string
-                std::wstring wfilename((const wchar_t*)[filename UTF8String]);
+                // Convert NSString to std::wstring
+                const char* utf8Str = [filename UTF8String];
+                size_t len = strlen(utf8Str);
+                // Allocate buffer for wide string
+                std::wstring wfilename;
+                wfilename.resize(len);
+                mbstowcs(&wfilename[0], utf8Str, len);
                 pinFilePath.setValue(wfilename);
             }
 #endif
@@ -50,7 +55,6 @@ public:
 private:
     NSString* openFileDialog()
     {
-        // Use Objective-C to open a native macOS file dialog
         __block NSString* selectedFile = nil;
 
         dispatch_sync(dispatch_get_main_queue(), ^ {
