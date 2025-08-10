@@ -189,7 +189,7 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 	}
 
 	std::string filepath = pinFileName;
-	auto parentPath = std::experimental::filesystem::path(filepath).parent_path();
+	auto parentPath = std::filesystem::path(filepath).parent_path();
 	pinDirectory = parentPath;
 	updateItemsList(parentPath.string());
 	nativeFileDialog.setNull(); // release it.
@@ -205,7 +205,7 @@ void FileDialogGui::updateItemsList(const fs::path& directory)
 		for (const auto& entry : fs::directory_iterator(directory))
 		{
 			
-			if (std::experimental::filesystem::is_regular_file(entry.path()))
+			if (std::filesystem::is_regular_file(entry.path()))
 			{
 				auto ext = entry.path().extension().string();
 				if (!ext.empty() && ext[0] == '.') {
@@ -243,7 +243,7 @@ void FileDialogGui::onSetSelectedFile()
 		return;
 	}
 	std::string filepath = pinFileName;
-	std::wstring selectedFile = std::experimental::filesystem::path(filepath).stem().wstring();
+	std::wstring selectedFile = std::filesystem::path(filepath).stem().wstring();
 
 	auto it = std::find(m_fileNames.begin(), m_fileNames.end(), selectedFile);
 
