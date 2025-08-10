@@ -50,8 +50,14 @@ void FileDialogGui::onSetChoice()
 {
 	if (pinChoice >= 0 && pinChoice < m_fileNames.size())
 	{
-		std::wstring filenameOnly = pinDirectory.getValue() + L"\\" + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue(); // Append the extension
+#ifdef _WIN32
+		const wchar_t* pathSeparator = L"\\";
+#else
+		const wchar_t* pathSeparator = L"/";
+#endif
 
+		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue();
+	
 		pinFileName = filenameOnly;
 	}
 	else
