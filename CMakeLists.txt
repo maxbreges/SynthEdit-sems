@@ -137,7 +137,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (ItemList)
 #add_subdirectory (TestingFilesystem)
 #add_subdirectory (FilePath)
-
+add_subdirectory (BoolCounter)
 
 
 

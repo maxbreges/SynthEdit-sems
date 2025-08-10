@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My BoolCounter" name="BoolCounter" category="mx/Sub-Controls/Logic">
+        <GUI>            
+            <Pin name="Bool" datatype="bool" direction="out"/>
+			<Pin name="Count" datatype="int" direction="out"/>
+			<Pin name="Reset" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
