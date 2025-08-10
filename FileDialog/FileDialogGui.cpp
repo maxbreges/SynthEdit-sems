@@ -90,7 +90,7 @@ std::string FileDialogGui::getDefaultFolder(std::wstring extension)
 void FileDialogGui::onSetTrigger()
 {
 	// trigger on mouse-up
-	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
+	if (!pinTrigger && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
 		std::wstring filename = pinFileName;
 		std::wstring file_extension = pinFileExtension;
