@@ -57,7 +57,7 @@ void FileDialogGui::onSetChoice()
 #endif
 
 		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue();
-	
+
 		pinFileName = filenameOnly;
 	}
 	else
@@ -90,10 +90,10 @@ std::string FileDialogGui::getDefaultFolder(std::wstring extension)
 void FileDialogGui::onSetTrigger()
 {
 	// trigger on mouse-up
-	if (!pinTrigger && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
+	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
 		std::wstring filename = pinFileName;
-		std::wstring file_extension = pinFileExtension;
+		//std::wstring file_extension = pinFileExtension;
 
 		IMpGraphicsHostBase* dialogHost = 0;
 		getHost()->queryInterface(SE_IID_GRAPHICS_HOST_BASE, reinterpret_cast<void**>(&dialogHost));
@@ -184,12 +184,10 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 		}
 
 		pinFileName = filepath;
-		//pinDebug = filepath;
-	
+		pinDebug = filepath;
 	}
 
-	std::string filepath = pinFileName;
-	auto parentPath = std::filesystem::path(filepath).parent_path();
+	auto parentPath = fs::path(pinFileName).parent_path();
 	pinDirectory = parentPath;
 	updateItemsList(parentPath.string());
 	nativeFileDialog.setNull(); // release it.
@@ -197,24 +195,21 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 
 void FileDialogGui::updateItemsList(const fs::path& directory)
 {
-	m_fileNames.clear();	
+	m_fileNames.clear(); // Clear previous file names
 
 	if (fs::exists(directory) && fs::is_directory(directory))
 	{
-		pinDebug = L"updateItemList";
 		for (const auto& entry : fs::directory_iterator(directory))
 		{
-			
-			if (std::filesystem::is_regular_file(entry.path()))
+			if (entry.is_regular_file())
 			{
-				auto ext = entry.path().extension().string();
-				if (!ext.empty() && ext[0] == '.') {
-					ext = ext.substr(1);
-				}
+				auto file_extension = entry.path().extension().string().substr(1);
 
-				if (ext == fileext)
+				// Now check if the extension matches the requested one
+				if (file_extension == fileext) // no operator matches these operands 
 				{
-					m_fileNames.push_back(entry.path().stem().wstring());
+					// Store the full filename (with extension) in m_fileNames
+					m_fileNames.push_back(entry.path().stem().wstring()); // Store only the file name without extension
 				}
 			}
 		}
@@ -242,8 +237,8 @@ void FileDialogGui::onSetSelectedFile()
 		pinChoice = -1; // Or another default value to indicate no selection
 		return;
 	}
-	std::string filepath = pinFileName;
-	std::wstring selectedFile = std::filesystem::path(filepath).stem().wstring();
+
+	std::wstring selectedFile = fs::path(pinFileName).stem().wstring();
 
 	auto it = std::find(m_fileNames.begin(), m_fileNames.end(), selectedFile);
 
