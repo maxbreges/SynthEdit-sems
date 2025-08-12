@@ -215,6 +215,9 @@ void FileDialogGui::updateItemsList(const fs::path& directory)
 		}
 	}
 
+	// Sort the list alphabetically
+	std::sort(m_fileNames.begin(), m_fileNames.end());
+
 	// Join file names into a comma-separated list for display
 	std::wstringstream ss;
 
