@@ -29,16 +29,6 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinOpened);
 }
 
-bool iequals(const std::wstring& a, const std::wstring& b)
-{
-	if (a.size() != b.size())
-		return false;
-	return std::equal(a.begin(), a.end(), b.begin(), b.end(),
-		[](wchar_t a_char, wchar_t b_char) {
-			return towlower(a_char) == towlower(b_char);
-		});
-}
-
 void FileDialogGui::onSetItemsList()
 {
 	std::wstring itemsList = pinItemsListIn.getValue();
@@ -52,7 +42,7 @@ void FileDialogGui::onSetItemsList()
 			m_fileNames.push_back(item);
 	}
 
-	pinDebug = L"onSetItemsList()";
+	//pinDebug = L"onSetItemsList()";
 	//onSetChoice();
 }
 
@@ -227,7 +217,7 @@ void FileDialogGui::updateItemsList(const fs::path& directory)
 	}
 
 	// Sort the list alphabetically
-	//std::sort(m_fileNames.begin(), m_fileNames.end());
+	std::sort(m_fileNames.begin(), m_fileNames.end());
 
 	// Join file names into a comma-separated list for display
 	std::wstringstream ss;
