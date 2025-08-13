@@ -196,30 +196,10 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 	nativeFileDialog.setNull(); // release it.
 }
 
-bool caseInsensitiveCompare(const std::wstring& a, const std::wstring& b)
-{
-	auto itA = a.begin();
-	auto itB = b.begin();
-
-	while (itA != a.end() && itB != b.end())
-	{
-		wchar_t chA = towlower(*itA);
-		wchar_t chB = towlower(*itB);
-		if (chA < chB)
-			return true;
-		else if (chA > chB)
-			return false;
-		++itA;
-		++itB;
-	}
-
-	// If all characters are equal so far, shorter string is "less"
-	return a.size() < b.size();
-}
 
 void FileDialogGui::updateItemsList(const fs::path& directory)
 {
-	m_fileNames.clear(); // Clear previous file names
+	m_fileNamesSet.clear();
 
 	if (fs::exists(directory) && fs::is_directory(directory))
 	{
@@ -227,29 +207,27 @@ void FileDialogGui::updateItemsList(const fs::path& directory)
 		{
 			if (entry.is_regular_file())
 			{
-				auto file_extension = entry.path().extension().string().substr(1);
-
-				// Now check if the extension matches the requested one
-				if (iequals(file_extension, fileext)) // no operator matches these operands 
+				auto extension = entry.path().extension().string().substr(1);
+				if (iequals(extension, fileext))
 				{
-					// Store the full filename (with extension) in m_fileNames
-					m_fileNames.push_back(entry.path().stem().wstring()); // Store only the file name without extension
+					// Insert into the set
+					m_fileNamesSet.insert(entry.path().stem().wstring());
 				}
 			}
 		}
 	}
 
-	// Sort the list alphabetically
-	std::sort(m_fileNames.begin(), m_fileNames.end(), caseInsensitiveCompare);
+	// Clear previous list
+	pinItemsList = "";
 
-	// Join file names into a comma-separated list for display
 	std::wstringstream ss;
-
-	for (size_t i = 0; i < m_fileNames.size(); ++i)
+	size_t count = 0;
+	for (const auto& filename : m_fileNamesSet)
 	{
-		ss << m_fileNames[i];
-		if (i < m_fileNames.size() - 1)
-			ss << L","; // Add comma between items
+		if (count > 0)
+			ss << L",";
+		ss << filename;
+		++count;
 	}
 
 	pinItemsList = ss.str();
@@ -259,22 +237,23 @@ void FileDialogGui::updateItemsList(const fs::path& directory)
 
 void FileDialogGui::onSetSelectedFile()
 {
-	if (m_fileNames.empty())
+	if (m_fileNamesSet.empty())
 	{
-		pinChoice = -1; // Or another default value to indicate no selection
+		pinChoice = -1;
 		return;
 	}
 
-	std::wstring selectedFile = fs::path(pinFileName).stem().wstring();
+	std::wstring selectedFileStem = fs::path(pinFileName).stem().wstring();
 
-	auto it = std::find(m_fileNames.begin(), m_fileNames.end(), selectedFile);
-
-	if (it != m_fileNames.end())
+	auto it = m_fileNamesSet.find(selectedFileStem);
+	if (it != m_fileNamesSet.end())
 	{
-		pinChoice = static_cast<int>(std::distance(m_fileNames.begin(), it));
+		// Get the index of the filename in the sorted set
+		auto index = std::distance(m_fileNamesSet.begin(), it);
+		pinChoice = static_cast<int>(index);
 	}
 	else
 	{
-		pinChoice = -1; // File not found, set to -1 (or appropriate value)
+		pinChoice = -1;
 	}
 }
