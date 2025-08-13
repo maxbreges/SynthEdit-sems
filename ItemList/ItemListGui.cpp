@@ -7,30 +7,36 @@ using namespace gmpi;
 
 class ItemListGui final : public SeGuiInvisibleBase
 {
+    // Callbacks for pin changes
     void onSetFileName()
     {
-        // When pinItemList changes, update pinFileName based on selected filename(s)
+        // Your existing code to build the filename from list
+        updateFileNameFromList();
+    }
 
+    void onSetItemList()
+    {
+        // When the list changes, update the filename accordingly
+        updateFileNameFromList();
+    }
+
+    void updateFileNameFromList()
+    {
         std::wstring currentFullPath = pinFileName.getValue();
 
-        // Find the last occurrence of '/' or '\\' to identify the directory part
+        // Extract directory from currentFullPath
         size_t lastSlashPos = currentFullPath.find_last_of(L"/\\");
         std::wstring directory;
-        std::wstring filenamePart;
-
         if (lastSlashPos != std::wstring::npos)
         {
             directory = currentFullPath.substr(0, lastSlashPos);
-            filenamePart = currentFullPath.substr(lastSlashPos + 1);
         }
         else
         {
-            // No directory info in current path, default to current working directory or empty
-            directory = L""; // Or set to your default directory
-            filenamePart = currentFullPath;
+            directory = L""; // Default or leave empty
         }
 
-        // Parse the comma-separated list
+        // Parse the list of filenames
         std::wstringstream ss(pinItemList.getValue());
         std::wstring item;
         std::vector<std::wstring> filenames;
@@ -46,34 +52,30 @@ class ItemListGui final : public SeGuiInvisibleBase
             filenames.push_back(item);
         }
 
-        // For demo, pick the first filename or handle selection differently
+        // For demonstration, pick the first filename
         if (!filenames.empty())
         {
-            std::wstring selectedFile = filenames[0]; // Or select based on some criteria
+            std::wstring selectedFile = filenames[0];
 
             // Construct full path
-            // Use the extracted directory if available, fallback to current directory if not
-            std::wstring dirToUse = directory.empty() ? L"" : directory;
-            std::wstring pathSeparator = L"/";
-
-            std::wstring fullPath = dirToUse + pathSeparator + selectedFile;
+            std::wstring fullPath = directory + L"/" + selectedFile;
             pinFileName = fullPath;
         }
         else
         {
-            // No items, clear filename
             pinFileName = L"";
         }
     }
 
-    StringGuiPin pinFileName;       // Full path filename pin
-    StringGuiPin pinItemList;       // Comma-separated list of filenames
-
 public:
+    StringGuiPin pinFileName;  // Full path filename pin
+    StringGuiPin pinItemList;  // Comma-separated list of filenames
+
     ItemListGui()
     {
+        // Initialize with callbacks
         initializePin(pinFileName, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFileName));
-        initializePin(pinItemList);
+        initializePin(pinItemList, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetItemList));
     }
 };
 
