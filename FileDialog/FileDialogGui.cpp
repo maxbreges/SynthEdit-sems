@@ -29,6 +29,16 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinOpened);
 }
 
+bool iequals(const std::wstring& a, const std::wstring& b)
+{
+	if (a.size() != b.size())
+		return false;
+	return std::equal(a.begin(), a.end(), b.begin(), b.end(),
+		[](wchar_t a_char, wchar_t b_char) {
+			return towlower(a_char) == towlower(b_char);
+		});
+}
+
 void FileDialogGui::onSetItemsList()
 {
 	std::wstring itemsList = pinItemsListIn.getValue();
@@ -129,6 +139,16 @@ void FileDialogGui::onSetTrigger()
 
 std::string fileext;
 
+bool iequals(const std::string& a, const std::string& b)
+{
+	if (a.size() != b.size())
+		return false;
+	return std::equal(a.begin(), a.end(), b.begin(), b.end(),
+		[](char a_char, char b_char) {
+			return tolower(a_char) == tolower(b_char);
+		});
+}
+
 void FileDialogGui::OnFileDialogComplete(int32_t result)
 {
 	pinOpened = false;
@@ -145,30 +165,21 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 		fileext = GetExtension(filepath);
 		const char* fileclass = nullptr;
 
-		if (fileext == "sf2" || fileext == "sfz")
+		if (iequals(fileext, "sf2") || iequals(fileext, "sfz"))
 		{
 			fileclass = "Instrument";
 		}
-		else
+		else if (iequals(fileext, "png") || iequals(fileext, "bmp") || iequals(fileext, "jpg"))
 		{
-			if (fileext == "png" || fileext == "bmp" || fileext == "jpg")
-			{
-				fileclass = "Image";
-			}
-			else
-			{
-				if (fileext == "wav")
-				{
-					fileclass = "Audio";
-				}
-				else
-				{
-					if (fileext == "mid")
-					{
-						fileclass = "MIDI";
-					}
-				}
-			}
+			fileclass = "Image";
+		}
+		else if (iequals(fileext, "wav"))
+		{
+			fileclass = "Audio";
+		}
+		else if (iequals(fileext, "mid"))
+		{
+			fileclass = "MIDI";
 		}
 
 		if (fileclass)
@@ -179,7 +190,7 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 
 			if (filepath == r)
 			{
-				//filepath = shortName;
+				filepath = shortName;
 			}
 		}
 
@@ -206,7 +217,7 @@ void FileDialogGui::updateItemsList(const fs::path& directory)
 				auto file_extension = entry.path().extension().string().substr(1);
 
 				// Now check if the extension matches the requested one
-				if (file_extension == fileext) // no operator matches these operands 
+				if (iequals(file_extension, fileext)) // no operator matches these operands 
 				{
 					// Store the full filename (with extension) in m_fileNames
 					m_fileNames.push_back(entry.path().stem().wstring()); // Store only the file name without extension
@@ -216,7 +227,7 @@ void FileDialogGui::updateItemsList(const fs::path& directory)
 	}
 
 	// Sort the list alphabetically
-	std::sort(m_fileNames.begin(), m_fileNames.end());
+	//std::sort(m_fileNames.begin(), m_fileNames.end());
 
 	// Join file names into a comma-separated list for display
 	std::wstringstream ss;
