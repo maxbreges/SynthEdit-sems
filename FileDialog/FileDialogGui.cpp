@@ -34,14 +34,14 @@ FileDialogGui::FileDialogGui() :
 void FileDialogGui::onSetItemsList()
 {
 	std::wstring itemsList = pinItemsListIn.getValue();
-	m_fileNames.clear();
+	m_fileNamesSet.clear();
 
 	std::wistringstream wss(itemsList);
 	std::wstring item;
 
 	while (std::getline(wss, item, L',')) {
 		if (!item.empty()) // Avoid empty entries
-			m_fileNames.push_back(item);
+			m_fileNamesSet.insert(item);
 	}
 
 	//pinDebug = L"onSetItemsList()";
@@ -50,15 +50,17 @@ void FileDialogGui::onSetItemsList()
 
 void FileDialogGui::onSetChoice()
 {
-	if (pinChoice >= 0 && pinChoice < m_fileNames.size())
+	if (pinChoice >= 0 && pinChoice < static_cast<int>(m_fileNamesSet.size()))
 	{
 #ifdef _WIN32
 		const wchar_t* pathSeparator = L"\\";
 #else
 		const wchar_t* pathSeparator = L"/";
 #endif
+		auto it = std::next(m_fileNamesSet.begin(), pinChoice);
+		auto element = *it; // element is a std::wstring
 
-		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + m_fileNames[pinChoice] + L"." + pinFileExtension.getValue();
+		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + element + L"." + pinFileExtension.getValue();
 
 		pinFileName = filenameOnly;
 	}
@@ -70,7 +72,7 @@ void FileDialogGui::onSetChoice()
 
 	// Combine file names into a single string for debug purposes
 	std::wstringstream debugStream;
-	for (const auto& name : m_fileNames) {
+	for (const auto& name : m_fileNamesSet) {
 		debugStream << name << L","; // Adds a comma for separation
 	}
 

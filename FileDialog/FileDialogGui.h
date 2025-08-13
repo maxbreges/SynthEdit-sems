@@ -37,7 +37,7 @@ class FileDialogGui : public SeGuiInvisibleBase
 {
 	bool m_prev_trigger;
 	GmpiGui::FileDialog nativeFileDialog;
-	std::vector<std::wstring> m_fileNames;
+	//std::vector<std::wstring> m_fileNames;
 	std::set<std::wstring, ci_wstring_compare> m_fileNamesSet;
 
 public:
