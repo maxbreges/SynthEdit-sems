@@ -5,6 +5,8 @@
 #include "../shared/string_utilities.h"
 #include "../se_sdk3/MpString.h"
 #include <sstream>
+#include <algorithm> // for std::sort
+#include <cctype>    // for tolower
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -194,6 +196,27 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 	nativeFileDialog.setNull(); // release it.
 }
 
+bool caseInsensitiveCompare(const std::wstring& a, const std::wstring& b)
+{
+	auto itA = a.begin();
+	auto itB = b.begin();
+
+	while (itA != a.end() && itB != b.end())
+	{
+		wchar_t chA = towlower(*itA);
+		wchar_t chB = towlower(*itB);
+		if (chA < chB)
+			return true;
+		else if (chA > chB)
+			return false;
+		++itA;
+		++itB;
+	}
+
+	// If all characters are equal so far, shorter string is "less"
+	return a.size() < b.size();
+}
+
 void FileDialogGui::updateItemsList(const fs::path& directory)
 {
 	m_fileNames.clear(); // Clear previous file names
@@ -217,7 +240,7 @@ void FileDialogGui::updateItemsList(const fs::path& directory)
 	}
 
 	// Sort the list alphabetically
-	std::sort(m_fileNames.begin(), m_fileNames.end());
+	std::sort(m_fileNames.begin(), m_fileNames.end(), caseInsensitiveCompare);
 
 	// Join file names into a comma-separated list for display
 	std::wstringstream ss;
