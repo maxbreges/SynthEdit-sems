@@ -4,7 +4,7 @@
         <GUI>			
             <Pin name="File Name In" datatype="string"/>
 			<Pin name="Item List" datatype="string" />
-			<Pin name="Debug" datatype="string" direction="out"/>
+			<Pin name="Extension" datatype="string" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>

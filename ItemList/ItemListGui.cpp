@@ -13,7 +13,7 @@ class ItemListGui final : public SeGuiInvisibleBase
 {
     void onSetFileName()
     {
-        pinDebug = "onSetFileName()";
+        //pinDebug = "onSetFileName()";
 
         std::string filename = pinFileName;
 
@@ -32,9 +32,7 @@ class ItemListGui final : public SeGuiInvisibleBase
                 [](unsigned char c) { return std::tolower(c); });
 
             for (const auto& entry : fs::directory_iterator(dirPath))
-            {
-                pinDebug = "Iterator";
-
+            {               
                 if (entry.is_regular_file())
                 {
                     std::string fname = entry.path().filename().string();
@@ -83,7 +81,7 @@ class ItemListGui final : public SeGuiInvisibleBase
             }
 
             pinItemList = ss.str();
-            pinDebug = "updated";
+            pinDebug = targetExt;
         }
         else
         {
