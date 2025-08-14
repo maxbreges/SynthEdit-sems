@@ -17,6 +17,7 @@ class CheckingStringOnMacGui final : public SeGuiInvisibleBase
         fileNames.clear();
 
         std::string filename = pinFileName;
+        pinFileNameOut = pinFileName;
 
         fs::path filePath(filename);
         fs::path dirPath = filePath.parent_path();     
