@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My CheckingStringOnMac" name="CheckingStringOnMac" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="File Name In" datatype="string"/>
+            <Pin name="Item List" datatype="string"/>
+            <Pin name="Debug" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>

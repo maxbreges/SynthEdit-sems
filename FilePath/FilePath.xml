@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<PluginList>
-    <Plugin id="FilePath" name="File Path" category="mx/Sub-Controls">
-        <GUI>
-            <Pin name="File Path" datatype="string"/>
-            <Pin name="Trigger" datatype="bool" direction="out"/>
-        </GUI>
-    </Plugin>
-</PluginList>
