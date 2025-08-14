@@ -1,81 +1,104 @@
 #include "mp_sdk_gui2.h"
-#include <string>
+#include <filesystem>
 #include <vector>
+#include <algorithm>
+#include <string>
 #include <sstream>
+#include <cctype>
 
 using namespace gmpi;
+namespace fs = std::filesystem;
 
 class ItemListGui final : public SeGuiInvisibleBase
-{
-    // Callbacks for pin changes
+{  
     void onSetFileName()
     {
-        // Your existing code to build the filename from list
-        updateFileNameFromList();
-    }
+        pinDebug = "onSetFileName()";
 
-    void onSetItemList()
-    {
-        // When the list changes, update the filename accordingly
-        updateFileNameFromList();
-    }
+        auto filename = pinFileName.getValue();        
 
-    void updateFileNameFromList()
-    {
-        std::wstring currentFullPath = pinFileName.getValue();
+        fs::path filePath(filename);
+        fs::path dirPath = filePath.parent_path();
 
-        // Extract directory from currentFullPath
-        size_t lastSlashPos = currentFullPath.find_last_of(L"/\\");
-        std::wstring directory;
-        if (lastSlashPos != std::wstring::npos)
+        if (fs::exists(dirPath) && fs::is_directory(dirPath))
         {
-            directory = currentFullPath.substr(0, lastSlashPos);
-        }
-        else
-        {
-            directory = L""; // Default or leave empty
-        }
+            std::vector<std::wstring> fileNames;
 
-        // Parse the list of filenames
-        std::wstringstream ss(pinItemList.getValue());
-        std::wstring item;
-        std::vector<std::wstring> filenames;
-        while (std::getline(ss, item, L','))
-        {
-            // Remove leading/trailing spaces
-            size_t start = item.find_first_not_of(L" \t");
-            size_t end = item.find_last_not_of(L" \t");
-            if (start != std::wstring::npos && end != std::wstring::npos)
+            // Get extension of the selected file (lowercase)
+            std::wstring targetExt = filePath.extension().native();
+
+            for (const auto& entry : fs::directory_iterator(dirPath))
             {
-                item = item.substr(start, end - start + 1);
+                pinDebug = "Iterator";
+
+                if (entry.is_regular_file())
+                {
+                    std::wstring fname = entry.path().filename().native();
+
+                    // Filter by extension (case-insensitive)
+                    std::wstring ext = entry.path().extension().native();
+
+                    // Convert extensions to lowercase for comparison
+                    auto toLower = [](wchar_t c) { return std::tolower(c); };
+
+                    std::wstring extLower(ext.size(), L'\0');
+                    std::transform(ext.begin(), ext.end(), extLower.begin(), toLower);
+
+                    std::wstring targetExtLower(targetExt.size(), L'\0');
+                    std::transform(targetExt.begin(), targetExt.end(), targetExtLower.begin(), toLower);
+
+                    if (extLower == targetExtLower)
+                    {
+                        // Exclude hidden files (optional)
+                        if (fname.front() != L'.')
+                        {
+                            fileNames.push_back(fname);
+                        }
+                    }
+                }
             }
-            filenames.push_back(item);
-        }
 
-        // For demonstration, pick the first filename
-        if (!filenames.empty())
-        {
-            std::wstring selectedFile = filenames[0];
+            // Sort alphabetically, case-insensitive
+            std::sort(fileNames.begin(), fileNames.end(),
+                [](const std::wstring& a, const std::wstring& b)
+                {
+                    return std::lexicographical_compare(
+                        a.begin(), a.end(),
+                        b.begin(), b.end(),
+                        [](wchar_t ac, wchar_t bc)
+                        {
+                            return std::tolower(ac) < std::tolower(bc);
+                        });
+                });
 
-            // Construct full path
-            std::wstring fullPath = directory + L"/" + selectedFile;
-            pinFileName = fullPath;
+            // Join into comma-separated string
+            std::wstringstream ss;
+            for (size_t i = 0; i < fileNames.size(); ++i)
+            {
+                ss << fileNames[i];
+                if (i != fileNames.size() - 1)
+                    ss << L", ";
+            }
+
+            pinItemList = ss.str();
+            pinDebug = "updated";
         }
         else
         {
-            pinFileName = L"";
+            pinItemList = L"";
         }
     }
+
+    StringGuiPin pinFileName;  // Full path filename pin
+    StringGuiPin pinItemList;  // List of filenames
+    StringGuiPin pinDebug;
 
 public:
-    StringGuiPin pinFileName;  // Full path filename pin
-    StringGuiPin pinItemList;  // Comma-separated list of filenames
-
     ItemListGui()
     {
-        // Initialize with callbacks
         initializePin(pinFileName, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFileName));
-        initializePin(pinItemList, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetItemList));
+        initializePin(pinItemList);
+        initializePin(pinDebug, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFileName));
     }
 };
 
