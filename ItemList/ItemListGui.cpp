@@ -10,22 +10,26 @@ using namespace gmpi;
 namespace fs = std::filesystem;
 
 class ItemListGui final : public SeGuiInvisibleBase
-{  
+{
     void onSetFileName()
     {
         pinDebug = "onSetFileName()";
 
-        auto filename = pinFileName.getValue();        
+        std::string filename = pinFileName;
 
         fs::path filePath(filename);
         fs::path dirPath = filePath.parent_path();
 
         if (fs::exists(dirPath) && fs::is_directory(dirPath))
         {
-            std::vector<std::wstring> fileNames;
+            std::vector<std::string> fileNames;
 
             // Get extension of the selected file (lowercase)
-            std::wstring targetExt = filePath.extension().native();
+            std::string targetExt = filePath.extension().string();
+
+            // Convert targetExt to lowercase
+            std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
+                [](unsigned char c) { return std::tolower(c); });
 
             for (const auto& entry : fs::directory_iterator(dirPath))
             {
@@ -33,24 +37,21 @@ class ItemListGui final : public SeGuiInvisibleBase
 
                 if (entry.is_regular_file())
                 {
-                    std::wstring fname = entry.path().filename().native();
+                    std::string fname = entry.path().filename().string();
 
                     // Filter by extension (case-insensitive)
-                    std::wstring ext = entry.path().extension().native();
+                    std::string ext = entry.path().extension().string();
 
                     // Convert extensions to lowercase for comparison
-                    auto toLower = [](wchar_t c) { return std::tolower(c); };
+                    std::transform(ext.begin(), ext.end(), ext.begin(),
+                        [](unsigned char c) { return std::tolower(c); });
 
-                    std::wstring extLower(ext.size(), L'\0');
-                    std::transform(ext.begin(), ext.end(), extLower.begin(), toLower);
+                    // Also convert targetExt to lowercase (already done above)
 
-                    std::wstring targetExtLower(targetExt.size(), L'\0');
-                    std::transform(targetExt.begin(), targetExt.end(), targetExtLower.begin(), toLower);
-
-                    if (extLower == targetExtLower)
+                    if (ext == targetExt)
                     {
                         // Exclude hidden files (optional)
-                        if (fname.front() != L'.')
+                        if (!fname.empty() && fname.front() != '.')
                         {
                             fileNames.push_back(fname);
                         }
@@ -60,24 +61,24 @@ class ItemListGui final : public SeGuiInvisibleBase
 
             // Sort alphabetically, case-insensitive
             std::sort(fileNames.begin(), fileNames.end(),
-                [](const std::wstring& a, const std::wstring& b)
+                [](const std::string& a, const std::string& b)
                 {
                     return std::lexicographical_compare(
                         a.begin(), a.end(),
                         b.begin(), b.end(),
-                        [](wchar_t ac, wchar_t bc)
+                        [](unsigned char ac, unsigned char bc)
                         {
                             return std::tolower(ac) < std::tolower(bc);
                         });
                 });
 
             // Join into comma-separated string
-            std::wstringstream ss;
+            std::stringstream ss;
             for (size_t i = 0; i < fileNames.size(); ++i)
             {
                 ss << fileNames[i];
                 if (i != fileNames.size() - 1)
-                    ss << L", ";
+                    ss << ", ";
             }
 
             pinItemList = ss.str();
@@ -85,7 +86,7 @@ class ItemListGui final : public SeGuiInvisibleBase
         }
         else
         {
-            pinItemList = L"";
+            pinItemList = "";
         }
     }
 
