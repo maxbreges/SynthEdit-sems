@@ -98,7 +98,7 @@ public:
     {
         initializePin(pinFileName, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFileName));
         initializePin(pinItemList);
-        initializePin(pinDebug, static_cast<MpGuiBaseMemberPtr2>(&ItemListGui::onSetFileName));
+        initializePin(pinDebug);
     }
 };
 
