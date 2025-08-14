@@ -53,7 +53,8 @@ class ItemListGui final : public SeGuiInvisibleBase
                         // Exclude hidden files (optional)
                         if (!fname.empty() && fname.front() != '.')
                         {
-                            fileNames.push_back(fname);
+                            std::string filenameWithoutExt = fname.substr(0, fname.size() - ext.size());
+                            fileNames.push_back(filenameWithoutExt);
                         }
                     }
                 }
