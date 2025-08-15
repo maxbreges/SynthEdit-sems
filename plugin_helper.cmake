@@ -68,6 +68,8 @@ set_plugin_standard_srcs(
 
 include (GenerateExportHeader)
 add_library(${PROJECT_NAME} MODULE ${srcs} ${sdk_srcs} ${resource_srcs})
+# Link against Gmpi32 framework/library
+target_link_libraries(${PROJECT_NAME} PRIVATE Gmpi32)
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE 
   $<$<CONFIG:Debug>:_DEBUG>
