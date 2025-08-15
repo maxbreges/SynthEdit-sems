@@ -60,8 +60,6 @@ void FileDialogGui::onSetChoice()
 		auto it = std::next(m_fileNamesSet.begin(), pinChoice);
 		auto element = *it; // element is a std::wstring
 
-		pinDebug = element;
-
 		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + element + L"." + pinFileExtension.getValue();
 
 		pinFileName = filenameOnly;
@@ -83,8 +81,7 @@ void FileDialogGui::onSetChoice()
 		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
 	}
 
-	//pinDebug = debugOutput;
-
+	pinDebug = debugOutput;
 }
 
 std::string FileDialogGui::getDefaultFolder(std::wstring extension)
@@ -106,7 +103,8 @@ void FileDialogGui::onSetTrigger()
 		getHost()->queryInterface(SE_IID_GRAPHICS_HOST_BASE, reinterpret_cast<void**>(&dialogHost));
 
 		if (dialogHost != 0)
-		{			
+		{
+			pinOpened = true;
 			int dialogMode = (int)pinSaveMode;
 			dialogHost->createFileDialog(dialogMode, nativeFileDialog.GetAddressOf());
 
@@ -116,13 +114,13 @@ void FileDialogGui::onSetTrigger()
 
 				auto filename = pinFileName.getValue();
 				if (!filename.empty())
-				{					
+				{
 					filename = uiHost.resolveFilename(filename);
-					nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));					
+					nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
 				}
 				else
 				{
-					nativeFileDialog.setInitialDirectory(getDefaultFolder(pinFileExtension));					
+					nativeFileDialog.setInitialDirectory(getDefaultFolder(pinFileExtension));
 				}
 
 				nativeFileDialog.ShowAsync([this](int32_t result) -> void { this->OnFileDialogComplete(result); });
@@ -147,6 +145,8 @@ bool iequals(const std::string& a, const std::string& b)
 
 void FileDialogGui::OnFileDialogComplete(int32_t result)
 {
+	pinOpened = false;
+
 	if (result != gmpi::MP_OK)
 	{
 		return;
@@ -179,7 +179,7 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 		if (fileclass)
 		{
 			auto shortName = StripPath(filepath);
-			
+
 			const auto r = uiHost.FindResourceU(shortName.c_str(), fileclass);
 
 			if (filepath == r)
@@ -189,16 +189,7 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 		}
 
 		pinFileName = filepath;
-		
-
-		if (!filepath.empty())
-		{
-			pinOpened = 1;
-		}
-		else
-		{
-			pinOpened = 0;			
-		}
+		pinDebug = filepath;
 	}
 
 	auto parentPath = fs::path(pinFileName).parent_path();
