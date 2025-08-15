@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My IntChange" name="onSetIntVal Pulse" category="mx/Tools" >
+		<Parameters>
+			<Parameter id="0" datatype="int" name="Preset ID" metadata=",,127,0"/>
+		</Parameters>			
+        <Audio>
+            <Pin name="Int Val" datatype="int" metadata=",,127,0"/>
+            <Pin name="Bool Val" datatype="bool" direction="out"/>
+			<Pin name="Pulse Length ms" datatype="int" default="200" isMinimised="true"/>
+			<Pin name="Parameter" datatype="int" parameterId="0"/>
+        </Audio>
+    </Plugin>
+</PluginList>

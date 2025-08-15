@@ -139,7 +139,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (FilePath)
 #add_subdirectory (BoolCounter)
 #add_subdirectory (CheckingStringOnMac)
-add_subdirectory (Location)
+add_subdirectory (IntChange)
 
 
 
