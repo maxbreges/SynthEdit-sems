@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My Location" name="Location" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Path" datatype="string" direction="out" />
+        </GUI>
+    </Plugin>
+</PluginList>
