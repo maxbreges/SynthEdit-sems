@@ -67,8 +67,12 @@ set_plugin_standard_srcs(
 )
 
 include (GenerateExportHeader)
+
+project(${PROJECT_NAME})
+
 add_library(${PROJECT_NAME} MODULE ${srcs} ${sdk_srcs} ${resource_srcs})
-# Link against CoreFoundation framework on macOS
+
+# Link CoreFoundation on macOS
 if(APPLE)
     find_library(COREFOUNDATION_LIBRARY CoreFoundation)
     target_link_libraries(${PROJECT_NAME} PRIVATE ${COREFOUNDATION_LIBRARY})
