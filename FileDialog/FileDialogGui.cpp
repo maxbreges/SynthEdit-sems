@@ -50,11 +50,11 @@ void FileDialogGui::onSetChoice()
 {
 	if (pinChoice >= 0 && pinChoice < static_cast<int>(m_fileNamesSet.size()))
 	{
-#ifdef _WIN32
+/*#ifdef _WIN32
 		const wchar_t* pathSeparator = L"\\";
 #else
-		const char_t* pathSeparator = L"/";
-#endif
+		const char_t* pathSeparator = "/";
+#endif*/
 		auto it = std::next(m_fileNamesSet.begin(), pinChoice);
 		auto element = *it; // element is a std::wstring		
 
