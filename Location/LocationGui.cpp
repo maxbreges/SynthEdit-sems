@@ -1,10 +1,11 @@
 #include "mp_sdk_gui2.h"
+#include <limits.h> // Add this at the top
 
 #ifdef _WIN32
 #include <windows.h>
 #include <string>
-#ifndef MAX_PATH
-#define MAX_PATH 260
+#ifndef PATH_MAX
+#define PATH_MAX 260
 #endif
 #endif
 
@@ -46,11 +47,11 @@ public:
 private:
     std::string getModulePath()
     {
-        char buffer[MAX_PATH];
+        char buffer[PATH_MAX];
 
 #ifdef _WIN32
-        DWORD length = GetModuleFileNameA(NULL, buffer, MAX_PATH);
-        if (length == 0 || length == MAX_PATH)
+        DWORD length = GetModuleFileNameA(NULL, buffer, PATH_MAX);
+        if (length == 0 || length == PATH_MAX)
             return "";
         return std::string(buffer, length);
 #elif __APPLE__
