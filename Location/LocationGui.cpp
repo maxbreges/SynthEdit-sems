@@ -1,80 +1,61 @@
 #include "mp_sdk_gui2.h"
-#include <limits.h> // Add this at the top
 
 #ifdef _WIN32
 #include <windows.h>
-#include <string>
-#ifndef PATH_MAX
-#define PATH_MAX 260
-#endif
-#endif
-
-#ifdef __APPLE__
-#include <mach-o/dyld.h>
-#include <limits.h>
-#include <string>
+#elif __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 using namespace gmpi;
 
 class LocationGui final : public SeGuiInvisibleBase
 {
-    void onSetPath()
+    void onSetPathOut()
     {
-        // pinPath changed
+        std::string path;
+
+#ifdef _WIN32
+        HMODULE hModule = NULL;
+        // Get handle of current module (DLL)
+        hModule = GetModuleHandleA(NULL);
+        char buffer[MAX_PATH];
+        if (GetModuleFileNameA(hModule, buffer, MAX_PATH))
+        {
+            path = std::string(buffer);
+        }
+#elif __APPLE__
+        CFURLRef pluginURL = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+        char buffer[PATH_MAX];
+        if (CFURLGetFileSystemRepresentation(pluginURL, true, (UInt8*)buffer, PATH_MAX))
+        {
+            path = std::string(buffer);
+        }
+        CFRelease(pluginURL);
+#else
+        path = "Platform not supported.";
+#endif
+
+        pinPathOut = path;
     }
 
-    StringGuiPin pinPath;
+    StringGuiPin pinPathOut;
 
 public:
     LocationGui()
     {
-        initializePin(pinPath, static_cast<MpGuiBaseMemberPtr2>(&LocationGui::onSetPath));
-        // Don't set pinPath here if it causes issues
+        initializePin(pinPathOut, static_cast<MpGuiBaseMemberPtr2>(&LocationGui::onSetPathOut));
     }
 
-   int32_t initialize()
+    int32_t initialize()
     {
-        // Call this after construction
-        std::string path = getModulePath();
-        if (!path.empty())
-        {
-            pinPath = path;
-        }
+        // Call onSetPathOut() once at construction to initialize the path
+        onSetPathOut();
+
         return gmpi::MP_OK;
-    }
-
-private:
-    std::string getModulePath()
-    {
-        char buffer[PATH_MAX];
-
-#ifdef _WIN32
-        DWORD length = GetModuleFileNameA(NULL, buffer, PATH_MAX);
-        if (length == 0 || length == PATH_MAX)
-            return "";
-        return std::string(buffer, length);
-#elif __APPLE__
-        uint32_t size = sizeof(buffer);
-        if (_NSGetExecutablePath(buffer, &size) != 0)
-        {
-            std::vector<char> buf(size);
-            if (_NSGetExecutablePath(buf.data(), &size) == 0)
-                return std::string(buf.data(), size);
-            else
-                return "";
-        }
-        else
-        {
-            return std::string(buffer, size);
-        }
-#else
-        return "";
-#endif
     }
 };
 
 namespace
 {
-    auto r = Register<LocationGui>::withId(L"My Location");
+    auto r = Register<LocationGui>::withId(L"Location");
 }
