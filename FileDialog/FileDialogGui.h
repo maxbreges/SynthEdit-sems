@@ -63,7 +63,7 @@ public:
 	StringGuiPin pinDirectory;
 	StringGuiPin pinDebug;
 	StringGuiPin pinItemsListIn;
-	BoolGuiPin pinOpened;
+	FloatGuiPin pinOpened;
 };
 
 #endif
