@@ -50,23 +50,16 @@ void FileDialogGui::onSetChoice()
 {
 	if (pinChoice >= 0 && pinChoice < static_cast<int>(m_fileNamesSet.size()))
 	{
-/*#ifdef _WIN32
+#ifdef _WIN32
 		const wchar_t* pathSeparator = L"\\";
 #else
-		const char_t* pathSeparator = "/";
-#endif*/
+		const wchar_t* pathSeparator = L"/";
+#endif
 		auto it = std::next(m_fileNamesSet.begin(), pinChoice);
 		auto element = *it; // element is a std::wstring		
 
-		std::string dir = pinDirectory;
-		std::wstringstream ss;
-		ss << element;
-		pinDebug = ss.str();
-		std::string fname = pinDebug;
-		std::string ext = pinFileExtension;
-
-		std::string filenameOnly = dir + "/" + fname + "." + ext;
-		pinFileNameOut = fname;
+		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + element + L"." + pinFileExtension.getValue();
+		
 		pinFileName = filenameOnly;
 	}
 	else
@@ -74,6 +67,9 @@ void FileDialogGui::onSetChoice()
 		// Possibly clear the filename if the choice is out of range
 		pinFileName = L"";
 	}
+
+	std::wstring selectedFileStem = fs::path(pinFileName).stem().wstring();
+	pinFileNameOut = selectedFileStem;
 
 /*	// Combine file names into a single string for debug purposes
 	std::wstringstream debugStream;
@@ -255,7 +251,7 @@ void FileDialogGui::onSetSelectedFile()
 	}
 
 	std::wstring selectedFileStem = fs::path(pinFileName).stem().wstring();
-
+	
 	auto it = m_fileNamesSet.find(selectedFileStem);
 	if (it != m_fileNamesSet.end())
 	{
