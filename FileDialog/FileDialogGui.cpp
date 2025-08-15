@@ -29,6 +29,7 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinDebug);
 	initializePin(pinItemsListIn, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetItemsList));
 	initializePin(pinOpened);
+	initializePin(pinFileNameOut);
 }
 
 void FileDialogGui::onSetItemsList()
@@ -52,7 +53,7 @@ void FileDialogGui::onSetChoice()
 #ifdef _WIN32
 		const wchar_t* pathSeparator = L"\\";
 #else
-		const wchar_t* pathSeparator = L"/";
+		const char_t* pathSeparator = L"/";
 #endif
 		auto it = std::next(m_fileNamesSet.begin(), pinChoice);
 		auto element = *it; // element is a std::wstring		
@@ -61,10 +62,11 @@ void FileDialogGui::onSetChoice()
 		std::wstringstream ss;
 		ss << element;
 		pinDebug = ss.str();
+		std::string fname = pinDebug;
 		std::string ext = pinFileExtension;
 
-		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + element + L"." + pinFileExtension.getValue();
-		//pinDebug = element;
+		std::string filenameOnly = dir + "/" + fname + "." + ext;
+		pinFileNameOut = fname;
 		pinFileName = filenameOnly;
 	}
 	else

@@ -64,6 +64,7 @@ public:
 	StringGuiPin pinDebug;
 	StringGuiPin pinItemsListIn;
 	FloatGuiPin pinOpened;
+	StringGuiPin pinFileNameOut;
 };
 
 #endif
