@@ -43,9 +43,6 @@ void FileDialogGui::onSetItemsList()
 		if (!item.empty()) // Avoid empty entries
 			m_fileNamesSet.insert(item);
 	}
-
-	//pinDebug = L"onSetItemsList()";
-	//onSetChoice();
 }
 
 void FileDialogGui::onSetChoice()
@@ -82,9 +79,6 @@ void FileDialogGui::onSetChoice()
 	if (!debugOutput.empty()) {
 		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
 	}
-
-	//pinDebug = debugOutput;
-
 }
 
 std::string FileDialogGui::getDefaultFolder(std::wstring extension)

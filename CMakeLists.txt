@@ -108,7 +108,6 @@ include(plugin_helper.cmake)
 #add_subdirectory (FloatEntry)
 #add_subdirectory (MidiToHex)
 #add_subdirectory (BoolTriggerGui)
-add_subdirectory (FileDialog)
 #add_subdirectory (StepCounterGui)
 #add_subdirectory (StringRight)
 #add_subdirectory (GrayscaleHex)
@@ -138,8 +137,8 @@ add_subdirectory (FileDialog)
 #add_subdirectory (FilePath)
 #add_subdirectory (BoolCounter)
 #add_subdirectory (CheckingStringOnMac)
-add_subdirectory (IntChange)
-
+#add_subdirectory (IntChange)
+add_subdirectory (FileDialog)
 
 
 
