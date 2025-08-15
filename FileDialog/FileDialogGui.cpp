@@ -57,8 +57,14 @@ void FileDialogGui::onSetChoice()
 		auto it = std::next(m_fileNamesSet.begin(), pinChoice);
 		auto element = *it; // element is a std::wstring		
 
+		std::string dir = pinDirectory;
+		std::wstringstream ss;
+		ss << element;
+		pinDebug = ss.str();
+		std::string ext = pinFileExtension;
+
 		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + element + L"." + pinFileExtension.getValue();
-		pinDebug = element;
+		//pinDebug = element;
 		pinFileName = filenameOnly;
 	}
 	else
