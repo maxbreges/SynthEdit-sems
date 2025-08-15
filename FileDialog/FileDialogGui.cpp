@@ -55,12 +55,10 @@ void FileDialogGui::onSetChoice()
 		const wchar_t* pathSeparator = L"/";
 #endif
 		auto it = std::next(m_fileNamesSet.begin(), pinChoice);
-		auto element = *it; // element is a std::wstring
-
-		pinDebug = element;
+		auto element = *it; // element is a std::wstring		
 
 		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + element + L"." + pinFileExtension.getValue();
-
+		pinDebug = element;
 		pinFileName = filenameOnly;
 	}
 	else
@@ -69,7 +67,7 @@ void FileDialogGui::onSetChoice()
 		pinFileName = L"";
 	}
 
-	// Combine file names into a single string for debug purposes
+/*	// Combine file names into a single string for debug purposes
 	std::wstringstream debugStream;
 	for (const auto& name : m_fileNamesSet) {
 		debugStream << name << L","; // Adds a comma for separation
@@ -78,7 +76,7 @@ void FileDialogGui::onSetChoice()
 	std::wstring debugOutput = debugStream.str();
 	if (!debugOutput.empty()) {
 		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
-	}
+	}*/
 }
 
 std::string FileDialogGui::getDefaultFolder(std::wstring extension)
@@ -187,11 +185,11 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 
 		if (!filepath.empty())
 		{
-			pinOpened = 1;
+			pinOpened = 1.f;
 		}
 		else
 		{
-			pinOpened = 0;			
+			pinOpened = 0.f;			
 		}
 	}
 
