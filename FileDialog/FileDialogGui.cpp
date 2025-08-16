@@ -62,6 +62,8 @@ void FileDialogGui::onSetChoice()
 		
 		pinFileName = filenameOnly;
 
+		std::wstring fname = fs::path(pinFileName).stem();
+		pinFileNameOut = fname;
 		pinDebug = element;
 	}
 	else
@@ -70,8 +72,7 @@ void FileDialogGui::onSetChoice()
 		pinFileName = L"";
 	}
 
-	std::wstring selectedFileStem = fs::path(pinFileName).stem().wstring();
-	pinFileNameOut = selectedFileStem;
+	
 	
 
 /*	// Combine file names into a single string for debug purposes
