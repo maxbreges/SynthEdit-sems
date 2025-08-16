@@ -61,10 +61,9 @@ void FileDialogGui::onSetChoice()
 		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + element + L"." + pinFileExtension.getValue();
 		
 		pinFileName = filenameOnly;
-
-		std::wstring fname = fs::path(pinFileName).stem().wstring();
-		pinFileNameOut = fname;
-		pinDebug = element;
+		
+		pinFileNameOut = L"fuck mac";
+		pinDebug = L"FUCK MAC TWICE";
 	}
 	else
 	{
