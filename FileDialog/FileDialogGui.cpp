@@ -64,8 +64,8 @@ void FileDialogGui::onSetChoice()
 
 		std::wstring fname = fs::path(pinFileName).stem().wstring();
 		
-		pinFileNameOut = L"Just string" + fname;
-		pinDebug = L"Just string TWICE" + fname;
+		pinFileNameOut = fname;
+		pinDebug = element;
 	}
 	else
 	{
