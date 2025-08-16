@@ -138,7 +138,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (BoolCounter)
 #add_subdirectory (CheckingStringOnMac)
 #add_subdirectory (IntChange)
-add_subdirectory (FileDialog)
+#add_subdirectory (FileDialog)
 
 
 
