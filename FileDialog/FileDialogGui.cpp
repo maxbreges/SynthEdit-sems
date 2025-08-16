@@ -62,7 +62,7 @@ void FileDialogGui::onSetChoice()
 		
 		pinFileName = filenameOnly;
 
-		std::wstring fname = fs::path(pinFileName).stem();
+		std::wstring fname = fs::path(pinFileName).stem().wstring();
 		pinFileNameOut = fname;
 		pinDebug = element;
 	}
