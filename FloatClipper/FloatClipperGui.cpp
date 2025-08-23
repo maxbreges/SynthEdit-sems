@@ -4,26 +4,19 @@ using namespace gmpi;
 
 class FloatClipperGui final : public SeGuiInvisibleBase
 {
-	float minValue = pinMin.getValue();
-	float maxValue = pinMax.getValue();
-	float ValueIn = pinValueIn;
-
  	void onSetValueIn()
 	{
-		if (ValueIn < minValue)
+		if (pinValueIn < pinMin)
 		{
-			pinValueOut = minValue;
+			pinValueOut = pinMin;
 		}					
 		
-		if (ValueIn > maxValue)
+		if (pinValueIn > pinMax)
 		{
-			pinValueOut = maxValue;
+			pinValueOut = pinMax;
 		}
 
-		else
-		{ 
-			pinValueOut = pinValueIn; 
-		}		
+		pinValueOut = pinValueIn;
 	}
 	void onSetMin()
 	{
