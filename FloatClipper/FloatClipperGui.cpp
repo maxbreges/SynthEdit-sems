@@ -5,9 +5,7 @@ using namespace gmpi;
 class FloatClipperGui final : public SeGuiInvisibleBase
 {
  	void onSetValueIn()
-	{
-		void onSetValueIn()
-		{
+	{		
 			if (pinValueIn > pinMax)
 			{
 				pinValueOut = pinMax;
@@ -19,8 +17,7 @@ class FloatClipperGui final : public SeGuiInvisibleBase
 			else
 			{
 				pinValueOut = pinValueIn;
-			}
-		}
+			}		
 	}
 	void onSetMin()
 	{
