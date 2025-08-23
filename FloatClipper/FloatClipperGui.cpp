@@ -4,21 +4,26 @@ using namespace gmpi;
 
 class FloatClipperGui final : public SeGuiInvisibleBase
 {
+	float minValue = pinMin.getValue();
+	float maxValue = pinMax.getValue();
+
+	float ValueIn = pinValueIn.getValue();
+
  	void onSetValueIn()
 	{
-		if (pinValueIn < pinMin)
+		if (ValueIn < minValue)
 		{
-			pinValueOut = pinMin;
+			pinValueOut = minValue;
 		}					
 		
-		if (pinValueIn > pinMax) 
+		if (ValueIn > maxValue)
 		{
-			pinValueOut = pinMax;
+			pinValueOut = maxValue;
 		}
 
 		else
 		{ 
-			pinValueOut = pinValueIn; 
+			pinValueOut = pinValueIn.getValue(); 
 		}		
 	}
 	void onSetMin()
@@ -44,7 +49,7 @@ public:
 		initializePin( pinValueIn, static_cast<MpGuiBaseMemberPtr2>(&FloatClipperGui::onSetValueIn) );
 		initializePin( pinMin, static_cast<MpGuiBaseMemberPtr2>(&FloatClipperGui::onSetMin) );
 		initializePin(pinMax, static_cast<MpGuiBaseMemberPtr2>(&FloatClipperGui::onSetMax));
-		initializePin( pinValueOut, static_cast<MpGuiBaseMemberPtr2>(&FloatClipperGui::onSetValueOut) );
+		initializePin( pinValueOut );
 	}
 
 };
