@@ -2,7 +2,7 @@
 <PluginList>
     <Plugin id="DoubleClick" name="Double Click" category="mx/Sub-Controls">
         <GUI>
-            <Pin name="Mouse Down" datatype="bool" direction="out"/>
+            <Pin name="Mouse Down" datatype="bool" direction="in"/>
             <Pin name="Time ms" datatype="int" default="250"/>
             <Pin name="Countdown Out" datatype="int" direction="out" private="true"/>
 			<Pin name="Click Count" datatype="int" direction="out" isMinimised="true"/>
