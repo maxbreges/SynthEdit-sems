@@ -6,8 +6,7 @@ class FloatClipperGui final : public SeGuiInvisibleBase
 {
 	float minValue = pinMin.getValue();
 	float maxValue = pinMax.getValue();
-
-	float ValueIn = pinValueIn.getValue();
+	float ValueIn = pinValueIn;
 
  	void onSetValueIn()
 	{
@@ -23,7 +22,7 @@ class FloatClipperGui final : public SeGuiInvisibleBase
 
 		else
 		{ 
-			pinValueOut = pinValueIn.getValue(); 
+			pinValueOut = pinValueIn; 
 		}		
 	}
 	void onSetMin()
