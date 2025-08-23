@@ -15,8 +15,10 @@ class FloatClipperGui final : public SeGuiInvisibleBase
 		{
 			pinValueOut = pinMax;
 		}
-
-		pinValueOut = pinValueIn;
+		else
+		{
+			pinValueOut = pinValueIn;
+		}		
 	}
 	void onSetMin()
 	{
