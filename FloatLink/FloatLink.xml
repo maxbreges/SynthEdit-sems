@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Float Link" name="Float Link" category="mx/Sub-Controls" >
+        <GUI>            
+            <Pin name="Link" datatype="bool" />            
+			<Pin name="mDown1" datatype="bool" />
+			<Pin name="mDown2" datatype="bool" />
+            <Pin name="Animation Position 2" datatype="float"/>
+			<Pin name="Animation Position 1" datatype="float"/>						
+        </GUI>
+    </Plugin>
+</PluginList>

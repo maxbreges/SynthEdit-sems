@@ -140,6 +140,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (IntChange)
 #add_subdirectory (FileDialog)
 #add_subdirectory (FloatClipper)
+add_subdirectory (FloatLink)
 
 
 
