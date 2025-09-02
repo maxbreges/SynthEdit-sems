@@ -21,9 +21,11 @@ void SampleTimer::subProcess( int sampleFrames )
 	{
 		for (int s = sampleFrames; s > 0; --s)
 		{
+			outValue_ = 1;
+
 			if (timer_++ == pinTimeIn)
 			{
-				outValue_ = 1;
+				outValue_ = 0;
 				pinSignalOut.setUpdated(this->getBlockPosition() + sampleFrames - s);
 			}
 
