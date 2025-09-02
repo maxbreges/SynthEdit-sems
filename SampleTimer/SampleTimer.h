@@ -14,7 +14,7 @@ public:
 	virtual void onSetPins(void);
 
 private:
-	BoolInPin pinGate;
+	AudioInPin pinGate;
 	IntInPin pinTimeIn;
 	AudioOutPin pinSignalOut;
 };

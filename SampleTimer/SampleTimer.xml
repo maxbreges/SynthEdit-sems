@@ -2,7 +2,7 @@
 <PluginList>
   <Plugin id="SE Sample Timer" name="Sample Timer" category="Diagnostic" >
     <Audio>
-		<Pin name="Gate" datatype="bool" />
+		<Pin name="Gate" datatype="float" rate="audio" />
       <Pin name="Trigger Time (samples)" datatype="int" />
       <Pin name="Signal Out" datatype="float" rate="audio" direction="out" />
     </Audio>

@@ -14,8 +14,10 @@ SampleTimer::SampleTimer( )
 void SampleTimer::subProcess( int sampleFrames )
 {
 	// get pointers to in/output buffers.
-	float* signalOut = getBuffer(pinSignalOut);
-	if (pinGate)
+	float* gate = getBuffer(pinGate);
+	float* signalOut = getBuffer(pinSignalOut);	
+
+	if (gate)
 	{
 		for (int s = sampleFrames; s > 0; --s)
 		{
@@ -24,7 +26,9 @@ void SampleTimer::subProcess( int sampleFrames )
 				outValue_ = 1;
 				pinSignalOut.setUpdated(this->getBlockPosition() + sampleFrames - s);
 			}
-			*signalOut++ = outValue_;
+
+			*gate++;
+			*signalOut++ = outValue_;			
 		}
 	}
 }
