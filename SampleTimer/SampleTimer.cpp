@@ -31,11 +31,13 @@ void SampleTimer::subProcess( int sampleFrames )
 			*signalOut++ = outValue_;			
 		}
 	}
+	else
+	{ }
 }
 
 void SampleTimer::onSetPins(void)
 {
-	//pinGate.isUpdated(true);
+	pinGate.setStreaming(false);
 	// Set state of output audio pins.
 	pinSignalOut.setStreaming(false);
 
