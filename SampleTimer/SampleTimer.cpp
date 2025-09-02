@@ -11,38 +11,43 @@ SampleTimer::SampleTimer( )
 	initializePin(  pinSignalOut );
 }
 
-void SampleTimer::subProcess( int sampleFrames )
+void SampleTimer::subProcess(int sampleFrames)
 {
-	// get pointers to in/output buffers.
-	float* gate = getBuffer(pinGate);
-	float* signalOut = getBuffer(pinSignalOut);	
+    float* gate = getBuffer(pinGate);
+    float* signalOut = getBuffer(pinSignalOut);
 
-	if (*gate > 0)
-	{
-		for (int s = sampleFrames; s > 0; --s)
-		{
-			outValue_ = 1;
+    if (*gate > 0)
+    {
+        for (int s = 0; s < sampleFrames; ++s)
+        {
+            if (timer_ >= pinTimeIn)
+            {
+                // Timer expired, output is 0
+                outValue_ = 0;
+            }
+            else
+            {
+                // Timer running, output is 1
+                outValue_ = 1;
+                ++timer_;
+            }
 
-			if (timer_++ == pinTimeIn)
-			{
-				outValue_ = 0;
-				pinSignalOut.setUpdated(this->getBlockPosition() + sampleFrames - s);
-			}
+            // When timer hits pinTimeIn, set output to 0 at this sample
+            if (timer_ == pinTimeIn)
+            {
+                pinSignalOut.setUpdated(this->getBlockPosition() + s);
+            }
 
-			if (timer_ >= pinTimeIn)
-			{
-				timer_ = 0;
-			}
-
-			(*gate)++;
-			*signalOut++ = outValue_;			
-		}
-	}
-	else
-	{
-		*signalOut++ = 0;
-		timer_ = 0;
-	}
+            *signalOut++ = outValue_;
+        }
+    }
+    else
+    {
+        // Gate is not active, output is 0, reset timer
+        outValue_ = 0;
+        *signalOut++ = 0;
+        timer_ = 0;
+    }
 }
 
 void SampleTimer::onSetPins(void)
