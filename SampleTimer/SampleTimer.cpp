@@ -17,7 +17,7 @@ void SampleTimer::subProcess( int sampleFrames )
 	float* gate = getBuffer(pinGate);
 	float* signalOut = getBuffer(pinSignalOut);	
 
-	if (gate)
+	if (gate > 0)
 	{
 		for (int s = sampleFrames; s > 0; --s)
 		{
@@ -32,12 +32,14 @@ void SampleTimer::subProcess( int sampleFrames )
 		}
 	}
 	else
-	{ }
+	{
+		*signalOut++ = 0;
+	}
 }
 
 void SampleTimer::onSetPins(void)
 {
-	//pinGate.setStreaming(false);
+	
 	// Set state of output audio pins.
 	pinSignalOut.setStreaming(false);
 
