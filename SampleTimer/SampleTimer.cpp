@@ -6,6 +6,7 @@ SampleTimer::SampleTimer( )
 	: outValue_(0), timer_(0)
 {
 	// Register pins.
+	initializePin(pinGate);
 	initializePin(pinTimeIn);
 	initializePin(  pinSignalOut );
 }
@@ -14,20 +15,23 @@ void SampleTimer::subProcess( int sampleFrames )
 {
 	// get pointers to in/output buffers.
 	float* signalOut = getBuffer(pinSignalOut);
-
-	for( int s = sampleFrames; s > 0; --s )
+	if (pinGate)
 	{
-		if( timer_++ == pinTimeIn )
+		for (int s = sampleFrames; s > 0; --s)
 		{
-			outValue_ = 1;
-			pinSignalOut.setUpdated(this->getBlockPosition() + sampleFrames - s);
+			if (timer_++ == pinTimeIn)
+			{
+				outValue_ = 1;
+				pinSignalOut.setUpdated(this->getBlockPosition() + sampleFrames - s);
+			}
+			*signalOut++ = outValue_;
 		}
-		*signalOut++ = outValue_;
 	}
 }
 
 void SampleTimer::onSetPins(void)
 {
+	pinGate.isUpdated(true);
 	// Set state of output audio pins.
 	pinSignalOut.setStreaming(false);
 
