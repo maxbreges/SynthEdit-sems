@@ -29,6 +29,11 @@ void SampleTimer::subProcess( int sampleFrames )
 				pinSignalOut.setUpdated(this->getBlockPosition() + sampleFrames - s);
 			}
 
+			if (timer_ >= pinTimeIn)
+			{
+				timer_ = 0;
+			}
+
 			(*gate)++;
 			*signalOut++ = outValue_;			
 		}
@@ -36,6 +41,7 @@ void SampleTimer::subProcess( int sampleFrames )
 	else
 	{
 		*signalOut++ = 0;
+		timer_ = 0;
 	}
 }
 
