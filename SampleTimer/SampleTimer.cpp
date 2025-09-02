@@ -31,7 +31,7 @@ void SampleTimer::subProcess( int sampleFrames )
 
 void SampleTimer::onSetPins(void)
 {
-	pinGate.isUpdated(true);
+	//pinGate.isUpdated(true);
 	// Set state of output audio pins.
 	pinSignalOut.setStreaming(false);
 
