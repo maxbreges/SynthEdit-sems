@@ -141,7 +141,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (FileDialog)
 #add_subdirectory (FloatClipper)
 #add_subdirectory (FloatLink)
-add_subdirectory (SampleOscillator2) //failed
+add_subdirectory (SampleOscillator2)
 #add_subdirectory (SampleTimer)
 
 
