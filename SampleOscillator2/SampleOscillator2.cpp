@@ -11,7 +11,7 @@ static float interpolationTable[ tableSize_ ];
 static bool interpolationTableInitialized = false;
 float* SincInterpolator::interpolation_table2 = 0;
 
-REGISTER_PLUGIN ( SoundfontOscillator2, L"SE Sample Oscillator2" );
+REGISTER_PLUGIN ( SoundfontOscillator2, L"Sample Oscillator2" );
 
 /* notes
 Soundfonts don't unload until all voices have been woken once, can take sometime during which both soundfonts
