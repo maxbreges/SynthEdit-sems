@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <PluginList>
-  <Plugin id="SE Sample Oscillator2" name="Sample Oscillator2" category="Waveform" helpUrl="SampleOscillator2.htm">
+  <Plugin id="Sample Oscillator2" name="Sample Oscillator2" category="Waveform" helpUrl="SampleOscillator2.htm">
     <Audio>
       <Pin id="0" name="Sample ID" direction="in" datatype="int"/>
       <Pin id="1" name="Pitch" direction="in" datatype="float" rate="audio" default="0.5"/>
