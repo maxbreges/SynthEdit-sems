@@ -3,7 +3,7 @@
 #include "../shared/unicode_conversion.h"
 #include "../se_sdk3/MpString.h"
 
-REGISTER_PLUGIN ( SampleLoader2, L"SE Sample Loader2" );
+REGISTER_PLUGIN ( SampleLoader2, L"Sample Loader2" );
 
 SampleLoader2::SampleLoader2( IMpUnknown* host ) : MpBase( host )
 ,sampleHandle(-1)
