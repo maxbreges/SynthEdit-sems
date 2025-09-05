@@ -4,7 +4,7 @@
 #include "RiffFile2.h"
 #include "../shared/unicode_conversion.h"
 
-REGISTER_GUI_PLUGIN( SampleLoader2Gui, L"SE Sample Loader2Gui" );
+REGISTER_GUI_PLUGIN( SampleLoader2Gui, L"Sample Loader2Gui" );
 
 SampleLoader2Gui::SampleLoader2Gui(IMpUnknown* host) : MpGuiBase(host)
 {

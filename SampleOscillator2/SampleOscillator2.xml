@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <PluginList>
-  <Plugin id="SE Sample Oscillator2" name="Sample Oscillator2" category="Waveform" helpUrl="SampleOscillator2.htm">
+  <Plugin id="Sample Oscillator2" name="Sample Oscillator2" category="mx/Waveform" helpUrl="SampleOscillator2.htm">
     <Audio>
       <Pin id="0" name="Sample ID" direction="in" datatype="int"/>
       <Pin id="1" name="Pitch" direction="in" datatype="float" rate="audio" default="0.5"/>
@@ -15,7 +15,7 @@
     </Audio>
   </Plugin>
 
-  <Plugin id="SE Sample Loader2" name="Sample Loader2" category="Waveform" helpUrl="SampleOscillator2.htm" >
+  <Plugin id="Sample Loader2" name="Sample Loader2" category="mx/Waveform" helpUrl="SampleOscillator2.htm" >
     <Audio>
       <Pin id="0" name="Filename" direction="in" datatype="string" isFilename="true" metadata="sf2"/>
       <Pin id="1" name="Bank" direction="in" datatype="int" default="0"/>
@@ -24,7 +24,7 @@
     </Audio>
   </Plugin>
 
-  <Plugin id="SE Sample Loader2Gui" name="Sample Loader2 GUI" category="Waveform" helpUrl="SampleOscillator2.htm" >
+  <Plugin id="Sample Loader2Gui" name="Sample Loader2 GUI" category="mx/Waveform" helpUrl="SampleOscillator2.htm" >
     <GUI>
       <Pin id="0" name="Filename" direction="in" datatype="string" isFilename="true" metadata="sf2"/>
       <Pin id="1" name="Bank" direction="in" datatype="int" />
@@ -34,7 +34,7 @@
     </GUI>
   </Plugin>
   
-  <Plugin id="SE Sample Exclusive Hihat" name="Sample Exclusive Hihat" category="Waveform" helpUrl="SampleOscillator2.htm">
+  <Plugin id="Sample Exclusive Hihat" name="Sample Exclusive Hihat" category="mx/Waveform" helpUrl="SampleOscillator2.htm">
     <Audio>
       <Pin id="0" name="MIDI In" direction="in" datatype="midi"/>
       <Pin id="1" name="MIDI Out" direction="out" datatype="midi"/>
