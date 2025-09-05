@@ -1,6 +1,6 @@
 #include "SampleManager.h"
 #include "assert.h"
-#include "../../mfc_emulation.h"
+//#include "../../mfc_emulation.h"
 #include "../shared/unicode_conversion.h"
 
 SampleManager* SampleManager::Instance()
