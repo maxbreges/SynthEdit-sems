@@ -3,7 +3,7 @@
 #include "./csoundfont.h"
 #include "./SampleManager.h"
 
-#define INTERPOLATION_POINTS 2
+#define INTERPOLATION_POINTS 8
 #define INTERPOLATION_DIV 8
 
 const int tableSize_ = 2 * ( INTERPOLATION_POINTS / 2 + 1 ) * INTERPOLATION_DIV;
