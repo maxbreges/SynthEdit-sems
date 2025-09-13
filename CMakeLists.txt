@@ -141,7 +141,7 @@ add_subdirectory (ImageX)
 #add_subdirectory (FileDialog)
 #add_subdirectory (FloatClipper)
 #add_subdirectory (FloatLink)
-add_subdirectory (SampleOscillator2)
+#add_subdirectory (SampleOscillator2)
 #add_subdirectory (SampleTimer)
 
 
