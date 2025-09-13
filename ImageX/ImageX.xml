@@ -11,10 +11,11 @@
 			<Pin name="Mouse Down" datatype="bool"/>
 			<Pin name="Frame Count" datatype="int" private="true"/>
 			<Pin name="Frame Count" datatype="int" direction="out"/>
-			<Pin name="Mouse Response" datatype="enum" default="-1" isMinimised="true" metadata="off=-2, auto=-1, vertical=0, horizontal=1, clicks=2, rotary=3, step=4"/>
+			<Pin name="Mouse Response" datatype="enum" default="-1" isMinimised="true" metadata="off=-2, auto=-1, vertical=0, horizontal=1, clicks=2, rotary=3, step=4, latched=5"/>
 			<Pin name="Mouse Over" datatype="bool" direction="out"/>
 			<Pin name="Hint Out" datatype="string" direction="out"/>
 			<Pin name="Ctrl+clk" datatype="bool" direction="out" />
+			<Pin name="Reset" datatype="bool" />
 		</GUI>
 	</Plugin>
 </PluginList>

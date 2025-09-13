@@ -31,6 +31,7 @@ ImageXGui::ImageXGui(bool useMouseResponsePin) :
 	initializePin(10, pinMouseOver);	
 	initializePin(11, pinHintOut, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::onSetHintOut));
 	initializePin(12, pinCtrlClk);
+	initializePin(13, pinReset);
 }
 
 int32_t ImageXGui::setHover(bool isMouseOverMe)
@@ -91,10 +92,19 @@ int32_t ImageXGui::onMouseWheel(int32_t flags, int32_t delta, GmpiDrawing_API::M
 
 int32_t ImageXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 {
+	if (pinMouseResponse == 5)
+	{
+		pinAnimationPosition = 1.f;
+	}
+
 	if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 	{
 		pinCtrlClk = true;
-		goto pass;
+		if(pinMouseResponse == 4)
+		{ 		
+			goto pass;
+		}
+		
 	}
 
 	//	_RPT2(_CRT_WARN, "onPointerDown (%f,%f)\n", point.x, point.y);
@@ -178,6 +188,13 @@ int32_t ImageXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point
 	setCapture();
 
 	return gmpi::MP_OK;
+}
+
+void ImageXGui::onSetReset()
+{
+	if (pinReset)
+
+		pinAnimationPosition = 0.f;
 }
 
 int32_t ImageXGui::onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point)

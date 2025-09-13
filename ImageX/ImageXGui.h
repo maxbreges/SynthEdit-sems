@@ -14,6 +14,7 @@ protected:
 	BoolGuiPin pinMouseOver;
 	StringGuiPin pinHintOut;
 	BoolGuiPin pinCtrlClk;
+	BoolGuiPin pinReset;
 
 public:
 	ImageXGui(bool useMouseResponsePin = true);
@@ -37,6 +38,7 @@ public:
 	int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point) override;
 	int32_t MP_STDCALL measure(GmpiDrawing_API::MP1_SIZE availableSize, GmpiDrawing_API::MP1_SIZE* returnDesiredSize) override;
 	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, GmpiDrawing_API::MP1_POINT point) override;
+	void onSetReset();
 
 	// MP_OK = hit, MP_UNHANDLED/MP_FAIL = miss.
 	// Default to MP_OK to allow user to select by clicking.
