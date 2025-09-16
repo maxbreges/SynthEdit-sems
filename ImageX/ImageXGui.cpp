@@ -31,7 +31,7 @@ ImageXGui::ImageXGui(bool useMouseResponsePin) :
 	initializePin(10, pinMouseOver);	
 	initializePin(11, pinHintOut, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::onSetHintOut));
 	initializePin(12, pinCtrlClk);
-	initializePin(13, pinReset);
+	initializePin(13, pinReset, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::onSetReset));
 }
 
 int32_t ImageXGui::setHover(bool isMouseOverMe)
