@@ -144,6 +144,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (SampleOscillator2)
 #add_subdirectory (SampleTimer)
 #add_subdirectory (MidiChannelShift)
+add_subdirectory (DeleteDoubles)
+
 
 
 
