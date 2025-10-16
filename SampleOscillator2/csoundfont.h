@@ -160,7 +160,7 @@ public:
 
 	sfSample * GetSampleHeader(int id);
 	//WORD* GetSampleChunk(){return chunk_smpl + padSampleMemorybytes;}
-	WORD* GetSampleChunk() {return chunk_smpl + padSampleMemorybytes / sizeof(*chunk_smpl);
+	WORD* GetSampleChunk() { return chunk_smpl + padSampleMemorybytes / sizeof(*chunk_smpl); }
 	bool Load( gmpi::IProtectedFile2* file );
 	int get_count_shdr(){return count_shdr;}
 #if defined( _DEBUG )
