@@ -1,3 +1,11 @@
+#ifdef _MSC_VER
+#include <crtdbg.h>
+#define DEBUG_REPORT(...) // define if needed
+#else
+#define _RPT1(...) // noop
+#define _RPT0(...) // noop
+#endif
+
 #include "SampleManager.h"
 #include "assert.h"
 //#include "../../mfc_emulation.h"
