@@ -12,6 +12,7 @@ class MIDIDelta final : public MpBase2
 
 	int NoteOn = 0;
 	int NoteOff = 0;
+	int lastNote = 0;
 
 public:
 	MIDIDelta() :
@@ -55,14 +56,16 @@ public:
 			if (NoteOn > NoteOff)
 			{
 				pinDelta = 1;
+				lastNote = pinDelta;
 			}
 			if (NoteOn < NoteOff)
 			{
 				pinDelta = -1;
+				lastNote = pinDelta;
 			}
 			if (NoteOn == NoteOff)
 			{
-				pinDelta = 0;
+				pinDelta = lastNote;
 			}
 		}
 		break;
