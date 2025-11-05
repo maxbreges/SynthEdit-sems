@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Sample Delay" name="Sample Delay" category="mx/Special">
+        <Audio>
+            <Pin name="Audio In" datatype="float" rate="audio" linearInput="true"/>
+			<Pin name="Samples" datatype="int" default="1"/>
+            <Pin name="Audio Out" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
