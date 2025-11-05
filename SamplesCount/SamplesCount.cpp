@@ -57,7 +57,7 @@ public:
             else
             {
                 // When disabled, just output the current count without incrementing
-                countOut[s] = static_cast<float>(sampleCounter);
+                countOut[s] = static_cast<float>(sampleCounter) * 0.1f;
             }
 
             previousPulseState = currentPulseState;
