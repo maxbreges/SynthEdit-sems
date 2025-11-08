@@ -53,12 +53,12 @@ class ExKnobGui final : public gmpi_gui::MpGuiGfxBase
 
  	void onSetBackground()
 	{
-		// pinBackground changed
+		invalidateRect();
 	}
 
  	void onSetForeground()
 	{
-		// pinForground changed
+		invalidateRect();
 	}
 
  	void onSetRead_only()
