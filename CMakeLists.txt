@@ -148,6 +148,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (SampleDelay)
 #add_subdirectory (SamplesCount)
 #add_subdirectory (SamplesToCV)
+add_subdirectory (ExKnob)
+
 
 
 
