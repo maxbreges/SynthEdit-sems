@@ -81,5 +81,5 @@ public:
 
 namespace
 {
-	auto r = Register<ORGateGuiGui>::withId(L"OR Gate GuiLR");
+	auto r = Register<ORGateGuiGui>::withId(L"OR Gate GuiLR"), Register<ORGateGuiGui>::withId(L"OR Gate GuiL");
 }
