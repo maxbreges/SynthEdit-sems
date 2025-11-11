@@ -4,6 +4,7 @@
         <GUI>
             <Pin name="Click In" datatype="bool"/>
             <Pin name="Latch Out" datatype="bool" direction="out"/>
+			<Pin name="Latch Out" datatype="bool" />
         </GUI>
     </Plugin>
 </PluginList>

@@ -4,27 +4,32 @@ using namespace gmpi;
 
 class LatchGuiGui final : public SeGuiInvisibleBase
 {
- 	void onSetInput()
+	void onSetInput()
 	{
 		if (pinInput)
 		{
 			pinOutput = !pinOutput;
+		
+		pinOutputL = pinOutput;
+
 		}
 	}
 
  	void onSetOutput()
 	{
-		// pinOutput changed
+		//pinOutputL = pinOutput;
 	}
 
  	BoolGuiPin pinInput;
  	BoolGuiPin pinOutput;
+	BoolGuiPin pinOutputL;
 
 public:
 	LatchGuiGui()
 	{
 		initializePin( pinInput, static_cast<MpGuiBaseMemberPtr2>(&LatchGuiGui::onSetInput) );
 		initializePin( pinOutput, static_cast<MpGuiBaseMemberPtr2>(&LatchGuiGui::onSetOutput) );
+		initializePin(pinOutputL);
 	}
 
 };
