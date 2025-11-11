@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="LatchGui" name="Latch Gui" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Click In" datatype="bool"/>
+            <Pin name="Latch Out" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
