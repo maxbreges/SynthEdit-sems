@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My FloatTrigger" name="Float Trigger" category="mx/Sub-Controls" helpUrl="Sub-control-converters.htm">
+        <GUI>
+            <Pin name="Float" datatype="float"/>
+            <Pin name="Bool" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
