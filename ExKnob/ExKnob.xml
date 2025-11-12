@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
     <Plugin id="exKnob" name="exKnob" category="mx/Sub-Controls">
+		<Parameters>
+			<Parameter id="2" datatype="string" name=""/>
+		</Parameters>
         <GUI graphicsApi="GmpiGui">
             <Pin name="Animation Position" datatype="float"/>
-            <Pin name="Hint" datatype="string"/>
+            <Pin name="Hint" datatype="string" default="Hold Shift and Drag to change color"/>
             <Pin name="Menu Items" datatype="string"/>
             <Pin name="Menu Selection" datatype="int"/>
             <Pin name="Mouse Down" datatype="bool"/>
-            <Pin name="Background" datatype="string" default="FF000000"/>
-            <Pin name="Forground" datatype="string" default="FFFFFFFF"/>
+            <Pin name="Background" datatype="string" default="FF000000" private="true"/>
+            <Pin name="Line Color" datatype="string" default="FFFFFFFF"/>
             <Pin name="Read-only" datatype="bool" isMinimised="true"/>
 			<Pin name="Steps" datatype="int" default="11"/>
 			<Pin name="Current Step" datatype="int"/>
-        </GUI>
+			<Pin name="Line Style" datatype="enum" metadata="Flat,Square,Round,Triangle" default="2" isMinimised="true"/>
+			<Pin name="Hex In" datatype="string" default="ffff6b00" private="true"/>
+			<Pin name="Circle Size" datatype="float" default="0.93" isMinimised="false"/>
+			<Pin name="Line Thickness" datatype="float" default="4" isMinimised="true"/>
+			<Pin name="ColorAdj" datatype="bool" private="true"/>
+			<Pin name="Hex" datatype="string" parameterId="2"/>
+			<Pin name="Color Out" datatype="string" direction="out"/>
+			<Pin name="Start Angle" datatype="float" default="35" isMinimised="true"/>
+			<Pin name="Ctrl+click" datatype="bool" direction="out"/>
+		</GUI>
     </Plugin>
 </PluginList>
