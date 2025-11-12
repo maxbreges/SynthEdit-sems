@@ -5,8 +5,8 @@
             <Pin name="Link" datatype="bool" />            
 			<Pin name="mDown1" datatype="bool" />
 			<Pin name="mDown2" datatype="bool" />
-            <Pin name="Animation Position 2" datatype="float"/>
-			<Pin name="Animation Position 1" datatype="float"/>						
+            <Pin name="Animation Position 1" datatype="float"/>
+			<Pin name="Animation Position 2" datatype="float"/>						
         </GUI>
     </Plugin>
 </PluginList>
