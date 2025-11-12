@@ -6,6 +6,7 @@
 #include "../shared/xplatform_modifier_keys.h"
 #include <iomanip>
 #include <sstream>
+#include <algorithm> 
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -266,7 +267,7 @@ public:
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) // <cntr> key magnifies
 		{
 			float new_pos = pinAnimationPosition + delta * WHEEL_SCROLL_FACTOR; // Updated scrolling logic
-			new_pos = max(0.f, min(new_pos, 1.f)); // Clamp value between 0 and 1
+			new_pos = std::max(0.f, std::min(new_pos, 1.f)); // Clamp value between 0 and 1
 			pinAnimationPosition = new_pos;
 		}
 
@@ -390,7 +391,7 @@ public:
 	void calcDimensionsBg(Point& centerBg, float& radiusBg, float& thicknessBg) {
 		auto r = getRect();
 		centerBg = Point((r.left + r.right) * 0.5f, (r.top + r.bottom) * 0.5f);
-		radiusBg = min(r.getWidth(), r.getHeight()) * 0.4f; // Background radius
+		radiusBg = std::max(r.getWidth(), r.getHeight()) * 0.4f; // Background radius
 		thicknessBg = radiusBg * THICKNESS_MULTIPLIER; // Background thickness
 	}
 
@@ -399,7 +400,7 @@ public:
 		auto r = getRect();
 		float mult = circleSize * CIRCLE_SIZE_MULTIPLIER;
 		center = Point((r.left + r.right) * 0.5f, (r.top + r.bottom) * 0.5f);
-		radius = min(r.getWidth(), r.getHeight()) * mult; // Circle radius
+		radius = std::max(r.getWidth(), r.getHeight()) * mult; // Circle radius
 		thickness = radius * THICKNESS_MULTIPLIER;
 	}
 
