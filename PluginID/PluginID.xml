@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="PluginID" name="Plug-In ID" category="Special">
+        <Audio>
+            <Pin name="Signal in" datatype="float" rate="audio" private="true"/>
+            <Pin name="ID Out" datatype="int" direction="out"/>
+			<Pin name="Instance ID" datatype="int" direction="out"/>
+			<Pin name="Active Instances Count" datatype="int" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
