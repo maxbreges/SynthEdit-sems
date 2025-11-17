@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="RenderingMode" name="Rendering Mode" category="Special">
+        <Audio>
+			<Pin name="Host BPM" datatype="float" hostConnect="Time/BPM" />
+			<Pin name="Host SP" datatype="int" hostConnect="Processor/OfflineRenderMode" />
+			<Pin name="Host BPM" direction="out" datatype="float" />
+			<Pin name="Int Out" direction="out" datatype="int" />
+        </Audio>
+    </Plugin>
+</PluginList>

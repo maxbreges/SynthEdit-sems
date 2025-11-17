@@ -152,6 +152,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (LatchGui)
 #add_subdirectory (FloatTrigger)
 #add_subdirectory (PluginID)
+add_subdirectory (RenderingMode)
 
 
 
