@@ -8,7 +8,6 @@ class BooleanANDxGui final : public SeGuiInvisibleBase
    // IntGuiPin pinIntIn;             // This pin allows user input (can be ignored for auto allocation)
     BoolGuiPin pinBoolOut;          // Output pin
     vector<BoolGuiPin> pinSpareIn;  // Vector to hold input pins
-    int initPinCount = 0;
 
 public:
     BooleanANDxGui()
@@ -29,21 +28,17 @@ public:
             bool inputValue = pinSpareIn[i]; // Get the value from the current input pin
             result = result && inputValue; // AND all inputs together
         }
-        if (initPinCount == 0)
-            // Transmit the result to the output pin
-        {
-            pinBoolOut = false;
-        }
 
-        else
-        pinBoolOut = result;
+        if(size)
+        {
+            pinBoolOut = result;
+        }
     }
 
     int32_t initialize() override
     {
         // Retrieve total number of pins from the host
         int32_t pinCount = 0;
-        initPinCount = pinCount;
         // Access the base host interface (IMpUserInterfaceHost) to obtain pin count
         gmpi::IMpUserInterfaceHost* host = nullptr;
         if (getHost()->queryInterface(gmpi::MP_IID_UI_HOST, (void**)&host) == gmpi::MP_OK)
