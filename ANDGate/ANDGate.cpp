@@ -17,9 +17,7 @@ public:
      //   initializePin(pinIntIn, static_cast<MpGuiBaseMemberPtr2>(&BooleanANDxGui::onSetSpareIn));
         initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&BooleanANDxGui::onSetSpareIn));
     }
-
     
-
     void onSetSpareIn()
     {
         // Perform AND operation when any input pin changes
@@ -31,11 +29,14 @@ public:
             bool inputValue = pinSpareIn[i]; // Get the value from the current input pin
             result = result && inputValue; // AND all inputs together
         }
-        if (initPinCount > 0)
+        if (initPinCount == 0)
             // Transmit the result to the output pin
         {
-            pinBoolOut = result;
+            pinBoolOut = false;
         }
+
+        else
+        pinBoolOut = result;
     }
 
     int32_t initialize() override
