@@ -84,6 +84,11 @@ public:
 
 namespace
 {
-    auto r = Register<BooleanANDxGui>::withId(L"BooleanAND");
-    auto rL = Register<BooleanANDxGui>::withId(L"BooleanANDL");
+    bool r[] =
+    {
+    Register<BooleanANDxGui>::withId(L"AND Gate GuiROutLIn"),
+    Register<BooleanANDxGui>::withId(L"AND Gate GuiLOutRIn"),
+    Register<BooleanANDxGui>::withId(L"AND Gate GuiROutRIn"),
+    Register<BooleanANDxGui>::withId(L"AND Gate GuiLOutLIn"),
+    };
 }
