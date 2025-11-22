@@ -29,7 +29,7 @@ public:
             result = result && inputValue; // AND all inputs together
         }
 
-        if(size)
+        if (pinSpareIn.size())
         {
             pinBoolOut = result;
         }
