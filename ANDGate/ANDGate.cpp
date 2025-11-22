@@ -15,7 +15,11 @@ public:
         // Initialize output pin
      //   initializePin(pinIntIn, static_cast<MpGuiBaseMemberPtr2>(&BooleanANDxGui::onSetSpareIn));
         initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&BooleanANDxGui::onSetSpareIn));
+
+        pinBoolOut = false;
     }
+
+    //pinBoolOut = false;
 
     void onSetSpareIn()
     {
