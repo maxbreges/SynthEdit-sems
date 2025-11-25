@@ -5,6 +5,8 @@
 using namespace gmpi;
 using namespace std;
 
+const int HEX_WIDTH = 2; // Width for hex color string
+
 class PatchMemoryFloatGui final : public SeGuiInvisibleBase
 {
 	void onSetScaleIn()
