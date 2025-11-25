@@ -9,7 +9,7 @@
 			<Pin name="Scale In" datatype="float" private="true" parameterId="0"/>
 			<Pin name="AnimationIn" datatype="float" private="true" parameterId="0" parameterField="Normalized"/>
 			<Pin name="Scaled" datatype="float" direction="out"/>
-			<Pin name="Animation Position" datatype="float" direction="out"/>
+			<Pin name="Animation Position" datatype="float" direction="in"/>
 			<Pin name="HexIn" datatype="string" private="true" parameterId="1"/>
 			<Pin name="Hex" datatype="string" direction="out"/>
 		</GUI>

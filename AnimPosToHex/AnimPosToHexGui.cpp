@@ -87,19 +87,12 @@ class PatchMemoryFloatGui final : public SeGuiInvisibleBase
 			B = 255 - (x - 1280);
 		}
 
-		std::stringstream ssR;
-		ssR << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << R;
-		std::string resR(ssR.str());
+		std::stringstream ssR, ssG, ssB;
+		ssR << std::setfill('0') << std::setw(HEX_WIDTH) << std::hex << R;
+		ssG << std::setfill('0') << std::setw(HEX_WIDTH) << std::hex << G;
+		ssB << std::setfill('0') << std::setw(HEX_WIDTH) << std::hex << B;
 
-		std::stringstream ssG;
-		ssG << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << G;
-		std::string resG(ssG.str());
-
-		std::stringstream ssB;
-		ssB << std::setfill('0') << std::setw(sizeof(int) - 2) << std::hex << B;
-		std::string resB(ssB.str());
-
-		pinHexIn = resR + resG + resB;
+		pinHexIn = "ff" + ssR.str() + ssG.str() + ssB.str();
 
 	}
 	void onSetHexIn()
