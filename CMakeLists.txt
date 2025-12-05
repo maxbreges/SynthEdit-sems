@@ -154,6 +154,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (PluginID)
 #add_subdirectory (RenderingMode)
 #add_subdirectory (AnimPosToHex)
+add_subdirectory (VectorKnobX)
 
 
 
