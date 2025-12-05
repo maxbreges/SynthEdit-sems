@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="VectorKnobX" name="Vector Knob X" category="Sub-Controls">
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Animation Position" datatype="float"/>
+            <Pin name="Hint" datatype="string"/>
+            <Pin name="Menu Items" datatype="string"/>
+            <Pin name="Menu Selection" datatype="int"/>
+            <Pin name="Mouse Down" datatype="bool"/>
+            <Pin name="Background" datatype="string" default="FF000000" private="false"/>
+            <Pin name="Line Color" datatype="string" default="FFFFFFFF" isMinimised="true"/>
+            <!--<Pin name="Color by datatype" datatype="enum" metadata="blob,bool,float,int,string" private="true"/>-->
+			<Pin name="Circle Size" datatype="float" default="0.99" isMinimised="false"/>
+			<Pin name="Line Thickness" datatype="float" default="3" isMinimised="true"/>
+		</GUI>
+    </Plugin>
+</PluginList>
