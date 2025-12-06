@@ -7,7 +7,8 @@
 			<Pin name="Choice" datatype="int"/>
 			<Pin name="List Size" datatype="int" direction="out"/>
             <Pin name="Extension" datatype="string" direction="out"/>
-			<Pin name="Directory" datatype="string" direction="out"/>			
+			<Pin name="Directory" datatype="string" direction="out"/>
+			<Pin name="Selection" datatype="string" direction="out"/>			
 			<Pin name="File Name Out" datatype="string"/>			
         </GUI>
     </Plugin>

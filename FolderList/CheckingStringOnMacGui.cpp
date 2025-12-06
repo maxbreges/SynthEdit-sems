@@ -140,6 +140,7 @@ class CheckingStringOnMacGui final : public SeGuiInvisibleBase
         std::string filenameOnly = dir + "/" + fileNames[pinChoice] + ext; // Append the extension
 
         pinFileNameOut = filenameOnly;
+        pinSelection = fileNames[pinChoice];
     }
 
 
@@ -149,6 +150,7 @@ class CheckingStringOnMacGui final : public SeGuiInvisibleBase
     IntGuiPin pinListSize;
  	StringGuiPin pinFileExtension;
     StringGuiPin pinDirectory;    
+    StringGuiPin pinSelection;
     StringGuiPin pinFileNameOut;
     
 
@@ -160,7 +162,8 @@ public:
         initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&CheckingStringOnMacGui::onSetChoice));
         initializePin(pinListSize);
 		initializePin(pinFileExtension, static_cast<MpGuiBaseMemberPtr2>(&CheckingStringOnMacGui::onSetFileExtension) );
-        initializePin(pinDirectory);        
+        initializePin(pinDirectory);   
+        initializePin(pinSelection);
         initializePin(pinFileNameOut);
 	}
 };
