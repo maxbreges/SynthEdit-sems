@@ -4,8 +4,6 @@ using namespace gmpi;
 
 class DH_ControlTrigger final : public MpBase2
 {
-    int triggerCounter = 0;
-    int triggerDuration = 0;
 
     BoolOutPin pinTrigger;
 
@@ -15,51 +13,22 @@ public:
         initializePin(pinTrigger);
     }
 
-    int32_t open() override
-    {
-        MpBase2::open();
-        triggerDuration = static_cast<int>(getSampleRate() * 0.0005f); // 0.5 ms trigger pulse
-        return gmpi::MP_OK;
-    }
-
     int32_t receiveMessageFromGui(int32_t id, int32_t size, void* messageData)
     {
-        if (id == 223322)
+        if (id == 3232 && size == sizeof(int32_t))
         {
-            // Trigger the pulse
-            triggerCounter = triggerDuration;
-            pinTrigger.setValue(true, getBlockPosition());  // Set trigger high
-            setSubProcess(&DH_ControlTrigger::subProcess);    // Start processing to turn off pulse
+            pinTrigger.setValue(true, getBlockPosition());
+
+            return 1; // handled
+        }
+
+        if (id == 3233 && size == sizeof(int32_t))
+        {
+            pinTrigger.setValue(false, getBlockPosition()+1);
+
             return 1; // handled
         }
         return 0; // not handled
-    }
-
-    void subProcess(int sampleFrames)
-    {
-        for (int s = 0; s < sampleFrames; ++s)
-        {
-            if (triggerCounter > 0)
-            {
-                triggerCounter--;
-                if (triggerCounter == 0)
-                {
-                    // End of pulse
-                    pinTrigger.setValue(false, getBlockPosition() + s);
-                }
-            }
-            else
-            {
-                // Pulse is done, switch to idle
-                setSubProcess(&DH_ControlTrigger::subProcessIdle);
-                break; // Exit early to prevent unnecessary processing
-            }
-        }
-    }
-
-    void subProcessIdle(int sampleFrames)
-    {
-        // Do nothing, idle state
     }
 };
 

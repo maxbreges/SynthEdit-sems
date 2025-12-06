@@ -1,6 +1,4 @@
 #include "mp_sdk_gui2.h"
-#include <chrono>
-#include <thread>
 
 using namespace gmpi;
 
@@ -69,10 +67,14 @@ public:
     void onSetTrigger()
     {
         pinTrigger = true;
+        int myData = pinTrigger.getValue();
+        int totalDataBytes = sizeof(myData);
+        getHost()->sendMessageToAudio(3232, totalDataBytes, &myData);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-        pinTrigger = false;
+        pinTrigger = false;        
+        int myDataFalse = pinTrigger.getValue();
+        totalDataBytes = sizeof(myDataFalse);
+        getHost()->sendMessageToAudio(3233, totalDataBytes, &myData);
     }
 };
 
