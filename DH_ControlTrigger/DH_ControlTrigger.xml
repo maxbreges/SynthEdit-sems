@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My DH_ControlTrigger" name="DH_ControlTrigger" category="DH/Sub-Controls">
+        <Audio>          
+            <Pin name="Trigger" datatype="bool" direction="out"/>
+        </Audio>
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Bool" datatype="bool"/>
+            <Pin name="Float" datatype="float" />
+            <Pin name="Int" datatype="int"/>
+            <Pin name="Text" datatype="string"/>
+			<Pin name="Trigger" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
