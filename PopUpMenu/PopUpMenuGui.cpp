@@ -27,6 +27,7 @@ PopupMenuGui::PopupMenuGui()
 	initializePin(pinPopUpOpen);
 	initializePin(pinOpenExt, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::onSetExt));
 	initializePin(pinSelection, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::redraw));
+	initializePin(pinMouseDown);
 }
 bool onSetExtFlag = false;
 
@@ -95,7 +96,7 @@ int32_t MP_STDCALL PopupMenuGui::onPointerDown(int32_t flags, GmpiDrawing_API::M
 
 	if (pinWriteable == false)
 		return gmpi::MP_OK; // Indicate successful hit.
-
+	pinMouseDown = true;
 	setCapture(); // prevent mouse-up going to menu (and dismissing it).
 
 	return gmpi::MP_OK;
@@ -103,6 +104,8 @@ int32_t MP_STDCALL PopupMenuGui::onPointerDown(int32_t flags, GmpiDrawing_API::M
 
 int32_t MP_STDCALL PopupMenuGui::onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 {
+	pinMouseDown = false;
+
 	if (getCapture())
 	{
 		releaseCapture();

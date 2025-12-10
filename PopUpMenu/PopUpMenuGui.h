@@ -30,6 +30,7 @@ private:
 	BoolGuiPin pinPopUpOpen;
 	BoolGuiPin pinOpenExt;
 	StringGuiPin pinSelection;
+	BoolGuiPin pinMouseDown;
 };
 
 #endif
