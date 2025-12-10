@@ -187,7 +187,3 @@ void PopupMenuGui::OnPopupComplete(int32_t result)
 	pinOpenExt = false;
 	onSetSelection();
 }
-
-
-
-
