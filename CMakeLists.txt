@@ -156,6 +156,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (AnimPosToHex)
 #add_subdirectory (VectorKnobX)
 #add_subdirectory (DH_ControlTrigger)
+add_subdirectory (DisplayText)
+
 
 
 
