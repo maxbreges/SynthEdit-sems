@@ -77,6 +77,7 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	FloatGuiPin pinAnimPosAlt;
 	BoolGuiPin pinMouseDown;
 	IntGuiPin pinCornerRadius;
+	BoolGuiPin pinCtrlClick;
 
 public:
 	DisplayList()
@@ -92,6 +93,7 @@ public:
 		initializePin(pinAnimPosAlt, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetMouseDown));
 		initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetCornerRadius));
+		initializePin(pinCtrlClick);
 	}
 
 	//========================================
@@ -109,6 +111,10 @@ public:
 		if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
 		{
 			return gmpi::MP_OK; // Indicate successful hit, so right-click menu can show.
+		}
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
+		{
+			pinCtrlClick = true;
 		}
 
 		pointPrevious = point;	// note first point.
@@ -177,6 +183,7 @@ public:
 	int32_t onPointerUp(int32_t flags, struct GmpiDrawing_API::MP1_POINT point)
 	{
 		pinMouseDown = false;
+		pinCtrlClick = false;
 
 		releaseCapture();
 

@@ -13,6 +13,7 @@
 			<Pin name="Alt+MouseWheel" datatype="float"/>
 			<Pin name="Mouse Down" datatype="bool"/>
             <Pin name="Corner Radius" datatype="int" default="5" isMinimised="true"/>
+			<Pin name="Ctrl+click" datatype="bool" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>
