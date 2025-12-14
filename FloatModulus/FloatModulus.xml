@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FloatModulus" name="FloatModulus" category="mx/Sub-Controls" >
+        <GUI>
+			<Pin name="Value 1" datatype="float"/>
+            <Pin name="Value 2" datatype="float"/>
+			<Pin name="Modulus" datatype="float"/>
+			<Pin name="Value Out" datatype="float" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
