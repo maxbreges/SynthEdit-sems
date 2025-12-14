@@ -157,7 +157,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (VectorKnobX)
 #add_subdirectory (DH_ControlTrigger)
 #add_subdirectory (DisplayText)
-add_subdirectory (FloatModulus)
+#add_subdirectory (FloatModulus)
 
 
 
