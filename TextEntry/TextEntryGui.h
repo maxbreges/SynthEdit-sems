@@ -8,6 +8,7 @@
 class TextXGui : public TextSubcontrol
 {
     GmpiGui::TextEdit nativeEdit;
+    GmpiDrawing_API::MP1_POINT pointPrevious;
 
 public:
     TextXGui();
@@ -16,6 +17,8 @@ public:
     int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext) override;
     int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override;
     int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point) override;
+    int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override;
+    int32_t MP_STDCALL onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point) override;
 
     std::string getDisplayText() override;
 
@@ -40,6 +43,10 @@ private:
 /*    IntGuiPin pinFontSize;
     StringGuiPin pinFont;
     IntGuiPin pinAlignV;*/
+
+    FloatGuiPin pinAnimPosShift;
+    FloatGuiPin pinAnimPosAlt;
+    BoolGuiPin pinCtrlClick;
 
     GmpiDrawing::TextFormat_readonly textFormat;
     FontMetadata* fontmetadata = nullptr;

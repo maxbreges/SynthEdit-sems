@@ -37,7 +37,12 @@ TextXGui::TextXGui()
 /*    initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&TextXGui::redraw));
     initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&TextXGui::redraw));
     initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&TextXGui::redraw));*/
+    initializePin(pinAnimPosShift, static_cast<MpGuiBaseMemberPtr2>(&TextXGui::redraw));
+    initializePin(pinAnimPosAlt, static_cast<MpGuiBaseMemberPtr2>(&TextXGui::redraw));
+    initializePin(pinCtrlClick);
 }
+
+
 
 void TextXGui::redraw()
 {
@@ -194,9 +199,62 @@ int32_t TextXGui::OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext)
         textRect.bottom += directXOffset;
     }
 
-    GmpiDrawing::ParagraphAlignment paragraphAlignment = GmpiDrawing::ParagraphAlignment::Center;
-
     g.DrawTextU(getDisplayText(), textFormat, textRect, brush, (int32_t)DrawTextOptions::Clip);
+
+    return gmpi::MP_OK;
+}
+
+int32_t TextXGui::onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
+{
+    float new_pos = pinAnimPosAlt;
+    new_pos = new_pos + delta / 12000.0f;
+    if (new_pos < 0.f)
+        new_pos = 0.f;
+    if (new_pos > 1.0f)
+        new_pos = 1.0f;
+
+    pinAnimPosAlt = new_pos;
+
+    invalidateRect();
+
+    return gmpi::MP_OK;
+}
+
+int32_t TextXGui::onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
+{
+    if (!getCapture())
+    {
+        return gmpi::MP_UNHANDLED;
+    }
+    // ignore horizontal scrolling
+    if (0 != (flags & gmpi_gui_api::GG_POINTER_KEY_ALT))
+        return gmpi::MP_UNHANDLED;
+
+    if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
+    {
+        Point offset(point.x - pointPrevious.x, point.y - pointPrevious.y); // TODO overload subtraction.
+
+        float coarseness = 0.004f;
+
+        //		if (modifier_keys::isHeldCtrl()) // <cntr> key magnifies
+        /*if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) // <cntr> key magnifies
+            coarseness = 0.001f;*/
+
+        float new_pos = pinAnimPosShift;
+        new_pos = new_pos - coarseness * (float)offset.y;
+
+        if (new_pos < 0.f)
+            new_pos = 0.f;
+
+        if (new_pos > 1.f)
+            new_pos = 1.f;
+
+        pinAnimPosShift = new_pos;
+    }
+
+    pointPrevious = point;
+
+    invalidateRect();
 
     return gmpi::MP_OK;
 }
@@ -207,6 +265,11 @@ int32_t TextXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point)
     if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
     {
         return gmpi::MP_OK; // Indicate successful hit
+    }
+
+    if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
+    {
+        pinCtrlClick = true;
     }
 
     setCapture();
@@ -225,6 +288,7 @@ int32_t TextXGui::onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 
     releaseCapture();
     pinMouseDown = false;
+    pinCtrlClick = false;
 
     if (pinWriteable == false)
         return gmpi::MP_OK;
