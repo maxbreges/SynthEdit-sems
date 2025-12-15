@@ -16,9 +16,6 @@
 	<!--		<Pin name="Font Size" datatype="int" default="16" isMinimised="true"/>
 			<Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
 			<Pin name="Align" datatype="enum" metadata="Center, Top, Bottom" isMinimised="true"/> -->
-			<Pin name="Shift+Drag" datatype="float"/>
-			<Pin name="Alt+MouseWheel" datatype="float"/>
-			<Pin name="Ctrl+click" datatype="bool" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>
