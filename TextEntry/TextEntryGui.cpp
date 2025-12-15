@@ -194,6 +194,8 @@ int32_t TextXGui::OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext)
         textRect.bottom += directXOffset;
     }
 
+    GmpiDrawing::ParagraphAlignment paragraphAlignment = GmpiDrawing::ParagraphAlignment::Center;
+
     g.DrawTextU(getDisplayText(), textFormat, textRect, brush, (int32_t)DrawTextOptions::Clip);
 
     return gmpi::MP_OK;
