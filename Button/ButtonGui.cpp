@@ -5,7 +5,7 @@
 #include <iomanip>
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "../shared/unicode_conversion.h"
+#include "unicode_conversion.h"
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -587,7 +587,7 @@ public:
 		//===================================
 		return gmpi::MP_OK;
 	}
-	std::string ButtonGui::getDisplayText()
+	std::string getDisplayText()
 	{
 		return WStringToUtf8(pinHint.getValue());
 	}
