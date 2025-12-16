@@ -156,7 +156,7 @@ add_subdirectory (TextEntry)
 #add_subdirectory (AnimPosToHex)
 #add_subdirectory (VectorKnobX)
 #add_subdirectory (DH_ControlTrigger)
-#add_subdirectory (DisplayText)
+add_subdirectory (DisplayText)
 #add_subdirectory (FloatModulus)
 
 
