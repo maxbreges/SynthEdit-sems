@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.19)
 
 project(DisplayText)
 
@@ -7,4 +7,5 @@ build_gmpi_plugin(
 	HAS_GUI
 	SOURCE_FILES
 	  DisplayTextGui.cpp
+	unicode_conversion.h
 )
