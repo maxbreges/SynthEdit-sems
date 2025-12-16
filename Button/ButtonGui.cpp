@@ -5,10 +5,12 @@
 #include <iomanip>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "../shared/unicode_conversion.h"
 
 using namespace gmpi;
 using namespace gmpi_gui;
 using namespace GmpiDrawing;
+using namespace JmUnicodeConversions;
 
 class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 {
@@ -413,6 +415,7 @@ public:
 	int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext) override
 	{
 		Graphics g(drawingContext);
+		ClipDrawingToBounds x(g, getRect());
 		auto r = getRect();
 
 		int width = r.right - r.left;
@@ -532,7 +535,7 @@ public:
 		if (pinDisplayHint)
 		{
 			int minFontSize = 8;
-			int maxFontSize = 20;
+			int maxFontSize = 40;
 			int fontSize;
 
 			// Determine base font size
@@ -578,11 +581,15 @@ public:
 			auto brush = g.CreateSolidColorBrush(Color::FromHexString(HintColor));
 
 			// Draw text within the button rect
-			g.DrawTextU(pinHint, textFormat, textRect, brush, 1);
+			g.DrawTextU(getDisplayText(), textFormat, textRect, brush, 1);
 		}
 
 		//===================================
 		return gmpi::MP_OK;
+	}
+	std::string ButtonGui::getDisplayText()
+	{
+		return WStringToUtf8(pinHint.getValue());
 	}
 };
 
