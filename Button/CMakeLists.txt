@@ -7,4 +7,6 @@ build_gmpi_plugin(
 	HAS_GUI
 	SOURCE_FILES
 	  ButtonGui.cpp
+	${se_shared_folder}/unicode_conversion.h
+
 )
