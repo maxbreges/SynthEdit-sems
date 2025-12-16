@@ -65,6 +65,9 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 		invalidateRect();
 	}
 
+	// Define padding (in pixels)
+	int padding = 0;
+
 	StringGuiPin pinText;
 	StringGuiPin pinHint;
 	StringGuiPin pinBgColor;
@@ -305,13 +308,25 @@ public:
 		tf.SetParagraphAlignment(ParagraphAlignment::Center),
 
 			tf.SetTextAlignment(TextAlignment::Center);
+
+		// Original rect
+		auto rect = getRect(); // GmpiDrawing::Rect
+
+		// Create inset rect as GmpiDrawing::Rect
+		GmpiDrawing::Rect textRect(
+			rect.left,
+			rect.top + padding,
+			rect.right,
+			rect.bottom - padding
+		);
+
 		auto brush = g.CreateSolidColorBrush(Color::White);
 		brush.SetColor(Color::FromHexString(pinTextColor));
 		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
 
 		return gmpi::MP_OK;
 	}
-	std::string DisplayList::getDisplayText()
+	std::string getDisplayText()
 	{
 		return WStringToUtf8(pinText.getValue());
 	}
