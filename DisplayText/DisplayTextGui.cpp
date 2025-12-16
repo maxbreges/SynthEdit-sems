@@ -1,6 +1,6 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
-//#include "..\shared\unicode_conversion.h"
+#include "..\shared\unicode_conversion.h"
 //#include "..\SubControlsXp\TextSubcontrol.h"
 #include "mp_gui.h"
 #include <sstream>
@@ -10,10 +10,9 @@ using namespace std;
 using namespace gmpi;
 using namespace gmpi_gui;
 using namespace GmpiDrawing;
-//using namespace JmUnicodeConversions;
+using namespace JmUnicodeConversions;
 
 GmpiDrawing_API::MP1_POINT pointPrevious;
-GmpiGui::PopupMenu nativeMenu;
 
 class DisplayList final : public gmpi_gui::MpGuiGfxBase
 {
@@ -298,6 +297,9 @@ public:
 		//=============================================================
 		std::string str = { pinFont };
 		const char* fontFace = str.c_str();
+
+		// If tfReadonly is read-only, create a writable copy:
+	
 		TextFormat tf = g.GetFactory().CreateTextFormat(pinFontSize, fontFace);
 
 		tf.SetParagraphAlignment(ParagraphAlignment::Center),
@@ -305,9 +307,13 @@ public:
 			tf.SetTextAlignment(TextAlignment::Center);
 		auto brush = g.CreateSolidColorBrush(Color::White);
 		brush.SetColor(Color::FromHexString(pinTextColor));
-		g.DrawTextW(pinText.getValue(), tf, getRect(), brush);
+		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
 
 		return gmpi::MP_OK;
+	}
+	std::string DisplayList::getDisplayText()
+	{
+		return WStringToUtf8(pinText.getValue());
 	}
 };
 
