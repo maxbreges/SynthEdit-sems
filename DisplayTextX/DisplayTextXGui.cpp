@@ -12,6 +12,8 @@ using namespace gmpi_gui;
 using namespace GmpiDrawing;
 using namespace JmUnicodeConversions;
 
+GmpiDrawing_API::MP1_POINT pointPrevious;
+
 class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 {
 	bool previousState = false;
@@ -150,9 +152,64 @@ public:
 		pinMouseDown = true;
 
 	bypass:
-		pinCtrlClick = true;
+		
 		return gmpi::MP_OK;
 
+	}
+
+	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
+	{
+		float new_pos = pinAnimPosAlt;
+		new_pos = new_pos + delta / 12000.0f;
+		if (new_pos < 0.f)
+			new_pos = 0.f;
+		if (new_pos > 1.0f)
+			new_pos = 1.0f;
+
+		pinAnimPosAlt = new_pos;
+
+		invalidateRect();
+
+		return gmpi::MP_OK;
+	}
+
+	int32_t MP_STDCALL onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
+	{
+		if (!getCapture())
+		{
+			return gmpi::MP_UNHANDLED;
+		}
+		// ignore horizontal scrolling
+		if (0 != (flags & gmpi_gui_api::GG_POINTER_KEY_ALT))
+			return gmpi::MP_UNHANDLED;
+
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
+		{
+			Point offset(point.x - pointPrevious.x, point.y - pointPrevious.y); // TODO overload subtraction.
+
+			float coarseness = 0.004f;
+
+			//		if (modifier_keys::isHeldCtrl()) // <cntr> key magnifies
+			/*if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) // <cntr> key magnifies
+				coarseness = 0.001f;*/
+
+			float new_pos = pinAnimPosShift;
+			new_pos = new_pos - coarseness * (float)offset.y;
+
+			if (new_pos < 0.f)
+				new_pos = 0.f;
+
+			if (new_pos > 1.f)
+				new_pos = 1.f;
+
+			pinAnimPosShift = new_pos;
+		}
+
+		pointPrevious = point;
+
+		invalidateRect();
+
+		return gmpi::MP_OK;
 	}
 
 	int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
@@ -161,7 +218,7 @@ public:
 		// Release control key
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 		{
-			
+			pinCtrlClick = true;
 			pinCtrlClick = false;
 		}
 
@@ -325,7 +382,7 @@ public:
 
 		auto Brush = g.CreateLinearGradientBrush(gradientStopCollection, point1, point2);
 		auto outlineBrush = g.CreateSolidColorBrush(botCol);
-		float thickness = 1.f;
+		float thickness = 0.0f;
 
 			g.FillGeometry(geometry, Brush);
 		g.DrawGeometry(geometry, outlineBrush, thickness);
