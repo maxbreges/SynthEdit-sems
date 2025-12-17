@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="DisplayTextX" name="Display TextX" category="mx/Sub-Controls">
+    <Plugin id="DisplayTextX" name="Display Text" category="mx/Sub-Controls">
         <GUI graphicsApi="GmpiGui">
 
 			<Pin name="Text In" datatype="string"/>
