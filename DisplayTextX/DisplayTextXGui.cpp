@@ -257,5 +257,5 @@ private:
 };
 namespace
 {
-    auto r = Register<DisplayText>::withId(L"DisplayTextX");
+    auto r = Register<DisplayText>::withId(L"DisplayText");
 }
