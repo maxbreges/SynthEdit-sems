@@ -1,12 +1,10 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
 #include "unicode_conversion.h"
-//#include "..\SubControlsXp\TextSubcontrol.h"
 #include "mp_gui.h"
 #include <sstream>
 #include <iomanip>
 
-using namespace std;
 using namespace gmpi;
 using namespace gmpi_gui;
 using namespace GmpiDrawing;
@@ -16,15 +14,6 @@ GmpiDrawing_API::MP1_POINT pointPrevious;
 
 class DisplayList final : public gmpi_gui::MpGuiGfxBase
 {
-	void onSetHint()
-	{
-		// pinHint changed
-	}
-
-	void onSetBgColor()
-	{
-		// pinBgColor changed
-	}
 	void onSetTopColor()
 	{
 		invalidateRect();
@@ -33,35 +22,29 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	{
 		invalidateRect();
 	}
-
 	void onSetTextColor()
 	{
 		invalidateRect();
 	}
-
 	void onSetTextFont()
 	{
 		invalidateRect();
 	}
-
 	void onSetFontSize()
 	{
 		invalidateRect();
 	}
-
-	void onSetAnimationPosition()
-	{
-
-		invalidateRect();
-	}
-
-
-	void onSetMouseDown()
-	{
-	}
-
 	void onSetCornerRadius()
 	{
+		invalidateRect();
+	}
+	void onSetAlignV()
+	{
+		invalidateRect();
+	}
+	void onSetAlignY()
+	{
+		padding = pinAlignY;
 		invalidateRect();
 	}
 
@@ -81,21 +64,26 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	IntGuiPin pinCornerRadius;
 	BoolGuiPin pinCtrlClick;
 
+	IntGuiPin pinAlignV;
+	FloatGuiPin pinAlignY;
+
 public:
 	DisplayList()
 	{
 		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetText));
-		initializePin(pinHint, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetHint));
-		initializePin(pinBgColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetBgColor));
+		initializePin(pinHint);
+		initializePin(pinBgColor);
 		initializePin(pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTopColor));		
 		initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextColor));
 		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextFont));
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetFontSize));
-		initializePin(pinAnimPosShift, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
-		initializePin(pinAnimPosAlt, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
-		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetMouseDown));
+		initializePin(pinAnimPosShift);
+		initializePin(pinAnimPosAlt);
+		initializePin(pinMouseDown);
 		initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetCornerRadius));
 		initializePin(pinCtrlClick);
+		initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAlignV));
+		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAlignY));
 	}
 
 	//========================================
@@ -125,7 +113,6 @@ public:
 
 		return gmpi::MP_OK;
 	}
-
 
 	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
 	{
@@ -190,7 +177,6 @@ public:
 		releaseCapture();
 
 		return gmpi::MP_OK;
-		//invalidateRect();
 	}
 
 	Color FromHexStringBackwardCompatible(const std::wstring& s)
@@ -298,16 +284,33 @@ public:
 		g.FillGeometry(geometry, gradientBrush);
 
 		//=============================================================
-		std::string str = { pinFont };
-		const char* fontFace = str.c_str();
+		//drawing text
 
-		// If tfReadonly is read-only, create a writable copy:
-	
-		TextFormat tf = g.GetFactory().CreateTextFormat(pinFontSize, fontFace);
+		int minFontSize = 8;
+		int maxFontSize = 32;
+		int fontSize;
 
-		tf.SetParagraphAlignment(ParagraphAlignment::Center),
+		// Determine base font size
+		if (pinFontSize != 0)
+		{
+			// Use user-defined font size, constrained within min/max
+			fontSize = std::max<int32_t>(minFontSize, std::min<int32_t>(maxFontSize, pinFontSize));
+		}
+		else
+		{
+			int buttonHeight = getRect().bottom - getRect().top;
+			fontSize = static_cast<int>(buttonHeight * 0.5f);
+			fontSize = std::max<>(minFontSize, std::min<>(maxFontSize, fontSize));
+		}
 
-			tf.SetTextAlignment(TextAlignment::Center);
+		// Create text format with the final font size
+		std::string fontFace = std::string(pinFont);
+		TextFormat textFormat = g.GetFactory().CreateTextFormat(fontSize, fontFace.c_str());
+
+		// Set alignment
+		ParagraphAlignment alignV[] = { ParagraphAlignment::Center, ParagraphAlignment::Near, ParagraphAlignment::Far };
+		textFormat.SetParagraphAlignment(alignV[pinAlignV.getValue()]);
+		textFormat.SetTextAlignment(TextAlignment::Center);
 
 		// Original rect
 		auto rect = getRect(); // GmpiDrawing::Rect
@@ -321,9 +324,11 @@ public:
 		);
 
 		auto brush = g.CreateSolidColorBrush(Color::White);
-		brush.SetColor(Color::FromHexString(pinTextColor));
-		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
 
+		// Draw text within the button rect
+		g.DrawTextU(getDisplayText(), textFormat, textRect, brush, 1);
+
+		//===================================
 		return gmpi::MP_OK;
 	}
 	std::string getDisplayText()
