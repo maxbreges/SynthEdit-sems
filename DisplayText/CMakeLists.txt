@@ -7,5 +7,5 @@ build_gmpi_plugin(
 	HAS_GUI
 	SOURCE_FILES
 	  DisplayTextGui.cpp
-	unicode_conversion.h
+	  unicode_conversion.h
 )
