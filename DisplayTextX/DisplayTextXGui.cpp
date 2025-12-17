@@ -1,7 +1,5 @@
-#pragma once
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
-//#include "unicode_conversion.h"
 #include "mp_gui.h"
 #include <sstream>
 #include <iomanip>
@@ -36,26 +34,26 @@ Color FromHexStringBackwardCompatible(const std::wstring& s)
     );
 }
 
-class DisplayList final : public gmpi_gui::MpGuiGfxBase
+class DisplayText final : public gmpi_gui::MpGuiGfxBase
 {
 public:
     // Constructor
-    DisplayList()
+    DisplayText()
     {
-        initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetText));
+        initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetText));
         initializePin(pinHint);
         initializePin(pinBgColor);
-        initializePin(pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTopColor));
-        initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextColor));
-        initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextFont));
-        initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetFontSize));
+        initializePin(pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetTopColor));
+        initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetTextColor));
+        initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetTextFont));
+        initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetFontSize));
         initializePin(pinAnimPosShift);
         initializePin(pinAnimPosAlt);
         initializePin(pinMouseDown);
-        initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetCornerRadius));
+        initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetCornerRadius));
         initializePin(pinCtrlClick);
-        initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAlignV));
-        initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAlignY));
+        initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetAlignV));
+        initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetAlignY));
     }
 
     // --- Pin handlers
@@ -66,7 +64,7 @@ public:
     void onSetFontSize() { invalidateRect(); }
     void onSetCornerRadius() { invalidateRect(); }
     void onSetAlignV() { invalidateRect(); }
-    void onSetAlignY()
+    void onSetAlignY() 
     {
         padding = static_cast<int>(pinAlignY);
         invalidateRect();
@@ -259,5 +257,5 @@ private:
 };
 namespace
 {
-    auto r = Register<DisplayList>::withId(L"DisplayTextX");
+    auto r = Register<DisplayText>::withId(L"DisplayTextX");
 }
