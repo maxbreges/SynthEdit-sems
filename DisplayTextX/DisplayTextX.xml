@@ -16,8 +16,8 @@
 			<Pin name="Corner Radius" datatype="int" default="5" isMinimised="true"/>
 			<Pin name="Ctrl+click" datatype="bool" direction="out"/>
 			
-            <Pin name="Align" datatype="enum" isMinimised="true" metadata="Center, Top, Bottom"/>
-            <Pin name="Align Top/Bottom" datatype="float" default="4" isMinimised="true"/>
+            <Pin name="Align" datatype="enum" isMinimised="true" default="2" metadata="Top,Bottom,Center" />
+            <Pin name="Top/Bottom Padding" datatype="float" default="4" isMinimised="true"/>
         </GUI>
     </Plugin>
 </PluginList>
