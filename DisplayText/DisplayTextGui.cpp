@@ -102,7 +102,11 @@ public:
 		{
 			return gmpi::MP_OK; // Indicate successful hit, so right-click menu can show.
 		}
-
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
+		{
+			pinCtrlClick = true;
+		}
+			
 		pointPrevious = point;	// note first point.
 		pinMouseDown = true;
 		setCapture();
@@ -112,7 +116,7 @@ public:
 
 	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
 	{
-		float new_pos = new_pos + delta / 12000.0f;
+		float new_pos = pinAnimPosAlt + delta / 12000.0f;
 		if (new_pos < 0.f)
 			new_pos = 0.f;
 		if (new_pos > 1.f)
@@ -157,7 +161,6 @@ public:
 		}
 
 		pointPrevious = point;
-
 		invalidateRect();
 
 		return gmpi::MP_OK;
@@ -165,10 +168,9 @@ public:
 
 	int32_t onPointerUp(int32_t flags, struct GmpiDrawing_API::MP1_POINT point)
 	{
+		pinCtrlClick = false;
 		pinMouseDown = false;
-
 		releaseCapture();
-
 		return gmpi::MP_OK;
 	}
 
