@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="DisplayText" name="Display Text" category="mx/Sub-Controls">
+        <GUI graphicsApi="GmpiGui">
+
+			<Pin name="Text In" datatype="string"/>
+			<Pin name="Hint" datatype="string" isMinimised="true"/>
+			<Pin name="BgColor" datatype="string" default="FF000000" private="true"/>
+			<Pin name="Color" datatype="string" default="FF666666"/>
+			<Pin name="Text Color" datatype="string" default="ffffffff"/>
+			<Pin name="Font" datatype="string" default="sans-Serif" isMinimised="true"/>
+			<Pin name="Font Size" datatype="int" default="28" isMinimised="true"/>
+			<Pin name="Shift+Drag" datatype="float"/>
+			<Pin name="Alt+MouseWheel" datatype="float"/>
+			<Pin name="Mouse Down" datatype="bool"/>
+			<Pin name="Corner Radius" datatype="int" default="5" isMinimised="true"/>
+			<Pin name="Ctrl+click" datatype="bool" direction="out"/>
+			
+            <Pin name="Align" datatype="enum" isMinimised="true" default="2" metadata="Top,Bottom,Center" />
+            <Pin name="Top/Bottom Padding" datatype="float" default="4" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>

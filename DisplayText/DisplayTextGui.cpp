@@ -293,16 +293,21 @@ public:
 			tf.SetTextAlignment(TextAlignment::Center);
 
 		brush.SetColor(Color::FromHexString(pinTextColor));
+		// Platform-specific text drawing
+#ifdef _WIN32
+		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
+#else
 		g.DrawTextU(pinText, tf, getRect(), brush);
+#endif
 
 		return gmpi::MP_OK;
 	}
 
-/*	std::string getDisplayText()
+	std::string getDisplayText()
 	{
 		std::wstring wideText = pinText.getValue(); // assuming this returns std::wstring
 		return WStringToUtf8(wideText);
-	}*/
+	}
 
 };
 
