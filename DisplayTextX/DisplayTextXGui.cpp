@@ -221,17 +221,17 @@ private:
     // --- Helper methods
     int determineFontSize(const Rect& rect)
     {
-        int fontSize = 28;
+        int fontSize = 12;
         if (pinFontSize != 0)
         {
             fontSize = std::clamp<int>(pinFontSize, MinFontSize, MaxFontSize);
         }
-        else
+/*        else
         {
             int height = rect.bottom - rect.top;
-            fontSize = static_cast<int>(height * 1.0f);
+            fontSize = static_cast<int>(height * 0.5f);
             fontSize = std::clamp<int>(fontSize, MinFontSize, MaxFontSize);
-        }
+        }*/
         return fontSize;
     }
 
