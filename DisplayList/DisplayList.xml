@@ -4,12 +4,12 @@
 		<GUI graphicsApi="GmpiGui">
 			<Pin name="Hint" datatype="string" isMinimised="true"/>
 			<Pin name="BgColor" datatype="string" default="FF000000" private="true"/>
-			<Pin name="Color" datatype="string" default="FF666666" isMinimised="true"/>
+			<Pin name="Color" datatype="string" default="FF666666" isMinimised="false"/>
 			<Pin name="Text" datatype="string" direction="out" private="true"/>
-			<Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="true"/>
+			<Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="false"/>
 			<Pin name="Text Font" datatype="string" default="Times New Roman" isMinimised="true"/>
 			<Pin name="Font Size" datatype="int" default="16" isMinimised="true" />
-			<Pin name="AnimPos+Shift" datatype="float" direction="in" private="true"/>
+			<Pin name="AnimPos+Shift" datatype="float" direction="in" private="false"/>
 			<Pin name="AnimPos+Ctrl" datatype="float" direction="in" private="true"/>
 
 			<Pin name="Choice" datatype="int" direction="in" />
