@@ -187,7 +187,7 @@ public:
         g.FillGeometry(geometry, gradientBrush);
 
         // --- Draw text
-        int fontSize = pinFontSize;
+        int fontSize = determineFontSize(rect);
         auto textFormat = createTextFormat(g, fontSize);
         textFormat.SetTextAlignment(TextAlignment::Center);
         auto textRect = getTextRect(rect, padding);
@@ -199,7 +199,7 @@ public:
     }
 
 private:
-/*    // --- Helper methods
+    // --- Helper methods
     int determineFontSize(const Rect& rect)
     {
         int fontSize = 0;
@@ -211,10 +211,10 @@ private:
         {
             int height = rect.bottom - rect.top;
             fontSize = static_cast<int>(height * 0.5f);
-            fontSize = std::clamp<int>(fontSize, 28, MaxFontSize);
+            fontSize = std::clamp<int>(fontSize, MinFontSize, MaxFontSize);
         }
         return fontSize;
-    }*/
+    }
 
     TextFormat createTextFormat(Graphics& g, int fontSize)
     {
