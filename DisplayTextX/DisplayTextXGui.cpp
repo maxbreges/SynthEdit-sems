@@ -11,7 +11,7 @@ using namespace JmUnicodeConversions;
 
 namespace {
     constexpr float MouseWheelCoarseness = 12000.0f;
-    constexpr int MinFontSize = 12;
+    constexpr int MinFontSize = 8;
     constexpr int MaxFontSize = 32;
 }
 
@@ -221,17 +221,17 @@ private:
     // --- Helper methods
     int determineFontSize(const Rect& rect)
     {
-        int fontSize = 12;
+        int fontSize = 0;
         if (pinFontSize != 0)
         {
             fontSize = std::clamp<int>(pinFontSize, MinFontSize, MaxFontSize);
         }
-/*        else
+        else
         {
             int height = rect.bottom - rect.top;
             fontSize = static_cast<int>(height * 0.5f);
-            fontSize = std::clamp<int>(fontSize, MinFontSize, MaxFontSize);
-        }*/
+            fontSize = std::clamp<int>(fontSize, 28, MaxFontSize);
+        }
         return fontSize;
     }
 
