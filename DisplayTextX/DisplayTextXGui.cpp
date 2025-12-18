@@ -15,7 +15,25 @@ namespace {
     constexpr int MaxFontSize = 32;
 }
 
-// Utility function outside class for reusability
+Color FromHexStringBackwardCompatible(const std::wstring& s)
+{
+    constexpr float oneOver255 = 1.0f / 255.0f;
+    wchar_t* stopString = nullptr;
+    uint32_t hex = wcstoul(s.c_str(), &stopString, 16);
+    if (stopString == s.c_str() || *stopString != L'\0') {
+        // Invalid parsing
+        return Color(0, 0, 0, 0);
+    }
+    float alpha = ((hex >> 24) & 0xFF) * oneOver255;
+    return Color(
+        se_sdk::FastGamma::sRGB_to_float((hex >> 16) & 0xFF),
+        se_sdk::FastGamma::sRGB_to_float((hex >> 8) & 0xFF),
+        se_sdk::FastGamma::sRGB_to_float(hex & 0xFF),
+        alpha
+    );
+}
+
+/*// Utility function outside class for reusability
 Color FromHexStringBackwardCompatible(const std::wstring& s)
 {
     constexpr float oneOver255 = 1.0f / 255.0f;
@@ -32,7 +50,7 @@ Color FromHexStringBackwardCompatible(const std::wstring& s)
         se_sdk::FastGamma::sRGB_to_float(hex & 0xFF),
         alpha
     );
-}
+}*/
 
 class DisplayText final : public gmpi_gui::MpGuiGfxBase
 {
