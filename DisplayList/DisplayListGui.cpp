@@ -1,7 +1,5 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
-//#include "..\shared\unicode_conversion.h"
-//#include "..\SubControlsXp\TextSubcontrol.h"
 #include "mp_gui.h"
 #include <sstream>
 #include <iomanip>
@@ -17,15 +15,6 @@ GmpiGui::PopupMenu nativeMenu;
 
 class DisplayList final : public gmpi_gui::MpGuiGfxBase
 {
-	void onSetHint()
-	{
-		// pinHint changed
-	}
-
-	void onSetBgColor()
-	{
-		// pinBgColor changed
-	}
 	void onSetTopColor()
 	{
 		invalidateRect();
@@ -112,8 +101,8 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 public:
 	DisplayList()
 	{
-		initializePin(pinHint, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetHint));
-		initializePin(pinBgColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetBgColor));
+		initializePin(pinHint);
+		initializePin(pinBgColor);
 		initializePin(pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTopColor));
 		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetText));
 		initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextColor));
@@ -154,7 +143,6 @@ public:
 		return gmpi::MP_OK;
 	}
 
-
 	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
 	{
 		float new_pos = pinListIndex;
@@ -178,7 +166,6 @@ public:
 			pinColorAdj = false;
 		}
 
-
 		invalidateRect();
 
 		return gmpi::MP_OK;
@@ -197,7 +184,7 @@ public:
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
 		{
 
-			/*if ((flags & gmpi_gui_api::GG_POINTER_KEY_ALT) == 0)
+			if ((flags & gmpi_gui_api::GG_POINTER_KEY_ALT) == 0)
 			{
 				pinColorAdj = false;
 			}
@@ -209,7 +196,7 @@ public:
 			if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) == 0)
 			{
 				pinColorAdj = false;
-			}*/
+			}
 
 			Point offset(point.x - pointPrevious.x, point.y - pointPrevious.y); // TODO overload subtraction.
 
@@ -256,7 +243,7 @@ public:
 		return gmpi::MP_OK;
 	}
 
-	int32_t onPointerUp(int32_t flags, struct GmpiDrawing_API::MP1_POINT point)
+	int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 	{
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
 		{
@@ -332,9 +319,7 @@ public:
 		releaseCapture();
 
 		return gmpi::MP_OK;
-		//invalidateRect();
 	}
-
 
 	Color FromHexStringBackwardCompatible(const std::wstring& s)
 	{
@@ -350,11 +335,11 @@ public:
 	int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext) override
 	{
 		Graphics g(drawingContext);
-		//ClipDrawingToBounds x(g, getRect());
+		ClipDrawingToBounds x(g, getRect());
 
 		auto brush = g.CreateSolidColorBrush(Color::FromHexString(pinTextColor));
 
-		//g.FillRectangle(getRect(), brush);
+		//g.FillRectangle(getRect(), brush); //background rect
 
 		//======================================
 		auto r = getRect();
@@ -441,26 +426,9 @@ public:
 			{ 1.0f, botCol },
 		};
 
-
 		auto gradientBrush = g.CreateLinearGradientBrush(gradientStops, point1, point2);
 
 		g.FillGeometry(geometry, gradientBrush);
-
-
-		//=============================================================
-
-/*		it_enum_list itr(pinListItems);
-		int i = 0;
-		for (itr.First(); !itr.IsDone(); itr.Next())
-		{
-			if (itr.CurrentItem()->getType() != enum_entry_type::Normal)
-			{
-				continue;
-			}
-			pinText = itr.CurrentItem()->text;
-
-			++i;
-		}*/
 
 		//=============================================================
 		std::string str = { pinFont };
@@ -472,14 +440,21 @@ public:
 			tf.SetTextAlignment(TextAlignment::Center);
 
 		brush.SetColor(Color::FromHexString(pinTextColor));
+
+#ifdef _WIN32
 		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
+#else
+		g.DrawTextU(pinText, tf, getRect(), brush);
+#endif
 
 		return gmpi::MP_OK;
 	}
 	std::string getDisplayText()
 	{
-		return WStringToUtf8(pinText.getValue());
+		std::wstring wideText = pinText.getValue(); // assuming this returns std::wstring
+		return WStringToUtf8(wideText);
 	}
+
 	//====================================
 
 	void OnPopupComplete(int32_t result)
