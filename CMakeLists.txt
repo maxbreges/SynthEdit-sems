@@ -18,7 +18,7 @@ include(FetchContent)
 #note: SOURCE_SUBDIR is a subfolder with NO cmake file (so we don't needlessly include the examples)
 FetchContent_Declare(
   se_sdk3_repo
-  GIT_REPOSITORY https://github.com/maxbreges/SynthEdit-sems
+  GIT_REPOSITORY https://github.com/JeffMcClintock/SynthEdit_SDK
   GIT_TAG origin/master
   SOURCE_SUBDIR se_sdk3
 )
