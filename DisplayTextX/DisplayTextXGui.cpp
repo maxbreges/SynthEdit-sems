@@ -34,25 +34,6 @@ Color FromHexStringBackwardCompatible(const std::wstring& s)
     );
 }
 
-/*// Utility function outside class for reusability //crashes on macOS
-Color FromHexStringBackwardCompatible(const std::wstring& s)
-{
-    constexpr float oneOver255 = 1.0f / 255.0f;
-    wchar_t* stopString;
-    uint32_t hex = wcstoul(s.c_str(), &stopString, 16);
-    if (stopString == s.c_str()) {
-        // Invalid parsing, return a default color, e.g., transparent black
-        return Color(0, 0, 0, 0);
-    }
-    float alpha = ((hex >> 24) & 0xFF) * oneOver255;
-    return Color(
-        se_sdk::FastGamma::sRGB_to_float((hex >> 16) & 0xFF),
-        se_sdk::FastGamma::sRGB_to_float((hex >> 8) & 0xFF),
-        se_sdk::FastGamma::sRGB_to_float(hex & 0xFF),
-        alpha
-    );
-}*/
-
 class DisplayText final : public gmpi_gui::MpGuiGfxBase
 {
 public:
@@ -206,7 +187,7 @@ public:
         g.FillGeometry(geometry, gradientBrush);
 
         // --- Draw text
-        int fontSize = determineFontSize(rect);
+        int fontSize = pinFontSize;
         auto textFormat = createTextFormat(g, fontSize);
         textFormat.SetTextAlignment(TextAlignment::Center);
         auto textRect = getTextRect(rect, padding);
@@ -218,7 +199,7 @@ public:
     }
 
 private:
-    // --- Helper methods
+/*    // --- Helper methods
     int determineFontSize(const Rect& rect)
     {
         int fontSize = 0;
@@ -233,7 +214,7 @@ private:
             fontSize = std::clamp<int>(fontSize, 28, MaxFontSize);
         }
         return fontSize;
-    }
+    }*/
 
     TextFormat createTextFormat(Graphics& g, int fontSize)
     {
