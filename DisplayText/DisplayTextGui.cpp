@@ -293,7 +293,7 @@ public:
 			tf.SetTextAlignment(TextAlignment::Center);
 
 		brush.SetColor(Color::FromHexString(pinTextColor));
-		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
+		g.DrawTextU(pinText, tf, getRect(), brush);
 
 		return gmpi::MP_OK;
 	}
