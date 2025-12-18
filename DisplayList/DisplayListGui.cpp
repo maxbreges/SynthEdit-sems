@@ -10,7 +10,7 @@ using namespace std;
 using namespace gmpi;
 using namespace gmpi_gui;
 using namespace GmpiDrawing;
-//using namespace JmUnicodeConversions;
+using namespace JmUnicodeConversions;
 
 GmpiDrawing_API::MP1_POINT pointPrevious;
 GmpiGui::PopupMenu nativeMenu;
@@ -472,9 +472,13 @@ public:
 			tf.SetTextAlignment(TextAlignment::Center);
 
 		brush.SetColor(Color::FromHexString(pinTextColor));
-		g.DrawTextW(pinText.getValue(), tf, getRect(), brush);
+		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
 
 		return gmpi::MP_OK;
+	}
+	std::string getDisplayText()
+	{
+		return WStringToUtf8(pinText.getValue());
 	}
 	//====================================
 
