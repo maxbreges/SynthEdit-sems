@@ -11,10 +11,11 @@ using namespace JmUnicodeConversions;
 
 namespace {
     constexpr float MouseWheelCoarseness = 12000.0f;
-    constexpr int MinFontSize = 8;
+    constexpr int MinFontSize = 12;
     constexpr int MaxFontSize = 32;
 }
 
+// Utility function outside class for reusability
 Color FromHexStringBackwardCompatible(const std::wstring& s)
 {
     constexpr float oneOver255 = 1.0f / 255.0f;
@@ -33,7 +34,7 @@ Color FromHexStringBackwardCompatible(const std::wstring& s)
     );
 }
 
-/*// Utility function outside class for reusability
+/*// Utility function outside class for reusability //crashes on macOS
 Color FromHexStringBackwardCompatible(const std::wstring& s)
 {
     constexpr float oneOver255 = 1.0f / 255.0f;
@@ -220,7 +221,7 @@ private:
     // --- Helper methods
     int determineFontSize(const Rect& rect)
     {
-        int fontSize = 0;
+        int fontSize = 12;
         if (pinFontSize != 0)
         {
             fontSize = std::clamp<int>(pinFontSize, MinFontSize, MaxFontSize);
