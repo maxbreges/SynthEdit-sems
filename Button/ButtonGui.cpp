@@ -5,7 +5,7 @@
 #include <iomanip>
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "../shared/unicode_conversion.h"
+#include "mp_gui.h"
 
 using namespace gmpi;
 using namespace gmpi_gui;
