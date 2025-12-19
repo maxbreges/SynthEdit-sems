@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="majors asc" name="Scale Degree" category="mx/MIDI">
+		<Parameters>
+			<Parameter name="Degree" id="1" datatype="int" private="true" metadata=",,11,0"/>
+			<Parameter name="Mode" id="2" datatype="int" private="true" metadata=",,1,0"/>
+			<Parameter name="Root" id="3" datatype="int" private="true" metadata=",,11,0"/>
+		</Parameters>
+		<Audio>
+			<Pin name="MIDI In" datatype="midi"/>
+			<Pin name="Mode" datatype="enum" metadata="Major,Minor"/>
+			<Pin name="Root" datatype="enum" metadata="C,C♯,D,E♭,E,F,F♯,G,A♭,A,B♭,B"/>
+			<Pin name="Note" datatype="int" direction="out" parameterId="1" private="true" />
+			<Pin name="Mode" datatype="int" direction="out" parameterId="2" private="true"/>
+			<Pin name="Root" datatype="int" direction="out" parameterId="3" private="true"/>
+		</Audio>
+        <GUI>
+			<Pin name="Note" direction="in" datatype="int" parameterId="1" private="true"/>
+			<Pin name="Mode" direction="in" datatype="int" parameterId="2" private="true"/>
+			<Pin name="Root" direction="in" datatype="int" parameterId="3" private="true"/>
+			
+			<Pin name="Choice" datatype="int" direction="out"/>
+            <Pin name="Key List" datatype="string" direction="out"/>
+			<Pin name="Degree List" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
