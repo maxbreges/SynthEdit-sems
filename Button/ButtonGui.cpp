@@ -581,7 +581,11 @@ public:
 			auto brush = g.CreateSolidColorBrush(Color::FromHexString(HintColor));
 
 			// Draw text within the button rect
-			g.DrawTextU(getDisplayText(), textFormat, textRect, brush, 1);
+#ifdef _WIN32
+			g.DrawTextU(getDisplayText(), textFormat, getRect(), brush, 1);
+#else
+			g.DrawTextU(pinHint, textFormat, getRect(), brush, 1);
+#endif
 		}
 
 		//===================================

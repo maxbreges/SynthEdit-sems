@@ -1,7 +1,5 @@
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
-//#include "..\shared\unicode_conversion.h"
-//#include "..\SubControlsXp\TextSubcontrol.h"
 #include "mp_gui.h"
 #include <sstream>
 #include <iomanip>
