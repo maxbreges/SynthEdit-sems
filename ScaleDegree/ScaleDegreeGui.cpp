@@ -1,3 +1,5 @@
+// Copyright 2025 Max Brezhestovski
+
 #include "mp_sdk_gui2.h"
 
 using namespace gmpi;
