@@ -3,7 +3,7 @@
     <Plugin id="AnimPosToHex" name="AnimPos to Color Hex" category="mx/Sub-Controls/Conversion">
 		<GUI>
 			<Pin name="AnimPosIn" datatype="float"/>
-			<Pin name="Hex" datatype="string"/>
+			<Pin name="Hex" datatype="string" direction="out"/>
 		</GUI>
     </Plugin>
 </PluginList>
