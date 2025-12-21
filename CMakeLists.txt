@@ -154,7 +154,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (DisplayText)
 #add_subdirectory (FloatModulus)
 #add_subdirectory (ScaleDegree)
-#add_subdirectory (ListToText)
+add_subdirectory (ListToText)
 
 
 
