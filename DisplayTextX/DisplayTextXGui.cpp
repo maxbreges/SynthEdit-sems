@@ -98,8 +98,8 @@ public:
         if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
         {
             float newPos = pinAnimPosAlt + delta / MouseWheelCoarseness;
-            newPos = std::clamp(newPos, 0.f, 1.f);
-            pinAnimPosAlt = newPos;
+        newPos = std::clamp(newPos, 0.f, 1.f);
+        pinAnimPosAlt = newPos;
         }
         invalidateRect();
         return gmpi::MP_OK;
@@ -201,7 +201,7 @@ public:
 #ifdef _WIN32
         g.DrawTextU(getDisplayText(), textFormat, getRect(), textBrush, 1);
 #else
-        g.DrawTextU(pinText.getValue(), textFormat, getRect(), textBrush, 1);
+        g.DrawTextU(pinText, textFormat, getRect(), textBrush, 1);
 #endif
 
         return gmpi::MP_OK;
