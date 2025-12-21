@@ -20,10 +20,10 @@ jobs:
         include:
         #  - name: Linux
         #    os: ubuntu-22.04
-        #  - name: macOS
-        #    os: macos-latest
-          - name: Windows
-            os: windows-latest
+          - name: macOS
+            os: macos-latest
+         # - name: Windows
+          #  os: windows-latest
     steps:
       - uses: actions/checkout@v4
 
