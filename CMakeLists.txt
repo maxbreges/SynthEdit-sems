@@ -151,10 +151,10 @@ include(plugin_helper.cmake)
 #add_subdirectory (AnimPosToColorHex)
 #add_subdirectory (VectorKnobX)
 #add_subdirectory (DH_ControlTrigger)
-#add_subdirectory (DisplayText)
+add_subdirectory (DisplayText)
 #add_subdirectory (FloatModulus)
 #add_subdirectory (ScaleDegree)
-add_subdirectory (ListToText)
+#add_subdirectory (ListToText)
 
 
 
