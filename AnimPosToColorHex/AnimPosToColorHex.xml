@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="AnimPosToHex" name="AnimPos to Color Hex" category="mx/Sub-Controls/Conversion">
+		<GUI>
+			<Pin name="AnimPosIn" datatype="float"/>
+			<Pin name="Hex" datatype="string"/>
+		</GUI>
+    </Plugin>
+</PluginList>
