@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="ListToText" name="List To Text" category="mx/Sub-Controls/Conversion">
+        <GUI>
+            <Pin name="Choice" datatype="int"/>
+            <Pin name="Item List" datatype="string"/>
+            <Pin name="Item Text" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>

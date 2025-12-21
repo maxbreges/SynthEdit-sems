@@ -114,14 +114,13 @@ public:
 
 	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
 	{
-		float new_pos = pinAnimPosAlt + delta / 12000.0f;
-		if (new_pos < 0.f)
-			new_pos = 0.f;
-		if (new_pos > 1.f)
-			new_pos = 1.f;
-
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
 		{
+			float new_pos = pinAnimPosAlt + delta / 12000.0f;
+			if (new_pos < 0.f)
+				new_pos = 0.f;
+			if (new_pos > 1.f)
+				new_pos = 1.f;
 			pinAnimPosAlt = new_pos;
 		}
 
@@ -293,19 +292,19 @@ public:
 		brush.SetColor(Color::FromHexString(pinTextColor));
 		// Platform-specific text drawing
 #ifdef _WIN32
-		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
+		g.DrawTextU(WStringToUtf8(pinText.getValue()), tf, getRect(), brush);
 #else
-		g.DrawTextU(pinText, tf, getRect(), brush);
+		g.DrawTextU(pinText.getValue(), tf, getRect(), brush);
 #endif
 
 		return gmpi::MP_OK;
 	}
 
-	std::string getDisplayText()
+/*	std::string getDisplayText()
 	{
 		std::wstring wideText = pinText.getValue(); // assuming this returns std::wstring
-		return WStringToUtf8(wideText);
-	}
+		return WStringToUtf8(pinText.getValue());
+	}*/
 
 };
 
