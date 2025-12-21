@@ -299,13 +299,11 @@ public:
 
 		return gmpi::MP_OK;
 	}
-
 /*	std::string getDisplayText()
 	{
 		std::wstring wideText = pinText.getValue(); // assuming this returns std::wstring
 		return WStringToUtf8(pinText.getValue());
 	}*/
-
 };
 
 namespace
