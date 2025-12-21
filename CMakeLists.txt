@@ -148,13 +148,13 @@ include(plugin_helper.cmake)
 #add_subdirectory (FloatTrigger)
 #add_subdirectory (PluginID)
 #add_subdirectory (RenderingMode)
-add_subdirectory (AnimPosToColorHex)
+#add_subdirectory (AnimPosToColorHex)
 #add_subdirectory (VectorKnobX)
 #add_subdirectory (DH_ControlTrigger)
 #add_subdirectory (DisplayTextX)
 #add_subdirectory (FloatModulus)
 #add_subdirectory (ScaleDegree)
-#add_subdirectory (ListToText)
+add_subdirectory (ListToText)
 
 
 
