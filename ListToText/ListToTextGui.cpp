@@ -21,7 +21,6 @@ class ListToTextGui final : public SeGuiInvisibleBase
     StringGuiPin pinItemList;
     StringGuiPin pinItemText;
 
-#ifdef _WIN32
     // Helper function to split UTF-8 string into wstring based on commas
     std::vector<std::wstring> splitString(const std::wstring& s, wchar_t delimiter)
     {
@@ -34,20 +33,6 @@ class ListToTextGui final : public SeGuiInvisibleBase
         }
         return tokens;
 }
-#else
-    // Helper function to split UTF-8 string into wstring based on commas
-    std::vector<std::string> splitString(const std::string& s, char delimiter)
-    {
-        std::vector<std::string> tokens;
-        std::stringstream ss(s);
-        std::string item;
-        while (std::getline(ss, item, delimiter))
-        {
-            tokens.push_back(item);
-        }
-        return tokens;
-    }
-#endif
 
     void updateItemText()
     {
