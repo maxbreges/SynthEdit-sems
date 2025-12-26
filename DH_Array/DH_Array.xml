@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+	<Plugin id="Array" name="DH_Array" category="DH/Logic">
+		<Audio>
+			<Pin name="Filename" datatype="string" isFilename="true" default="ArrayValues01.txt" metadata="txt"/>
+			<Pin name="Array Size" datatype="int" default="128" />
+			<Pin name="Index" datatype="int" />
+			<Pin name="Value In" datatype="string" />
+			<Pin name="Write" datatype="bool" />
+			<Pin name="Clear" datatype="bool" />
+
+			<Pin name="Text Out" datatype="string" direction="out"/>
+		</Audio>
+	</Plugin>
+</PluginList>

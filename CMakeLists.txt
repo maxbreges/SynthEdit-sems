@@ -155,6 +155,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (FloatModulus)
 #add_subdirectory (ScaleDegree)
 #add_subdirectory (ListToText)
+add_subdirectory (DH_Array)
 #add_subdirectory ()
 
 
