@@ -43,6 +43,7 @@ public:
         lastFilePath = currentPath; // Save current path
 
         std::ifstream file(currentPath);
+
         if (file.is_open())
         {
             arrayValues.clear();
@@ -104,8 +105,8 @@ public:
         }
 
         int size = pinArraySize.getValue();
-        int index = pinIndex.getValue();
-        bool writeMode = pinBool.getValue();
+        int index = pinIndex;
+        bool writeMode = pinBool;
 
         if (pinArraySize.isUpdated() || arrayValues.size() != static_cast<size_t>(size))
         {
