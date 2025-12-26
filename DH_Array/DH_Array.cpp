@@ -17,7 +17,7 @@ class ArrayTest final : public MpBase2
     StringOutPin pinValueOut;
 
     vector<string> arrayValues;
-    std::wstring lastFilePath; // To detect changes in file path
+    std::string lastFilePath; // To detect changes in file path
     bool fileLoaded = false;
     bool dataModified = false;
 
@@ -35,7 +35,7 @@ public:
 
     void loadFile()
     {
-        std::wstring currentPath = pinFile.getValue();
+        std::string currentPath = static_cast<string>(pinFile);
 
         if (fileLoaded && currentPath == lastFilePath)
             return; // Already loaded for this path
@@ -67,7 +67,7 @@ public:
     {
         if (!dataModified) return;
 
-        std::wstring filePathW = pinFile.getValue();
+        std::string filePathW = static_cast<string>(pinFile);
         std::ofstream file(filePathW);
         if (file.is_open())
         {
@@ -82,17 +82,17 @@ public:
 
     void onSetPins() override
     {
-        std::wstring currentPath = pinFile.getValue();
+        std::string currentPath = static_cast<string>(pinFile);
         if (currentPath != lastFilePath)
         {
             fileLoaded = false; // force reload
         }
         loadFile();
 
-        if (pinClear.isUpdated() && pinClear.getValue())
+        if (pinClear)
         {
             // Clear the file content
-            std::wstring filePathW = pinFile.getValue();
+            std::string filePathW = static_cast<string>(pinFile);
 
             std::ofstream file(filePathW, std::ios::trunc);
             file.close();
@@ -100,8 +100,6 @@ public:
             // Clear the in-memory array
             arrayValues.clear();
 
-            // Reset pinClear after clearing
-            pinClear.setValue(false);
             return; // Exit early since we've cleared
         }
 
@@ -119,20 +117,23 @@ public:
             return; // Out of bounds
         }
 
-        if (writeMode)
+        switch (writeMode)
         {
-            loadFile(); // optional, only if you want to ensure latest data
-            arrayValues[index] = static_cast<string>(pinValueIn);
-            dataModified = true; // mark for later save
-            saveFile(); // Save immediately after write
-        }
-        else
+        case 0:
         {
-            // Read from array
+            saveFile(); 
             auto value = arrayValues[index];
-            pinValueOut = value;
-            pinValueOut.isUpdated();
-        }
+            pinValueOut = value;            
+        }; break;
+
+        case 1:
+        {
+            //loadFile(); // optional, only if you want to ensure latest data
+            arrayValues[index] = static_cast<string>(pinValueIn);
+            dataModified = true; // mark for later save  
+             //saveFile(); // Save immediately after write
+        }; break;
+        }        
     }
 };
 namespace
