@@ -17,10 +17,9 @@ class ArrayTest final : public MpBase2
     StringOutPin pinValueOut;
 
     vector<string> arrayValues;
-    std::wstring currentFilePath; // To detect changes in file path
+    std::wstring lastFilePath; // To detect changes in file path
     bool fileLoaded = false;
     bool dataModified = false;
-    std::wstring lastFilePath;
 
 public:
     ArrayTest()
@@ -81,44 +80,40 @@ public:
         }
     }
 
-    void run()
+    void onSetPins() override
     {
-        // Save current array to file if modified
-        saveFile();
-
-        // Write data if in write mode
-        bool writeMode = pinBool.getValue();
-        int size = pinArraySize.getValue();
-        int index = pinIndex.getValue();
-
-        // Load file if path changed
-        if (pinFile.isUpdated() || (pinFile.getValue() != currentFilePath))
+        std::wstring currentPath = pinFile.getValue();
+        if (currentPath != lastFilePath)
         {
-            loadFile();
+            fileLoaded = false; // force reload
         }
+        loadFile();
 
-        // Handle clearing the array and file
         if (pinClear.isUpdated() && pinClear.getValue())
         {
+            // Clear the file content
             std::wstring filePathW = pinFile.getValue();
 
             std::ofstream file(filePathW, std::ios::trunc);
             file.close();
 
+            // Clear the in-memory array
             arrayValues.clear();
 
             // Reset pinClear after clearing
             pinClear.setValue(false);
-            return; // Exit early after clearing
+            return; // Exit early since we've cleared
         }
 
-        // Resize array if needed
+        int size = pinArraySize.getValue();
+        int index = pinIndex.getValue();
+        bool writeMode = pinBool.getValue();
+
         if (pinArraySize.isUpdated() || arrayValues.size() != static_cast<size_t>(size))
         {
             arrayValues.resize(size);
         }
 
-        // Check bounds
         if (index < 0 || index >= size)
         {
             return; // Out of bounds
@@ -126,19 +121,17 @@ public:
 
         if (writeMode)
         {
-            // Write to array
+            loadFile(); // optional, only if you want to ensure latest data
             arrayValues[index] = static_cast<string>(pinValueIn);
             dataModified = true; // mark for later save
+            saveFile(); // Save immediately after write
         }
         else
         {
             // Read from array
-            if (index >= 0 && index < static_cast<int>(arrayValues.size()))
-            {
-                auto value = arrayValues[index];
-                pinValueOut = value;
-                pinValueOut.isUpdated();
-            }
+            auto value = arrayValues[index];
+            pinValueOut = value;
+            pinValueOut.isUpdated();
         }
     }
 };
