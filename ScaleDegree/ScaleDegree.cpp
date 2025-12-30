@@ -103,7 +103,8 @@ public:
 	{
 		if (pinRoot.isUpdated())
 		{
-			pinRootOut = pinRoot;
+			pinRootOut.setValue(pinRoot.getValue());
+			pinNote.isUpdated();
 		}
 	}
 };
