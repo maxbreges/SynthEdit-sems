@@ -104,7 +104,6 @@ public:
 		if (pinRoot.isUpdated())
 		{
 			pinRootOut.setValue(pinRoot.getValue());
-			pinNote.isUpdated();
 		}
 	}
 };
