@@ -199,9 +199,9 @@ public:
 
         // Platform-specific text drawing
 #ifdef _WIN32
-        g.DrawTextU(getDisplayText(), textFormat, getRect(), textBrush, 1);
+        g.DrawTextU(getDisplayText(), textFormat, textRect, textBrush, 1);
 #else
-        g.DrawTextU(pinText, textFormat, getRect(), textBrush, 1);
+        g.DrawTextU(pinText, textFormat, textRect, textBrush, 1);
 #endif
 
         return gmpi::MP_OK;
