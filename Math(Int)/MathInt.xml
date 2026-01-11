@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Divide(Int)" name="Divide (Int)" category="mx/math">
+        <Audio>
+            <Pin name="In" datatype="int"/>
+			<Pin name="In" datatype="int"/>
+            <Pin name="Out" datatype="int" direction="out"/>
+        </Audio>
+    </Plugin>
+    <Plugin id="Subtract(Int)" name="Subtract (Int)" category="mx/math">
+        <Audio>
+            <Pin name="In" datatype="int"/>
+			<Pin name="In" datatype="int"/>
+            <Pin name="Out" datatype="int" direction="out"/>
+        </Audio>
+    </Plugin>
+    <Plugin id="Multiply(Int)" name="Multiply (Int)" category="mx/math">
+        <Audio>
+            <Pin name="In" datatype="int"/>
+			<Pin name="In" datatype="int"/>
+            <Pin name="Out" datatype="int" direction="out"/>
+        </Audio>
+    </Plugin>
+    <Plugin id="Add(Int)" name="Add (Int)" category="mx/math">
+        <Audio>
+            <Pin name="In" datatype="int"/>
+			<Pin name="In" datatype="int"/>
+            <Pin name="Out" datatype="int" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
