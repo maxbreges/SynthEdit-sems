@@ -1,63 +1,63 @@
 #include "mp_sdk_audio.h"
+#include <cmath> // for fmod
 
 using namespace gmpi;
 
 class Modulus final : public MpBase2
 {
-	AudioInPin pinInput1;
-	
-	AudioOutPin pinOutput;
+    AudioInPin pinSignalin;
+    FloatInPin pinModulus;
+    AudioOutPin pinSignalOut;
 
 public:
-	Modulus()
-	{
-		initializePin( pinInput1 );
-		
-		initializePin( pinOutput );
-	}
+    Modulus()
+    {
+        initializePin(pinSignalin);
+        initializePin(pinModulus);
+        initializePin(pinSignalOut);
+    }
 
-	void subProcess( int sampleFrames )
-	{
-		// get pointers to in/output buffers.
-		auto input1 = getBuffer(pinInput1);
-		auto input2 = getBuffer(pinInput1);
-		auto output = getBuffer(pinOutput);
+    void subProcess(int sampleFrames)
+    {
+        auto signalin = getBuffer(pinSignalin);
+        auto signalOut = getBuffer(pinSignalOut);
+        float modulus = pinModulus.getValue() / 10.f;
 
-		for( int s = sampleFrames; s > 0; --s )
-		{
-			// TODO: Signal processing goes here.
+        if (modulus == 0)
+            return; // Avoid division by zero
 
-			double a = *input1 * 10;
-			double b = *input2 * 10;
-			int c = b;
+        for (int s = 0; s < sampleFrames; ++s)
+        {
+            // Wrap signal using fmod
+            signalOut[s] = fmod(signalin[s], static_cast<float>(modulus));
+            if (signalOut[s] < 0)
+                signalOut[s] += static_cast<float>(modulus); // Ensure positive result if needed
+        }
+    }
 
-			float result = (a - c)*1.2f;
-			*output = result;
+    void onSetPins() override
+    {
+        // Check if input signal is streaming
+        if (pinSignalin.isStreaming())
+        {
+            // do something if needed
+        }
 
-			// Increment buffer pointers.
-			++input1;
-			++input2;
-			++output;
-		}
-	}
+        // Check if modulus pin is updated
+        if (pinModulus.isUpdated())
+        {
+            // do something if needed
+        }
 
-	void onSetPins() override
-	{
-		// Check which pins are updated.
-		if( pinInput1.isStreaming() )
-		{
-		}
-		
+        // Set output pin to streaming if input is streaming
+        pinSignalOut.setStreaming(pinSignalin.isStreaming());
 
-		// Set state of output audio pins.
-		pinOutput.setStreaming(true);
-
-		// Set processing method.
-		setSubProcess(&Modulus::subProcess);
-	}
+        // Set process callback
+        setSubProcess(&Modulus::subProcess);
+    }
 };
 
 namespace
 {
-	auto r = Register<Modulus>::withId(L"My Modulus");
+    auto r = Register<Modulus>::withId(L"Modulus");
 }

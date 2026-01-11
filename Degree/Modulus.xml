@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My Modulus" name="Modulus" category="mx/Math">
+        <Audio>
+            <Pin name="Pitch" datatype="float" rate="audio" default="0.8" linearInput="true"/>
+            <Pin name="Hue" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
