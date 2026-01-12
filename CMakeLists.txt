@@ -157,7 +157,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (ListToText)
 #add_subdirectory (DH_Array)
 #add_subdirectory (MathInt)
-#add_subdirectory ()
+add_subdirectory (SampleAndHoldInt)
 
 
 
