@@ -57,7 +57,52 @@ public:
     }
 };
 
+class ModulusInt final : public MpBase2
+{
+    IntInPin pinSignalin;
+    IntInPin pinModulus;
+    IntOutPin pinSignalOut;
+
+public:
+    ModulusInt()
+    {
+        initializePin(pinSignalin);
+        initializePin(pinModulus);
+        initializePin(pinSignalOut);
+    }
+
+    void subProcess(int sampleFrames)
+    {        
+    }
+
+    void onSetPins() override
+    {
+        int signalin = pinSignalin;
+        int signalOut = pinSignalOut;
+        int modulus = pinModulus;
+
+        if (modulus == 0)
+            return; // Avoid division by zero
+        // Check if input signal is streaming
+        if (pinSignalin.isUpdated())
+        {
+            // Wrap signal using fmod
+            int signalOutValue = signalin % modulus;
+            // Assign output pin value
+            pinSignalOut.setValue(static_cast<int>(signalOutValue));
+        }
+
+        // Check if modulus pin is updated
+        if (pinModulus.isUpdated())
+        {
+            // do something if needed
+        }
+    }
+};
+
 namespace
 {
-    auto r = Register<Modulus>::withId(L"Modulus");
+    bool r[] = { Register<Modulus>::withId(L"Modulus"),
+        Register<ModulusInt>::withId(L"ModulusInt")
+    };
 }

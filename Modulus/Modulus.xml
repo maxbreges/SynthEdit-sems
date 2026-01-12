@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="Modulus" name="Modulus" category="mx/Math">
+    <Plugin id="Modulus" name="Modulus" category="mx/math">
         <Audio>
-            <Pin name="Signal in" datatype="float" rate="audio"/>
+            <Pin name="Signal In" datatype="float" rate="audio"/>
 			<Pin name="% Value" datatype="float"/>
             <Pin name="Signal Out" datatype="float" rate="audio" direction="out"/>
         </Audio>
     </Plugin>
+	<Plugin id="ModulusInt" name="Modulus Int" category="mx/math">
+		<Audio>
+			<Pin name="Value In" datatype="int" />
+			<Pin name="% Value" datatype="int"/>
+			<Pin name="Value Out" datatype="int" direction="out"/>
+		</Audio>
+	</Plugin>
 </PluginList>
