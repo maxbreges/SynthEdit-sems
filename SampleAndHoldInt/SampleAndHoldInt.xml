@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="SampleHoldInt" name="Sample-n-Hold Int" category="mx/Modifiers">
+        <Audio>
+            <Pin name="Audio" datatype="int" />
+            <Pin name="Hold" datatype="bool" />
+			<Pin name="Output" datatype="int" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
