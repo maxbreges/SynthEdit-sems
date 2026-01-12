@@ -157,7 +157,7 @@ add_subdirectory(Modulus)
 #add_subdirectory (ListToText)
 #add_subdirectory (DH_Array)
 #add_subdirectory (MathInt)
-add_subdirectory (SampleAndHoldInt)
+#add_subdirectory (SampleAndHoldInt)
 
 
 
