@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="TimeFormat" name="Time Format" category="mx/Tools">
+        <Audio>
+            <Pin name="ms" datatype="int"/>
+            <Pin name="Text Out" datatype="string" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
