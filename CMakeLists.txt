@@ -158,7 +158,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (DH_Array)
 #add_subdirectory (MathInt)
 #add_subdirectory (SampleAndHoldInt)
-
+add_subdirectory (TimeFormat)
 
 
 
