@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="IntCounter" name="Int Counter" category="mx/Logic">
+        <Audio>
+            <Pin name="Incr" datatype="bool"/>
+			<Pin name="Decr" datatype="bool"/>
+            <Pin name="Reset" datatype="bool"/>
+            <Pin name="Output" datatype="int" direction="out"/>
+        </Audio>
+    </Plugin>
+	<Plugin id="IntCounterStep" name="Int Counter+" category="mx/Logic">
+		<Audio>
+			<Pin name="Incr" datatype="bool"/>
+			<Pin name="Decr" datatype="bool"/>
+			<Pin name="Steps" datatype="int" />
+			<Pin name="Reset" datatype="bool"/>
+			<Pin name="Wrap" datatype="bool"/>
+			<Pin name="Output" datatype="int" direction="out"/>
+		</Audio>
+	</Plugin>
+</PluginList>

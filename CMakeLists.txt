@@ -159,6 +159,6 @@ include(plugin_helper.cmake)
 #add_subdirectory (MathInt)
 #add_subdirectory (SampleAndHoldInt)
 #add_subdirectory (TimeFormat)
-
+add_subdirectory (IntCounter)
 
 
