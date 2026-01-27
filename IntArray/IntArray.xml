@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="IntArray" name="Int Array" category="mx/Sub-Controls">
-        <GUI>
+    <Plugin id="IntArray" name="Int Array" category="mx/Logic">
+        <Audio>
+			<Pin name="Size" datatype="int" default="100" isMinimised="false"/>
             <Pin name="Index" datatype="int"/>
-			<Pin name="Value" datatype="int"/>
-			<Pin name="Size In" datatype="int" direction="out"/>
-			<Pin name="Size In" datatype="int"/>
-			<Pin name="Value Out" datatype="int" direction="out"/>
-        </GUI>
+            <Pin name="Value In" datatype="int"/>
+            <Pin name="Write" datatype="bool"/>
+			<Pin name="Clear" datatype="bool"/>
+			<Pin name="Filename" datatype="string" isFilename="true" metadata="txt"/>
+            <Pin name="Output" datatype="int" direction="out"/>
+			<Pin name="Debug" datatype="string" direction="out" isMinimised="true"/>
+        </Audio>
     </Plugin>
 </PluginList>
