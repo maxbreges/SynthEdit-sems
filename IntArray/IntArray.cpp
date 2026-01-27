@@ -35,14 +35,14 @@ public:
         initializePin(pinDebug);
     }
 
-    std::wstring filename;
+    std::string filename;
 
     void onSetPins() override
     {
         int size = pinSize.getValue();
         int index = pinIndex.getValue();
         bool writeMode = pinReadWrite.getValue();
-        filename = pinFilename.getValue();
+        filename = static_cast<std::string>(pinFilename);
         loadFile();
 
         if (pinClear)
@@ -56,6 +56,7 @@ public:
             // Clear the in-memory array
             arrayValues.clear();
             pinDebug = L"File cleared";
+            pinValueOut = 0;
             return; // Exit early since we've cleared
         }
 
@@ -97,7 +98,7 @@ public:
     void saveFile()
     {
         // Create and open a text file for writing
-        std::ofstream file(pinFilename.getValue());
+        std::ofstream file(static_cast<std::string>(pinFilename));
 
         if (!file.is_open())
         {
