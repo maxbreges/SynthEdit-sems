@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include "../shared/string_utilities.h"
 
 using namespace std;
 using namespace gmpi;
@@ -21,6 +22,7 @@ class IntArray final : public MpBase2
     std::string lastFilePath; // To detect changes in file path
     bool fileLoaded = false;
     bool dataModified = false;
+    int lastIndex = 0;
 
 public:
     IntArray()
@@ -35,15 +37,13 @@ public:
         initializePin(pinDebug);
     }
 
-    std::string filename;
-
     void onSetPins() override
     {
         int size = pinSize.getValue();
         int index = pinIndex.getValue();
         bool writeMode = pinReadWrite.getValue();
-        filename = static_cast<std::string>(pinFilename);
-        loadFile();
+       
+        loadFile();        
 
         if (pinClear)
         {
@@ -89,8 +89,14 @@ public:
         else if (!writeMode)
         {
             if (pinIndex.isUpdated() && index >= 0 && index < arrayValues.size())
-            {
+            {                
                 pinValueOut = arrayValues[index]; 
+
+                if(lastIndex != pinIndex)
+                {
+                    pinDebug = L"Index changed";
+                    lastIndex = pinIndex;
+                }                
             }
         }
     }
@@ -115,15 +121,43 @@ public:
         pinDebug = L"Data saved to file";
     }
 
+    bool isFirstLoad = true;
+
     void loadFile()
     {
         std::string currentPath = static_cast<std::string>(pinFilename);
 
+        // Detect filename change
+        if (currentPath != lastFilePath)
+        {
+            lastFilePath = currentPath;
+
+            // Only create/truncate new file if filename changed after initial load
+            if (!isFirstLoad)
+            {
+                // Create empty file for new filename
+                std::ofstream file(currentPath, std::ios::trunc);
+                file.close();
+
+                // Clear in-memory data
+                arrayValues.clear();
+                pinDebug = L"New file created for filename change.";
+            }
+            else
+            {
+                // First load: do NOT truncate, just load existing data
+                isFirstLoad = false;
+                pinDebug = L"Initial load, existing file data.";
+            }
+            fileLoaded = false; // Reset load flag
+           // return; // Exit to avoid reloading data immediately
+        }
+
+        // Load existing data if not already loaded for this file
         if (fileLoaded && currentPath == lastFilePath)
-            return; // Already loaded for this path
+            return;
 
-        lastFilePath = currentPath; // Save current path
-
+        // Load the data from the file
         std::ifstream file(currentPath);
         int size = pinSize.getValue();
 
@@ -138,26 +172,22 @@ public:
             {
                 try
                 {
-                    int value = std::stoi(line); // Convert string to int
+                    int value = std::stoi(line);
                     arrayValues.push_back(value);
                     ++count;
                 }
                 catch (...)
                 {
-                    // ignore invalid lines, or set to default
                     arrayValues.push_back(0);
                 }
             }
             file.close();
             fileLoaded = true;
-            if (fileLoaded)
-            {
-                pinDebug = L"File loaded";
-            }
+            pinDebug = L"File loaded.";
         }
         else
         {
-            pinDebug = L"Failed to open file";
+            pinDebug = L"Failed to open file.";
         }
     }
 };

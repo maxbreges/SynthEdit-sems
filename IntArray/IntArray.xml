@@ -7,9 +7,9 @@
             <Pin name="Value In" datatype="int"/>
             <Pin name="Write" datatype="bool"/>
 			<Pin name="Clear" datatype="bool"/>
-			<Pin name="Filename" datatype="string" isFilename="true" metadata="txt"/>
+			<Pin name="File Name" datatype="string" default="IntArrayValues01" isFilename="true" metadata="txt"/>
             <Pin name="Output" datatype="int" direction="out"/>
-			<Pin name="Debug" datatype="string" direction="out" isMinimised="true"/>
+			<Pin name="Debug" datatype="string" direction="out" isMinimised="false"/>
         </Audio>
     </Plugin>
 </PluginList>
