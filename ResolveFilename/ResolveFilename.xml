@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="resolveFilename" name="resolveFilename" category="mx/Controls">
+		<Parameters>
+			<Parameter id="0" name="From DSP to Gui" datatype="string" />
+		</Parameters>
+		<Audio>
+			<Pin name="Resource Folder Path" datatype="string" default="resourceFolderPath" private="true"/>
+            <Pin name="Common Path Out" datatype="string" direction="out"/>
+            <Pin name="Common Path" datatype="string" direction="out" private="true" parameterId="0"/>
+        </Audio>
+		<GUI>
+			<Pin name="Common Path" datatype="string" direction="in" private="true" parameterId="0"/>
+			<Pin name="Common Path Out" datatype="string" direction="out"/>
+		</GUI>
+    </Plugin>
+</PluginList>
