@@ -162,6 +162,6 @@ include(plugin_helper.cmake)
 #add_subdirectory (IntCounter)
 #add_subdirectory (PulseOnZero)
 #add_subdirectory (IntArray)
-#add_subdirectory (ResolveFilename)
+add_subdirectory (ResolveFilename)
 
 
