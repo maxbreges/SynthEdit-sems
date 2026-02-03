@@ -54,7 +54,9 @@ class SharedStringGui final : public SeGuiInvisibleBase
 	{
 		if (onDialogComplete)
 		{
-			std::ofstream file(pinAppDirPath.getValue());
+			std::string filename = pinAppDirPath;
+
+			std::ofstream file(filename);
 			if (file)
 			{
 				file << fileContent;				
