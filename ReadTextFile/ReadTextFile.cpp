@@ -32,14 +32,14 @@ public:
 private:
     void readFile()
     {
-        std::wstring filename = pinFilenameIn;
+        std::string filename = pinFilenameIn;
 
         // Open the file
-        std::wifstream file(filename);
+        std::ifstream file(filename);
         if (file)
         {
             // Read entire file into a wstring
-            std::wstringstream buffer;
+            std::stringstream buffer;
             buffer << file.rdbuf();
 
             // Output the file content to pinTextOut
