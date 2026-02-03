@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="LocateFile" name="Locate File" category="mx/Sub-Controls">
+        <GUI>            
+            <Pin name="Trigger" datatype="bool" direction="out"/>
+			<Pin name="File Path" datatype="string"/>
+			<Pin name="Extension" datatype="string" default=""/>
+            <Pin name="onDialogComplete" datatype="bool"/>
+        </GUI>
+    </Plugin>
+</PluginList>
