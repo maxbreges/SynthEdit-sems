@@ -6,23 +6,24 @@ using namespace gmpi;
 class CreateTextFileGui final : public SeGuiInvisibleBase
 {
 	// Create and open a text file for writing
-	std::wstring fullFilename;
-
+	std::string fullFilename;
+	std::string fileContent;
 	void onSetFileName()
 	{
 		fullFilename = pinFilePath;
 	}
 
  	void onSetTextIn()
-	{		
+	{	
+		fileContent = pinTextIn;
 	}
 
  	void onSetCreate()
 	{
-		std::wofstream file(fullFilename);
+		std::ofstream file(fullFilename);
 		if (file)
 		{
-			file << pinTextIn.getValue();
+			file << fileContent;
 			pinSetFlag = true;
 		}		
 	}
