@@ -165,5 +165,5 @@ include(plugin_helper.cmake)
 #add_subdirectory (ResolveFilename)
 #add_subdirectory (LocateFile)
 #add_subdirectory (SharedString)
-add_subdirectory (CreateTextFile)
-
+#add_subdirectory (CreateTextFile)
+add_subdirectory (ReadTextFile)

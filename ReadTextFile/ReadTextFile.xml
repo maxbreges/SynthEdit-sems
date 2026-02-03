@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="readTextFile" name="Read Text File" category="mx/Sub-Controls">
+		<GUI>
+            <Pin name="Filename In" datatype="string" />
+            <Pin name="Text Out" datatype="string" direction="out"/>
+			<Pin name="Bool In" datatype="bool" />
+        </GUI>
+    </Plugin>
+</PluginList>
