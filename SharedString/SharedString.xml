@@ -2,16 +2,16 @@
 <PluginList>
     <Plugin id="sharedString" name="Shared String" category="mx/Sub-Controls">
 		<Parameters>
-			<Parameter id="0" datatype="string"/>
+			<Parameter id="0" datatype="string" private="true" ignorePatchChange="true"/>
 		</Parameters>
 		<Audio>
-			<Pin name="App Dir Path" datatype="string" default="AppDirPath" private="true"/>
-			<Pin name="Text Out" datatype="string" direction="out"/>
+			<Pin name="App Dir Path" datatype="string" default="userPath" private="true"/>
 			<Pin name="Text Out" datatype="string" direction="out" parameterId="0"/>
 		</Audio>
 		<GUI>
-			<Pin name="Trigger" datatype="bool"/>
-            <Pin name="Text Out" datatype="string" direction="out"/>            
+			<Pin name="User File Path" datatype="string" direction="in" parameterId="0"/>
+			<Pin name="Trigger" datatype="bool" direction="out"/>
+            <Pin name="Text Out" datatype="string" direction="out"/>"			
         </GUI>
     </Plugin>
 </PluginList>

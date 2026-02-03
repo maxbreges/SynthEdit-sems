@@ -6,14 +6,12 @@ using namespace gmpi;
 class SharedString final : public MpBase2
 {	
 	StringInPin pinFileName;
-	StringOutPin pinAppDirPathOut;
 	StringOutPin pinAppDirPathOut2Gui;
 
 public:
 	SharedString()
 	{
 		initializePin(pinFileName);
-		initializePin(pinAppDirPathOut);
 		initializePin(pinAppDirPathOut2Gui);
 	}
 	
@@ -24,9 +22,7 @@ public:
 		wchar_t fullFilename[500];
 		getHost()->resolveFilename(filename.c_str(), sizeof(fullFilename) / sizeof(fullFilename[0]), fullFilename);
 
-		std::wstring fullPath(fullFilename);
-
-		pinAppDirPathOut = fullPath;
+		pinAppDirPathOut2Gui = fullFilename;
 	}
 };
 
