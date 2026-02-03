@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="CreateTextFile" name="Create Text File" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="File Path In" datatype="string" isFilename="true"/>
+            <Pin name="Text In" datatype="string"/>
+            <Pin name="Create (In)" datatype="bool" direction="out"/>
+            <Pin name="Created(Flag(Out))" datatype="bool" direction="out"/>
+            <Pin name="Reset Flag" datatype="bool"/>
+        </GUI>
+    </Plugin>
+</PluginList>
