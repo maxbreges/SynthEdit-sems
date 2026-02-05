@@ -8,7 +8,7 @@
             <Pin name="Color" datatype="string" default="FF666666"/>
             <Pin name="Text Color" datatype="string" default="ffffffff"/>
             <Pin name="Font" datatype="string" default="sans-Serif" isMinimised="true"/>
-            <Pin name="Font Size" datatype="int" default="28" isMinimised="true"/>
+            <Pin name="Font Size" datatype="int" default="28" isMinimised="false"/>
             <Pin name="Shift+Drag" datatype="float"/>
             <Pin name="Shift+MouseWheel" datatype="float"/>
             <Pin name="Mouse Down" datatype="bool"/>
