@@ -11,7 +11,6 @@
             <Pin name="Writeable" datatype="bool" default="1" isMinimised="true"/>
             <Pin name="Greyed" datatype="bool" isMinimised="true"/>
             <Pin name="Hint" datatype="string" isMinimised="true"/>
-            <Pin name="Mouse Down" datatype="bool" direction="out" private="true"/>
             <Pin name="Mouse Down" datatype="bool"/>
 	<!--		<Pin name="Font Size" datatype="int" default="16" isMinimised="true"/>
 			<Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
