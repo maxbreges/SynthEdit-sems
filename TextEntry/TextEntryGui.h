@@ -1,4 +1,3 @@
-#pragma once
 #ifndef TEXTENTRYGUI_H_INCLUDED
 #define TEXTENTRYGUI_H_INCLUDED
 
