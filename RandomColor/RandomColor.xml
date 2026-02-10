@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="RandomColor" name="Random Color" category="mx/Sub-Controls/Special" >
+        <GUI>
+            <Pin name="Bool" datatype="bool"/>
+            <Pin name="Color Hex" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
