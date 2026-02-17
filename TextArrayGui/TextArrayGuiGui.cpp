@@ -9,6 +9,7 @@ namespace fs = std::filesystem;
 class TextArrayGuiGui final : public SeGuiInvisibleBase
 {
 	std::string lastFilePath; // To detect changes in file path
+	std::string FilePath;
 	int index = 0;
 	int size = 0;
 	int lastIndex = 0; //to detect index changes
@@ -105,7 +106,7 @@ class TextArrayGuiGui final : public SeGuiInvisibleBase
 				pinDebug = "File is empty";
 			}
 		}
-		pinSizeOut = static_cast<int>(arrayValues.size());
+		pinSizeOut = static_cast<int>(arrayValues.size() -1);
 		fileLoadedFlag = true;
 	}
 
@@ -195,8 +196,8 @@ public:
 	void loadFile()
 	{
 		arrayValues.clear();
-
-		std::ifstream file(pinFilePathIn.getValue());
+		FilePath = pinFilePathIn;
+		std::ifstream file(FilePath);
 		if (file)
 		{
 			std::string line;
@@ -204,7 +205,7 @@ public:
 			{
 				arrayValues.push_back(line);
 			}
-
+			onSetSize();
 			//optional
 			std::string filename = fs::path(pinFilePathIn).filename().string();
 			pinDebug = filename + " loaded"; // Or just "File loaded"

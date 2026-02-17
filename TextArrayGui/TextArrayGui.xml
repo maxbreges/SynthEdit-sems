@@ -11,7 +11,7 @@
 			<Pin name="Reload" datatype="bool"/>
             <Pin name="Text Out" datatype="string" direction="out"/>
             <Pin name="Debug" datatype="string" direction="out" isMinimised="false"/>
-			<Pin name="Size Out" datatype="int" direction="out" isMinimised="false"/>
+			<Pin name="Size Out" datatype="int" direction="out" isMinimised="true"/>
 		</GUI>
     </Plugin>
 </PluginList>
