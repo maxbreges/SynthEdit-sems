@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="TextArrayGui" name="Text Array Gui" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="File Path In" datatype="string" isFilename="false" metadata="txt"/>
+            <Pin name="Array Size" datatype="int" default="127" />
+            <Pin name="Index" datatype="int" direction="in"/>
+            <Pin name="Text In" datatype="string"/>
+            <Pin name="Write" datatype="bool"/>
+            <Pin name="Clear" datatype="bool"/>
+			<Pin name="Reload" datatype="bool"/>
+            <Pin name="Text Out" datatype="string" direction="out"/>
+            <Pin name="Debug" datatype="string" direction="out" isMinimised="false"/>
+			<Pin name="Size Out" datatype="int" direction="out" isMinimised="false"/>
+		</GUI>
+    </Plugin>
+</PluginList>
