@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Ifmac" name="If mac" category="Experimental/Sub-Controls">
+        <GUI>
+            <Pin name="ifMac10" datatype="int" direction="in"/>
+		<!--	<Pin name="MAC" datatype="bool" direction="out"/>
+        --></GUI>
+    </Plugin>
+</PluginList>
