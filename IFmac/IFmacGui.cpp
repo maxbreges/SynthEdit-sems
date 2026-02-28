@@ -6,12 +6,12 @@ class IFmacGui final : public SeGuiInvisibleBase
 {
  	void onSetVal()
 	{
-#ifdef _MAC
 
+#ifdef _WIN32
+		pinVal = -1;
+#else
 		pinVal = 10;
-
-#endif // !WIN32
-
+#endif
 		
 	}
 
