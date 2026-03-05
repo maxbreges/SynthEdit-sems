@@ -5,5 +5,6 @@ project(Unison)
 build_gmpi_plugin(
     PROJECT_NAME ${PROJECT_NAME}
     HAS_DSP
-    SOURCE_FILES Unison.h Unison.cpp
+    SOURCE_FILES
+ 	Unison.cpp
 )
