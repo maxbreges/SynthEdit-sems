@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="QuadroMix" name="Quadro Mix" category="mx/Modifiers">
+        <Audio>
+            <Pin name="In A" datatype="float" rate="audio"/>
+            <Pin name="In B" datatype="float" rate="audio"/>
+            <Pin name="In C" datatype="float" rate="audio"/>
+            <Pin name="In D" datatype="float" rate="audio"/>
+            <Pin name="Level" datatype="float" rate="audio" default="1"/>
+            <Pin name="Joystick X" datatype="float" rate="audio"/>
+            <Pin name="Joystick Y" datatype="float" rate="audio"/>
+            <Pin name="Output" datatype="float" rate="audio" direction="out"/>
+            <Pin name="Mode" datatype="enum" metadata="0dB, 3dB, 6dB"/>
+        </Audio>
+    </Plugin>
+</PluginList>
