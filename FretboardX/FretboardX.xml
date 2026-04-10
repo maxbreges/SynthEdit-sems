@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="FretboardX" name="FretboardX" category="mx/Tools">
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Fingerboard Color" datatype="string" default="f5400000"/>
+            <Pin name="Nut Color" datatype="string" default="ddeebb88"/>
+			<Pin name="Frets Color" datatype="string" default="ffffffff"/>
+            <Pin name="Markers Color" datatype="string" default="ffaaaaaa"/>
+            <Pin name="Strings Color" datatype="string" default="ffffffff"/>
+			<Pin name="Strings Thickness" datatype="float" default="0.6" isMinimised="true"/>
+            <Pin name="Fret Count" datatype="int" default="24"/>
+            <Pin name="Strings Count" datatype="int" default="6"/>
+			<Pin name="Frets Thickness" datatype="float" default="1" isMinimised="true"/>
+			<Pin name="Marker Radius" datatype="float" default="20" isMinimised="true"/>
+			<Pin name="Width" datatype="float" direction="in"/>
+        </GUI>
+    </Plugin>
+</PluginList>
