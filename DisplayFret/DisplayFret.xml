@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="DisplayFret" name="Display Fret" category="mx/MIDI">
+        <Parameters>
+			<Parameter id="0" datatype="int" name="" ignorePatchChange="true" persistant="false"/>
+            <Parameter id="1" datatype="int" name="" ignorePatchChange="true" persistant="false"/>
+            <Parameter id="2" datatype="int" name="" ignorePatchChange="true" persistant="false"/>
+            <Parameter id="3" datatype="int" name="" ignorePatchChange="true" persistant="false"/>
+            <Parameter id="4" datatype="int" name="" ignorePatchChange="true" persistant="false"/>
+            <Parameter id="5" datatype="int" name="" ignorePatchChange="true" persistant="false"/>
+		</Parameters>
+        <Audio>
+			<Pin name="MIDI In" datatype="midi"/>
+            <Pin name="String1" datatype="int" direction="out" private="true" parameterId="0"/>
+            <Pin name="String2" datatype="int" direction="out" private="true" parameterId="1"/>
+            <Pin name="String3" datatype="int" direction="out" private="true" parameterId="2"/>
+            <Pin name="String4" datatype="int" direction="out" private="true" parameterId="3"/>
+            <Pin name="String5" datatype="int" direction="out" private="true" parameterId="4"/>
+            <Pin name="String6" datatype="int" direction="out" private="true" parameterId="5"/>
+			<Pin name="Transport Run" datatype="bool"/>
+        </Audio>
+        <GUI graphicsApi="GmpiGui">
+			<Pin name="String1" datatype="int" private="true" parameterId="0"/> 
+            <Pin name="String2" datatype="int" private="true" parameterId="1"/>
+            <Pin name="String3" datatype="int" private="true" parameterId="2"/>
+            <Pin name="String4" datatype="int" private="true" parameterId="3"/>
+            <Pin name="String5" datatype="int" private="true" parameterId="4"/>
+            <Pin name="String6" datatype="int" private="true" parameterId="5"/>
+			<Pin name="Fret Count" datatype="int" default="20"/>
+			<Pin name="String Count" datatype="int" default="6"/>
+			<Pin name="Hex" datatype="string" default="FFFFFFFF"/>
+			<Pin name="Transpose String1" datatype="int" isMinimised="true" default="64"/>
+			<Pin name="Transpose String2" datatype="int" isMinimised="true" default="59"/>
+			<Pin name="Transpose String3" datatype="int" isMinimised="true" default="55"/>
+			<Pin name="Transpose String4" datatype="int" isMinimised="true" default="50"/>
+			<Pin name="Transpose String5" datatype="int" isMinimised="true" default="45"/>
+			<Pin name="Transpose String6" datatype="int" isMinimised="true" default="40"/>
+			<Pin name="Radius" datatype="float" default="10" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
