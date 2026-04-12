@@ -8,7 +8,7 @@ using namespace gmpi;
 class TimeFormat final : public MpBase2
 {
     IntInPin pinMilliseconds;
-    StringOutPin pinTextOut; // outputs time as a string in format M:SS.mmm
+    StringOutPin pinTextOut; // outputs time as a string in format M:SS.mm or H:MM:SS.mm
 
 public:
     TimeFormat()
@@ -21,29 +21,32 @@ public:
     {
         long long currentMilliseconds = pinMilliseconds;
 
-        // Convert to minutes, seconds, milliseconds
-        
-        long long minutes = currentMilliseconds / 60000;
-        long long seconds = (currentMilliseconds % 60000) / 1000;
-        long long milliseconds = (currentMilliseconds % 1000) / 10;
-        long long hours = minutes / 60;
+        // Convert total milliseconds into components
+        long long totalSeconds = currentMilliseconds / 1000;
+        long long minutes = totalSeconds / 60;
+        long long seconds = totalSeconds % 60;
+        long long milliseconds = (currentMilliseconds % 1000) / 10; // first two digits of milliseconds
+
         std::ostringstream oss;
-        // Format time string: "H:M:SS.mmm" or "M:SS.mmm"
-        if (minutes >=60)
+
+        if (minutes >= 60)
         {
-            
-            oss << hours << ":" << minutes << ":"  // minutes can be variable length
-                << std::setfill('0') << std::setw(2) << seconds << "."  // seconds always 2 digits
-                << std::setfill('0') << std::setw(2) << milliseconds; // milliseconds 2 digits
+            long long hours = minutes / 60;
+            long long remainingMinutes = minutes % 60;
+
+            // Format: H:MM:SS.mm
+            oss << hours << ":"
+                << std::setfill('0') << std::setw(2) << remainingMinutes << ":"
+                << std::setfill('0') << std::setw(2) << seconds << "."
+                << std::setfill('0') << std::setw(2) << milliseconds;
         }
         else
         {
-           
-            oss << minutes << ":"  // minutes can be variable length
-                << std::setfill('0') << std::setw(2) << seconds << "."  // seconds always 2 digits
-                << std::setfill('0') << std::setw(2) << milliseconds; // milliseconds 2 digits
+            // Format: M:SS.mm
+            oss << minutes << ":"
+                << std::setfill('0') << std::setw(2) << seconds << "."
+                << std::setfill('0') << std::setw(2) << milliseconds;
         }
-
 
         // Output the formatted time string
         pinTextOut = oss.str();
