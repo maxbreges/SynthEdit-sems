@@ -22,15 +22,28 @@ public:
         long long currentMilliseconds = pinMilliseconds;
 
         // Convert to minutes, seconds, milliseconds
+        
         long long minutes = currentMilliseconds / 60000;
         long long seconds = (currentMilliseconds % 60000) / 1000;
         long long milliseconds = (currentMilliseconds % 1000) / 10;
-
-        // Format time string: "M:SS.mmm"
+        long long hours = minutes / 60;
         std::ostringstream oss;
-        oss << minutes << ":"  // minutes can be variable length
-            << std::setfill('0') << std::setw(2) << seconds << "."  // seconds always 2 digits
-            << std::setfill('0') << std::setw(2) << milliseconds; // milliseconds 3 digits
+        // Format time string: "H:M:SS.mmm" or "M:SS.mmm"
+        if (minutes >=60)
+        {
+            
+            oss << hours << ":" << minutes << ":"  // minutes can be variable length
+                << std::setfill('0') << std::setw(2) << seconds << "."  // seconds always 2 digits
+                << std::setfill('0') << std::setw(2) << milliseconds; // milliseconds 2 digits
+        }
+        else
+        {
+           
+            oss << minutes << ":"  // minutes can be variable length
+                << std::setfill('0') << std::setw(2) << seconds << "."  // seconds always 2 digits
+                << std::setfill('0') << std::setw(2) << milliseconds; // milliseconds 2 digits
+        }
+
 
         // Output the formatted time string
         pinTextOut = oss.str();
