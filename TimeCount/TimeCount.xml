@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="TimeCount" name="Time Count" category="mx/Logic">
+        <Audio>
+            <Pin name="Gate" datatype="float" rate="audio"/>
+			<Pin name="Reset" datatype="float" rate="audio"/>
+            <Pin name="samples" datatype="float" rate="audio" direction="out"/>
+			<Pin name="milliseconds" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
