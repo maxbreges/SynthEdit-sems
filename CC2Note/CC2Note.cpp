@@ -1,5 +1,6 @@
 #include "mp_sdk_audio.h"
 #include "mp_midi.h"
+#include <cstdint>
 
 using namespace gmpi;
 
@@ -79,7 +80,7 @@ public:
                 {
                     lastControllerValue = newValue;
                     auto noteOffMsg = gmpi::midi_2_0::makeNoteOffMessage(noteNumber, 0.5f);
-                    pinMIDIOut.send(noteOffMsg.m, sizeof(UINT64), getBlockPosition() + triggerDuration * 100);
+                    pinMIDIOut.send(noteOffMsg.m, sizeof(uint64_t), getBlockPosition() + triggerDuration * 100);
                 }
             }
             initializedState = true;
