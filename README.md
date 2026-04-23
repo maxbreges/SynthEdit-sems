@@ -15,3 +15,4 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 [Support me via PayPal](https://paypal.me/yourlink)
+to get the cheapest M1 Mac for testing SynthEdit new software
