@@ -10,6 +10,7 @@ class CC2Note final : public MpBase2
     MidiOutPin pinMIDIOut;
     IntInPin pinController;
     IntInPin pinChannel;
+    IntInPin pinOutputChannel;
 
     gmpi::midi_2_0::MidiConverter2 midiConverter;
 
@@ -34,6 +35,7 @@ public:
         initializePin(pinMIDIOut);
         initializePin(pinController);
         initializePin(pinChannel);
+        initializePin(pinOutputChannel);
     }
 
     void onMidiMessage(int pin, unsigned char* midiMessage, int size) override
@@ -64,6 +66,7 @@ public:
         {
             const auto header = gmpi::midi_2_0::decodeHeader(msg);
             const auto chan = header.channel;
+            const auto outputChan = pinOutputChannel.getValue();
 
             const auto controller = gmpi::midi_2_0::decodeController(msg);
             int cntrType = static_cast<int>(controller.type);
@@ -73,13 +76,13 @@ public:
             if ((initializedState && selectedChannel == -1 && cntrType == pinController.getValue() && newValue != lastControllerValue) || initializedState && chan == selectedChannel && cntrType == pinController.getValue())
                 // Send MIDI Note On
             {
-                auto noteOnMsg = gmpi::midi_2_0::makeNoteOnMessage(noteNumber, 0.5f);
+                auto noteOnMsg = gmpi::midi_2_0::makeNoteOnMessage(noteNumber, 0.5f, outputChan);
                 pinMIDIOut.send(noteOnMsg.m);
                
                 if (newValue != lastControllerValue)
                 {
                     lastControllerValue = newValue;
-                    auto noteOffMsg = gmpi::midi_2_0::makeNoteOffMessage(noteNumber, 0.5f);
+                    auto noteOffMsg = gmpi::midi_2_0::makeNoteOffMessage(noteNumber, 0.5f, outputChan);
                     pinMIDIOut.send(noteOffMsg.m, sizeof(uint64_t), getBlockPosition() + triggerDuration * 100);
                 }
             }
