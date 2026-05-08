@@ -14,5 +14,5 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
-[Support me via PayPal](https://paypal.me/yourlink)
+[Support me via PayPal](https://paypal.me/maxbreges)
 to get the cheapest M1 Mac for testing SynthEdit new software
