@@ -1,6 +1,8 @@
 #include "mp_sdk_audio.h"
 #include <fstream>
 #include <string>
+#include <locale>
+#include <codecvt>
 
 using namespace gmpi;
 
@@ -19,12 +21,15 @@ public:
 
     void onSetPins() override
     {
-        if (pinFileName.isUpdated())
-        {
-            std::wstring filename = pinFileName.getValue();
+        // Convert wstring to string
+        std::wstring filename_w = pinFileName.getValue();
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+        std::string filename_str = converter.to_bytes(filename_w);
 
+        if (pinFileName.isUpdated())
+        {           
             // Open WAV file
-            std::ifstream file(filename, std::ios::binary);
+            std::ifstream file(filename_str, std::ios::binary);
             if (!file)
             {
                 // Failed to open file, set output to 0 or handle error
