@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="WavFileLength" name="Wav File Length" category="mx/Diagnostic">
+        <Audio>
+            <Pin name="File Name" datatype="string" default="Wavefile" isFilename="true" metadata="wav"/>
+            <Pin name="Samples" datatype="int" direction="out"/>
+			<Pin name="Debug" datatype="string" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
