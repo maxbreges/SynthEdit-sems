@@ -1,65 +1,90 @@
-#include "./SampleTimer.h"
+#include "mp_sdk_audio.h"
 
-REGISTER_PLUGIN2 ( SampleTimer, L"SE Sample Timer" );
+using namespace gmpi;
 
-SampleTimer::SampleTimer( ) 
-	: outValue_(0), timer_(0)
+class SampleTimer final : public MpBase2
 {
-	// Register pins.
-	initializePin(pinGate);
-	initializePin(pinTimeIn);
-	initializePin(  pinSignalOut );
-}
+    AudioInPin pinGate;
+    IntInPin pinTriggerTimesamples;
+    AudioOutPin pinSignalOut;
 
-void SampleTimer::subProcess(int sampleFrames)
-{
-    float* gate = getBuffer(pinGate);
-    float* signalOut = getBuffer(pinSignalOut);
+private:
+    uint64_t timer; // count of samples
+    bool outputHigh; // whether output is currently high
 
-    if (*gate > 0)
+public:
+    SampleTimer()
     {
+        initializePin(pinGate);
+        initializePin(pinTriggerTimesamples);
+        initializePin(pinSignalOut);
+
+        timer = 0;
+        outputHigh = false;
+    }
+
+    void subProcess(int sampleFrames)
+    {
+        auto gate = getBuffer(pinGate);
+        auto signalOut = getBuffer(pinSignalOut);
+        int triggerSamples = pinTriggerTimesamples.getValue();
+
         for (int s = 0; s < sampleFrames; ++s)
         {
-            if (timer_ >= pinTimeIn)
+            // Check if gate is triggered
+            if (*gate > 0)
             {
-                // Timer expired, output is 0
-                outValue_ = 0;
+                // Start or continue counting and set output high
+                outputHigh = true;
+                ++timer;
+                *signalOut = 1.0f;
             }
             else
             {
-                // Timer running, output is 1
-                outValue_ = 1;
-                ++timer_;
+                // Gate not triggered, but if output is still high, keep counting
+                if (outputHigh)
+                {
+                    ++timer;
+                    *signalOut = 1.0f;
+                }
+                else
+                {
+                    // Output low, reset timer
+                    *signalOut = 0.0f;
+                    timer = 0;
+                }
             }
 
-            // When timer hits pinTimeIn, set output to 0 at this sample
-            if (outValue_ == 1 && timer_ == 1)
+            // Check if timer reached trigger samples
+            if (outputHigh && timer >= triggerSamples)
             {
-                pinSignalOut.setUpdated(this->getBlockPosition() + s);
+                // Reset everything
+                outputHigh = false;
+                timer = 0;
+                *signalOut = 0.0f;
             }
 
-            *signalOut++ = outValue_;
+            ++gate;
+            ++signalOut;
         }
     }
-    else
+
+    void onSetPins() override
     {
-        // Gate is not active, output is 0, reset timer
-        outValue_ = 0;
-        *signalOut++ = 0;
-        timer_ = 0;
+        if (pinTriggerTimesamples.isUpdated())
+        {            
+        }
+        if (pinGate.isStreaming())
+        {
+            // handle gate streaming state if needed
+        }
+
+        pinSignalOut.setStreaming(true);
+        setSubProcess(&SampleTimer::subProcess);
     }
-}
+};
 
-void SampleTimer::onSetPins(void)
+namespace
 {
-	
-	// Set state of output audio pins.
-	pinSignalOut.setStreaming(false);
-
-	// Set processing method.
-	SET_PROCESS2(&SampleTimer::subProcess);
-
-	// Set sleep mode (optional).
-	setSleep(false);
+    auto r = Register<SampleTimer>::withId(L"SampleTimer");
 }
-
