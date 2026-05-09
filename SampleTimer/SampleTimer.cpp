@@ -33,10 +33,10 @@ void SampleTimer::subProcess(int sampleFrames)
             }
 
             // When timer hits pinTimeIn, set output to 0 at this sample
-            if (timer_ == pinTimeIn)
-            {
-                pinSignalOut.setUpdated(this->getBlockPosition() + s);
-            }
+           // if (timer_ >= pinTimeIn)
+           // {
+           //     pinSignalOut.setUpdated(this->getBlockPosition() + s);
+           // }
 
             *signalOut++ = outValue_;
         }
