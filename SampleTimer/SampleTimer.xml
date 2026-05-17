@@ -1,10 +1,10 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-  <Plugin id="SE Sample Timer" name="Sample Timer" category="Diagnostic" >
-    <Audio>
-		<Pin name="Gate" datatype="float" rate="audio" />
-      <Pin name="Trigger Time (samples)" datatype="int" default="4410"/>
-      <Pin name="Signal Out" datatype="float" rate="audio" direction="out" />
-    </Audio>
-  </Plugin>
+    <Plugin id="SampleTimer" name="Sample Timer" category="mx/Diagnostic">
+        <Audio>
+            <Pin name="Gate" datatype="float" rate="audio"/>
+            <Pin name="Trigger Time (samples)" datatype="int" default="44100"/>
+            <Pin name="Signal Out" datatype="float" rate="audio" direction="out"/>
+        </Audio>
+    </Plugin>
 </PluginList>

@@ -18,7 +18,6 @@ public:
         initializePin(pinGate);
         initializePin(pinTriggerTimesamples);
         initializePin(pinSignalOut);
-
         timer = 0;
         outputHigh = false;
     }
@@ -56,7 +55,7 @@ public:
             }
 
             // Check if timer reached trigger samples
-            if (outputHigh && timer >= triggerSamples)
+            if (outputHigh && timer > triggerSamples)
             {
                 // Reset everything
                 outputHigh = false;
