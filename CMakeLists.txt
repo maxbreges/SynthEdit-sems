@@ -178,7 +178,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (CC2Note)
 #add_subdirectory (WavFileLength)
 #add_subdirectory (TriggerToMIDI)
-
+add_subdirectory (MIDI_Chan)
 
 
 #add_subdirectory (AutoFixedValues)
@@ -225,6 +225,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (ListToText)
 #add_subdirectory (MatchPitch)
 #add_subdirectory (MatchPitchGate)
+#add_subdirectory (MIDI_Chan)
 #add_subdirectory (MidiChannelShift)
 #add_subdirectory (MidiToBlobs)
 #add_subdirectory (MidiToHex)

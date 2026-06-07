@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My MIDI_Chan" name="MIDI_Chan" category="mx/MIDI">
+        <Audio>
+            <Pin name="MIDI In" datatype="midi"/>
+            <Pin name="Channel" datatype="int" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
