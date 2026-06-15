@@ -97,6 +97,7 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	BoolGuiPin pinColorAdj;
 	IntGuiPin pinCornerRadius;
 	StringGuiPin pinSelection;
+	BoolGuiPin pinShiftHold;
 
 public:
 	DisplayList()
@@ -117,6 +118,7 @@ public:
 		initializePin(pinColorAdj, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 		initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetCornerRadius));
 		initializePin(pinSelection, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
+		initializePin(pinShiftHold);
 	}
 
 	//========================================
@@ -134,6 +136,10 @@ public:
 		if ((flags & GG_POINTER_FLAG_FIRSTBUTTON) == 0)
 		{
 			return gmpi::MP_OK; // Indicate successful hit, so right-click menu can show.
+		}
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
+		{
+			pinShiftHold = true;
 		}
 
 		pointPrevious = point;	// note first point.
@@ -315,6 +321,7 @@ public:
 
 		pinColorAdj = false;
 		pinMouseDown = false;
+		pinShiftHold = false;
 
 		releaseCapture();
 

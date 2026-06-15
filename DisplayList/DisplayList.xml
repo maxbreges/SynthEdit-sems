@@ -22,6 +22,7 @@
 			<Pin name="Shift+Drag" datatype="bool" private="true"/>
 			<Pin name="Corner Radius" datatype="int" isMinimised="true" default="5"/>
 			<Pin name="Selection" datatype="string" direction="in" />
+			<Pin name="Shift hold" datatype="bool" direction="out"/>
 		</GUI>
 	</Plugin>
 </PluginList>
