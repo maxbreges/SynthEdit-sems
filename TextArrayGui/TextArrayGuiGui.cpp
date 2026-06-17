@@ -18,29 +18,29 @@ class TextArrayGuiGui final : public SeGuiInvisibleBase
 	std::string stringData; //Text In
 	std::ofstream file;
 
-	bool fileExists(const std::string& filename) 
+	bool fileExists(const std::string& filename)
 	{
 		std::ifstream file(filename);
 		return file.good();
 	}
 
- 	void onSetFilePathIn()
+	void onSetFilePathIn()
 	{
 		std::string currentPath = static_cast<std::string>(pinFilePathIn);
 
 		if (fileExists(currentPath))
-		{	
+		{
 			lastFilePath = currentPath;
 			loadFile();
 		}
-		else 
+		else
 		{
 			// Create empty file for new filename
 			std::ofstream file(currentPath, std::ios::trunc);
 			file.close();
 			pinDebug = "New file created.";
 			lastFilePath = currentPath;
-		}		
+		}
 	}
 
 	void onSetSize()
@@ -65,16 +65,21 @@ class TextArrayGuiGui final : public SeGuiInvisibleBase
 			}
 		}
 	}
-	
+
 	void onSetTextIn()
 	{
 		stringData = pinTextIn;
+		if (pinWrite)
+		{
+			arrayValues[index] = stringData;
+			pinTextOut = arrayValues[index];
+		}
 	}
 
 	void onSetIndex()
 	{
 		index = pinIndex;
-		
+
 		// If in write mode, store the value
 		if (pinWrite)
 		{
@@ -98,7 +103,7 @@ class TextArrayGuiGui final : public SeGuiInvisibleBase
 			if (index != lastIndex && fileLoadedFlag)
 			{
 				pinDebug = "Index is " + std::to_string(index);
-				lastIndex = index;				
+				lastIndex = index;
 			}
 
 			if (arrayValues.empty())
@@ -106,13 +111,13 @@ class TextArrayGuiGui final : public SeGuiInvisibleBase
 				pinDebug = "File is empty";
 			}
 		}
-		pinSizeOut = static_cast<int>(arrayValues.size() -1);
+		pinSizeOut = static_cast<int>(arrayValues.size() - 1);
 		fileLoadedFlag = true;
 	}
 
 	void onSetWrite()
 	{
-		onSetSize();
+		onSetIndex();
 	}
 
 	void onSetClear()
@@ -128,37 +133,37 @@ class TextArrayGuiGui final : public SeGuiInvisibleBase
 			onSetSize();
 
 			pinTextOut = "File cleared"; //
-			
-			pinIndex = 0;			
+
+			pinIndex = 0;
 			pinDebug = "File cleared";
 		}
 		//else
 		//{}
 	}
 
- 	StringGuiPin pinFilePathIn;
- 	IntGuiPin pinSize;
- 	IntGuiPin pinIndex;
- 	StringGuiPin pinTextIn;
- 	BoolGuiPin pinWrite;
- 	BoolGuiPin pinClear;
+	StringGuiPin pinFilePathIn;
+	IntGuiPin pinSize;
+	IntGuiPin pinIndex;
+	StringGuiPin pinTextIn;
+	BoolGuiPin pinWrite;
+	BoolGuiPin pinClear;
 	BoolGuiPin pinReload;
- 	StringGuiPin pinTextOut;
- 	StringGuiPin pinDebug;
+	StringGuiPin pinTextOut;
+	StringGuiPin pinDebug;
 	IntGuiPin pinSizeOut;
 
 public:
 	TextArrayGuiGui()
 	{
-		initializePin( pinFilePathIn, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetFilePathIn) );
-		initializePin( pinSize, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetSize) );
-		initializePin( pinIndex, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetIndex) );
-		initializePin( pinTextIn, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetTextIn) );
-		initializePin( pinWrite, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetWrite) );
-		initializePin( pinClear, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetClear) );
+		initializePin(pinFilePathIn, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetFilePathIn));
+		initializePin(pinSize, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetSize));
+		initializePin(pinIndex, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetIndex));
+		initializePin(pinTextIn, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetTextIn));
+		initializePin(pinWrite, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetWrite));
+		initializePin(pinClear, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::onSetClear));
 		initializePin(pinReload, static_cast<MpGuiBaseMemberPtr2>(&TextArrayGuiGui::reloadFile));
-		initializePin( pinTextOut);
-		initializePin( pinDebug);
+		initializePin(pinTextOut);
+		initializePin(pinDebug);
 		initializePin(pinSizeOut);
 	}
 
@@ -210,7 +215,7 @@ public:
 			std::string filename = fs::path(pinFilePathIn).filename().string();
 			pinDebug = filename + " loaded"; // Or just "File loaded"
 			fileLoadedFlag = false;
-			pinIndex = 0;			
+			pinIndex = 0;
 		}
 		else
 		{
