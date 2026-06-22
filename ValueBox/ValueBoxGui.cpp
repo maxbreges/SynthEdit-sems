@@ -4,13 +4,11 @@
 #include <iomanip>
 #include <sstream>
 #include "mp_gui.h"
-//#include "../shared/unicode_conversion.h"
 
 using namespace gmpi;
 using namespace gmpi_gui; //for enum GG_POINTER_FLAGS
 using namespace GmpiGui;
 using namespace GmpiDrawing;
-//using namespace JmUnicodeConversions;
 
 class ValueBoxGui final : public gmpi_gui::MpGuiGfxBase
 {
@@ -26,12 +24,15 @@ class ValueBoxGui final : public gmpi_gui::MpGuiGfxBase
 
     FloatGuiPin pinFontSize;
     StringGuiPin pinFontFace;
+    StringGuiPin pinTextColor;
 
     IntGuiPin pinPrecision;
     IntGuiPin pinCorner;
-    BoolGuiPin pinDisableGradient;
+    FloatGuiPin pinGradientAmount;
     BoolGuiPin pinEntryOpen;
     BoolGuiPin pinMouseDown;
+
+    FloatGuiPin pinDebug;
     
 
     // Member variables 
@@ -43,8 +44,8 @@ class ValueBoxGui final : public gmpi_gui::MpGuiGfxBase
     float previousValue = 0.0f;
     int precision = 2;
     int corner = 4;
-    std::wstring pinBottomColor = L"FF000000";//pin substitute
-   
+    float gradientAmount = 1.f;
+       
 public:
     ValueBoxGui()
         : pointPrevious({ 0, 0 }), //initializing variables
@@ -62,13 +63,17 @@ public:
 
         initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetFontSize));
         initializePin(pinFontFace, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetFontFace));
+        initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetTextColor));
+
 
         initializePin(pinPrecision, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetPrecision));
         initializePin(pinCorner, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetCorner));
 
-        initializePin(pinDisableGradient, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetDisableGradient));
+        initializePin(pinGradientAmount, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetGradientAmount));
         initializePin(pinEntryOpen);
         initializePin(pinMouseDown);
+
+        initializePin(pinDebug);
     }
     void onSetFontSize()
     {
@@ -78,6 +83,12 @@ public:
     {
         pinFontFace.getValue();
     }
+
+    void onSetTextColor()
+    {
+        invalidateRect();
+    }
+
     void onSetPrecision()
     {
         precision = pinPrecision.getValue();
@@ -86,14 +97,10 @@ public:
     {
         corner = pinCorner.getValue();
     }
-    void onSetDisableGradient()
+
+    void onSetGradientAmount()
     {
-        if (pinDisableGradient)
-        {            
-            pinBottomColor = pinColorHex;
-        }
-        else
-        { }
+        gradientAmount = pinGradientAmount * 3.33f;
     }
 
     void onSetBrightness()
@@ -180,12 +187,12 @@ public:
         if (pinAnimPos < pinMin.getValue())
         {
             pinAnimPos = previousValue;
-            pinHelp = "Out of range. Reverted";
+            pinHelp = "Out of range. Reverted to the previous value";
         }
         if (pinAnimPos > pinMax.getValue())
         {
             pinAnimPos = previousValue;
-            pinHelp = "Out of range. Reverted";
+            pinHelp = "Out of range. Reverted to the previous value";
         }
 
         onSetFloat(); //to update the text box value
@@ -194,13 +201,12 @@ public:
     }
 
     int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
-    {
-        float multiplier = ((pinMax - pinMin) / 100);
-        float coarseness = 12000.0f * multiplier;
+    {        
+        float coarseness = 1200.0f;
 
         if (precision == 0 && !(flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT))
         {
-            coarseness = 1200.f * multiplier;
+            coarseness = 120.f;
             pinHelp = "The value changes in integer steps";
         }
 
@@ -209,17 +215,16 @@ public:
             if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
             {
                 float new_pos = pinBrightness;
-                new_pos = std::clamp(new_pos + delta / 12000.0f, 0.0f, 1.0f);
+                new_pos = std::clamp(new_pos + delta / 12000.0f, 0.0f, 10.0f);
                 pinBrightness = new_pos;
-                pinHelp = "Adjusting brightness with the mouse wheel";
-               // coarseness = 12000.0f * 1.535f;
+                pinHelp = "Fine adjusting of the brightness with the mouse wheel";
             }
             else
-            { 
+            {
                 float new_pos = pinAnimPosColor;
-                new_pos = std::clamp(new_pos + delta / coarseness, 0.0f, 10.0f);
+                new_pos = std::clamp(new_pos + delta / 18420.f, 0.0f, 10.0f);
                 pinAnimPosColor = new_pos;
-                pinHelp = "Adjusting the color with the mouse wheel"; 
+                pinHelp = "Fine adjusting of the color with the mouse wheel"; 
                 AnimPosToHex();
             }                        
         }
@@ -227,13 +232,13 @@ public:
         { 
             if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) // <cntr> key magnifies
             {
-                coarseness = 120000.0f * multiplier;
+                coarseness = 12000.0f;
                 pinHelp = "The value is changing in hundreds";
             }
             else{ pinHelp = "Changing the value with the mouse wheel"; }
 
             float new_pos = pinAnimPos;
-            new_pos = std::clamp(new_pos + delta / coarseness, 0.0f, 10.0f);
+            new_pos = std::clamp(new_pos + delta / coarseness, pinMin.getValue(), pinMax.getValue());
             pinAnimPos = new_pos; 
         }
         onSetFloat();
@@ -248,13 +253,18 @@ public:
         }
 
         float coarseness = (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) ? 0.005f : 0.02f;
+        constexpr float brightnessMin = 0.f;
+        constexpr float brightnessMax = 10.f;
+
+        constexpr float colorMin = 0.f;
+        constexpr float colorMax = 10.f;
 
         // Lambda to handle position update
-        auto handlePointerMove = [&](GmpiDrawing_API::MP1_POINT currentPoint, FloatGuiPin& pinTarget, GmpiDrawing_API::MP1_POINT& prevPoint)
+        auto handlePointerMove = [&](GmpiDrawing_API::MP1_POINT currentPoint, FloatGuiPin& pinTarget, float minVal, float maxVal, GmpiDrawing_API::MP1_POINT& prevPoint)
             {
                 Point offset(currentPoint.x - prevPoint.x, currentPoint.y - prevPoint.y);
                 float new_pos = pinTarget;
-                new_pos = std::clamp(new_pos - coarseness * (float)offset.y, pinMin.getValue(), pinMax.getValue());
+                new_pos = std::clamp(new_pos - coarseness * (float)offset.y, minVal, maxVal);
                 pinTarget = new_pos;
                 prevPoint = currentPoint;
             };
@@ -263,26 +273,31 @@ public:
         {
             if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
             {
-                handlePointerMove(point, pinBrightness, pointPreviousBrightness);
-                pinHelp = "Adjusting brightness";
+                // Adjust brightness with its range
+                coarseness = 0.02f;
+                handlePointerMove(point, pinBrightness, brightnessMin, brightnessMax, pointPreviousBrightness);
+                pinHelp = "Adjusting the brightness";
             }
             else
-            { 
-                pinHelp = "Adjusting color";
-            handlePointerMove(point, pinAnimPosColor, pointPreviousColor);
+            {
+                // Adjust color with its range
+                handlePointerMove(point, pinAnimPosColor, colorMin, colorMax, pointPreviousColor);
+                pinHelp = "Adjusting the color";
             }
-            
-            AnimPosToHex();            
+            AnimPosToHex();
         }
         else
         {
             if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
             {
-                pinHelp = "Fine tuning";
+                pinHelp = "Fine tuning the value";
             }
             else
-            { pinHelp = "Changing value"; }
-            handlePointerMove(point, pinAnimPos, pointPrevious);           
+            {
+                pinHelp = "Changing the value";
+            }
+            // For pinAnimPos, use its min/max
+            handlePointerMove(point, pinAnimPos, pinMin.getValue(), pinMax.getValue(), pointPrevious);
         }
 
         onSetFloat();
@@ -292,7 +307,7 @@ public:
 
     int32_t AnimPosToHex()
     {
-        int x = pinAnimPosColor * 153.5f;
+        float x = pinAnimPosColor * 153.5f;
         int R = 0; int G = 0; int B = 0;
         //--------------------------------
         if ((x >= 255) && (x < 768))
@@ -378,21 +393,17 @@ public:
 
         auto topCol = FromHexStringBackwardCompatible(pinColorHex);
         auto botCol = topCol;
-        if (!pinBottomColor.empty())
-        {
-            botCol = FromHexStringBackwardCompatible(pinBottomColor);
-        }
 
         auto adjustBrightness = [&](Color color, float brightness) -> Color {
-            float r = std::clamp(color.r * brightness, 0.0f, 1.0f);
-            float g = std::clamp(color.g * brightness, 0.0f, 1.0f);
-            float b = std::clamp(color.b * brightness, 0.0f, 1.0f);
+            float r = std::clamp(color.r * brightness, 0.0f, 1.f);
+            float g = std::clamp(color.g * brightness, 0.0f, 1.f);
+            float b = std::clamp(color.b * brightness, 0.0f, 1.f);
             float a = color.a; // Keep alpha unchanged
             return Color(r, g, b, a);
             };
 
         auto topColorBright = adjustBrightness(topCol, pinBrightness.getValue());
-        auto bottomColorBright = adjustBrightness(botCol, pinBrightness.getValue());
+        auto bottomColorBright = adjustBrightness(botCol, gradientAmount);
 
         int radius = corner;
 
@@ -482,7 +493,7 @@ public:
         TextFormat tf = g.GetFactory().CreateTextFormat(pinFontSize, fontFace);
         tf.SetParagraphAlignment(ParagraphAlignment::Center);
         tf.SetTextAlignment(TextAlignment::Center);
-        auto brush = g.CreateSolidColorBrush(Color::White);
+        auto brush = g.CreateSolidColorBrush(Color::FromHexString(pinTextColor));
         g.DrawTextU(textValue, tf, getRect(), brush);
         invalidateRect();
         return gmpi::MP_OK;
