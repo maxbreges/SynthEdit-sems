@@ -1,4 +1,5 @@
 #include "mp_sdk_audio.h"
+#include "cmath"
 
 using namespace gmpi;
 
@@ -21,6 +22,8 @@ public:
 		// Check which pins are updated.
 		if( pinValueIn.isUpdated() )
 		{
+			pinFloatOut = pinValueIn;
+			pinIntOut = std::round(pinValueIn);
 		}
 	}
 };

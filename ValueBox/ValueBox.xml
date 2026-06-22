@@ -2,18 +2,34 @@
 <PluginList>
     <Plugin id="My ValueBox" name="Value Box" category="mx/Controls" helpUrl="DisplayKnob.htm">
         <Parameters>
-            <Parameter id="0" datatype="float" name="Float Out"/>
+            <Parameter id="0" datatype="float" name="Float Value"/>
+			<Parameter id="1" datatype="string" name="Color Hex"/>
+			<Parameter id="2" datatype="float" name="Color Value"/>
+			<Parameter id="3" datatype="float" name="Brightness"/>
         </Parameters>
         <Audio>
             <Pin name="ValueIn" datatype="float" private="true" parameterId="0"/>
+			<Pin name="Float Out" datatype="float" direction="out"/>
+			<Pin name="Int Out" datatype="int" direction="out"/>
         </Audio>
         <GUI graphicsApi="GmpiGui">
-            <Pin name="Animation Position" datatype="float" parameterId="0" parameterField="Normalized"/>
-       
-			<Pin name="Debug" datatype="float" direction="out"/>
-			<Pin name="Debug2" datatype="float" direction="out"/>
-           
+            <Pin name="Animation Position" datatype="float" parameterId="0" />
+			<Pin name="Animation Position Color" datatype="float" parameterId="2" />
+			<Pin name="Brightness" datatype="float" parameterId="3"/>
+
+			<Pin name="Min" datatype="float" parameterId="0" parameterField="RangeMinimum"/>
+			<Pin name="Max" datatype="float" parameterId="0" parameterField="RangeMaximum"/>
+			
 			<Pin name="Help" datatype="string" direction="out"/>
+			<Pin name="Color Hex" datatype="string" parameterId="1"/>
+			
+			<Pin name="Font Size" datatype="float" default="12" isMinimised="true"/>
+			<Pin name="Font Face" datatype="string" default="Times New Roman" isMinimised="true"/>
+			<Pin name="Decimal Places" datatype="int" default="2" isMinimised="true"/>
+			<Pin name="Corner Radius" datatype="int" default="4" isMinimised="true"/>
+			<Pin name="Disable Gradient" datatype="bool" default="false" isMinimised="true"/>
+			<Pin name="Entry Open" datatype="bool" direction="out"/>
+			<Pin name="Mouse Down" datatype="bool" />
         </GUI>
     </Plugin>
 </PluginList>
