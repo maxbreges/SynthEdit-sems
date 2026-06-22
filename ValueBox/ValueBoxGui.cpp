@@ -1,16 +1,16 @@
+#pragma once 
 #include "mp_sdk_gui2.h"
 #include "Drawing.h"
 #include <iomanip>
 #include <sstream>
 #include "mp_gui.h"
-#include "../shared/unicode_conversion.h"
-#include "algorithm"
+//#include "../shared/unicode_conversion.h"
 
 using namespace gmpi;
 using namespace gmpi_gui; //for enum GG_POINTER_FLAGS
 using namespace GmpiGui;
 using namespace GmpiDrawing;
-using namespace JmUnicodeConversions;
+//using namespace JmUnicodeConversions;
 
 class ValueBoxGui final : public gmpi_gui::MpGuiGfxBase
 {
