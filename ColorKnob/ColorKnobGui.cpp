@@ -80,9 +80,7 @@ public:
     {
         if (pinMouseDown)
         {
-            ++count;
-
-           
+            ++count;           
 
             int countDown = 250;
             // Start countdown in a separate thread
