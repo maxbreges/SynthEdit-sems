@@ -37,6 +37,7 @@ class ValueBoxGui final : public gmpi_gui::MpGuiGfxBase
     FloatGuiPin pinFloat; 
     StringGuiPin pinHint;
 
+
     // Member variables 
     GmpiDrawing_API::MP1_POINT pointPrevious;
     GmpiDrawing_API::MP1_POINT pointPreviousColor;
@@ -55,12 +56,12 @@ public:
         pointPreviousColor({ 0, 0 }), pointOnMouseDown({ 0, 0 }), pointPreviousBrightness({ 0, 0 }), pointPreviousBrightnessBot({ 0, 0 })
     {
         initializePin(pinAnimPos, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetAnimPos));
-        initializePin(pinAnimPosColor);
+        initializePin(pinAnimPosColor, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetAnimPosColor));
         initializePin(pinBrightness);
         initializePin(pinBrightnessBot);
 
-        initializePin(pinMin, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetFloat));
-        initializePin(pinMax, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetFloat));
+        initializePin(pinMin);
+        initializePin(pinMax);
 
         initializePin(pinHelp);
         initializePin(pinColorHex);
@@ -78,10 +79,16 @@ public:
 
         initializePin(pinFloat);
         initializePin(pinHint);
+
     }
+
     void onSetAnimPos()
     {
         onSetFloat();
+    }
+    void onSetAnimPosColor()
+    {
+        AnimPosToHex();
     }
     void onSetFontSize()
     {
@@ -444,6 +451,7 @@ public:
         ss << std::fixed << std::setprecision(precision) << pinAnimPos;
         textValue = ss.str();
         pinFloat = pinAnimPos;
+        invalidateRect();
     }
 
     std::string textValue;

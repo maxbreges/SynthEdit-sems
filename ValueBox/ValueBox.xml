@@ -36,6 +36,7 @@
 		
 			<Pin name="Float Out" datatype="float" direction="out" />
 			<Pin name="Hint" datatype="string" default="Hint" isMinimised="true"/>
+
         </GUI>
     </Plugin>
 </PluginList>
