@@ -11,10 +11,11 @@ GmpiDrawing_API::MP1_POINT pointPrevious;
 
 class TransparentKnobGui final : public gmpi_gui::MpGuiGfxBase
 {
+	int precision = 2;
  	void onSetAnimationPosition()
 	{
 		std::stringstream ss;
-		ss << std::fixed << std::setprecision(2) << pinAnimationPosition;
+		ss << std::fixed << std::setprecision(precision) << pinAnimationPosition;
 		std::string res(ss.str());
 		if(!pinDisplayEnable)
 		{
@@ -44,7 +45,8 @@ class TransparentKnobGui final : public gmpi_gui::MpGuiGfxBase
  	BoolGuiPin pinDisplayEnable;
 	BoolGuiPin pinRectangleColorEnable;
 	StringGuiPin pinColor;
- 	BoolGuiPin pinMouseDown; 	
+ 	BoolGuiPin pinMouseDown;
+	StringGuiPin pinHelp;
 
 public:
 	TransparentKnobGui()
@@ -53,7 +55,8 @@ public:
 		initializePin( pinDisplayEnable, static_cast<MpGuiBaseMemberPtr2>(&TransparentKnobGui::onSetDisplayEnable) );
 		initializePin(pinRectangleColorEnable, static_cast<MpGuiBaseMemberPtr2>(&TransparentKnobGui::onSetRectangleColorEnable));
 		initializePin(pinColor, static_cast<MpGuiBaseMemberPtr2>(&TransparentKnobGui::onSetColor));
-		initializePin( pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&TransparentKnobGui::onSetMouseDown) );		
+		initializePin( pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&TransparentKnobGui::onSetMouseDown) );
+		initializePin(pinHelp);
 	}
 
 	int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
@@ -86,12 +89,20 @@ public:
 	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
 	{
 		float coarseness = 1200.0f ;
-
+		pinHelp = "Rotating the mouse wheel";
 		//		if (modifier_keys::isHeldCtrl()) // <cntr> key magnifies
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) // <cntr> key magnifies
 		{
-			coarseness = 12000.0f;			
+			coarseness = 12000.0f;	
+			pinHelp = "Ctrl key is held down";
 		}
+		if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) && (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT))// <cntr> key magnifies
+		{
+			coarseness = 120000.0f;
+			precision = 3;
+			pinHelp = "Ctrl and Shift keys are held down";
+		}
+		else { precision = 2; }
 
 		float new_pos = pinAnimationPosition;
 
@@ -108,11 +119,25 @@ public:
 		{
 			return gmpi::MP_UNHANDLED;
 		}
+		float coarseness = 0.005f;
+		pinHelp = "Click and drag";
+		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) // <cntr> key magnifies
+		{
+			coarseness = 0.001f;
+			pinHelp = "Ctrl key is held down";
+		}
+		if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) && (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT))// <cntr> key magnifies
+		{
+			coarseness = 0.0001f;
+			precision = 3;
+			pinHelp = "Ctrl and Shift keys are held down";
+		}
+		else { precision = 2; }
 
 		Point offset(point.x - pointPrevious.x, point.y - pointPrevious.y);
 
 		float new_pos = pinAnimationPosition;
-		new_pos = std::clamp(new_pos - 0.005f * (float)offset.y, 0.0f, 1.0f);
+		new_pos = std::clamp(new_pos - coarseness * (float)offset.y, 0.0f, 1.0f);
 		pinAnimationPosition = new_pos;
 		pointPrevious = point;
 

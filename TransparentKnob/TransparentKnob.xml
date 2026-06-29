@@ -6,7 +6,8 @@
             <Pin name="Display Enable" datatype="bool" isMinimised="true"/>
 			<Pin name="Rectangle Color Enable" datatype="bool" isMinimised="true"/>
 			<Pin name="Rectangle Color" datatype="string" default="ff00a3dd" isMinimised="true"/>
-			<Pin name="Mouse Down" datatype="bool" />			
+			<Pin name="Mouse Down" datatype="bool" />
+			<Pin name="Help" datatype="string" direction="out" private="true"/>
         </GUI>
     </Plugin>
 </PluginList>
