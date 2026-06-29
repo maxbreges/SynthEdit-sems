@@ -180,6 +180,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (Trigger2midi)
 #add_subdirectory (MIDI_Chan)
 #add_subdirectory (ValueBox)
+add_subdirectory (TransparentKnob)
+
 
 #add_subdirectory (AutoFixedValues)
 #add_subdirectory (AutoFixedValuesInt)
