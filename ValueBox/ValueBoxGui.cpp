@@ -37,6 +37,8 @@ class ValueBoxGui final : public gmpi_gui::MpGuiGfxBase
     FloatGuiPin pinFloat; 
     StringGuiPin pinHint;
 
+    StringGuiPin pinMenuItems;
+    IntGuiPin pinMenuSelection;
 
     // Member variables 
     GmpiDrawing_API::MP1_POINT pointPrevious;
@@ -80,6 +82,50 @@ public:
         initializePin(pinFloat);
         initializePin(pinHint);
 
+        initializePin(pinMenuItems);
+        initializePin(pinMenuSelection);
+
+    }
+
+    virtual int32_t MP_STDCALL populateContextMenu(float x, float y, gmpi::IMpUnknown* contextMenuItemsSink) override
+    {
+        gmpi::IMpContextItemSink* sink = nullptr;
+        contextMenuItemsSink->queryInterface(gmpi::MP_IID_CONTEXT_ITEMS_SINK, reinterpret_cast<void**>(&sink));
+
+        it_enum_list itr(pinMenuItems);
+
+        for (itr.First(); !itr.IsDone(); ++itr)
+        {
+            int32_t flags = 0;
+
+            // Special commands (sub-menus)
+            switch (itr.CurrentItem()->getType())
+            {
+            case enum_entry_type::Separator:
+            case enum_entry_type::SubMenu:
+                flags |= gmpi_gui::MP_PLATFORM_MENU_SEPARATOR;
+                break;
+
+            case enum_entry_type::SubMenuEnd:
+            case enum_entry_type::Break:
+                continue;
+
+            default:
+                break;
+            }
+
+            sink->AddItem(JmUnicodeConversions::WStringToUtf8(itr.CurrentItem()->text).c_str(), itr.CurrentItem()->value, flags);
+        }
+        sink->release();
+        return gmpi::MP_OK;
+    }
+
+    virtual int32_t MP_STDCALL onContextMenu(int32_t selection) override
+    {
+        pinMenuSelection = selection; // send menu momentarily, then reset.
+        pinMenuSelection = -1;
+
+        return gmpi::MP_OK;
     }
 
     void onSetAnimPos()
@@ -451,7 +497,7 @@ public:
         ss << std::fixed << std::setprecision(precision) << pinAnimPos;
         textValue = ss.str();
         pinFloat = pinAnimPos;
-        invalidateRect();
+        invalidateRect();//added for 1.6 (in 1.5 it does not seem to be necessary)
     }
 
     std::string textValue;

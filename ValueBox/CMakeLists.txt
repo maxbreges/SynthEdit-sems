@@ -9,4 +9,6 @@ build_gmpi_plugin(
 	SOURCE_FILES
 	  ValueBox.cpp
 	  ValueBoxGui.cpp
+	${se_sdk_folder}/it_enum_list.h
+        ${se_sdk_folder}/it_enum_list.cpp
 )

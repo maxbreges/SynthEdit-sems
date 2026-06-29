@@ -37,6 +37,8 @@
 			<Pin name="Float Out" datatype="float" direction="out" />
 			<Pin name="Hint" datatype="string" default="Hint" isMinimised="true"/>
 
+			<Pin name="Menu Items" direction="in" datatype="string" parameterId="0" parameterField="MenuItems"/>
+			<Pin name="Menu Selection" direction="in" datatype="int" parameterId="0" parameterField="MenuSelection"/>
         </GUI>
     </Plugin>
 </PluginList>
