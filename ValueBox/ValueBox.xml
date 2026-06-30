@@ -10,7 +10,7 @@
         </Parameters>
         <Audio>
             <Pin name="ValueIn" datatype="float" private="true" parameterId="0"/>
-			<Pin name="Float Out" datatype="float" direction="out"/>
+			<Pin name="Float Out" datatype="float" direction="out" autoConfigureParameter="true"/>
 			<Pin name="Int Out" datatype="int" direction="out"/>
         </Audio>
         <GUI graphicsApi="GmpiGui">
@@ -35,10 +35,13 @@
 			<Pin name="Mouse Down" datatype="bool" />
 		
 			<Pin name="Float Out" datatype="float" direction="out" />
-			<Pin name="Hint" datatype="string" default="Hint" isMinimised="true"/>
+			<Pin name="Hint" datatype="string" isMinimised="true"/>
 
 			<Pin name="Menu Items" direction="in" datatype="string" parameterId="0" parameterField="MenuItems"/>
 			<Pin name="Menu Selection" direction="in" datatype="int" parameterId="0" parameterField="MenuSelection"/>
+
+			<Pin name="HintAuto" datatype="string" parameterId="0" parameterField="ShortName"/>
+			<Pin name="Disable Hint" datatype="bool" />
         </GUI>
     </Plugin>
 </PluginList>

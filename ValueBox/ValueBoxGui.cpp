@@ -40,6 +40,9 @@ class ValueBoxGui final : public gmpi_gui::MpGuiGfxBase
     StringGuiPin pinMenuItems;
     IntGuiPin pinMenuSelection;
 
+    StringGuiPin pinHintAuto;
+    BoolGuiPin pinDisableHint;
+
     // Member variables 
     GmpiDrawing_API::MP1_POINT pointPrevious;
     GmpiDrawing_API::MP1_POINT pointPreviousColor;
@@ -84,6 +87,9 @@ public:
 
         initializePin(pinMenuItems);
         initializePin(pinMenuSelection);
+
+        initializePin(pinHintAuto);
+        initializePin(pinDisableHint);
 
     }
 
@@ -169,9 +175,22 @@ public:
 
     int32_t MP_STDCALL getToolTip(GmpiDrawing_API::MP1_POINT point, gmpi::IString* returnString) override
     {
-        auto utf8String = (std::string)pinHint;
-        returnString->setData(utf8String.data(), (int32_t)utf8String.size());
-        return gmpi::MP_OK;
+        if(!pinDisableHint)
+        {
+            auto hintUser = pinHint.getValue();
+            if (hintUser.empty())
+            {
+                pinHint = pinHintAuto;
+            }
+            else
+            {
+                pinHint = hintUser;
+            }
+            auto utf8String = (std::string)pinHint;
+            returnString->setData(utf8String.data(), (int32_t)utf8String.size());
+            return gmpi::MP_OK;
+        }
+        else{}
     }
 private:
     int count = 0;
@@ -202,7 +221,7 @@ public:
             }
             else{ pointPreviousColor = point; }            
         }
-        pinHelp = "MouseDown (setCapture())";
+        //pinHelp = "MouseDown (setCapture())";
         if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
         {
             if (pinMouseDown)
@@ -259,7 +278,7 @@ public:
 
         releaseCapture();
         pinMouseDown = false;
-        pinHelp = "MouseUp (releaseCapture())";
+        //pinHelp = "MouseUp (releaseCapture())";
 
         if ((pointOnMouseUp.x == pointOnMouseDown.x && pointOnMouseUp.y == pointOnMouseDown.y) && !((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) || (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)) )
         {
