@@ -22,7 +22,7 @@
 			<Pin name="Min" datatype="float" parameterId="0" parameterField="RangeMinimum"/>
 			<Pin name="Max" datatype="float" parameterId="0" parameterField="RangeMaximum"/>
 			
-			<Pin name="Help" datatype="string" direction="out"/>
+			<Pin name="Help" datatype="string" direction="out" private="true"/>
 			<Pin name="Color Hex" datatype="string" parameterId="1"/>
 			
 			<Pin name="Font Size" datatype="float" default="12" isMinimised="true"/>
