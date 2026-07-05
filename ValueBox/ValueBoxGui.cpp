@@ -290,22 +290,23 @@ public:
             previousValue = pinAnimPos;
             // Show the edit control
             nativeEdit.ShowAsync([this](int32_t result) { this->OnTextEnteredComplete(result); });
-        }                
+        }
         
         return gmpi::MP_OK;
     }
 
     void OnTextEnteredComplete(int32_t result)
     {
+        pinHelp = "OnTextEnteredComplete";
+        
         if (result == gmpi::MP_OK)
         {
             // Update pinText with the current content of the text edit
             textValue = (nativeEdit.GetText()); // Get the latest text after editing                      
-            invalidateRect(); // Request UI redraw if necessary
-            pinEntryOpen = false;
+            invalidateRect(); // Request UI redraw if necessary            
             // Release native edit instance
             nativeEdit.setNull();
-            pinHelp = "Entry is closed";
+            
         }
 
         try {
@@ -333,6 +334,8 @@ public:
         onSetFloat(); //to update the text box value
         
         invalidateRect();
+        pinEntryOpen = false;
+        pinHelp = "Entry is closed";
     }
 
     int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
