@@ -16,14 +16,14 @@
         <GUI graphicsApi="GmpiGui">
             <Pin name="Animation Position" datatype="float" parameterId="0"/>
 			<Pin name="Animation Position Color" datatype="float" parameterId="2" />
-			<Pin name="Brightness Top" datatype="float" parameterId="3" />
-			<Pin name="Brightness Bottom" datatype="float" parameterId="4" />
+			<Pin name="Brightness Top" datatype="float" default="4" parameterId="3" />
+			<Pin name="Brightness Bottom" datatype="float" default="10" parameterId="4" />
 
 			<Pin name="Min" datatype="float" parameterId="0" parameterField="RangeMinimum"/>
 			<Pin name="Max" datatype="float" parameterId="0" parameterField="RangeMaximum"/>
 			
 			<Pin name="Help" datatype="string" direction="out" private="true"/>
-			<Pin name="Color Hex" datatype="string" parameterId="1"/>
+			<Pin name="Color Hex" datatype="string" default="ffff9900" parameterId="1"/>
 			
 			<Pin name="Font Size" datatype="float" default="12" isMinimised="true"/>
 			<Pin name="Font Face" datatype="string" default="Times New Roman" isMinimised="true"/>
@@ -32,16 +32,18 @@
 			<Pin name="Decimal Places" datatype="int" default="2" isMinimised="true"/>
 			<Pin name="Corner Radius" datatype="int" default="4" isMinimised="true"/>
 			<Pin name="Entry Open" datatype="bool" direction="out"/>
+			<Pin name="Mouse Over" datatype="bool" direction="out"/>
 			<Pin name="Mouse Down" datatype="bool" />
+			<Pin name="Disable Hint" datatype="bool" default="false" />
 		
-			<Pin name="Float Out" datatype="float" direction="out" />
+			<Pin name="Float Out" datatype="float" direction="in" />
 			<Pin name="Hint" datatype="string" isMinimised="true"/>
 
 			<Pin name="Menu Items" direction="in" datatype="string" parameterId="0" parameterField="MenuItems"/>
 			<Pin name="Menu Selection" direction="in" datatype="int" parameterId="0" parameterField="MenuSelection"/>
 
 			<Pin name="HintAuto" datatype="string" parameterId="0" parameterField="ShortName"/>
-			<Pin name="Disable Hint" datatype="bool" />
+
         </GUI>
     </Plugin>
 </PluginList>

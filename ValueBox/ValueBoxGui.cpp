@@ -32,7 +32,9 @@ class ValueBoxGui final : public gmpi_gui::MpGuiGfxBase
     IntGuiPin pinPrecision;
     IntGuiPin pinCorner;
     BoolGuiPin pinEntryOpen;
+    BoolGuiPin pinHover;
     BoolGuiPin pinMouseDown;
+    BoolGuiPin pinDisableHint;
 
     FloatGuiPin pinFloat; 
     StringGuiPin pinHint;
@@ -41,7 +43,6 @@ class ValueBoxGui final : public gmpi_gui::MpGuiGfxBase
     IntGuiPin pinMenuSelection;
 
     StringGuiPin pinHintAuto;
-    BoolGuiPin pinDisableHint;
 
     // Member variables 
     GmpiDrawing_API::MP1_POINT pointPrevious;
@@ -80,7 +81,9 @@ public:
         initializePin(pinCorner, static_cast<MpGuiBaseMemberPtr2>(&ValueBoxGui::onSetCorner));
 
         initializePin(pinEntryOpen);
+        initializePin(pinHover);
         initializePin(pinMouseDown);
+        initializePin(pinDisableHint);
 
         initializePin(pinFloat);
         initializePin(pinHint);
@@ -89,8 +92,13 @@ public:
         initializePin(pinMenuSelection);
 
         initializePin(pinHintAuto);
-        initializePin(pinDisableHint);
 
+    }
+
+    int32_t setHover(bool isMouseOverMe) override
+    {        
+        pinHover = isMouseOverMe;
+        return gmpi::MP_UNHANDLED;
     }
 
     virtual int32_t MP_STDCALL populateContextMenu(float x, float y, gmpi::IMpUnknown* contextMenuItemsSink) override
@@ -165,8 +173,14 @@ public:
         corner = pinCorner.getValue();
     }
 
-    void onSetBrightness()
+    void onSetColorHex()
     {
+        pinColorHex = "ffff9900";
+    }
+    void onSetBrightness()
+    {        
+        pinBrightness = 4.f;
+        pinBrightnessBot = 10.f;
     }
 
     void onSetMouseDown()
@@ -191,6 +205,7 @@ public:
             return gmpi::MP_OK;
         }
         else{}
+        return gmpi::MP_OK;
     }
 private:
     int count = 0;
@@ -361,7 +376,7 @@ public:
                 }
                 else
                 {
-                    float new_pos = pinBrightness;
+                    float new_pos = pinBrightness = 1.f;
                     new_pos = std::clamp(new_pos + delta / 12000.0f, 0.0f, 10.0f);
                     pinBrightness = new_pos;
                     pinHelp = "Fine adjusting of the top brightness with the mouse wheel (Shift+Ctrl+Mouse Wheel)";
@@ -465,7 +480,7 @@ public:
     int32_t AnimPosToHex()
     {
         float x = pinAnimPosColor * 153.5f;
-        int R = 0; int G = 0; int B = 0;
+        float R = 0; float G = 0; float B = 0;
         //--------------------------------
         if ((x >= 255) && (x < 768))
             G = 255;
@@ -570,6 +585,7 @@ public:
         radius = (std::min)(radius, height / 2);
 
         auto geometry = g.GetFactory().CreatePathGeometry();
+
         auto sink = geometry.Open();
 
         // define a corner 
