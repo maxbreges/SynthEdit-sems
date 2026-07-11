@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="TextEntry15" name="Text Entry15" category="mx/Sub-Controls">
+        <GUI graphicsApi="GmpiGui">
+            <Pin name="Text" datatype="string" default="Text"/>
+			<Pin name="Font Face" datatype="string" default="Times New Roman" isMinimised="true"/>
+			<Pin name="Font Size" datatype="int" default="20" isMinimised="true"/>
+            <Pin name="Text Color" datatype="string" default="ffffffff"/>
+            <Pin name="Top Color" datatype="string" default="ffbbbbbb"/>
+            <Pin name="Bg Color" datatype="string" default="ff000000"/>
+			<Pin name="Corner" datatype="int" default="5" isMinimised="true"/>
+            <Pin name="Hint" datatype="string" isMinimised="true"/>
+			<Pin name="Disable Hint" datatype="bool"/>
+            <Pin name="Mouse Down" datatype="bool"/>
+			<Pin name="Mouse Over" datatype="bool" direction="out"/>
+			<Pin name="Entry Open" datatype="bool" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
