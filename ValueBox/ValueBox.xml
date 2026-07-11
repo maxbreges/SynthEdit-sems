@@ -36,7 +36,7 @@
 			<Pin name="Mouse Down" datatype="bool" />
 			<Pin name="Disable Hint" datatype="bool" default="false" />
 		
-			<Pin name="Float Out" datatype="float" direction="in" />
+			<Pin name="Float Out" datatype="float" direction="out" />
 			<Pin name="Hint" datatype="string" isMinimised="true"/>
 
 			<Pin name="Menu Items" direction="in" datatype="string" parameterId="0" parameterField="MenuItems"/>
