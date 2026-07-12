@@ -150,10 +150,8 @@ public:
             nativeEdit = host.createPlatformTextEdit(getRect());
             nativeEdit.SetText(pinText);
             pinEntryOpen = true;
-
             // Show the edit control
-            nativeEdit.ShowAsync([this](int32_t result) { this->OnTextEnteredComplete(result); });
-        
+            nativeEdit.ShowAsync([this](int32_t result) { this->OnTextEnteredComplete(result); });        
 
         return gmpi::MP_OK;
     }
@@ -167,7 +165,6 @@ public:
             invalidateRect(); // Request UI redraw if necessary            
             // Release native edit instance
             nativeEdit.setNull();
-
         }
 
         invalidateRect();
@@ -311,25 +308,6 @@ public:
     return gmpi::MP_OK;
     }
 
-
-/*int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext) override
-{
-    Graphics g(drawingContext);
-    ClipDrawingToBounds x(g, getRect());
-    auto brushRect = g.CreateSolidColorBrush(Color::FromHexString(pinTopColor));
-
-        g.FillRectangle(getRect(), brushRect);
-    
-
-    TextFormat tf = g.GetFactory().CreateTextFormat(pinFontSize, "Times New Roman");
-    tf.SetParagraphAlignment(ParagraphAlignment::Center),
-        tf.SetTextAlignment(TextAlignment::Center);
-    auto brush = g.CreateSolidColorBrush(Color::Black);
-
-    g.DrawTextU(pinText, tf, getRect(), brush);
-
-    return gmpi::MP_OK;
-}*/
 };
 
 namespace
