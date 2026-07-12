@@ -16,7 +16,6 @@ class TextEntry15Gui final : public gmpi_gui::MpGuiGfxBase
 		invalidateRect();
 	}
 
-
     void onSetFontFace()
     { 
     }
@@ -108,7 +107,7 @@ public:
             auto hintUser = pinHint.getValue();
             if (hintUser.empty())
             {
-               // pinHint = pinHintAuto;//<Pin name="HintAuto" datatype="string" parameterId="0" parameterField="ShortName"/>
+               // pinHint = pinHintAuto;//<Pin name="HintAuto" datatype="string" parameterId="0" parameterField="ShortName"/> — if audio
             }
             else
             {
@@ -162,14 +161,11 @@ public:
         {
             // Update pinText with the current content of the text edit
             pinText = (nativeEdit.GetText()); // Get the latest text after editing                      
-            invalidateRect(); // Request UI redraw if necessary            
-            // Release native edit instance
-            nativeEdit.setNull();
+            invalidateRect(); // Request UI redraw if necessary
         }
-
-        invalidateRect();
+        // Release native edit instance
+        nativeEdit.setNull();
         pinEntryOpen = false;
-
     }
 
     Color FromHexStringBackwardCompatible(const std::wstring& s)
