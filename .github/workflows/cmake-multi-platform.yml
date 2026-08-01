@@ -22,7 +22,7 @@ jobs:
         #  - name: Linux
         #    os: ubuntu-22.04
           - name: macOS
-            os: macos-latest
+            os: macos-10.14
           - name: Windows
             os: windows-latest
     steps:
