@@ -4,9 +4,6 @@
 #include "../shared/it_enum_list.h"
 #include "../shared/string_utilities.h"
 #include "../se_sdk3/MpString.h"
-#include <sstream>
-#include <algorithm> // for std::sort
-#include <cctype>    // for tolower
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -21,71 +18,9 @@ FileDialogGui::FileDialogGui() :
 	// initialise pins.
 	initializePin(pinFileName);
 	initializePin(pinFileExtension);
-	initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetChoice));
-	initializePin(pinItemsList);
 	initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetTrigger));
 	initializePin(pinSaveMode);
-	initializePin(pinDirectory);
-	initializePin(pinDebug);
-	initializePin(pinItemsListIn, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetItemsList));
-	initializePin(pinOpened);
-	initializePin(pinFileNameOut);
-}
-
-void FileDialogGui::onSetItemsList()
-{
-	std::wstring itemsList = pinItemsListIn.getValue();
-	m_fileNamesSet.clear();
-
-	std::wistringstream wss(itemsList);
-	std::wstring item;
-
-	while (std::getline(wss, item, L',')) {
-		if (!item.empty()) // Avoid empty entries
-			m_fileNamesSet.insert(item);
-	}
-}
-
-void FileDialogGui::onSetChoice()
-{
-	if (pinChoice >= 0 && pinChoice < static_cast<int>(m_fileNamesSet.size()))
-	{
-#ifdef _WIN32
-		const wchar_t* pathSeparator = L"\\";
-#else
-		const wchar_t* pathSeparator = L"/";
-#endif
-		auto it = std::next(m_fileNamesSet.begin(), pinChoice);
-		auto element = *it; // element is a std::wstring		
-
-		std::wstring filenameOnly = pinDirectory.getValue() + pathSeparator + element + L"." + pinFileExtension.getValue();
-		
-		pinFileName = filenameOnly;
-
-		std::wstring fname = fs::path(pinFileName).stem().wstring();
-		
-		pinFileNameOut = fname;
-		pinDebug = element;
-	}
-	else
-	{
-		// Possibly clear the filename if the choice is out of range
-		pinFileName = L"";
-	}
-
-	
-	
-
-/*	// Combine file names into a single string for debug purposes
-	std::wstringstream debugStream;
-	for (const auto& name : m_fileNamesSet) {
-		debugStream << name << L","; // Adds a comma for separation
-	}
-
-	std::wstring debugOutput = debugStream.str();
-	if (!debugOutput.empty()) {
-		debugOutput.erase(debugOutput.end() - 2, debugOutput.end()); // Remove last comma and space
-	}*/
+	initializePin(pinOnDialogComplete);
 }
 
 std::string FileDialogGui::getDefaultFolder(std::wstring extension)
@@ -101,7 +36,7 @@ void FileDialogGui::onSetTrigger()
 	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
 		std::wstring filename = pinFileName;
-		//std::wstring file_extension = pinFileExtension;
+		std::wstring file_extension = pinFileExtension;
 
 		IMpGraphicsHostBase* dialogHost = 0;
 		getHost()->queryInterface(SE_IID_GRAPHICS_HOST_BASE, reinterpret_cast<void**>(&dialogHost));
@@ -117,13 +52,13 @@ void FileDialogGui::onSetTrigger()
 
 				auto filename = pinFileName.getValue();
 				if (!filename.empty())
-				{					
+				{
 					filename = uiHost.resolveFilename(filename);
-					nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));					
+					nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
 				}
 				else
 				{
-					nativeFileDialog.setInitialDirectory(getDefaultFolder(pinFileExtension));					
+					nativeFileDialog.setInitialDirectory(getDefaultFolder(pinFileExtension));
 				}
 
 				nativeFileDialog.ShowAsync([this](int32_t result) -> void { this->OnFileDialogComplete(result); });
@@ -134,138 +69,72 @@ void FileDialogGui::onSetTrigger()
 	m_prev_trigger = pinTrigger;
 }
 
-std::string fileext;
-
-bool iequals(const std::string& a, const std::string& b)
+std::string uniformPath(std::string path)
 {
-	if (a.size() != b.size())
-		return false;
-	return std::equal(a.begin(), a.end(), b.begin(), b.end(),
-		[](char a_char, char b_char) {
-			return tolower(a_char) == tolower(b_char);
-		});
+	std::string ret;
+
+	auto folderPath = path;
+
+	while (!folderPath.empty())
+	{
+		auto p = folderPath.find_last_of("\\/");
+
+		if (!ret.empty())
+			ret = '/' + ret;
+
+		if (p == std::string::npos)
+		{
+			ret = folderPath + ret;
+			folderPath.clear();
+		}
+		else
+		{
+			ret = std::string(folderPath.c_str() + p + 1) + ret;
+			folderPath = Left(folderPath, p);
+		}
+	}
+
+	return ret;
 }
 
 void FileDialogGui::OnFileDialogComplete(int32_t result)
 {
-	if (result != gmpi::MP_OK)
-	{
-		return;
-	}
-
 	if (result == gmpi::MP_OK)
 	{
 		// Trim filename if in default folder.
 		auto filepath = nativeFileDialog.GetSelectedFilename();
-		fileext = GetExtension(filepath);
+		auto fileext = GetExtension(filepath);
 		const char* fileclass = nullptr;
 
-		if (iequals(fileext, "sf2") || iequals(fileext, "sfz"))
+		if (fileext == "sf2" || fileext == "sfz")
 		{
 			fileclass = "Instrument";
 		}
-		else if (iequals(fileext, "png") || iequals(fileext, "bmp") || iequals(fileext, "jpg"))
-		{
-			fileclass = "Image";
-		}
-		else if (iequals(fileext, "wav"))
-		{
-			fileclass = "Audio";
-		}
-		else if (iequals(fileext, "mid"))
-		{
-			fileclass = "MIDI";
-		}
-
-		if (fileclass)
-		{
-			auto shortName = StripPath(filepath);
-			
-			const auto r = uiHost.FindResourceU(shortName.c_str(), fileclass);
-
-			if (filepath == r)
-			{
-				filepath = shortName;
-			}
-		}
-
-		pinFileName = filepath;
-		
-
-		if (!filepath.empty())
-		{
-			pinOpened = 1.f;
-		}
 		else
 		{
-			pinOpened = 0.f;			
-		}
-	}
-
-	auto parentPath = fs::path(pinFileName).parent_path();
-	pinDirectory = parentPath;
-	updateItemsList(parentPath.string());
-	nativeFileDialog.setNull(); // release it.
-}
-
-
-void FileDialogGui::updateItemsList(const fs::path& directory)
-{
-	m_fileNamesSet.clear();
-
-	if (fs::exists(directory) && fs::is_directory(directory))
-	{
-		for (const auto& entry : fs::directory_iterator(directory))
-		{
-			if (entry.is_regular_file())
+			if (fileext == "png" || fileext == "bmp" || fileext == "jpg")
 			{
-				auto extension = entry.path().extension().string().substr(1);
-				if (iequals(extension, fileext))
+				fileclass = "Image";
+			}
+			else
+			{
+				if (fileext == "wav")
 				{
-					// Insert into the set
-					m_fileNamesSet.insert(entry.path().stem().wstring());
+					fileclass = "Audio";
+				}
+				else
+				{
+					if (fileext == "mid")
+					{
+						fileclass = "MIDI";
+					}
 				}
 			}
 		}
-	}
 
-	// Clear previous list
-	pinItemsList = "";
-
-	std::wstringstream ss;
-	size_t count = 0;
-	for (const auto& filename : m_fileNamesSet)
-	{
-		if (count > 0)
-			ss << L",";
-		ss << filename;
-		++count;
+		pinOnDialogComplete = true;
+		pinFileName = filepath;
 	}
-
-	pinItemsList = ss.str();
-	pinItemsListIn = pinItemsList;
-	onSetSelectedFile();
-}
-
-void FileDialogGui::onSetSelectedFile()
-{
-	if (m_fileNamesSet.empty())
-	{
-		pinChoice = -1;
-		return;
-	}
-
-	std::wstring selectedFileStem = fs::path(pinFileName).stem().wstring();
-	
-	auto it = m_fileNamesSet.find(selectedFileStem);
-	if (it != m_fileNamesSet.end())
-	{
-		// Get the index of the filename in the sorted set
-		auto index = std::distance(m_fileNamesSet.begin(), it);
-		pinChoice = static_cast<int>(index);
-	}
-	else
-	{
-		pinChoice = -1;
-	}
+	pinOnDialogComplete = false;
+	nativeFileDialog.setNull(); // release it.
 }
