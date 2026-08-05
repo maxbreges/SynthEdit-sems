@@ -1,4 +1,4 @@
-#include "mp_sdk_gui2.h"
+//#include "mp_sdk_gui2.h"
 #include "mp_gui.h"
 //#include <filesystem> // Removed for cross-platform compatibility
 
@@ -31,8 +31,8 @@ class JustPathGui final : public SeGuiInvisibleBase
         // Check if the trigger has just been set (mouse button released)
         if (pinTrigger == false && m_prev_trigger == true)
         {
-            IMpGraphicsHostBase* dialogHost = 0;
-            getHost()->queryInterface(SE_IID_GRAPHICS_HOST_BASE, reinterpret_cast<void**>(&dialogHost));
+            IMpGraphicsHost* dialogHost = 0;
+            getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
 
             if (dialogHost != 0)
             {
