@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My ListFiles" name="ListFiles" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Directory" datatype="string"/>
+            <Pin name="Files List" datatype="string"/>
+        </GUI>
+    </Plugin>
+</PluginList>

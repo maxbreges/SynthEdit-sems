@@ -183,6 +183,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (TransparentKnob)
 #add_subdirectory (TextEntry15)
 #add_subdirectory(OpenFile)
+add_subdirectory(ListFiles)
 
 #add_subdirectory (AutoFixedValues)
 #add_subdirectory (AutoFixedValuesInt)
