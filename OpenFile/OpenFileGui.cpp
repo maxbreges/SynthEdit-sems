@@ -1,137 +1,82 @@
-
-#include "./OpenFileGui.h"
-
-#include "../shared/unicode_conversion.h"
-#include "../shared/it_enum_list.h"
-#include "../shared/string_utilities.h"
-#include "../se_sdk3/MpString.h"
+#include "../se_sdk3/mp_gui.h"
 
 using namespace gmpi;
 using namespace gmpi_gui;
-using namespace gmpi_sdk;
-using namespace JmUnicodeConversions;
 
-GMPI_REGISTER_GUI(MP_SUB_TYPE_GUI2, OpenFileGui, L"My OpenFile");
+GmpiGui::FileDialog nativeFileDialog;
 
-OpenFileGui::OpenFileGui() :
-	m_prev_trigger(false)
+class OpenFileGui final : public SeGuiInvisibleBase
 {
-	// initialise pins.
-	initializePin(pinFileName);
-	initializePin(pinFileExtension);
-	initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&OpenFileGui::onSetTrigger));
-	initializePin(pinSaveMode);
-	initializePin(pinOnDialogComplete);
-}
 
-std::string OpenFileGui::getDefaultFolder(std::wstring extension)
-{
-	const std::wstring searchFilename = L"dummy." + extension;
-	const auto fullFileName = uiHost.resolveFilename(searchFilename.c_str());
-	return JmUnicodeConversions::WStringToUtf8(fullFileName.substr(0, fullFileName.find(L"dummy") - 1));
-}
-
-void OpenFileGui::onSetTrigger()
-{
-	// trigger on mouse-up
-	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
-	{
-		IMpGraphicsHostBase* dialogHost = 0;
-		getHost()->queryInterface(SE_IID_GRAPHICS_HOST_BASE, reinterpret_cast<void**>(&dialogHost));
-		dialogHost->createFileDialog(0, nativeFileDialog.GetAddressOf());
-		if (!nativeFileDialog.isNull())
-		{
-			nativeFileDialog.AddExtensionList(pinFileExtension);
-
-			// caclulate initial directory from file extension, or use default.
-			{
-				auto filename = pinFileName.getValue();
-
-				if (!filename.empty())
-				{
-					filename = uiHost.resolveFilename(filename);
-					nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
-				}
-				else
-				{
-					nativeFileDialog.setInitialDirectory(getDefaultFolder(pinFileExtension));
-				}
-			}
-
-			nativeFileDialog.ShowAsync([this](int32_t result) -> void { this->OnFileDialogComplete(result); });
-
-		}
+ 	void onSetFilePath()
+	{		
 	}
 
-	m_prev_trigger = pinTrigger;
-}
-
-std::string uniformPath(std::string path)
-{
-	std::string ret;
-
-	auto folderPath = path;
-
-	while (!folderPath.empty())
+ 	void onSetTrigger()
 	{
-		auto p = folderPath.find_last_of("\\/");
-
-		if (!ret.empty())
-			ret = '/' + ret;
-
-		if (p == std::string::npos)
-		{
-			ret = folderPath + ret;
-			folderPath.clear();
-		}
-		else
-		{
-			ret = std::string(folderPath.c_str() + p + 1) + ret;
-			folderPath = Left(folderPath, p);
-		}
+		OnBrowseButton(0.f);
 	}
 
-	return ret;
-}
+ 	StringGuiPin pinFilePath;
+ 	FloatGuiPin pinTrigger;
+	BoolGuiPin pinLed;
 
-void OpenFileGui::OnFileDialogComplete(int32_t result)
-{
-	if (result == gmpi::MP_OK)
+public:
+	OpenFileGui()
 	{
-		// Trim filename if in default folder.
-		auto filepath = nativeFileDialog.GetSelectedFilename();
-		auto fileext = GetExtension(filepath);
-		const char* fileclass = nullptr;
+		initializePin( pinFilePath, static_cast<MpGuiBaseMemberPtr2>(&OpenFileGui::onSetFilePath) );
+		initializePin( pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&OpenFileGui::onSetTrigger) );
+		initializePin(pinLed);
+	}
 
-		if (fileext == "sf2" || fileext == "sfz")
+	void OnBrowseButton(float newvalue)
+	{		
+		if (pinTrigger > 0 && newvalue == 0)
 		{
-			fileclass = "Instrument";
-		}
-		else
-		{
-			if (fileext == "png" || fileext == "bmp" || fileext == "jpg")
+			pinLed = true;
+
+			IMpGraphicsHost* dialogHost = 0;
+			getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
+			
+			if (dialogHost != 0)
 			{
-				fileclass = "Image";
-			}
-			else
-			{
-				if (fileext == "wav")
+				dialogHost->createFileDialog(0, nativeFileDialog.GetAddressOf());
+				
+				// caclulate initial directory from file extension, or use default.
 				{
-					fileclass = "Audio";
-				}
-				else
-				{
-					if (fileext == "mid")
+					auto filename = pinFilePath.getValue();
+
+					if (!filename.empty())
 					{
-						fileclass = "MIDI";
+						filename = uiHost.resolveFilename(filename);
+						nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
+					}
+					else
+					{
 					}
 				}
 			}
+			nativeFileDialog.ShowAsync([this](int32_t result) -> void { this->OnPopupmenuComplete(result); });
+		}
+	}
+
+	void OnPopupmenuComplete(int32_t result)
+	{
+		if (result == gmpi::MP_OK)
+		{
+			// strip off path (or part of), if it's the default path
+			std::string returnValue = nativeFileDialog.GetSelectedFilename();
+			pinFilePath = returnValue;
 		}
 
-		pinOnDialogComplete = true;
-		pinFileName = filepath;
+		nativeFileDialog.setNull(); // release it.
+		
+		pinTrigger = 0;
+		pinLed = false;
 	}
-	pinOnDialogComplete = false;
-	nativeFileDialog.setNull(); // release it.
+};
+
+namespace
+{
+	auto r = Register<OpenFileGui>::withId(L"My OpenFile");
 }

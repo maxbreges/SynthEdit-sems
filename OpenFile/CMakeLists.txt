@@ -7,6 +7,4 @@ build_gmpi_plugin(
 	HAS_GUI
 	SOURCE_FILES
 	  OpenFileGui.cpp
-		${se_sdk_folder}/it_enum_list.h
-        ${se_sdk_folder}/it_enum_list.cpp	
 )
