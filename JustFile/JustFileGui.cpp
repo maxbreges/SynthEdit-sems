@@ -1,4 +1,4 @@
-#include "mp_sdk_gui2.h"
+//#include "mp_sdk_gui2.h"
 #include "mp_gui.h"
 
 using namespace gmpi;
@@ -20,8 +20,8 @@ class JustFileGui final : public SeGuiInvisibleBase
 		// 'm_prev_trigger' holds the previous state of the trigger
 		if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 		{		
-			IMpGraphicsHostBase* dialogHost = 0;  // Initialize a pointer for the dialog host interface
-			getHost()->queryInterface(SE_IID_GRAPHICS_HOST_BASE, reinterpret_cast<void**>(&dialogHost)); // Query the host for the graphics interface
+			IMpGraphicsHost* dialogHost = 0;  // Initialize a pointer for the dialog host interface
+			getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost)); // Query the host for the graphics interface
 
 			// Check if we successfully obtained the dialog host interface
 			if (dialogHost != 0)
