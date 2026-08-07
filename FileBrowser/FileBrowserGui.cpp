@@ -29,22 +29,12 @@ class FileBrowserGui final : public SeGuiInvisibleBase
         // pinHideExtensions changed
     }
 
-    void onSetList()
-    {
-        // pinList changed
-    }
-
-    void onSetParent()
-    {
-        // pinParent changed
-    }
-
-    void onSetItemList()
-    {
-        // pinItemList changed
-    }
-
-
+    // Determine platform-specific path separator
+#ifdef _WIN32
+    static constexpr wchar_t PathSeparator = L'\\';
+#else
+    static constexpr wchar_t PathSeparator = L'/';
+#endif
     // Conversion functions for UTF-8 and wstring
     std::string wstring_to_utf8(const std::wstring& wstr)
     {
@@ -62,12 +52,9 @@ class FileBrowserGui final : public SeGuiInvisibleBase
     StringGuiPin pinPath;
     StringGuiPin pinAllowedExtensions;
     BoolGuiPin pinHideExtensions;
-    IntGuiPin pinList;
-    BoolGuiPin pinRescan;
-    BoolGuiPin pinParent;
     IntGuiPin pinChoice;
     StringGuiPin pinItemList;
-    StringGuiPin pinDebug;
+
 
 private:
     // Internal file list
@@ -80,12 +67,8 @@ public:
         initializePin(pinPath, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetPath));
         initializePin(pinAllowedExtensions, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetAllowedExtensions));
         initializePin(pinHideExtensions, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetHideExtensions));
-        initializePin(pinList, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetList));
-        initializePin(pinRescan, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetRescan));
-        initializePin(pinParent, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetParent));
         initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetChoice));
         initializePin(pinItemList);
-        initializePin(pinDebug);
     }
 
 private:
@@ -107,12 +90,9 @@ private:
         {
             if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                // Convert wchar_t* to std::wstring
-                std::wstring filenameW(findFileData.cFileName);
-                std::wstring filename(filenameW.begin(), filenameW.end());
-                files.push_back(filename);
+                files.push_back(std::wstring(findFileData.cFileName));
             }
-        } while (FindNextFile(hFind, &findFileData) != 0);
+        } while (FindNextFileW(hFind, &findFileData) != 0);
         FindClose(hFind);
 #else
         // Convert directory to UTF-8 string
@@ -221,7 +201,7 @@ private:
         {
             if (currentFileList[i] == getFileNameFromPath(path))
             {
-                pinChoice=i;
+                pinChoice = static_cast<int32_t>(i);
                 break;
             }
         }
@@ -237,14 +217,7 @@ private:
     }
 
 public:
-    // Called when rescan pin changes
-    void onSetRescan()
-    {
-        if (pinRescan.getValue())
-        {
-            refreshFileList();
-        }
-    }
+
 
     // Called when path pin changes
     void onSetPath()
@@ -259,7 +232,6 @@ public:
 
         // Set pinChoice based on filename
         setPinChoiceFromPath();
-        pinDebug = "onSetPath()";
 
     }
 
@@ -275,7 +247,6 @@ public:
             pinPath = fullPath;
         }
 
-        pinDebug = "onSetChoice()";
     }
 
     // Additional: When pinPath is set externally, update selection
@@ -319,7 +290,7 @@ public:
                 pinPath = fullPath;
             }
         }
-        pinDebug = "onExternalPathChange()";
+
     }
 
 private:
