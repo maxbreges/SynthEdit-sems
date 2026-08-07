@@ -250,6 +250,7 @@ public:
     void onSetPath()
     {
         onExternalPathChange();
+
         std::wstring newPath = pinPath;
         std::wstring dirPath = getDirectoryFromPath(newPath);
         currentDirectory = dirPath;
@@ -312,7 +313,7 @@ public:
             // If not found, default to 0 or keep current pinChoice
             if (!currentFileList.empty())
             {
-                pinChoice = 0;
+                //pinChoice = 0;
                 // Optionally, update pinPath to the first file
                 std::wstring fullPath = currentDirectory + L"/" + currentFileList[0];
                 pinPath = fullPath;
@@ -332,7 +333,7 @@ private:
         currentFileList = filterFiles(currentFileList);
         updatePinItemList();
 
-/*        // Reset pinChoice if out of range
+        // Reset pinChoice if out of range
         int currentChoice = pinChoice.getValue();
         if (currentChoice >= (int)currentFileList.size())
         {
@@ -342,11 +343,11 @@ private:
         {
             // Update pinPath to selected filename
             if (!currentFileList.empty())
-            {*/
+            {
                 std::wstring filename = currentFileList[pinChoice.getValue()];
                 pinPath=currentDirectory + L"/" + filename;
-            //}
-       // }
+            }
+        }
     }
 
     // Helper: Extract directory from path
