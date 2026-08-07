@@ -50,10 +50,10 @@ class FileBrowserGui final : public SeGuiInvisibleBase
     BoolGuiPin pinParent;
     IntGuiPin pinChoice;
     StringGuiPin pinItemList;
-
+private:
     // Internal file list
-    std::vector<std::string> currentFileList;
-    std::string currentDirectory;
+    std::vector<std::wstring> currentFileList;
+    std::wstring currentDirectory;
 
 public:
     FileBrowserGui()
@@ -65,14 +65,14 @@ public:
         initializePin(pinRescan, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetRescan));
         initializePin(pinParent, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetParent));
         initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetChoice));
-        initializePin(pinItemList, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetItemList));
+        initializePin(pinItemList);
     }
 
 private:
     // Helper: List files in directory filtered by extensions
-    std::vector<std::string> listFilesInDirectory(const std::string& directory)
+    std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
     {
-        std::vector<std::string> files;
+        std::vector<std::wstring> files;
 
 #if defined(_WIN32) || defined(_WIN64)
         WIN32_FIND_DATAW findFileData;
@@ -87,9 +87,9 @@ private:
         {
             if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                // Convert wchar_t* to std::string
+                // Convert wchar_t* to std::wstring
                 std::wstring filenameW(findFileData.cFileName);
-                std::string filename(filenameW.begin(), filenameW.end());
+                std::wstring filename(filenameW.begin(), filenameW.end());
                 files.push_back(filename);
             }
         } while (FindNextFile(hFind, &findFileData) != 0);
@@ -112,15 +112,15 @@ private:
     }
 
     // Helper: Filter files by extension(s)
-    std::vector<std::string> filterFiles(const std::vector<std::string>& files)
+    std::vector<std::wstring> filterFiles(const std::vector<std::wstring>& files)
     {
-        std::vector<std::string> filtered;
+        std::vector<std::wstring> filtered;
 
         // Get allowed extensions
-        std::string extStr = pinAllowedExtensions; // e.g., "wav,mp3"
-        std::vector<std::string> allowedExts;
+        std::wstring extStr = pinAllowedExtensions; // e.g., "wav,mp3"
+        std::vector<std::wstring> allowedExts;
         size_t pos = 0;
-        while ((pos = extStr.find(',')) != std::string::npos)
+        while ((pos = extStr.find(L',')) != std::wstring::npos)
         {
             allowedExts.push_back(extStr.substr(0, pos));
             extStr.erase(0, pos + 1);
@@ -143,9 +143,9 @@ private:
             {
                 // Check extension
                 size_t dotPos = filename.find_last_of('.');
-                if (dotPos != std::string::npos)
+                if (dotPos != std::wstring::npos)
                 {
-                    std::string fileExt = filename.substr(dotPos + 1);
+                    std::wstring fileExt = filename.substr(dotPos + 1);
                     std::transform(fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower);
                     if (std::find(allowedExts.begin(), allowedExts.end(), fileExt) != allowedExts.end())
                     {
@@ -158,12 +158,12 @@ private:
     }
 
     // Helper: Remove extension if hideExtensions is true
-    std::string stripExtension(const std::string& filename)
+    std::wstring stripExtension(const std::wstring& filename)
     {
         if (!pinHideExtensions.getValue())
             return filename;
         size_t dotPos = filename.find_last_of('.');
-        if (dotPos != std::string::npos)
+        if (dotPos != std::wstring::npos)
             return filename.substr(0, dotPos);
         return filename;
     }
@@ -171,23 +171,23 @@ private:
     // Helper: Update pinItemList based on currentFileList
     void updatePinItemList()
     {
-        std::string itemListStr;
+        std::wstring itemListStr;
         bool hideExt = pinHideExtensions.getValue();
 
         for (size_t i = 0; i < currentFileList.size(); ++i)
         {
-            std::string name = stripExtension(currentFileList[i]);
+            std::wstring name = stripExtension(currentFileList[i]);
             itemListStr += name;
             if (i != currentFileList.size() - 1)
-                itemListStr += ",";
+                itemListStr += L",";
         }
-        pinItemList=itemListStr;
+        pinItemList = itemListStr;
     }
 
     // Helper: Set pinChoice based on filename
     void setPinChoiceFromPath()
     {
-        std::string path = pinPath;
+        std::wstring path = pinPath;
         // Find filename in currentFileList
         for (size_t i = 0; i < currentFileList.size(); ++i)
         {
@@ -200,10 +200,10 @@ private:
     }
 
     // Helper: Get filename from full path
-    std::string getFileNameFromPath(const std::string& path)
+    std::wstring getFileNameFromPath(const std::wstring& path)
     {
-        size_t sepPos = path.find_last_of("/\\");
-        if (sepPos != std::string::npos)
+        size_t sepPos = path.find_last_of(L"/\\");
+        if (sepPos != std::wstring::npos)
             return path.substr(sepPos + 1);
         return path;
     }
@@ -221,8 +221,8 @@ public:
     // Called when path pin changes
     void onSetPath()
     {
-        std::string newPath = pinPath;
-        std::string dirPath = getDirectoryFromPath(newPath);
+        std::wstring newPath = pinPath;
+        std::wstring dirPath = getDirectoryFromPath(newPath);
         currentDirectory = dirPath;
 
         refreshFileList();
@@ -238,17 +238,53 @@ public:
 
         if (choiceIndex >= 0 && choiceIndex < static_cast<int>(currentFileList.size()))
         {
-            std::string filename = currentFileList[choiceIndex];
-            std::string fullPath = currentDirectory + "/" + filename;
-            pinPath=fullPath;
+            std::wstring filename = currentFileList[choiceIndex];
+            std::wstring fullPath = currentDirectory + L"/" + filename;
+            pinPath = fullPath;
         }
     }
 
     // Additional: When pinPath is set externally, update selection
     void onExternalPathChange()
     {
-        // Similar to onSetPath
-        onSetPath();
+        // Extract directory from the new pinPath
+        std::wstring newPath = pinPath;
+        std::wstring newDir = getDirectoryFromPath(newPath);
+        currentDirectory = newDir;
+
+        // Save filename from the full path
+        std::wstring filenameToFind = getFileNameFromPath(newPath);
+
+        // Refresh file list in the new directory
+        refreshFileList();
+
+        // Try to find the filename in the new file list
+        int index = -1;
+        for (size_t i = 0; i < currentFileList.size(); ++i)
+        {
+            if (currentFileList[i] == filenameToFind)
+            {
+                index = static_cast<int>(i);
+                break;
+            }
+        }
+
+        // Set pinChoice accordingly
+        if (index >= 0)
+        {
+            pinChoice = index;
+        }
+        else
+        {
+            // If not found, default to 0 or keep current pinChoice
+            if (!currentFileList.empty())
+            {
+                pinChoice = 0;
+                // Optionally, update pinPath to the first file
+                std::wstring fullPath = currentDirectory + L"/" + currentFileList[0];
+                pinPath = fullPath;
+            }
+        }
     }
 
 private:
@@ -273,19 +309,19 @@ private:
             // Update pinPath to selected filename
             if (!currentFileList.empty())
             {
-                std::string filename = currentFileList[pinChoice.getValue()];
-                pinPath=currentDirectory + "/" + filename;
+                std::wstring filename = currentFileList[pinChoice.getValue()];
+                pinPath=currentDirectory + L"/" + filename;
             }
         }
     }
 
     // Helper: Extract directory from path
-    std::string getDirectoryFromPath(const std::string& path)
+    std::wstring getDirectoryFromPath(const std::wstring& path)
     {
-        size_t sepPos = path.find_last_of("/\\");
-        if (sepPos != std::string::npos)
+        size_t sepPos = path.find_last_of(L"/\\");
+        if (sepPos != std::wstring::npos)
             return path.substr(0, sepPos);
-        return "";
+        return L"";
     }
 };
 
