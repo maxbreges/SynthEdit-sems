@@ -10,6 +10,7 @@ namespace fs = std::filesystem;
 #else
 #include <dirent.h>
 #include <sys/stat.h>
+
 #endif
 
 using namespace gmpi;
@@ -95,17 +96,25 @@ private:
         } while (FindNextFile(hFind, &findFileData) != 0);
         FindClose(hFind);
 #else
-        DIR* dirp = opendir(directory.c_str());
+        // Convert directory to UTF-8 string
+        std::string dirUtf8 = wstring_to_utf8(directory);
+
+        DIR* dirp = opendir(dirUtf8.c_str());
         if (!dirp)
             return files;
+
         struct dirent* dp;
         while ((dp = readdir(dirp)) != nullptr)
         {
-            if (dp->d_type != DT_DIR)
-            {
-                files.push_back(dp->d_name);
-            }
-        }
+            // Skip "." and ".."
+            if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
+                continue;
+
+            // Convert filename to wstring
+            std::string filenameStr(dp->d_name);
+            std::wstring filenameW = utf8_to_wstring(filenameStr);
+            files.push_back(filenameW);
+    }
         closedir(dirp);
 #endif
         return files;
