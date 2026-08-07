@@ -6,6 +6,7 @@ using namespace gmpi;
 using namespace gmpi_gui; //for enum GG_POINTER_FLAGS
 using namespace GmpiDrawing;
 using namespace GmpiGui;
+using namespace JmUnicodeConversions;
 
 GmpiGui::TextEdit nativeEdit;
 
@@ -20,32 +21,29 @@ class TextEntry15Gui final : public gmpi_gui::MpGuiGfxBase
     { 
     }
 
-    int fontSize = 16;
+    float fontSize = 16;
     void onSetFontSize()
     {
         fontSize = pinFontSize;
     }
-
  	void onSetTextColor()
 	{
         pinTextColor.getValue();
 		invalidateRect();
 	}
-
  	void onSetTopColor()
 	{
 		invalidateRect();
 	}
-
  	void onSetBgColor()
 	{
 		invalidateRect();
 	}
 
-	int corner = 5;
+	float corner = 5;
 	void onSetCorner()
 	{
-		corner = pinCorner.getValue();
+		corner = pinCorner;
 		invalidateRect();
 	}
 
@@ -66,16 +64,23 @@ class TextEntry15Gui final : public gmpi_gui::MpGuiGfxBase
 
  	StringGuiPin pinText;
 	StringGuiPin pinFontFace;
-	IntGuiPin pinFontSize;
+	FloatGuiPin pinFontSize;
  	StringGuiPin pinTextColor;
  	StringGuiPin pinTopColor;
  	StringGuiPin pinBgColor;
-	IntGuiPin pinCorner;
+	FloatGuiPin pinCorner;
  	StringGuiPin pinHint;
     BoolGuiPin pinDisableHint;
  	BoolGuiPin pinMouseDown;
 	BoolGuiPin pinHover;   
     BoolGuiPin pinEntryOpen;
+    BoolGuiPin pinTopLeft;
+    BoolGuiPin pinTopRight;
+    BoolGuiPin pinBottomRight;
+    BoolGuiPin pinBottomLeft;
+    StringGuiPin pinMenuItems;
+    IntGuiPin pinMenuSelection;
+    BoolGuiPin pinWriteable;
 
 public:
 	TextEntry15Gui()
@@ -92,6 +97,13 @@ public:
 		initializePin( pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&TextEntry15Gui::onSetMouseDown) );
 		initializePin(pinHover);
         initializePin(pinEntryOpen);
+        initializePin(pinTopLeft);
+            initializePin(pinTopRight);
+            initializePin(pinBottomRight);
+            initializePin(pinBottomLeft);
+            initializePin(pinMenuItems);
+            initializePin(pinMenuSelection);
+            initializePin(pinWriteable);
 	}
 
     int32_t setHover(bool isMouseOverMe) override
@@ -145,6 +157,9 @@ public:
         releaseCapture();
         pinMouseDown = false;
 
+        if (pinWriteable == false)
+            return gmpi::MP_OK;
+
             GmpiGui::GraphicsHost host(getGuiHost());
             nativeEdit = host.createPlatformTextEdit(getRect());
             nativeEdit.SetText(pinText);
@@ -191,8 +206,8 @@ public:
         //an advanced rectangle with the gradient       
                 //======================================
         auto r = getRect();
-        int width = r.right - r.left;
-        int height = r.bottom - r.top;
+        float width = r.right - r.left;
+        float height = r.bottom - r.top;
 
         auto topCol = FromHexStringBackwardCompatible(pinTopColor);
         auto botCol = FromHexStringBackwardCompatible(pinBgColor);
@@ -208,7 +223,7 @@ public:
        // auto topColorBright = adjustBrightness(topCol, pinBrightness / 3.333f);
        // auto bottomColorBright = adjustBrightness(botCol, pinBrightnessBot / 3.333f);
 
-        int radius = corner;
+        float radius = corner;
 
         radius = (std::min)(radius, width / 2);
         radius = (std::min)(radius, height / 2);
@@ -220,7 +235,7 @@ public:
         // define a corner 
         const float rightAngle = 3.14159265358979323846 * 0.5f;
         // top left
-        if (5)
+        if (pinTopLeft)
         {
             sink.BeginFigure(Point(0, radius), FigureBegin::Filled);
             ArcSegment as(Point(radius, 0), Size(radius, radius), rightAngle);
@@ -232,7 +247,7 @@ public:
         }
 
         // top right
-        if (5)
+        if (pinTopRight)
         {
             sink.AddLine(Point(width - radius, 0));
             //		sink.AddArc(Corner, 270, 90);
@@ -245,7 +260,7 @@ public:
         }
 
         // bottom right
-        if (5)
+        if (pinBottomRight)
         {
             sink.AddLine(Point(width, height - radius));
             //		sink.AddArc(Corner, 0, 90);
@@ -258,7 +273,7 @@ public:
         }
 
         // bottom left
-        if (5)
+        if (pinBottomLeft)
         {
             sink.AddLine(Point(radius, height));
             ArcSegment as(Point(0, height - radius), Size(radius, radius), rightAngle);
@@ -276,22 +291,18 @@ public:
         Point point1(1, 0);
         Point point2(1, height);
 
-
         GradientStop gradientStops[]
         {
         { 0.0f, topCol }, //topColorBright },
         { 1.0f, botCol },//bottomColorBright },
         };
 
-
         auto gradientBrush = g.CreateLinearGradientBrush(gradientStops, point1, point2);
 
         g.FillGeometry(geometry, gradientBrush);
 
-
         //=============================================================
-
-        // 
+ 
         std::string str = { pinFontFace };
         const char* fontFace = str.c_str();
     TextFormat tf = g.GetFactory().CreateTextFormat(fontSize, fontFace);
@@ -302,6 +313,46 @@ public:
     g.DrawTextU(pinText, tf, getRect(), brush);
 
     return gmpi::MP_OK;
+    }
+
+    int32_t populateContextMenu(float x, float y, gmpi::IMpUnknown* contextMenuItemsSink)
+    {
+        gmpi::IMpContextItemSink* sink;
+        contextMenuItemsSink->queryInterface(gmpi::MP_IID_CONTEXT_ITEMS_SINK, reinterpret_cast<void**>(&sink));
+
+        it_enum_list itr(pinMenuItems);
+
+        for (itr.First(); !itr.IsDone(); ++itr)
+        {
+            int32_t flags = 0;
+
+            // Special commands (sub-menus)
+            switch (itr.CurrentItem()->getType())
+            {
+            case enum_entry_type::Separator:
+            case enum_entry_type::SubMenu:
+                flags |= gmpi_gui::MP_PLATFORM_MENU_SEPARATOR;
+                break;
+
+            case enum_entry_type::SubMenuEnd:
+            case enum_entry_type::Break:
+                continue;
+
+            default:
+                break;
+            }
+
+            sink->AddItem(WStringToUtf8(itr.CurrentItem()->text).c_str(), itr.CurrentItem()->value, flags);
+        }
+        return gmpi::MP_OK;
+    }
+
+    int32_t onContextMenu(int32_t selection)
+    {
+        pinMenuSelection = selection; // send menu momentarily, then reset.
+        pinMenuSelection = -1;
+
+        return gmpi::MP_OK;
     }
 
 };

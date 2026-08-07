@@ -4,16 +4,23 @@
         <GUI graphicsApi="GmpiGui">
             <Pin name="Text" datatype="string" default="Text"/>
 			<Pin name="Font Face" datatype="string" default="Times New Roman" isMinimised="true"/>
-			<Pin name="Font Size" datatype="int" default="20" isMinimised="true"/>
+			<Pin name="Font Size" datatype="float" default="20" isMinimised="true"/>
             <Pin name="Text Color" datatype="string" default="ffffffff"/>
             <Pin name="Top Color" datatype="string" default="ffbbbbbb"/>
             <Pin name="Bg Color" datatype="string" default="ff000000"/>
-			<Pin name="Corner" datatype="int" default="5" isMinimised="true"/>
+			<Pin name="Corner Radius" datatype="float" default="5" isMinimised="true"/>
             <Pin name="Hint" datatype="string" isMinimised="true"/>
 			<Pin name="Disable Hint" datatype="bool"/>
             <Pin name="Mouse Down" datatype="bool"/>
 			<Pin name="Mouse Over" datatype="bool" direction="out"/>
 			<Pin name="Entry Open" datatype="bool" direction="out"/>
+			<Pin name="Top Left" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Top Right" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Bottom Right" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Bottom Left" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Menu Items" datatype="string" private="false"/>
+			<Pin name="Menu Selection" datatype="int" private="false"/>
+			<Pin name="Writeable" datatype="bool" default="1" isMinimised="true"/>
         </GUI>
     </Plugin>
 </PluginList>
