@@ -181,9 +181,9 @@ include(plugin_helper.cmake)
 #add_subdirectory (MIDI_Chan)
 #add_subdirectory (ValueBox)
 #add_subdirectory (TransparentKnob)
-add_subdirectory (TextEntry15)
+#add_subdirectory (TextEntry15)
 #add_subdirectory(OpenFile)
-#add_subdirectory(ListFiles)
+add_subdirectory(ListFiles)
 #add_subdirectory(FileBrowser)
 
 

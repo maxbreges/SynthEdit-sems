@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="My ListFiles" name="ListFiles" category="mx/Sub-Controls">
+    <Plugin id="My ListFiles" name="List Directory Files" category="mx/Sub-Controls">
         <GUI>
-            <Pin name="Directory" datatype="string"/>
-            <Pin name="Files List" datatype="string"/>
-        </GUI>
+            <Pin name="Directory Path In" datatype="string"/>
+			<Pin name="Ext filter" datatype="string" default="wav" isMinimised="false"/>
+            <Pin name="Item List" datatype="string"/>
+			<Pin name="Choice" datatype="int"/>
+		</GUI>
     </Plugin>
 </PluginList>

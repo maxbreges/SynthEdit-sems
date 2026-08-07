@@ -6,22 +6,29 @@
 #include <windows.h>
 #else
 #include <dirent.h>
+#include <algorithm> // for transform
 #endif
 
 using namespace gmpi;
-
+std::vector<std::wstring> filenames;
 class ListFilesGui final : public SeGuiInvisibleBase
 {
     void onSetDirectory()
     {
+        filenames.clear();
         // Get the directory path from the pin
-        std::wstring directory = pinDirectory.getValue();
+        std::wstring directory = pinFilePath.getValue();
 
         // Remove trailing slash/backslash if present
         if (!directory.empty() && (directory.back() == L'\\' || directory.back() == L'/'))
             directory.pop_back();
 
-        std::vector<std::wstring> filenames;
+        // Get extension filter
+        std::string extensionFilter = pinExtension; // assuming it's a string
+        // Convert extension to lowercase for comparison
+        std::transform(extensionFilter.begin(), extensionFilter.end(), extensionFilter.begin(), ::tolower);
+
+
 
         // Platform-specific directory listing
 #if defined(_WIN32) || defined(_WIN64)
@@ -35,7 +42,11 @@ class ListFilesGui final : public SeGuiInvisibleBase
                 std::wstring filename = findFileData.cFileName;
                 if (filename != L"." && filename != L"..")
                 {
-                    filenames.push_back(filename);
+                    // Check extension if filter is set
+                    if (extensionFilter.empty() || hasExtension(filename, extensionFilter))
+                    {
+                        filenames.push_back(filename);
+                    }
                 }
             } while (FindNextFile(hFind, &findFileData) != 0);
             FindClose(hFind);
@@ -50,9 +61,11 @@ class ListFilesGui final : public SeGuiInvisibleBase
                 std::string name = entry->d_name;
                 if (name != "." && name != "..")
                 {
-                    // Convert to wstring
                     std::wstring wname(name.begin(), name.end());
-                    filenames.push_back(wname);
+                    if (extensionFilter.empty() || hasExtension(wname, extensionFilter))
+                    {
+                        filenames.push_back(wname);
+                    }
                 }
             }
             closedir(dir);
@@ -72,19 +85,60 @@ class ListFilesGui final : public SeGuiInvisibleBase
         pinFilesList = result;
     }
 
-    void onSetFilesList()
+    // Helper function to check extension
+    bool hasExtension(const std::wstring& filename, const std::string& extensionFilter)
     {
-        // Could be used if needed when files list pin changes
+        size_t dotPos = filename.find_last_of(L'.');
+        if (dotPos == std::wstring::npos)
+            return false; // no extension
+
+        std::wstring ext = filename.substr(dotPos + 1);
+        // Convert ext to lowercase
+        std::string extStr(ext.begin(), ext.end());
+        std::transform(extStr.begin(), extStr.end(), extStr.begin(), ::tolower);
+
+        return extStr == extensionFilter;
     }
 
-    StringGuiPin pinDirectory;
-    StringGuiPin pinFilesList;
+    void onSetFilesList() {}
+    void onSetExtension() {}
+
+    StringGuiPin pinFilePath;
+    StringGuiPin pinExtension;
+    StringGuiPin pinFilesList;  
+    IntGuiPin pinIndex;
 
 public:
     ListFilesGui()
     {
-        initializePin(pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&ListFilesGui::onSetDirectory));
+        initializePin(pinFilePath, static_cast<MpGuiBaseMemberPtr2>(&ListFilesGui::onSetDirectory));
+        initializePin(pinExtension, static_cast<MpGuiBaseMemberPtr2>(&ListFilesGui::onSetExtension));
         initializePin(pinFilesList, static_cast<MpGuiBaseMemberPtr2>(&ListFilesGui::onSetFilesList));
+        initializePin(pinIndex);
+    }
+
+    // Helper: Set pinChoice based on filename
+    void setPinChoiceFromPath()
+    {
+        std::wstring path = pinFilePath;
+        // Find filename in currentFileList
+        for (size_t i = 0; i < filenames.size(); ++i)
+        {
+            if (filenames[i] == getFileNameFromPath(path))
+            {
+                pinIndex = i;
+                break;
+            }
+        }
+    }
+
+    // Helper: Get filename from full path
+    std::wstring getFileNameFromPath(const std::wstring& path)
+    {
+        size_t sepPos = path.find_last_of(L"/\\");
+        if (sepPos != std::string::npos)
+            return path.substr(sepPos + 1);
+        return path;
     }
 };
 
