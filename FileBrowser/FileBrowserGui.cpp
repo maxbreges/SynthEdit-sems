@@ -67,6 +67,8 @@ class FileBrowserGui final : public SeGuiInvisibleBase
     BoolGuiPin pinParent;
     IntGuiPin pinChoice;
     StringGuiPin pinItemList;
+    StringGuiPin pinDebug;
+
 private:
     // Internal file list
     std::vector<std::wstring> currentFileList;
@@ -83,6 +85,7 @@ public:
         initializePin(pinParent, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetParent));
         initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetChoice));
         initializePin(pinItemList);
+        initializePin(pinDebug);
     }
 
 private:
@@ -246,6 +249,7 @@ public:
     // Called when path pin changes
     void onSetPath()
     {
+        onExternalPathChange();
         std::wstring newPath = pinPath;
         std::wstring dirPath = getDirectoryFromPath(newPath);
         currentDirectory = dirPath;
@@ -254,6 +258,8 @@ public:
 
         // Set pinChoice based on filename
         setPinChoiceFromPath();
+        pinDebug = "onSetPath()";
+
     }
 
     // Called when choice pin changes
@@ -267,6 +273,8 @@ public:
             std::wstring fullPath = currentDirectory + L"/" + filename;
             pinPath = fullPath;
         }
+
+        pinDebug = "onSetChoice()";
     }
 
     // Additional: When pinPath is set externally, update selection
@@ -310,6 +318,7 @@ public:
                 pinPath = fullPath;
             }
         }
+        pinDebug = "onExternalPathChange()";
     }
 
 private:
@@ -323,7 +332,7 @@ private:
         currentFileList = filterFiles(currentFileList);
         updatePinItemList();
 
-        // Reset pinChoice if out of range
+/*        // Reset pinChoice if out of range
         int currentChoice = pinChoice.getValue();
         if (currentChoice >= (int)currentFileList.size())
         {
@@ -333,11 +342,11 @@ private:
         {
             // Update pinPath to selected filename
             if (!currentFileList.empty())
-            {
+            {*/
                 std::wstring filename = currentFileList[pinChoice.getValue()];
                 pinPath=currentDirectory + L"/" + filename;
-            }
-        }
+            //}
+       // }
     }
 
     // Helper: Extract directory from path
