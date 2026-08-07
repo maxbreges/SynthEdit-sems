@@ -302,6 +302,13 @@ private:
 
         currentFileList = listFilesInDirectory(currentDirectory);
         currentFileList = filterFiles(currentFileList);
+
+        std::locale loc; // default locale
+        // ...
+        std::sort(currentFileList.begin(), currentFileList.end(), [&](const std::wstring& a, const std::wstring& b) {
+            return std::use_facet<std::collate<wchar_t>>(loc).compare(a.data(), a.data() + a.size(), b.data(), b.data() + b.size()) < 0;
+            });
+
         updatePinItemList();
 
         // Reset pinChoice if out of range
