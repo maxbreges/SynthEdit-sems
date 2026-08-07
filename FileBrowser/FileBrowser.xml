@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My FileBrowser" name="File Browser" category="mx/Sub-Controls" >
+        <GUI>
+            <Pin name="Path" datatype="string"/>
+            <Pin name="Allowed Extensions" datatype="string" isMinimised="true"/>
+            <Pin name="Hide Extensions" datatype="bool" isMinimised="true"/>
+            <Pin name="List" datatype="enum" isMinimised="true" metadata="All,Dirs Only,Files Only"/>
+            <Pin name="Rescan" datatype="bool" direction="out"/>
+            <Pin name="Parent" datatype="bool" direction="out"/>
+            <Pin name="Choice" datatype="int" direction="out"/>
+            <Pin name="Item List" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
