@@ -117,14 +117,15 @@ public:
 		initializePin(pinFileNameOut);
 	}
 
-   /* private:
+    std::vector<std::wstring> files;
+
+    private:
         // Helper: List files in directory filtered by extensions
         std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
-        {
-            std::vector<std::wstring> files;
+        {    
 
 #if defined(_WIN32) || defined(_WIN64)
-            std::filesystem::path filePath(fileNameString);
+/*            std::filesystem::path filePath(fileNameString);
             std::filesystem::path dirPath = filePath.parent_path();
             // Get extension of the selected file (lowercase)
             std::string targetExt = filePath.extension().string();
@@ -158,7 +159,7 @@ public:
                         }
                     }
                 }
-            }
+            }*/
 #else
             // Convert directory to UTF-8 string
             std::string dirUtf8 = wstring_to_utf8(directory);
@@ -203,7 +204,7 @@ public:
             }
             pinItemList = ss.str();
             return files;
-        }*/
+        }
 
 };
 
