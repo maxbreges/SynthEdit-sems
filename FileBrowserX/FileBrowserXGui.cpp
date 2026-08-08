@@ -6,7 +6,7 @@
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
-//#include <filesystem>
+#include <filesystem>
 #else
 #include <dirent.h>
 #include <sys/stat.h>
@@ -14,7 +14,7 @@
 
 using namespace gmpi;
 using namespace gmpi_gui;
-//namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 
 class FileBrowserXGui final : public SeGuiInvisibleBase
 {
@@ -65,7 +65,7 @@ class FileBrowserXGui final : public SeGuiInvisibleBase
         }
 
         nativeFileDialog.setNull(); // Release it.
-        listFilesInDirectory();
+        //listFilesInDirectory();
 
         return 0;
     }
@@ -99,7 +99,7 @@ public:
 		initializePin(pinFileNameOut);
 	}
 
-private:
+/*private:
     // Helper: List files in directory filtered by extensions
 
     std::vector<std::string> listFilesInDirectory()
@@ -108,7 +108,7 @@ private:
 
 #if defined(_WIN32) || defined(_WIN64)
 
-/*        fs::path filePath(fileNameString);
+        fs::path filePath(fileNameString);
         fs::path dirPath = filePath.parent_path();
         // Get extension of the selected file (lowercase)
         std::string targetExt = filePath.extension().string();
@@ -142,7 +142,7 @@ private:
                     }
                 }
             }
-        }  */
+        }    
 #else
         DIR* dirp = directoryPath;
         if (!dirp)
@@ -184,7 +184,7 @@ private:
         pinItemList = ss.str();
 
         return files;
-    }
+    }*/
 };
 
 namespace
