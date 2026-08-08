@@ -65,7 +65,7 @@ class FileBrowserXGui final : public SeGuiInvisibleBase
 
         nativeFileDialog.setNull(); // Release it.
         listFilesInDirectory(utf8_to_wstring(directoryPath));
-        
+
         return 0;
     }
 
@@ -116,12 +116,12 @@ public:
 		initializePin(pinItemList);
 		initializePin(pinFileNameOut);
 	}
-    std::vector<std::wstring> files;
+
     private:
         // Helper: List files in directory filtered by extensions
         std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
         {
-            
+            std::vector<std::wstring> files;
 
 #if defined(_WIN32) || defined(_WIN64)
             std::filesystem::path filePath(fileNameString);
@@ -202,46 +202,7 @@ public:
                     ss << ", ";
             }
             pinItemList = ss.str();
-            setPinChoiceFromPath();
             return files;
-        }
-
-        // Helper: Set pinChoice based on filename
-        void setPinChoiceFromPath()
-        {       
-            // Find filename in currentFileList
-            for (size_t i = 0; i < files.size(); ++i)
-            {
-                if (files[i] == getFileNameWithoutExtension(utf8_to_wstring(fileNameString)))
-                {
-                    pinChoice = static_cast<int32_t>(i);
-                    break;
-                }
-            }
-        }
-        // Helper: Get filename without extension from full path
-        std::wstring getFileNameWithoutExtension(const std::wstring& path)
-        {
-            // Find the position of the last directory separator
-            size_t sepPos = path.find_last_of(L"/\\");
-            size_t startPos = (sepPos != std::wstring::npos) ? sepPos + 1 : 0;
-
-            // Extract the filename with extension
-            std::wstring filenameWithExt = path.substr(startPos);
-
-            // Find the last dot in the filename to remove extension
-            size_t dotPos = filenameWithExt.find_last_of(L'.');
-
-            // If there's a dot, remove the extension
-            if (dotPos != std::wstring::npos)
-            {
-                return filenameWithExt.substr(0, dotPos);
-            }
-            else
-            {
-                // No extension found, return the filename as is
-                return filenameWithExt;
-            }
         }
 
 };
