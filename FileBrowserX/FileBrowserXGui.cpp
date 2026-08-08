@@ -194,7 +194,7 @@ public:
                         });
                 });
 #endif
-            // Join into comma-separated string
+/*            // Join into comma-separated string
             std::wstringstream ss;
             for (size_t i = 0; i < files.size(); ++i)
             {
@@ -202,7 +202,7 @@ public:
                 if (i != files.size() - 1)
                     ss << ", ";
             }
-            pinItemList = ss.str();
+            pinItemList = ss.str();*/
             return files;
         }
 
