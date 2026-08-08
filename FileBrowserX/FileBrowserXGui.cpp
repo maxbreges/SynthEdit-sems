@@ -107,7 +107,7 @@ private:
 
 #if defined(_WIN32) || defined(_WIN64)
 
-        std::filesystem::path filePath(fileNameString);
+/*        std::filesystem::path filePath(fileNameString);
         std::filesystem::path dirPath = filePath.parent_path();
         // Get extension of the selected file (lowercase)
         std::string targetExt = filePath.extension().string();
@@ -141,7 +141,7 @@ private:
                     }
                 }
             }
-        }    
+        }  */
 #else
         DIR* dirp = directoryPath;
         if (!dirp)
