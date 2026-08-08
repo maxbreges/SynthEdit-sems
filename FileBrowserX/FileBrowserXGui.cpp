@@ -3,6 +3,8 @@
 #include <vector>
 #include <algorithm> // for transform
 #include <sstream>
+#include <locale>
+#include <cwctype>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
@@ -180,18 +182,18 @@ public:
                 files.push_back(filenameW);
         }
             closedir(dirp);
-/*            // Sort alphabetically, case-insensitive
-            std::sort(files.begin(), files.end(),
-                [](const std::string& a, const std::string& b)
-                {
-                    return std::lexicographical_compare(
-                        a.begin(), a.end(),
-                        b.begin(), b.end(),
-                        [](unsigned char ac, unsigned char bc)
-                        {
-                            return std::tolower(ac) < std::tolower(bc);
-                        });
-                });*/
+           // Sort alphabetically, case-insensitive
+std::sort(files.begin(), files.end(),
+    [](const std::wstring& a, const std::wstring& b)
+    {
+        return std::lexicographical_compare(
+            a.begin(), a.end(),
+            b.begin(), b.end(),
+            [](wchar_t ac, wchar_t bc)
+            {
+                return std::towlower(ac) < std::towlower(bc);
+            });
+    });
 #endif
             // Join into comma-separated string
             std::wstringstream ss;
