@@ -161,10 +161,8 @@ public:
                 }
             }
 #else
-/*            // Convert directory to UTF-8 string
-            std::string dirUtf8 = wstring_to_utf8(directory);
 
-            DIR* dirp = opendir(dirUtf8.c_str());
+            DIR* dirp = directoryPath;
             if (!dirp)
                 return files;
 
@@ -175,10 +173,7 @@ public:
                 if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
                     continue;
 
-                // Convert filename to wstring
-                std::string filenameStr(dp->d_name);
-                std::wstring filenameW = utf8_to_wstring(filenameStr);
-                files.push_back(filenameW);
+                files.push_back(dp->d_name);
             }
             closedir(dirp);
             // Sort alphabetically, case-insensitive
@@ -192,7 +187,7 @@ public:
                         {
                             return std::tolower(ac) < std::tolower(bc);
                         });
-                });*/
+                });
 #endif
             // Join into comma-separated string
             std::wstringstream ss;
