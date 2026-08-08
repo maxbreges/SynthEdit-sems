@@ -1,4 +1,3 @@
-#include "mp_sdk_gui2.h"
 #include "mp_gui.h"
 #include <string>
 #include <vector>
