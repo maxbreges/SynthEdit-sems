@@ -58,13 +58,13 @@ class FileBrowserXGui final : public SeGuiInvisibleBase
             fileNameString = nativeFileDialog.GetSelectedFilename();
 
             // Replace filesystem path extraction with manual string manipulation
-            std::string directoryPath = getDirectoryFromPath(fileNameString);
+            directoryPath = getDirectoryFromPath(fileNameString);
 
             pinFileNameOut = fileNameString;
         }
 
         nativeFileDialog.setNull(); // Release it.
-        //listFilesInDirectory();
+        listFilesInDirectory(utf8_to_wstring(directoryPath));
 
         return 0;
     }
@@ -79,6 +79,25 @@ class FileBrowserXGui final : public SeGuiInvisibleBase
 	{
 		// pinChoice changed
 	}
+
+    // Determine platform-specific path separator
+#ifdef _WIN32
+    static constexpr wchar_t PathSeparator = L'\\';
+#else
+    static constexpr wchar_t PathSeparator = L'/';
+#endif
+    // Conversion functions for UTF-8 and wstring
+    std::string wstring_to_utf8(const std::wstring& wstr)
+    {
+        static std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+        return conv.to_bytes(wstr);
+    }
+
+    std::wstring utf8_to_wstring(const std::string& str)
+    {
+        static std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+        return conv.from_bytes(str);
+    }
 
 	BoolGuiPin pinTrigger;
 	StringGuiPin pinAllowedExtensions;
@@ -98,6 +117,73 @@ public:
 		initializePin(pinFileNameOut);
 	}
 
+    private:
+        // Helper: List files in directory filtered by extensions
+        std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
+        {
+            std::vector<std::wstring> files;
+
+#if defined(_WIN32) || defined(_WIN64)
+            std::filesystem::path filePath(fileNameString);
+            std::filesystem::path dirPath = filePath.parent_path();
+            // Get extension of the selected file (lowercase)
+            std::string targetExt = filePath.extension().string();
+
+            // Convert targetExt to lowercase
+            std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
+                [](unsigned char c) { return std::tolower(c); });
+
+            for (const auto& entry : std::filesystem::directory_iterator(dirPath))
+            {
+                if (entry.is_regular_file())
+                {
+                    std::string fname = entry.path().filename().string();
+
+                    // Filter by extension (case-insensitive)
+                    std::string ext = entry.path().extension().string();
+
+                    // Convert extensions to lowercase for comparison
+                    std::transform(ext.begin(), ext.end(), ext.begin(),
+                        [](unsigned char c) { return std::tolower(c); });
+
+                    // Also convert targetExt to lowercase (already done above)
+
+                    if (ext == targetExt)
+                    {
+                        // Exclude hidden files (optional)
+                        if (!fname.empty() && fname.front() != '.')
+                        {
+                            std::wstring filenameWithoutExt = utf8_to_wstring(fname.substr(0, fname.size() - ext.size()));
+                            files.push_back(filenameWithoutExt);
+                        }
+                    }
+                }
+            }
+#else
+            // Convert directory to UTF-8 string
+            std::string dirUtf8 = wstring_to_utf8(directory);
+
+            DIR* dirp = opendir(dirUtf8.c_str());
+            if (!dirp)
+                return files;
+
+            struct dirent* dp;
+            while ((dp = readdir(dirp)) != nullptr)
+            {
+                // Skip "." and ".."
+                if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
+                    continue;
+
+                // Convert filename to wstring
+                std::string filenameStr(dp->d_name);
+                std::wstring filenameW = utf8_to_wstring(filenameStr);
+                files.push_back(filenameW);
+            }
+            closedir(dirp);
+#endif
+            return files;
+        }
+
 /*private:
     // Helper: List files in directory filtered by extensions
 
@@ -107,8 +193,8 @@ public:
 
 #if defined(_WIN32) || defined(_WIN64)
 
-        fs::path filePath(fileNameString);
-        fs::path dirPath = filePath.parent_path();
+        std::filesystem::path filePath(fileNameString);
+        std::filesystem::path dirPath = filePath.parent_path();
         // Get extension of the selected file (lowercase)
         std::string targetExt = filePath.extension().string();
 
@@ -116,7 +202,7 @@ public:
         std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
             [](unsigned char c) { return std::tolower(c); });
 
-        for (const auto& entry : fs::directory_iterator(dirPath))
+        for (const auto& entry : std::filesystem::directory_iterator(dirPath))
         {
             if (entry.is_regular_file())
             {
