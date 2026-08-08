@@ -1,4 +1,6 @@
+//#include "mp_sdk_gui2.h"
 #include "mp_gui.h"
+//#include <filesystem> // Removed for cross-platform compatibility
 
 // Helper function to extract directory path from a full file path
 std::string getDirectoryFromPath(const std::string& filepath)
@@ -79,5 +81,5 @@ public:
 
 namespace
 {
-    auto r = Register<JustFolderListGui>::withId(L"My JustFolderList");
+    auto r = Register<JustFolderListGui>::withId(L"JustFolderList");
 }
