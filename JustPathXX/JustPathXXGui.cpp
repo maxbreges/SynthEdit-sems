@@ -4,13 +4,13 @@
 #include <algorithm> // for transform
 #include <sstream>
 
-/*#if defined(_WIN32) || defined(_WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
-#include <filesystem>
+//#include <filesystem>
 #else
 #include <dirent.h>
 #include <sys/stat.h>
-#endif*/
+#endif
 
 // Helper function to extract directory path from a full file path
 std::string getDirectoryFromPath(const std::string& filepath)
