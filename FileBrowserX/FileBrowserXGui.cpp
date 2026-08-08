@@ -161,21 +161,8 @@ public:
                 }
             }
 #else
-            DIR* dirp = directoryPath;
-            if (!dirp)
-                return files;
 
-            struct dirent* dp;
-            while ((dp = readdir(dirp)) != nullptr)
-            {
-                // Skip "." and ".."
-                if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
-                    continue;
-
-                files.push_back(dp->d_name);
-            }
-            closedir(dirp);
-/*            // Sort alphabetically, case-insensitive
+            // Sort alphabetically, case-insensitive
             std::sort(files.begin(), files.end(),
                 [](const std::string& a, const std::string& b)
                 {
@@ -186,7 +173,7 @@ public:
                         {
                             return std::tolower(ac) < std::tolower(bc);
                         });
-                });*/
+                });
 #endif
             // Join into comma-separated string
             std::wstringstream ss;
