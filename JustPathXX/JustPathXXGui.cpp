@@ -1,6 +1,16 @@
-//#include "mp_sdk_gui2.h"
 #include "mp_gui.h"
-//#include <filesystem> // Removed for cross-platform compatibility
+#include <string>
+#include <vector>
+#include <algorithm> // for transform
+#include <sstream>
+
+#if defined(_WIN32) || defined(_WIN64)
+#include <windows.h>
+#include <filesystem>
+#else
+#include <dirent.h>
+#include <sys/stat.h>
+#endif
 
 // Helper function to extract directory path from a full file path
 std::string getDirectoryFromPath(const std::string& filepath)
@@ -14,6 +24,7 @@ std::string getDirectoryFromPath(const std::string& filepath)
 
 using namespace gmpi;
 using namespace gmpi_gui;
+namespace fs = std::filesystem;
 
 class JustPathXXGui final : public SeGuiInvisibleBase
 {
