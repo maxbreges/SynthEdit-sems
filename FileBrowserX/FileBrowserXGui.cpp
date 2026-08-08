@@ -117,9 +117,8 @@ public:
 		initializePin(pinFileNameOut);
 	}
 
-    std::vector<std::wstring> files;
-
     private:
+        std::vector<std::wstring> files;
         // Helper: List files in directory filtered by extensions
         std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
         {    
@@ -161,7 +160,38 @@ public:
                 }
             }
 #else
+            // Convert directory to UTF-8 string
+            std::string dirUtf8 = wstring_to_utf8(directory);
 
+            DIR* dirp = opendir(dirUtf8.c_str());
+            if (!dirp)
+                return files;
+
+            struct dirent* dp;
+            while ((dp = readdir(dirp)) != nullptr)
+            {
+                // Skip "." and ".."
+                if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
+                    continue;
+
+                // Convert filename to wstring
+                std::string filenameStr(dp->d_name);
+                std::wstring filenameW = utf8_to_wstring(filenameStr);
+                files.push_back(filenameW);
+        }
+            closedir(dirp);
+/*            // Sort alphabetically, case-insensitive
+            std::sort(files.begin(), files.end(),
+                [](const std::string& a, const std::string& b)
+                {
+                    return std::lexicographical_compare(
+                        a.begin(), a.end(),
+                        b.begin(), b.end(),
+                        [](unsigned char ac, unsigned char bc)
+                        {
+                            return std::tolower(ac) < std::tolower(bc);
+                        });
+                });*/
 #endif
             // Join into comma-separated string
             std::wstringstream ss;
