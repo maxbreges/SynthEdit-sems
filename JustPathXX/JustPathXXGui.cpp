@@ -1,16 +1,5 @@
 #include "mp_gui.h"
-#include <string>
-#include <vector>
-#include <algorithm> // for transform
-#include <sstream>
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
-#include <filesystem>
-#else
-#include <dirent.h>
-#include <sys/stat.h>
-#endif
 
 // Helper function to extract directory path from a full file path
 std::string getDirectoryFromPath(const std::string& filepath)
@@ -24,7 +13,7 @@ std::string getDirectoryFromPath(const std::string& filepath)
 
 using namespace gmpi;
 using namespace gmpi_gui;
-namespace fs = std::filesystem;
+//namespace fs = std::filesystem;
 
 class JustPathXXGui final : public SeGuiInvisibleBase
 {
@@ -32,7 +21,7 @@ class JustPathXXGui final : public SeGuiInvisibleBase
     GmpiGui::FileDialog nativeFileDialog;
     std::string fileNameString;
 
-    void onSetDirectory()
+    void onSetChoice()
     {
         // pinDirectory changed; handle as needed
     }
@@ -60,14 +49,20 @@ class JustPathXXGui final : public SeGuiInvisibleBase
     }
 
     BoolGuiPin pinTrigger;
-    StringGuiPin pinDirectory;
+    StringGuiPin pinAllowedExtensions;
+    BoolGuiPin pinHideExtensions;
+    IntGuiPin pinChoice;//index
+    StringGuiPin pinItemList;
     StringGuiPin pinFilename;
 
 public:
     JustPathXXGui()
     {
         initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&JustPathXXGui::onSetTrigger));
-        initializePin(pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&JustPathXXGui::onSetDirectory));
+        initializePin(pinAllowedExtensions);
+        initializePin(pinHideExtensions);
+        initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&JustPathXXGui::onSetChoice));
+        initializePin(pinItemList);
         initializePin(pinFilename);
     }
 
@@ -79,8 +74,7 @@ public:
 
             // Replace filesystem path extraction with manual string manipulation
             std::string directoryPath = getDirectoryFromPath(fileNameString);
-
-            pinDirectory = directoryPath; // Assign the extracted directory path
+            
             pinFilename = fileNameString;
         }
 
