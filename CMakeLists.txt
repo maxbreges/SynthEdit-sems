@@ -184,7 +184,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (TextEntry15)
 #add_subdirectory(OpenFile)
 #add_subdirectory(ListFiles)
-add_subdirectory(FileBrowserX)
+add_subdirectory(JustPath)
 
 
 #add_subdirectory (AutoFixedValues)
