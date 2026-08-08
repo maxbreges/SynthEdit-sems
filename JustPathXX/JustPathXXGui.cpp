@@ -24,7 +24,7 @@ std::string getDirectoryFromPath(const std::string& filepath)
 
 using namespace gmpi;
 using namespace gmpi_gui;
-//namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 
 class JustPathXXGui final : public SeGuiInvisibleBase
 {
