@@ -16,6 +16,26 @@ using namespace gmpi;
 using namespace gmpi_gui;
 namespace fs = std::filesystem;
 
+
+// Determine platform-specific path separator
+#ifdef _WIN32
+static constexpr wchar_t PathSeparator = L'\\';
+#else
+static constexpr wchar_t PathSeparator = L'/';
+#endif
+// Conversion functions for UTF-8 and wstring
+std::string wstring_to_utf8(const std::wstring& wstr)
+{
+    static std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+    return conv.to_bytes(wstr);
+}
+
+std::wstring utf8_to_wstring(const std::string& str)
+{
+    static std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+    return conv.from_bytes(str);
+}
+
 class FileBrowserXGui final : public SeGuiInvisibleBase
 {
     bool m_prev_trigger = false;
@@ -187,14 +207,7 @@ private:
     }
 };
 
-#if defined(_WIN32) || defined(_WIN64)
 namespace
 {
 	auto r = Register<FileBrowserXGui>::withId(L"My FileBrowserX");
 }
-#else
-namespace
-{
-    auto r = Register<FileBrowserXGui>::withId("My FileBrowserX");
-}
-#endif
