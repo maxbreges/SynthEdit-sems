@@ -1,5 +1,16 @@
 #include "mp_gui.h"
+#include <string>
+#include <vector>
+#include <algorithm> // for transform
+#include <sstream>
 
+/*#if defined(_WIN32) || defined(_WIN64)
+#include <windows.h>
+#include <filesystem>
+#else
+#include <dirent.h>
+#include <sys/stat.h>
+#endif*/
 
 // Helper function to extract directory path from a full file path
 std::string getDirectoryFromPath(const std::string& filepath)
