@@ -4,8 +4,6 @@
 #include <vector>
 #include <algorithm> // for transform
 #include <sstream>
-#include <codecvt>
-#include <locale>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
