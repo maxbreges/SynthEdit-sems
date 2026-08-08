@@ -125,7 +125,7 @@ public:
         {    
 
 #if defined(_WIN32) || defined(_WIN64)
-/*            std::filesystem::path filePath(fileNameString);
+            std::filesystem::path filePath(fileNameString);
             std::filesystem::path dirPath = filePath.parent_path();
             // Get extension of the selected file (lowercase)
             std::string targetExt = filePath.extension().string();
@@ -159,9 +159,9 @@ public:
                         }
                     }
                 }
-            }*/
+            }
 #else
-            // Convert directory to UTF-8 string
+/*            // Convert directory to UTF-8 string
             std::string dirUtf8 = wstring_to_utf8(directory);
 
             DIR* dirp = opendir(dirUtf8.c_str());
@@ -192,9 +192,9 @@ public:
                         {
                             return std::tolower(ac) < std::tolower(bc);
                         });
-                });
+                });*/
 #endif
-/*            // Join into comma-separated string
+            // Join into comma-separated string
             std::wstringstream ss;
             for (size_t i = 0; i < files.size(); ++i)
             {
@@ -202,7 +202,7 @@ public:
                 if (i != files.size() - 1)
                     ss << ", ";
             }
-            pinItemList = ss.str();*/
+            pinItemList = ss.str();
             return files;
         }
 
