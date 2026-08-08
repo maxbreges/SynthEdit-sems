@@ -65,7 +65,7 @@ class FileBrowserXGui final : public SeGuiInvisibleBase
 
         nativeFileDialog.setNull(); // Release it.
         listFilesInDirectory(utf8_to_wstring(directoryPath));
-
+        
         return 0;
     }
 
@@ -116,12 +116,12 @@ public:
 		initializePin(pinItemList);
 		initializePin(pinFileNameOut);
 	}
-
+    std::vector<std::wstring> files;
     private:
         // Helper: List files in directory filtered by extensions
         std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
         {
-            std::vector<std::wstring> files;
+            
 
 #if defined(_WIN32) || defined(_WIN64)
             std::filesystem::path filePath(fileNameString);
@@ -180,96 +180,70 @@ public:
                 files.push_back(filenameW);
             }
             closedir(dirp);
+            // Sort alphabetically, case-insensitive
+            std::sort(files.begin(), files.end(),
+                [](const std::string& a, const std::string& b)
+                {
+                    return std::lexicographical_compare(
+                        a.begin(), a.end(),
+                        b.begin(), b.end(),
+                        [](unsigned char ac, unsigned char bc)
+                        {
+                            return std::tolower(ac) < std::tolower(bc);
+                        });
+                });
 #endif
+            // Join into comma-separated string
+            std::wstringstream ss;
+            for (size_t i = 0; i < files.size(); ++i)
+            {
+                ss << files[i];
+                if (i != files.size() - 1)
+                    ss << ", ";
+            }
+            pinItemList = ss.str();
+            setPinChoiceFromPath();
             return files;
         }
 
-/*private:
-    // Helper: List files in directory filtered by extensions
-
-    std::vector<std::string> listFilesInDirectory()
-    {
-        std::vector<std::string> files;
-
-#if defined(_WIN32) || defined(_WIN64)
-
-        std::filesystem::path filePath(fileNameString);
-        std::filesystem::path dirPath = filePath.parent_path();
-        // Get extension of the selected file (lowercase)
-        std::string targetExt = filePath.extension().string();
-
-        // Convert targetExt to lowercase
-        std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
-            [](unsigned char c) { return std::tolower(c); });
-
-        for (const auto& entry : std::filesystem::directory_iterator(dirPath))
-        {
-            if (entry.is_regular_file())
+        // Helper: Set pinChoice based on filename
+        void setPinChoiceFromPath()
+        {       
+            // Find filename in currentFileList
+            for (size_t i = 0; i < files.size(); ++i)
             {
-                std::string fname = entry.path().filename().string();
-
-                // Filter by extension (case-insensitive)
-                std::string ext = entry.path().extension().string();
-
-                // Convert extensions to lowercase for comparison
-                std::transform(ext.begin(), ext.end(), ext.begin(),
-                    [](unsigned char c) { return std::tolower(c); });
-
-                // Also convert targetExt to lowercase (already done above)
-
-                if (ext == targetExt)
+                if (files[i] == getFileNameWithoutExtension(utf8_to_wstring(fileNameString)))
                 {
-                    // Exclude hidden files (optional)
-                    if (!fname.empty() && fname.front() != '.')
-                    {
-                        std::string filenameWithoutExt = fname.substr(0, fname.size() - ext.size());
-                        files.push_back(filenameWithoutExt);
-                    }
+                    pinChoice = static_cast<int32_t>(i);
+                    break;
                 }
             }
-        }    
-#else
-        DIR* dirp = directoryPath;
-        if (!dirp)
-            return files;
-
-        struct dirent* dp;
-        while ((dp = readdir(dirp)) != nullptr)
-        {
-            // Skip "." and ".."
-            if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
-                continue;
-
-            std::string filenameStr(dp->d_name);
-            files.push_back(filenameStr);
         }
-        closedir(dirp);
+        // Helper: Get filename without extension from full path
+        std::wstring getFileNameWithoutExtension(const std::wstring& path)
+        {
+            // Find the position of the last directory separator
+            size_t sepPos = path.find_last_of(L"/\\");
+            size_t startPos = (sepPos != std::wstring::npos) ? sepPos + 1 : 0;
 
-        // Sort alphabetically, case-insensitive
-        std::sort(files.begin(), files.end(),
-            [](const std::string& a, const std::string& b)
+            // Extract the filename with extension
+            std::wstring filenameWithExt = path.substr(startPos);
+
+            // Find the last dot in the filename to remove extension
+            size_t dotPos = filenameWithExt.find_last_of(L'.');
+
+            // If there's a dot, remove the extension
+            if (dotPos != std::wstring::npos)
             {
-                return std::lexicographical_compare(
-                    a.begin(), a.end(),
-                    b.begin(), b.end(),
-                    [](unsigned char ac, unsigned char bc)
-                    {
-                        return std::tolower(ac) < std::tolower(bc);
-                    });
-            });
-#endif
-        // Join into comma-separated string
-        std::stringstream ss;
-        for (size_t i = 0; i < files.size(); ++i)
-        {
-            ss << files[i];
-            if (i != files.size() - 1)
-                ss << ", ";
+                return filenameWithExt.substr(0, dotPos);
+            }
+            else
+            {
+                // No extension found, return the filename as is
+                return filenameWithExt;
+            }
         }
-        pinItemList = ss.str();
 
-        return files;
-    }*/
 };
 
 namespace
