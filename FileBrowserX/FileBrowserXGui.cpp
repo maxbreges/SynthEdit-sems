@@ -64,7 +64,7 @@ class FileBrowserXGui final : public SeGuiInvisibleBase
         }
 
         nativeFileDialog.setNull(); // Release it.
-        listFilesInDirectory(utf8_to_wstring(directoryPath));
+        //listFilesInDirectory(utf8_to_wstring(directoryPath));
 
         return 0;
     }
@@ -117,7 +117,7 @@ public:
 		initializePin(pinFileNameOut);
 	}
 
-    private:
+   /* private:
         // Helper: List files in directory filtered by extensions
         std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
         {
@@ -203,7 +203,7 @@ public:
             }
             pinItemList = ss.str();
             return files;
-        }
+        }*/
 
 };
 
