@@ -14,7 +14,6 @@
 
 using namespace gmpi;
 using namespace gmpi_gui;
-namespace fs = std::filesystem;
 
 class FileBrowserXGui final : public SeGuiInvisibleBase
 {
@@ -65,7 +64,7 @@ class FileBrowserXGui final : public SeGuiInvisibleBase
         }
 
         nativeFileDialog.setNull(); // Release it.
-        //listFilesInDirectory();
+        listFilesInDirectory();
 
         return 0;
     }
@@ -99,7 +98,7 @@ public:
 		initializePin(pinFileNameOut);
 	}
 
-/*private:
+private:
     // Helper: List files in directory filtered by extensions
 
     std::vector<std::string> listFilesInDirectory()
@@ -108,8 +107,8 @@ public:
 
 #if defined(_WIN32) || defined(_WIN64)
 
-        fs::path filePath(fileNameString);
-        fs::path dirPath = filePath.parent_path();
+        std::filesystem::path filePath(fileNameString);
+        std::filesystem::path dirPath = filePath.parent_path();
         // Get extension of the selected file (lowercase)
         std::string targetExt = filePath.extension().string();
 
@@ -117,7 +116,7 @@ public:
         std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
             [](unsigned char c) { return std::tolower(c); });
 
-        for (const auto& entry : fs::directory_iterator(dirPath))
+        for (const auto& entry : std::filesystem::directory_iterator(dirPath))
         {
             if (entry.is_regular_file())
             {
@@ -184,7 +183,7 @@ public:
         pinItemList = ss.str();
 
         return files;
-    }*/
+    }
 };
 
 namespace
