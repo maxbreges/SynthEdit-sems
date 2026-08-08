@@ -161,7 +161,7 @@ public:
                 }
             }
 #else
-/*            DIR* dirp = directoryPath;
+            DIR* dirp = directoryPath;
             if (!dirp)
                 return files;
 
@@ -175,7 +175,7 @@ public:
                 files.push_back(dp->d_name);
             }
             closedir(dirp);
-            // Sort alphabetically, case-insensitive
+/*            // Sort alphabetically, case-insensitive
             std::sort(files.begin(), files.end(),
                 [](const std::string& a, const std::string& b)
                 {
