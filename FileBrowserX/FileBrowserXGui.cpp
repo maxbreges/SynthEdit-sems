@@ -187,7 +187,14 @@ private:
     }
 };
 
+#if defined(_WIN32) || defined(_WIN64)
 namespace
 {
 	auto r = Register<FileBrowserXGui>::withId(L"My FileBrowserX");
 }
+#else
+namespace
+{
+    auto r = Register<FileBrowserXGui>::withId("My FileBrowserX");
+}
+#endif
