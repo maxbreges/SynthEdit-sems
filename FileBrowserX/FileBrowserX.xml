@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My FileBrowserX" name="File Browser X" category="mx/Sub-Controls">
+        <GUI>
+			<Pin name="Trigger" datatype="bool" direction="out"/>
+			<Pin name="Allowed Extensions" datatype="string" default="wav" isMinimised="true"/>
+			<Pin name="Hide Extensions" datatype="bool" default="1" isMinimised="true"/>
+			<Pin name="Choice" datatype="int" direction="out"/>
+			<Pin name="Item List" datatype="string" direction="out"/>
+			<Pin name="File Path Out" datatype="string"/>
+        </GUI>
+    </Plugin>
+</PluginList>
