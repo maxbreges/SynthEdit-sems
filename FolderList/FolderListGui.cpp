@@ -124,7 +124,6 @@ public:
         pinExtension = targetExt;
     }
 
-
 private:
     std::vector<std::wstring> files;
     // Helper: List files in directory filtered by extensions
@@ -182,13 +181,26 @@ private:
             if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
                 continue;
 
-            // Convert filename to wstring
+            // Get filename and extension
             std::string filenameStr(dp->d_name);
             std::wstring filenameW = utf8_to_wstring(filenameStr);
-            files.push_back(filenameW);
-        }
-        closedir(dirp);
-        // Sort alphabetically, case-insensitive
+            std::string ext = "";
+            size_t extPos = filenameStr.find_last_of('.');
+            if (extPos != std::string::npos)
+                ext = filenameStr.substr(extPos);
+
+            // Convert extension to lowercase
+            std::transform(ext.begin(), ext.end(), ext.begin(),
+                [](unsigned char c) { return std::tolower(c); });
+
+            // Compare extension with targetExt (also lowercase)
+            if (ext == targetExt)
+            {
+                // Remove extension from filename
+                std::wstring filenameWithoutExt = utf8_to_wstring(filenameStr.substr(0, extPos));
+                files.push_back(filenameWithoutExt);
+            }
+        /*// Sort alphabetically, case-insensitive
         std::sort(files.begin(), files.end(),
             [](const std::wstring& a, const std::wstring& b)
             {
@@ -199,7 +211,7 @@ private:
                     {
                         return std::towlower(ac) < std::towlower(bc);
                     });
-            });
+            });*/
 #endif
         // Join into comma-separated string
         std::wstringstream ss;
