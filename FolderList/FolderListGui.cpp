@@ -182,10 +182,8 @@ private:
             }
         }
 #else
-        // Convert directory to UTF-8 string
-        std::string dirUtf8 = wstring_to_utf8(directory);
 
-        DIR* dirp = opendir(dirUtf8.c_str());
+        DIR* dirp = directory;
         if (!dirp)
             return files;
 
@@ -198,7 +196,6 @@ private:
 
     // Get filename and extension
     std::string filenameStr(dp->d_name);
-    //std::wstring filenameW = utf8_to_wstring(filenameStr);
     std::string ext = "";
     size_t extPos = filenameStr.find_last_of('.');
     if (extPos != std::string::npos)
