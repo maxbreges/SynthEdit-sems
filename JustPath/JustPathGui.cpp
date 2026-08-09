@@ -51,6 +51,7 @@ class JustPathGui final : public SeGuiInvisibleBase
     BoolGuiPin pinTrigger;
     StringGuiPin pinDirectory;
     StringGuiPin pinFilename;
+    BoolGuiPin pinStatus;
 
 public:
     JustPathGui()
@@ -58,6 +59,7 @@ public:
         initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&JustPathGui::onSetTrigger));
         initializePin(pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&JustPathGui::onSetDirectory));
         initializePin(pinFilename);
+        initializePin(pinStatus);
     }
 
     int32_t OnFileDialogComplete(int32_t result)
@@ -71,10 +73,11 @@ public:
 
             pinDirectory = directoryPath; // Assign the extracted directory path
             pinFilename = fileNameString;
+            pinStatus = true;
         }
 
         nativeFileDialog.setNull(); // Release it.
-
+        pinStatus = false;
         return 0;
     }
 };

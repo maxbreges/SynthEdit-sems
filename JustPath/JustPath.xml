@@ -5,6 +5,7 @@
             <Pin name="Trigger" datatype="bool" direction="out"/>
 			<Pin name="Directory" datatype="string"/>
 			<Pin name="Filename" datatype="string"/>
+			<Pin name="Status" datatype="bool" />
         </GUI>
     </Plugin>
 </PluginList>
