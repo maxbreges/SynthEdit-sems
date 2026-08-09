@@ -181,26 +181,13 @@ private:
             if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
                 continue;
 
-            // Get filename and extension
+            // Convert filename to wstring
             std::string filenameStr(dp->d_name);
             std::wstring filenameW = utf8_to_wstring(filenameStr);
-            std::string ext = "";
-            size_t extPos = filenameStr.find_last_of('.');
-            if (extPos != std::string::npos)
-                ext = filenameStr.substr(extPos);
-
-            // Convert extension to lowercase
-            std::transform(ext.begin(), ext.end(), ext.begin(),
-                [](unsigned char c) { return std::tolower(c); });
-
-            // Compare extension with targetExt (also lowercase)
-            if (ext == targetExt)
-            {
-                // Remove extension from filename
-                std::wstring filenameWithoutExt = utf8_to_wstring(filenameStr.substr(0, extPos));
-                files.push_back(filenameWithoutExt);
-            }
-        /*// Sort alphabetically, case-insensitive
+            files.push_back(filenameW);
+        }
+        closedir(dirp);
+        // Sort alphabetically, case-insensitive
         std::sort(files.begin(), files.end(),
             [](const std::wstring& a, const std::wstring& b)
             {
@@ -211,7 +198,7 @@ private:
                     {
                         return std::towlower(ac) < std::towlower(bc);
                     });
-            });*/
+            });
 #endif
         // Join into comma-separated string
         std::wstringstream ss;
