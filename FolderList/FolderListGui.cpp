@@ -58,6 +58,7 @@ class FolderListGui final : public SeGuiInvisibleBase
         }
     }
 
+
     // Determine platform-specific path separator
 #ifdef _WIN32
     static constexpr wchar_t PathSeparator = L'\\';
@@ -89,6 +90,20 @@ public:
         initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetChoice));
         initializePin(pinItemList);
         initializePin(pinExtension);        
+    }
+
+    // Helper: Set pinChoice based on filename
+    void setPinChoiceFromPath()
+    {
+        // Find filename in currentFileList
+        for (size_t i = 0; i < files.size(); ++i)
+        {
+            if (files[i] == getFileNameWithoutExtension(utf8_to_wstring(pinFilePath)))
+            {
+                pinChoice = static_cast<int32_t>(i);
+                break;
+            }
+        }
     }
 
     void onSetPath()
@@ -178,15 +193,29 @@ private:
         while ((dp = readdir(dirp)) != nullptr)
         {
             // Skip "." and ".."
-            if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
-                continue;
+    if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
+        continue;
 
-            // Convert filename to wstring
-            std::string filenameStr(dp->d_name);
-            std::wstring filenameW = utf8_to_wstring(filenameStr);
-            files.push_back(filenameW);
-        }
-        closedir(dirp);
+    // Get filename and extension
+    std::string filenameStr(dp->d_name);
+    //std::wstring filenameW = utf8_to_wstring(filenameStr);
+    std::string ext = "";
+    size_t extPos = filenameStr.find_last_of('.');
+    if (extPos != std::string::npos)
+        ext = filenameStr.substr(extPos);
+
+    // Convert extension to lowercase
+    std::transform(ext.begin(), ext.end(), ext.begin(),
+                   [](unsigned char c){ return std::tolower(c); });
+
+    // Compare extension with targetExt (also lowercase)
+    if (ext == targetExt)
+    {
+        // Remove extension from filename
+        std::string filenameWithoutExt = (filenameStr.substr(0, extPos);
+        std::wstring wfilenameWithoutExt = utf8_to_wstring(filenameWithoutExt);
+        files.push_back(wfilenameWithoutExt);
+    }
         // Sort alphabetically, case-insensitive
         std::sort(files.begin(), files.end(),
             [](const std::wstring& a, const std::wstring& b)
@@ -211,21 +240,6 @@ private:
         pinItemList = ss.str();
         setPinChoiceFromPath();       
         return files;
-    }
-public:
-    // Helper: Set pinChoice based on filename
-    void setPinChoiceFromPath()
-    {
-        // Find filename in currentFileList
-        for (size_t i = 0; i < files.size(); ++i)
-        {
-            if (files[i] == getFileNameWithoutExtension(utf8_to_wstring(pinFilePath)))
-            {
-                pinChoice = static_cast<int32_t>(i);
-                
-                break;
-            }
-        }
     }
 };
 
