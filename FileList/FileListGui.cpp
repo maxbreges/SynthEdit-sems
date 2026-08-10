@@ -41,7 +41,7 @@ public:
 		initializePin( pinExtension, static_cast<MpGuiBaseMemberPtr2>(&FileListGui::onSetDirectory));
 		initializePin(pinItemList);
 	}
-
+#if defined(_WIN32) || defined(_WIN64)
     // Conversion functions for UTF-8 and wstring
     std::string wstring_to_utf8(const std::wstring& wstr)
     {
@@ -54,7 +54,7 @@ public:
         static std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
         return conv.from_bytes(str);
     }
-#if defined(_WIN32) || defined(_WIN64)
+
     void listFilesInDirectory()
     {
         if (dirPath.empty())
