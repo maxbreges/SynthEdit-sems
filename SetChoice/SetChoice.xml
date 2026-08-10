@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My SetChoice" name="Set Choice" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Item List" datatype="string"/>
+            <Pin name="File Name" datatype="string"/>
+            <Pin name="Choice" datatype="int" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
