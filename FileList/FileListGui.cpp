@@ -26,8 +26,11 @@ class FileListGui final : public SeGuiInvisibleBase
         // Convert targetExt to lowercase
         std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
             [](unsigned char c) { return std::tolower(c); });
-        
-        //listFilesInDirectory();
+#if defined(_WIN32) || defined(_WIN64)      
+        listFilesInDirectory_win();
+#else
+        listFilesInDirectory_mac();
+#endif
 	}
 
  	StringGuiPin pinDirectory;
@@ -41,8 +44,8 @@ public:
 		initializePin( pinExtension, static_cast<MpGuiBaseMemberPtr2>(&FileListGui::onSetDirectory));
 		initializePin(pinItemList);
 	}
-#if defined(_WIN32) || defined(_WIN64)
-/*    // Conversion functions for UTF-8 and wstring
+
+    // Conversion functions for UTF-8 and wstring
     std::string wstring_to_utf8(const std::wstring& wstr)
     {
         static std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
@@ -55,7 +58,7 @@ public:
         return conv.from_bytes(str);
     }
 
-    void listFilesInDirectory()
+    void listFilesInDirectory_win()
     {
         if (dirPath.empty())
             return;        
@@ -98,10 +101,13 @@ public:
                 ss << ", ";
         }
         pinItemList = ss.str();
-    }*/
-#else
+    }
 
-#endif
+    void listFilesInDirectory_mac()
+    {
+
+    }
+
 };
 
 namespace
