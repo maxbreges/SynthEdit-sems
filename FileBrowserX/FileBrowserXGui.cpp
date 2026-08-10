@@ -58,7 +58,6 @@ class FileBrowserXGui final : public SeGuiInvisibleBase
         }
     }
 
-
     // Determine platform-specific path separator
 #ifdef _WIN32
     static constexpr wchar_t PathSeparator = L'\\';
@@ -193,32 +192,104 @@ private:
         return files;
     }
 #else
-    std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
+    std::vector<std::wstring> listFilesInDirectory(const std::wstring& fileNameString)
     {
         std::vector<std::wstring> files;
 
-        // Convert directory to UTF-8 string
-        std::string dirUtf8 = wstring_to_utf8(directory);
+        // Convert the input filename to UTF-8 for processing
+        std::string filenameUtf8 = wstring_to_utf8(fileNameString);
+        // Extract directory path
+        size_t lastSlashPos = filenameUtf8.find_last_of("/\\");
+        std::string dirPathStr;
+        std::string fileName;
+        if (lastSlashPos != std::string::npos)
+        {
+            dirPathStr = filenameUtf8.substr(0, lastSlashPos);
+            fileName = filenameUtf8.substr(lastSlashPos + 1);
+        }
+        else
+        {
+            // If no directory part, assume current directory
+            dirPathStr = ".";
+            fileName = filenameUtf8;
+        }
 
-        DIR* dirp = opendir(dirUtf8.c_str());
-        if (!dirp)
+        // Get extension of the selected file (lowercase)
+        size_t extPos = fileName.find_last_of('.');
+        std::string targetExt;
+        if (extPos != std::string::npos)
+            targetExt = fileName.substr(extPos);
+        else
+            targetExt = "";
+
+        // Convert targetExt to lowercase
+        std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
+            [](unsigned char c) { return std::tolower(c); });
+
+        // Open directory
+        DIR* dir = opendir(dirPathStr.c_str());
+        if (dir == nullptr)
+        {
+            // Failed to open directory
             return files;
+        }
 
-        struct dirent* dp;
-        while ((dp = readdir(dirp)) != nullptr)
+        struct dirent* entry;
+        while ((entry = readdir(dir)) != nullptr)
         {
             // Skip "." and ".."
-            if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
+            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
                 continue;
 
-            // Convert filename to wstring
-            std::string filenameStr(dp->d_name);
-            std::wstring filenameW = utf8_to_wstring(filenameStr);
-            files.push_back(filenameW);
+            // Compose full path to check file type
+            std::string fullPath = dirPathStr + "/" + entry->d_name;
+
+            struct stat st;
+            if (stat(fullPath.c_str(), &st) == 0 && S_ISREG(st.st_mode))
+            {
+                std::string fname(entry->d_name);
+
+                // Filter by extension (case-insensitive)
+                size_t extPos2 = fname.find_last_of('.');
+                std::string ext;
+                if (extPos2 != std::string::npos)
+                    ext = fname.substr(extPos2);
+                else
+                    ext = "";
+
+                // Convert extension to lowercase
+                std::transform(ext.begin(), ext.end(), ext.begin(),
+                    [](unsigned char c) { return std::tolower(c); });
+
+                if (ext == targetExt)
+                {
+                    // Exclude hidden files (optional)
+                    if (!fname.empty() && fname.front() != '.')
+                    {
+                        // Remove extension for filenameWithoutExt
+                        std::string filenameWithoutExt = fname.substr(0, extPos2);
+                        // Convert to wstring
+                        files.push_back(utf8_to_wstring(filenameWithoutExt));
+                    }
+                }
+            }
         }
-        closedir(dirp);
+        closedir(dir);
+
+        // Join into comma-separated string
+        std::wstringstream ss;
+        for (size_t i = 0; i < files.size(); ++i)
+        {
+            ss << files[i];
+            if (i != files.size() - 1)
+                ss << L", ";
+        }
+        pinItemList = ss.str();
+
+        setPinChoiceFromPath(); // call your function if needed
+
         return files;
-    }
+}
 #endif
 };
 
