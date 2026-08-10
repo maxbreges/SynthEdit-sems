@@ -27,7 +27,7 @@ class FileListGui final : public SeGuiInvisibleBase
         std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
             [](unsigned char c) { return std::tolower(c); });
         
-        listFilesInDirectory();
+        //listFilesInDirectory();
 	}
 
  	StringGuiPin pinDirectory;
@@ -42,7 +42,7 @@ public:
 		initializePin(pinItemList);
 	}
 #if defined(_WIN32) || defined(_WIN64)
-    // Conversion functions for UTF-8 and wstring
+/*    // Conversion functions for UTF-8 and wstring
     std::string wstring_to_utf8(const std::wstring& wstr)
     {
         static std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
@@ -98,7 +98,7 @@ public:
                 ss << ", ";
         }
         pinItemList = ss.str();
-    }
+    }*/
 #else
 
 #endif
