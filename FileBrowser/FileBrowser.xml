@@ -3,9 +3,7 @@
     <Plugin id="My FileBrowser" name="File Browser" category="mx/Sub-Controls" >
         <GUI>
             <Pin name="Path" datatype="string"/>
-            <Pin name="Allowed Extensions" datatype="string" default="wav" isMinimised="false"/>
-            <Pin name="Hide Extensions" datatype="bool" default="1" isMinimised="true"/>
-            <Pin name="Choice" datatype="int" direction="out"/>
+            <Pin name="Allowed Extensions" datatype="string" default="wav" />
             <Pin name="Item List" datatype="string" direction="out"/>
         </GUI>
     </Plugin>

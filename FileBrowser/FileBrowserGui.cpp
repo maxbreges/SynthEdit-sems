@@ -8,7 +8,6 @@
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
 #include <filesystem>
-namespace fs = std::filesystem;
 #else
 #include <dirent.h>
 #include <sys/stat.h>
@@ -22,11 +21,6 @@ class FileBrowserGui final : public SeGuiInvisibleBase
     void onSetAllowedExtensions()
     {
         // pinAllowedExtensions changed
-    }
-
-    void onSetHideExtensions()
-    {
-        // pinHideExtensions changed
     }
 
     // Determine platform-specific path separator
@@ -49,10 +43,8 @@ class FileBrowserGui final : public SeGuiInvisibleBase
     }
 
     // Pins
-    StringGuiPin pinPath;
+    StringGuiPin pinDirectory;
     StringGuiPin pinAllowedExtensions;
-    BoolGuiPin pinHideExtensions;
-    IntGuiPin pinChoice;
     StringGuiPin pinItemList;
 
 
@@ -60,14 +52,13 @@ private:
     // Internal file list
     std::vector<std::wstring> currentFileList;
     std::wstring currentDirectory;
+    std::string targetExt;
 
 public:
     FileBrowserGui()
     {
-        initializePin(pinPath, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetPath));
+        initializePin(pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetPath));
         initializePin(pinAllowedExtensions, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetAllowedExtensions));
-        initializePin(pinHideExtensions, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetHideExtensions));
-        initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetChoice));
         initializePin(pinItemList);
     }
 
@@ -75,25 +66,45 @@ private:
     // Helper: List files in directory filtered by extensions
     std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
     {
+        
         std::vector<std::wstring> files;
 
 #if defined(_WIN32) || defined(_WIN64)
-        WIN32_FIND_DATAW findFileData;
-        HANDLE hFind;
-        std::wstring searchPath = std::wstring(directory.begin(), directory.end()) + L"\\*";
 
-        hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
-        if (hFind == INVALID_HANDLE_VALUE)
-            return files;
+        std::filesystem::path dirPath = pinDirectory;
+        // Get extension of the selected file (lowercase)
+        targetExt = pinAllowedExtensions;
 
-        do
+        // Convert targetExt to lowercase
+        std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
+            [](unsigned char c) { return std::tolower(c); });
+
+        for (const auto& entry : std::filesystem::directory_iterator(dirPath))
         {
-            if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+            if (entry.is_regular_file())
             {
-                files.push_back(std::wstring(findFileData.cFileName));
+                std::string fname = entry.path().filename().string();
+
+                // Filter by extension (case-insensitive)
+                std::string ext = entry.path().extension().string();
+
+                // Convert extensions to lowercase for comparison
+                std::transform(ext.begin(), ext.end(), ext.begin(),
+                    [](unsigned char c) { return std::tolower(c); });
+
+                // Also convert targetExt to lowercase (already done above)
+
+                if (ext == targetExt)
+                {
+                    // Exclude hidden files (optional)
+                    if (!fname.empty() && fname.front() != '.')
+                    {
+                        std::wstring filenameWithoutExt = utf8_to_wstring(fname.substr(0, fname.size() - ext.size()));
+                        files.push_back(filenameWithoutExt);
+                    }
+                }
             }
-        } while (FindNextFileW(hFind, &findFileData) != 0);
-        FindClose(hFind);
+        }
 #else
         // Convert directory to UTF-8 string
         std::string dirUtf8 = wstring_to_utf8(directory);
@@ -165,11 +176,10 @@ private:
         return filtered;
     }
 
-    // Helper: Remove extension if hideExtensions is true
+    // Helper: Remove extension 
     std::wstring stripExtension(const std::wstring& filename)
     {
-        if (!pinHideExtensions.getValue())
-            return filename;
+
         size_t dotPos = filename.find_last_of('.');
         if (dotPos != std::wstring::npos)
             return filename.substr(0, dotPos);
@@ -180,31 +190,16 @@ private:
     void updatePinItemList()
     {
         std::wstring itemListStr;
-        bool hideExt = pinHideExtensions.getValue();
 
         for (size_t i = 0; i < currentFileList.size(); ++i)
         {
             std::wstring name = stripExtension(currentFileList[i]);
+            
             itemListStr += name;
             if (i != currentFileList.size() - 1)
-                itemListStr += L",";
+                itemListStr += L",";            
         }
-        pinItemList = itemListStr;
-    }
-
-    // Helper: Set pinChoice based on filename
-    void setPinChoiceFromPath()
-    {
-        std::wstring path = pinPath;
-        // Find filename in currentFileList
-        for (size_t i = 0; i < currentFileList.size(); ++i)
-        {
-            if (currentFileList[i] == getFileNameFromPath(path))
-            {
-                pinChoice = static_cast<int32_t>(i);
-                break;
-            }
-        }
+        pinItemList = itemListStr;         
     }
 
     // Helper: Get filename from full path
@@ -218,123 +213,44 @@ private:
 
 public:
 
-
     // Called when path pin changes
     void onSetPath()
-    {
-        onExternalPathChange();
+    {  
+        if (!currentFileList.empty())
+        {
+            currentFileList.clear();
+        }
+        if (currentFileList.empty())
+        {  
 
-        std::wstring newPath = pinPath;
-        std::wstring dirPath = getDirectoryFromPath(newPath);
-        currentDirectory = dirPath;
+            std::wstring dirPath = pinDirectory.getValue();
+            currentDirectory = dirPath;
 
+            listFilesInDirectory(currentDirectory);
+        }
         refreshFileList();
-
-        // Set pinChoice based on filename
-        setPinChoiceFromPath();
-
-    }
-
-    // Called when choice pin changes
-    void onSetChoice()
-    {
-        int choiceIndex = pinChoice.getValue();
-
-        if (choiceIndex >= 0 && choiceIndex < static_cast<int>(currentFileList.size()))
-        {
-            std::wstring filename = currentFileList[choiceIndex];
-            std::wstring fullPath = currentDirectory + L"/" + filename;
-            pinPath = fullPath;
-        }
-
-    }
-
-    // Additional: When pinPath is set externally, update selection
-    void onExternalPathChange()
-    {
-        // Extract directory from the new pinPath
-        std::wstring newPath = pinPath;
-        std::wstring newDir = getDirectoryFromPath(newPath);
-        currentDirectory = newDir;
-
-        // Save filename from the full path
-        std::wstring filenameToFind = getFileNameFromPath(newPath);
-
-        // Refresh file list in the new directory
-        refreshFileList();
-
-        // Try to find the filename in the new file list
-        int index = -1;
-        for (size_t i = 0; i < currentFileList.size(); ++i)
-        {
-            if (currentFileList[i] == filenameToFind)
-            {
-                index = static_cast<int>(i);
-                break;
-            }
-        }
-
-        // Set pinChoice accordingly
-        if (index >= 0)
-        {
-            pinChoice = index;
-        }
-        else
-        {
-            // If not found, default to 0 or keep current pinChoice
-            if (!currentFileList.empty())
-            {
-                //pinChoice = 0;
-                // Optionally, update pinPath to the first file
-                std::wstring fullPath = currentDirectory + L"/" + currentFileList[0];
-                pinPath = fullPath;
-            }
-        }
-
     }
 
 private:
     // Refresh file list based on current directory and filters
     void refreshFileList()
     {
+        
         if (currentDirectory.empty())
             return;
-
+        
         currentFileList = listFilesInDirectory(currentDirectory);
         currentFileList = filterFiles(currentFileList);
-
+        
         std::locale loc; // default locale
         // ...
+        
         std::sort(currentFileList.begin(), currentFileList.end(), [&](const std::wstring& a, const std::wstring& b) {
             return std::use_facet<std::collate<wchar_t>>(loc).compare(a.data(), a.data() + a.size(), b.data(), b.data() + b.size()) < 0;
             });
 
         updatePinItemList();
-
-        // Reset pinChoice if out of range
-        int currentChoice = pinChoice.getValue();
-        if (currentChoice >= (int)currentFileList.size())
-        {
-            pinChoice=0;
-        }
-        else
-        {
-            // Update pinPath to selected filename
-            if (!currentFileList.empty())
-            {
-                std::wstring filename = currentFileList[pinChoice.getValue()];
-                pinPath=currentDirectory + L"/" + filename;
-            }
-        }
-    }
-
-    // Helper: Extract directory from path
-    std::wstring getDirectoryFromPath(const std::wstring& path)
-    {
-        size_t sepPos = path.find_last_of(L"/\\");
-        if (sepPos != std::wstring::npos)
-            return path.substr(0, sepPos);
-        return L"";
+        
     }
 
 };
