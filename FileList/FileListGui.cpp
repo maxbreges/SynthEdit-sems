@@ -54,7 +54,7 @@ public:
         static std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
         return conv.from_bytes(str);
     }
-
+#if defined(_WIN32) || defined(_WIN64)
     void listFilesInDirectory()
     {
         if (dirPath.empty())
@@ -99,6 +99,9 @@ public:
         }
         pinItemList = ss.str();
     }
+#else
+
+#endif
 };
 
 namespace
