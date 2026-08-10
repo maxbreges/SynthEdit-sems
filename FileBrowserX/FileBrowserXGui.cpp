@@ -192,7 +192,7 @@ private:
         return files;
     }
 #else
-    std::vector<std::wstring> listFilesInDirectory(const std::wstring& fileNameString)
+/*    std::vector<std::wstring> listFilesInDirectory(const std::wstring& fileNameString)
     {
         std::vector<std::wstring> files;
 
@@ -289,7 +289,7 @@ private:
         setPinChoiceFromPath(); // call your function if needed
 
         return files;
-}
+}*/
 #endif
 };
 
