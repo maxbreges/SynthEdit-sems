@@ -194,7 +194,7 @@ public:
                 }
             }
         }
-        catch (const std::filesystem::filesystem_error&) {
+        catch (const std::filesystem::filesystem_error& e) {
             // Handle errors if needed
     }
 #endif
@@ -214,10 +214,12 @@ public:
     // Helper: Set pinChoice based on filename
     void setPinChoiceFromPath()
     {
+        fileNameString = getFileNameWithoutExtension(pinFilePath);
+
         // Find filename in currentFileList
         for (size_t i = 0; i < files.size(); ++i)
         {
-            if (files[i] == getFileNameWithoutExtension(pinFilePath))
+            if (files[i] == fileNameString)
             {
                 pinChoice = static_cast<int32_t>(i);
                 break;
