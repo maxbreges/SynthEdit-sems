@@ -1,4 +1,4 @@
-#include "../se_sdk3/mp_gui.h"
+#include "mp_gui.h"
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -7,31 +7,28 @@ GmpiGui::FileDialog nativeFileDialog;
 
 class OpenFileGui final : public SeGuiInvisibleBase
 {
-
- 	void onSetFilePath()
-	{		
-	}
+	bool m_prev_trigger = false;
 
  	void onSetTrigger()
 	{
-		OnBrowseButton(0.f);
+		OnBrowseButton();
 	}
 
+	BoolGuiPin pinTrigger;
  	StringGuiPin pinFilePath;
- 	FloatGuiPin pinTrigger;
-	BoolGuiPin pinLed;
+	BoolGuiPin pinLed;	
 
 public:
 	OpenFileGui()
 	{
-		initializePin( pinFilePath, static_cast<MpGuiBaseMemberPtr2>(&OpenFileGui::onSetFilePath) );
-		initializePin( pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&OpenFileGui::onSetTrigger) );
+		initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&OpenFileGui::onSetTrigger));
+		initializePin( pinFilePath );
 		initializePin(pinLed);
 	}
 
-	void OnBrowseButton(float newvalue)
+	void OnBrowseButton()
 	{		
-		if (pinTrigger > 0 && newvalue == 0)
+		if (!pinTrigger && m_prev_trigger == true)
 		{
 			pinLed = true;
 
@@ -51,27 +48,22 @@ public:
 						filename = uiHost.resolveFilename(filename);
 						nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
 					}
-					else
-					{
-					}
 				}
 			}
 			nativeFileDialog.ShowAsync([this](int32_t result) -> void { this->OnPopupmenuComplete(result); });
 		}
+		m_prev_trigger = pinTrigger;
 	}
 
 	void OnPopupmenuComplete(int32_t result)
 	{
 		if (result == gmpi::MP_OK)
 		{
-			// strip off path (or part of), if it's the default path
-			std::string returnValue = nativeFileDialog.GetSelectedFilename();
-			pinFilePath = returnValue;
+			pinFilePath = nativeFileDialog.GetSelectedFilename();//full path
 		}
 
 		nativeFileDialog.setNull(); // release it.
-		
-		pinTrigger = 0;
+
 		pinLed = false;
 	}
 };

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="My OpenFile" name="OpenFile" category="mx/Sub-Controls">
+    <Plugin id="My OpenFile" name="Open File" category="mx/Sub-Controls">
         <GUI>
-            <Pin name="File Path" datatype="string"/>
-            <Pin name="Trigger" datatype="float" direction="out"/>
-			<Pin name="State" datatype="bool" direction="out"/>
+			<Pin name="Trigger" datatype="bool" direction="out"/>
+            <Pin name="File Path Out" datatype="string"/>
+			<Pin name="Status" datatype="bool" />
         </GUI>
     </Plugin>
 </PluginList>
