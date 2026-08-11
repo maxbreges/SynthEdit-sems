@@ -86,30 +86,9 @@ public:
     void onSetPath()
     { 
         directoryPath = getDirectoryFromPath(pinFilePath);
-
         targetExt = getExtension(pinFilePath);
-
         pinExtension = targetExt;
 
-        Rescan();
-    }
-
-    void onSetChoice()
-    {
-        int choiceIndex = pinChoice;
-
-        std::string separator = PathSeparator;
-
-        if (choiceIndex >= 0 && choiceIndex < static_cast<int>(files.size()))
-        {
-            std::string filename = files[choiceIndex];
-            std::string fullPath = directoryPath + separator + filename + targetExt;
-            pinFilePath = fullPath;            
-        }
-    }
-
-    void Rescan()
-    {
         if (!files.empty())
         {
             files.clear();
@@ -117,20 +96,17 @@ public:
         if (directoryPath.empty())
             return; // avoid invalid directory access
         listFilesInDirectory();
-        setPinChoiceFromPath();
     }
 
-    // Helper: Set pinChoice based on filename
-    void setPinChoiceFromPath()
+    void onSetChoice()
     {
-        // Find filename in currentFileList
-        for (size_t i = 0; i < files.size(); ++i)
-        {            
-            if (files[i] == getFileNameWithoutExtension(pinFilePath))
-            {
-                pinChoice = static_cast<int32_t>(i);
-                break;
-            }
+        int choiceIndex = pinChoice;
+
+        if (choiceIndex >= 0 && choiceIndex < static_cast<int>(files.size()))
+        {
+            std::string filename = files[choiceIndex];
+            std::string fullPath = directoryPath + PathSeparator + filename + targetExt;
+            pinFilePath = fullPath;            
         }
     }
 
@@ -218,7 +194,7 @@ public:
                 }
             }
         }
-        catch (const std::filesystem::filesystem_error& e) {
+        catch (const std::filesystem::filesystem_error&) {
             // Handle errors if needed
     }
 #endif
@@ -232,6 +208,21 @@ public:
                 ss << ", ";
         }
         pinItemList = ss.str();
+        setPinChoiceFromPath();
+    }
+
+    // Helper: Set pinChoice based on filename
+    void setPinChoiceFromPath()
+    {
+        // Find filename in currentFileList
+        for (size_t i = 0; i < files.size(); ++i)
+        {
+            if (files[i] == getFileNameWithoutExtension(pinFilePath))
+            {
+                pinChoice = static_cast<int32_t>(i);
+                break;
+            }
+        }
     }
 };
 
