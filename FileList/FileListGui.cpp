@@ -1,16 +1,6 @@
 #include "mp_sdk_gui2.h"
-#include <string>
 #include <sstream>
-#include <codecvt>
-
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
 #include <filesystem>
-#else
-#include <dirent.h>
-#include <sys/stat.h>
-
-#endif
 
 using namespace gmpi;
 
@@ -26,11 +16,8 @@ class FileListGui final : public SeGuiInvisibleBase
         // Convert targetExt to lowercase
         std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
             [](unsigned char c) { return std::tolower(c); });
-#if defined(_WIN32) || defined(_WIN64)      
-        listFilesInDirectory_win();
-#else
-        listFilesInDirectory_mac();
-#endif
+        
+        listFilesInDirectory();
 	}
 
  	StringGuiPin pinDirectory;
@@ -58,12 +45,12 @@ public:
         return conv.from_bytes(str);
     }
 
-    void listFilesInDirectory_win()
+    void listFilesInDirectory()
     {
         if (dirPath.empty())
             return;        
 
-       std::vector<std::wstring> files;
+       std::vector<std::string> files;
        
         for (const auto& entry : std::filesystem::directory_iterator(dirPath))
         {
@@ -85,7 +72,7 @@ public:
                     // Exclude hidden files (optional)
                     if (!fname.empty() && fname.front() != '.')
                     {
-                        std::wstring filenameWithoutExt = utf8_to_wstring(fname.substr(0, fname.size() - ext.size()));
+                        std::string filenameWithoutExt = fname.substr(0, fname.size() - ext.size());
                         files.push_back(filenameWithoutExt);
                     }
                 }                
@@ -93,7 +80,7 @@ public:
         }
 
         // Join into comma-separated string
-        std::wstringstream ss;
+        std::stringstream ss;
         for (size_t i = 0; i < files.size(); ++i)
         {
             ss << files[i];
@@ -102,12 +89,6 @@ public:
         }
         pinItemList = ss.str();
     }
-
-    void listFilesInDirectory_mac()
-    {
-
-    }
-
 };
 
 namespace

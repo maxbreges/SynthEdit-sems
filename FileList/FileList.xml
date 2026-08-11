@@ -3,7 +3,7 @@
     <Plugin id="My FileList" name="File List" category="mx/Sub-Controls">
         <GUI>
             <Pin name="Directory" datatype="string"/>
-            <Pin name="Exetension" datatype="string" />
+            <Pin name="Extension" datatype="string" />
             <Pin name="Item List" datatype="string" direction="out"/>
         </GUI>
     </Plugin>
