@@ -14,15 +14,16 @@ using namespace gmpi;
 
 // Determine platform-specific path separator
 #ifdef __APPLE__
-static constexpr wchar_t  PathSeparator = L'/';
+static const std::string PathSeparator = "/";
 #else
-static constexpr wchar_t  PathSeparator = L'\\';
+static const std::string PathSeparator = "\\";
 #endif
 
 class FolderListGui final : public SeGuiInvisibleBase
 {
-    std::string fileNameString;
-    std::wstring directoryPath;
+    std::string directoryPath;
+    std::string Name;
+    std::wstring fullFileName;
     std::string targetExt;
 
     // Helper: Extract directory from path
@@ -63,7 +64,8 @@ class FolderListGui final : public SeGuiInvisibleBase
     IntGuiPin pinChoice;//index
     StringGuiPin pinItemList;  
     StringGuiPin pinExtension;
-    StringGuiPin pinName;
+    StringGuiPin pinName;//local var
+    StringGuiPin pinDirectory;//local var
 
 public:
 	FolderListGui()
@@ -72,13 +74,21 @@ public:
         initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetChoice));
         initializePin(pinItemList);
         initializePin(pinExtension); 
-        initializePin(pinName);
+        initializePin(pinName, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetFileName));
+        initializePin(pinDirectory);
     }
 
     void onSetPath()
     { 
-        directoryPath = getDirectory(pinFilePath);
+        pinDirectory = getDirectory(pinFilePath);
+
+        fullFileName = getFileName(pinFilePath);
+        pinName = stripExtension(fullFileName);
+
         pinExtension = getExtension(pinFilePath);
+
+        directoryPath = pinDirectory;
+        Name = pinName;
         targetExt = pinExtension;
 
         if (!files.empty())
@@ -96,13 +106,15 @@ public:
 
         if (choiceIndex >= 0 && choiceIndex < static_cast<int>(files.size()))
         {
-            fileNameString = files[choiceIndex];
-            pinName = fileNameString;
-            std::wstring filename = pinName;
-            std::wstring ext = pinExtension;
-            std::wstring fullPath = directoryPath + PathSeparator + filename + ext;
-            pinFilePath = fullPath;            
+            pinName = files[choiceIndex];            
         }
+        Name = pinName;
+        std::string fullPath = directoryPath + PathSeparator + Name + targetExt;
+        pinFilePath = fullPath;
+    }
+
+    void onSetFileName()
+    {       
     }
 
     std::vector<std::string> files;
@@ -209,13 +221,10 @@ public:
     // Helper: Set pinChoice based on filename
     void setPinChoiceFromPath()
     {
-        std::wstring fullname = getFileName(pinFilePath);
-        pinName = stripExtension(fullname);
-        std::string stripped = pinName;
         // Find filename in currentFileList
         for (size_t i = 0; i < files.size(); ++i)
         {
-            if (files[i] == stripped)
+            if (files[i] == Name)
             {
                 pinChoice = static_cast<int32_t>(i);
                 break;
