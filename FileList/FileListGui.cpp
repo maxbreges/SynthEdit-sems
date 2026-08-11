@@ -1,6 +1,14 @@
 #include "mp_sdk_gui2.h"
 #include <sstream>
+#include <algorithm>
+#include <vector>
+#include <string>
+
+#ifdef __APPLE__
+#include <dirent.h> // POSIX directory functions
+#else
 #include <filesystem>
+#endif
 
 using namespace gmpi;
 
@@ -9,28 +17,28 @@ class FileListGui final : public SeGuiInvisibleBase
     std::string targetExt;
     std::string dirPath;
 
- 	void onSetDirectory()
-	{  
+    void onSetDirectory()
+    {
         dirPath = pinDirectory;
         targetExt = pinExtension;
         // Convert targetExt to lowercase
         std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
             [](unsigned char c) { return std::tolower(c); });
-        
-        listFilesInDirectory();
-	}
 
- 	StringGuiPin pinDirectory;
-	StringGuiPin pinExtension;
- 	StringGuiPin pinItemList; 	
+        listFilesInDirectory();
+    }
+
+    StringGuiPin pinDirectory;
+    StringGuiPin pinExtension;
+    StringGuiPin pinItemList;
 
 public:
-	FileListGui()
-	{
-		initializePin( pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&FileListGui::onSetDirectory) );
-		initializePin( pinExtension, static_cast<MpGuiBaseMemberPtr2>(&FileListGui::onSetDirectory));
-		initializePin(pinItemList);
-	}
+    FileListGui()
+    {
+        initializePin(pinDirectory, static_cast<MpGuiBaseMemberPtr2>(&FileListGui::onSetDirectory));
+        initializePin(pinExtension, static_cast<MpGuiBaseMemberPtr2>(&FileListGui::onSetDirectory));
+        initializePin(pinItemList);
+    }
 
     // Conversion functions for UTF-8 and wstring
     std::string wstring_to_utf8(const std::wstring& wstr)
@@ -48,36 +56,78 @@ public:
     void listFilesInDirectory()
     {
         if (dirPath.empty())
-            return;        
+            return;
 
-       std::vector<std::string> files;
-       
-        for (const auto& entry : std::filesystem::directory_iterator(dirPath))
+        std::vector<std::string> files;
+
+#ifdef __APPLE__
+        // macOS / POSIX implementation
+        DIR* dir = opendir(dirPath.c_str());
+        if (!dir)
+            return;
+
+        struct dirent* entry;
+        while ((entry = readdir(dir)) != nullptr)
         {
-            if (entry.is_regular_file())
+            std::string fname = entry->d_name;
+
+            // Skip "." and ".."
+            if (fname == "." || fname == "..")
+                continue;
+
+            // Check extension
+            std::string ext;
+            size_t dotPos = fname.rfind('.');
+            if (dotPos != std::string::npos)
+                ext = fname.substr(dotPos); // includes dot
+
+            // Convert extension to lowercase
+            std::transform(ext.begin(), ext.end(), ext.begin(),
+                [](unsigned char c) { return std::tolower(c); });
+
+            if (ext == targetExt)
             {
-                std::string fname = entry.path().filename().string();
-
-                // Filter by extension (case-insensitive)
-                std::string ext = entry.path().extension().string();
-
-                // Convert extensions to lowercase for comparison
-                std::transform(ext.begin(), ext.end(), ext.begin(),
-                    [](unsigned char c) { return std::tolower(c); });
-
-                // Also convert targetExt to lowercase (already done above)
-                
-                if (ext == targetExt)
+                // Exclude hidden files (optional)
+                if (!fname.empty() && fname.front() != '.')
                 {
-                    // Exclude hidden files (optional)
-                    if (!fname.empty() && fname.front() != '.')
-                    {
-                        std::string filenameWithoutExt = fname.substr(0, fname.size() - ext.size());
-                        files.push_back(filenameWithoutExt);
-                    }
-                }                
+                    std::string filenameWithoutExt = fname.substr(0, fname.size() - ext.size());
+                    files.push_back(filenameWithoutExt);
+                }
             }
         }
+        closedir(dir);
+#else
+        // Use std::filesystem
+        try {
+            for (const auto& entry : std::filesystem::directory_iterator(dirPath))
+            {
+                if (entry.is_regular_file())
+                {
+                    std::string fname = entry.path().filename().string();
+
+                    // Filter by extension (case-insensitive)
+                    std::string ext = entry.path().extension().string();
+
+                    // Convert extensions to lowercase for comparison
+                    std::transform(ext.begin(), ext.end(), ext.begin(),
+                        [](unsigned char c) { return std::tolower(c); });
+
+                    if (ext == targetExt)
+                    {
+                        // Exclude hidden files (optional)
+                        if (!fname.empty() && fname.front() != '.')
+                        {
+                            std::string filenameWithoutExt = fname.substr(0, fname.size() - ext.size());
+                            files.push_back(filenameWithoutExt);
+                        }
+                    }
+                }
+            }
+        }
+        catch (const std::filesystem::filesystem_error& e) {
+            // Handle errors if needed
+        }
+#endif
 
         // Join into comma-separated string
         std::stringstream ss;
@@ -93,5 +143,5 @@ public:
 
 namespace
 {
-	auto r = Register<FileListGui>::withId(L"My FileList");
+    auto r = Register<FileListGui>::withId(L"My FileList");
 }
