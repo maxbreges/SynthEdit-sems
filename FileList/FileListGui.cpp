@@ -96,6 +96,9 @@ public:
             }
         }
         closedir(dir);
+
+        // Sort alphabetically
+        std::sort(files.begin(), files.end());
 #else
         // Use std::filesystem
         try {
