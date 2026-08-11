@@ -14,65 +14,56 @@ using namespace gmpi;
 
 // Determine platform-specific path separator
 #ifdef __APPLE__
-static const std::string PathSeparator = "/";
+static constexpr wchar_t  PathSeparator = L'/';
 #else
-static const std::string PathSeparator = "\\";
+static constexpr wchar_t  PathSeparator = L'\\';
 #endif
 
 class FolderListGui final : public SeGuiInvisibleBase
 {
     std::string fileNameString;
-    std::string directoryPath;
+    std::wstring directoryPath;
     std::string targetExt;
 
-    // Helper function to extract directory path from a full file path
-    std::string getDirectoryFromPath(const std::string& filepath)
+    // Helper: Extract directory from path
+    std::wstring getDirectory(const std::wstring& path)
     {
-        size_t p = filepath.find_last_of("/\\");
-        if (p != std::string::npos)
-            return filepath.substr(0, p);
-        else
-            return ""; // No directory part found
+        size_t sepPos = path.find_last_of(L"/\\");
+        if (sepPos != std::wstring::npos)
+            return path.substr(0, sepPos);
+        return L"";
     }
 
+    // Helper: Get filename from full path
+    std::wstring getFileName(const std::wstring& name)
+    {
+        size_t sepPos = name.find_last_of(L"/\\");
+        if (sepPos != std::wstring::npos)
+            return name.substr(sepPos + 1);
+        return name;
+    }
     // Helper: Get extension 
-    std::string getExtension(const std::string& ext)
+    std::wstring getExtension(const std::wstring& ext)
     {
         size_t dotPos = ext.find_last_of('.');
-        if (dotPos != std::string::npos)
+        if (dotPos != std::wstring::npos)
             return ext.substr(dotPos);
         return ext;
     }
-
-    // Helper: Get filename without extension from full path
-    std::string getFileNameWithoutExtension(const std::string& path)
+    // Helper: Remove extension
+    std::wstring stripExtension(const std::wstring& filename)
     {
-        // Find the position of the last directory separator
-        size_t sepPos = path.find_last_of("/\\");
-        size_t startPos = (sepPos != std::string::npos) ? sepPos + 1 : 0;
-
-        // Extract the filename with extension
-        std::string filenameWithExt = path.substr(startPos);
-
-        // Find the last dot in the filename to remove extension
-        size_t dotPos = filenameWithExt.find_last_of('.');
-
-        // If there's a dot, remove the extension
-        if (dotPos != std::string::npos)
-        {
-            return filenameWithExt.substr(0, dotPos);
-        }
-        else
-        {
-            // No extension found, return the filename as is
-            return filenameWithExt;
-        }
+        size_t dotPos = filename.find_last_of('.');
+        if (dotPos != std::wstring::npos)
+            return filename.substr(0, dotPos);
+        return filename;
     }
 
     StringGuiPin pinFilePath;
     IntGuiPin pinChoice;//index
     StringGuiPin pinItemList;  
     StringGuiPin pinExtension;
+    StringGuiPin pinName;
 
 public:
 	FolderListGui()
@@ -80,14 +71,15 @@ public:
         initializePin(pinFilePath, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetPath));
         initializePin(pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FolderListGui::onSetChoice));
         initializePin(pinItemList);
-        initializePin(pinExtension);        
+        initializePin(pinExtension); 
+        initializePin(pinName);
     }
 
     void onSetPath()
     { 
-        directoryPath = getDirectoryFromPath(pinFilePath);
-        targetExt = getExtension(pinFilePath);
-        pinExtension = targetExt;
+        directoryPath = getDirectory(pinFilePath);
+        pinExtension = getExtension(pinFilePath);
+        targetExt = pinExtension;
 
         if (!files.empty())
         {
@@ -104,8 +96,11 @@ public:
 
         if (choiceIndex >= 0 && choiceIndex < static_cast<int>(files.size()))
         {
-            std::string filename = files[choiceIndex];
-            std::string fullPath = directoryPath + PathSeparator + filename + targetExt;
+            fileNameString = files[choiceIndex];
+            pinName = fileNameString;
+            std::wstring filename = pinName;
+            std::wstring ext = pinExtension;
+            std::wstring fullPath = directoryPath + PathSeparator + filename + ext;
             pinFilePath = fullPath;            
         }
     }
@@ -214,12 +209,13 @@ public:
     // Helper: Set pinChoice based on filename
     void setPinChoiceFromPath()
     {
-        fileNameString = getFileNameWithoutExtension(pinFilePath);
-
+        std::wstring fullname = getFileName(pinFilePath);
+        pinName = stripExtension(fullname);
+        std::string stripped = pinName;
         // Find filename in currentFileList
         for (size_t i = 0; i < files.size(); ++i)
         {
-            if (files[i] == fileNameString)
+            if (files[i] == stripped)
             {
                 pinChoice = static_cast<int32_t>(i);
                 break;
