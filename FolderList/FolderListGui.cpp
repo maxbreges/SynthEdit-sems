@@ -3,24 +3,26 @@
 #include <sstream>
 #include <vector>
 #include <algorithm> // for transform
-#include <codecvt>
-#include <locale>
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
-#include <filesystem>
+#ifdef __APPLE__
+#include <dirent.h> // POSIX directory functions
 #else
-#include <dirent.h>
-#include <sys/stat.h>
+#include <filesystem>
 #endif
 
 using namespace gmpi;
-using namespace gmpi_gui;
+
+// Determine platform-specific path separator
+#ifdef __APPLE__
+static const std::string PathSeparator = "/";
+#else
+static const std::string PathSeparator = "\\";
+#endif
 
 class FolderListGui final : public SeGuiInvisibleBase
 {
     std::string fileNameString;
-    std::string directory;
+    std::string directoryPath;
     std::string targetExt;
 
     // Helper function to extract directory path from a full file path
@@ -33,21 +35,30 @@ class FolderListGui final : public SeGuiInvisibleBase
             return ""; // No directory part found
     }
 
+    // Helper: Get extension 
+    std::string getExtension(const std::string& ext)
+    {
+        size_t dotPos = ext.find_last_of('.');
+        if (dotPos != std::string::npos)
+            return ext.substr(dotPos);
+        return ext;
+    }
+
     // Helper: Get filename without extension from full path
-    std::wstring getFileNameWithoutExtension(const std::wstring& path)
+    std::string getFileNameWithoutExtension(const std::string& path)
     {
         // Find the position of the last directory separator
-        size_t sepPos = path.find_last_of(L"/\\");
-        size_t startPos = (sepPos != std::wstring::npos) ? sepPos + 1 : 0;
+        size_t sepPos = path.find_last_of("/\\");
+        size_t startPos = (sepPos != std::string::npos) ? sepPos + 1 : 0;
 
         // Extract the filename with extension
-        std::wstring filenameWithExt = path.substr(startPos);
+        std::string filenameWithExt = path.substr(startPos);
 
         // Find the last dot in the filename to remove extension
-        size_t dotPos = filenameWithExt.find_last_of(L'.');
+        size_t dotPos = filenameWithExt.find_last_of('.');
 
         // If there's a dot, remove the extension
-        if (dotPos != std::wstring::npos)
+        if (dotPos != std::string::npos)
         {
             return filenameWithExt.substr(0, dotPos);
         }
@@ -57,14 +68,6 @@ class FolderListGui final : public SeGuiInvisibleBase
             return filenameWithExt;
         }
     }
-
-
-    // Determine platform-specific path separator
-#ifdef _WIN32
-    static constexpr wchar_t PathSeparator = L'\\';
-#else
-    static constexpr wchar_t PathSeparator = L'/';
-#endif
 
     // Conversion functions for UTF-8 and wstring
     std::string wstring_to_utf8(const std::wstring& wstr)
@@ -92,37 +95,27 @@ public:
         initializePin(pinExtension);        
     }
 
-    // Helper: Set pinChoice based on filename
-    void setPinChoiceFromPath()
-    {
-        // Find filename in currentFileList
-        for (size_t i = 0; i < files.size(); ++i)
-        {
-            if (files[i] == getFileNameWithoutExtension(utf8_to_wstring(pinFilePath)))
-            {
-                pinChoice = static_cast<int32_t>(i);
-                break;
-            }
-        }
-    }
-
     void onSetPath()
-    {
-        std::wstring fullPathString = pinFilePath.getValue();
-        fileNameString = wstring_to_utf8(fullPathString);
-        directory = getDirectoryFromPath(fileNameString);         
+    { 
+        directoryPath = getDirectoryFromPath(pinFilePath);
+
+        targetExt = getExtension(pinFilePath);
+
+        pinExtension = targetExt;
+
         Rescan();
     }
 
     void onSetChoice()
     {
         int choiceIndex = pinChoice;
-        std::string separator = wstring_to_utf8(std::wstring(1, PathSeparator));
+
+        std::string separator = PathSeparator;
 
         if (choiceIndex >= 0 && choiceIndex < static_cast<int>(files.size()))
         {
-            std::wstring filename = files[choiceIndex];
-            std::string fullPath = directory + separator + wstring_to_utf8(filename) + targetExt;
+            std::string filename = files[choiceIndex];
+            std::string fullPath = directoryPath + separator + filename + targetExt;
             pinFilePath = fullPath;            
         }
     }
@@ -133,101 +126,117 @@ public:
         {
             files.clear();
         }
-        if (directory.empty())
+        if (directoryPath.empty())
             return; // avoid invalid directory access
-        listFilesInDirectory(utf8_to_wstring(directory));
-        pinExtension = targetExt;
+        listFilesInDirectory();
+        setPinChoiceFromPath();
     }
 
-private:
-    std::vector<std::wstring> files;
-    // Helper: List files in directory filtered by extensions
-    std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
+    // Helper: Set pinChoice based on filename
+    void setPinChoiceFromPath()
     {
-
-#if defined(_WIN32) || defined(_WIN64)
-        std::filesystem::path filePath(fileNameString);
-        std::filesystem::path dirPath = filePath.parent_path();
-        // Get extension of the selected file (lowercase)
-        targetExt = filePath.extension().string();
-
-        // Convert targetExt to lowercase
-        std::transform(targetExt.begin(), targetExt.end(), targetExt.begin(),
-            [](unsigned char c) { return std::tolower(c); });
-
-        for (const auto& entry : std::filesystem::directory_iterator(dirPath))
-        {
-            if (entry.is_regular_file())
+        // Find filename in currentFileList
+        for (size_t i = 0; i < files.size(); ++i)
+        {            
+            if (files[i] == getFileNameWithoutExtension(pinFilePath))
             {
-                std::string fname = entry.path().filename().string();
+                pinChoice = static_cast<int32_t>(i);
+                break;
+            }
+        }
+    }
 
-                // Filter by extension (case-insensitive)
-                std::string ext = entry.path().extension().string();
+    std::vector<std::string> files;
+    void listFilesInDirectory()
+    {
+        if (directoryPath.empty())
+            return;       
+        
+#ifdef __APPLE__
+        // macOS / POSIX implementation
+        DIR* dir = opendir(dirPath.c_str());
+        if (!dir)
+            return;
 
-                // Convert extensions to lowercase for comparison
-                std::transform(ext.begin(), ext.end(), ext.begin(),
-                    [](unsigned char c) { return std::tolower(c); });
+        struct dirent* entry;
+        while ((entry = readdir(dir)) != nullptr)
+        {
+            std::string fname = entry->d_name;
 
-                // Also convert targetExt to lowercase (already done above)
+            // Skip "." and ".."
+            if (fname == "." || fname == "..")
+                continue;
 
-                if (ext == targetExt)
+            // Check extension
+            std::string ext;
+            size_t dotPos = fname.rfind('.');
+            if (dotPos != std::string::npos)
+                ext = fname.substr(dotPos); // includes dot
+
+            // Convert extension to lowercase
+            std::transform(ext.begin(), ext.end(), ext.begin(),
+                [](unsigned char c) { return std::tolower(c); });
+
+            if (ext == targetExt)
+            {
+                // Exclude hidden files (optional)
+                if (!fname.empty() && fname.front() != '.')
                 {
-                    // Exclude hidden files (optional)
-                    if (!fname.empty() && fname.front() != '.')
-                    {
-                        std::wstring filenameWithoutExt = utf8_to_wstring(fname.substr(0, fname.size() - ext.size()));
-                        files.push_back(filenameWithoutExt);
-                    }
+                    std::string filenameWithoutExt = fname.substr(0, fname.size() - ext.size());
+                    files.push_back(filenameWithoutExt);
                 }
             }
         }
-#else
+        closedir(dir);
 
-        DIR* dirp = directory;
-        if (!dirp)
-            return files;
-
-        struct dirent* dp;
-        while ((dp = readdir(dirp)) != nullptr)
-        {
-            // Skip "." and ".."
-    if (strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
-        continue;
-
-    // Get filename and extension
-    std::string filenameStr(dp->d_name);
-    std::string ext = "";
-    size_t extPos = filenameStr.find_last_of('.');
-    if (extPos != std::string::npos)
-        ext = filenameStr.substr(extPos);
-
-    // Convert extension to lowercase
-    std::transform(ext.begin(), ext.end(), ext.begin(),
-                   [](unsigned char c){ return std::tolower(c); });
-
-    // Compare extension with targetExt (also lowercase)
-    if (ext == targetExt)
-    {
-        // Remove extension from filename
-        std::string filenameWithoutExt = (filenameStr.substr(0, extPos);
-        std::wstring wfilenameWithoutExt = utf8_to_wstring(filenameWithoutExt);
-        files.push_back(wfilenameWithoutExt);
-    }
         // Sort alphabetically, case-insensitive
         std::sort(files.begin(), files.end(),
-            [](const std::wstring& a, const std::wstring& b)
+            [](const std::string& a, const std::string& b)
             {
                 return std::lexicographical_compare(
                     a.begin(), a.end(),
                     b.begin(), b.end(),
-                    [](wchar_t ac, wchar_t bc)
+                    [](unsigned char ac, unsigned char bc)
                     {
-                        return std::towlower(ac) < std::towlower(bc);
+                        return std::tolower(ac) < std::tolower(bc);
                     });
             });
+#else
+        // Use std::filesystem
+        try {
+            for (const auto& entry : std::filesystem::directory_iterator(directoryPath))
+            {
+                
+                if (entry.is_regular_file())
+                {
+                    std::string fname = entry.path().filename().string();
+
+                    // Filter by extension (case-insensitive)
+                    std::string ext = entry.path().extension().string();
+
+                    // Convert extensions to lowercase for comparison
+                    std::transform(ext.begin(), ext.end(), ext.begin(),
+                        [](unsigned char c) { return std::tolower(c); });
+
+                    if (ext == targetExt)
+                    {                       
+                        // Exclude hidden files (optional)
+                        if (!fname.empty() && fname.front() != '.')
+                        {
+                            std::string filenameWithoutExt = fname.substr(0, fname.size() - ext.size());
+                            files.push_back(filenameWithoutExt);
+                        }
+                    }
+                }
+            }
+        }
+        catch (const std::filesystem::filesystem_error& e) {
+            // Handle errors if needed
+    }
 #endif
+
         // Join into comma-separated string
-        std::wstringstream ss;
+        std::stringstream ss;
         for (size_t i = 0; i < files.size(); ++i)
         {
             ss << files[i];
@@ -235,8 +244,6 @@ private:
                 ss << ", ";
         }
         pinItemList = ss.str();
-        setPinChoiceFromPath();       
-        return files;
     }
 };
 
