@@ -125,7 +125,7 @@ public:
         
 #ifdef __APPLE__
         // macOS / POSIX implementation
-        DIR* dir = opendir(directoryPath);
+        DIR* dir = opendir(directoryPath.c_str());
         if (!dir)
             return;
 
