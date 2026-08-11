@@ -98,7 +98,7 @@ public:
         closedir(dir);
 
         // Sort alphabetically, case-insensitive
-        std::sort(fileNames.begin(), fileNames.end(),
+        std::sort(files.begin(), files.end(),
             [](const std::string& a, const std::string& b)
             {
                 return std::lexicographical_compare(
