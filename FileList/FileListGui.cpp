@@ -97,8 +97,18 @@ public:
         }
         closedir(dir);
 
-        // Sort alphabetically
-        std::sort(files.begin(), files.end());
+        // Sort alphabetically, case-insensitive
+        std::sort(fileNames.begin(), fileNames.end(),
+            [](const std::string& a, const std::string& b)
+            {
+                return std::lexicographical_compare(
+                    a.begin(), a.end(),
+                    b.begin(), b.end(),
+                    [](unsigned char ac, unsigned char bc)
+                    {
+                        return std::tolower(ac) < std::tolower(bc);
+                    });
+            });
 #else
         // Use std::filesystem
         try {
