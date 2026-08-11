@@ -1,5 +1,6 @@
 #include "mp_sdk_gui2.h"
 #include <string>
+#include <sstream>
 #include <vector>
 #include <algorithm>
 #include <codecvt>
@@ -47,13 +48,6 @@ class FileBrowserGui final : public SeGuiInvisibleBase
     StringGuiPin pinAllowedExtensions;
     StringGuiPin pinItemList;
 
-
-private:
-    // Internal file list
-    std::vector<std::wstring> currentFileList;
-    std::wstring currentDirectory;
-    std::string targetExt;
-
 public:
     FileBrowserGui()
     {
@@ -61,12 +55,35 @@ public:
         initializePin(pinAllowedExtensions, static_cast<MpGuiBaseMemberPtr2>(&FileBrowserGui::onSetAllowedExtensions));
         initializePin(pinItemList);
     }
+    // Called when path pin changes
+    void onSetPath()
+    {
+        std::wstring dirPath = pinDirectory.getValue();
+        if (dirPath.empty())
+            return;
+
+        if (!currentFileList.empty())
+        {
+            currentFileList.clear();
+        }
+        if (currentFileList.empty())
+        {
+            currentDirectory = dirPath;
+            listFilesInDirectory();
+        }
+        //refreshFileList();
+    }
 
 private:
+    // Internal file list
+    std::vector<std::wstring> currentFileList;
+    std::wstring currentDirectory;
+    std::string targetExt;
+
     // Helper: List files in directory filtered by extensions
-    std::vector<std::wstring> listFilesInDirectory(const std::wstring& directory)
+    void listFilesInDirectory()
     {
-        
+
         std::vector<std::wstring> files;
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -127,7 +144,16 @@ private:
     }
         closedir(dirp);
 #endif
-        return files;
+        
+        // Join into comma-separated string
+        std::wstringstream ss;
+        for (size_t i = 0; i < files.size(); ++i)
+        {
+            ss << files[i];
+            if (i != files.size() - 1)
+                ss << ", ";
+        }
+        pinItemList = ss.str();
     }
 
     // Helper: Filter files by extension(s)
@@ -211,29 +237,9 @@ private:
         return path;
     }
 
-public:
-
-    // Called when path pin changes
-    void onSetPath()
-    {  
-        if (!currentFileList.empty())
-        {
-            currentFileList.clear();
-        }
-        if (currentFileList.empty())
-        {  
-
-            std::wstring dirPath = pinDirectory.getValue();
-            currentDirectory = dirPath;
-
-            listFilesInDirectory(currentDirectory);
-        }
-        refreshFileList();
-    }
-
 private:
     // Refresh file list based on current directory and filters
-    void refreshFileList()
+/*    void refreshFileList()
     {
         
         if (currentDirectory.empty())
@@ -251,7 +257,7 @@ private:
 
         updatePinItemList();
         
-    }
+    }*/
 
 };
 
