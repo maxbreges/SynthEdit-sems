@@ -6,7 +6,7 @@ REGISTER_PLUGIN(MidiCc, L"MIDI CC");
 SE_DECLARE_INIT_STATIC_FILE(MidiCc);
 
 MidiCc::MidiCc(IMpUnknown* host) : MpBase(host),
-initState(false)
+initState(0)
 {
 	// Register pins.
 	initializePin(0, pinGate);
