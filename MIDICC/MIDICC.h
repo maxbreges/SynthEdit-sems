@@ -20,6 +20,7 @@ private:
 	IntInPin pinMidiCc;
 
 	void SendValue(int bufferPosition = -1);
+	bool initState;
 };
 
 #endif
