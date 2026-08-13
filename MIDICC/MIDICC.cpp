@@ -5,7 +5,8 @@
 REGISTER_PLUGIN(MidiCc, L"MIDI CC");
 SE_DECLARE_INIT_STATIC_FILE(MidiCc);
 
-MidiCc::MidiCc(IMpUnknown* host) : MpBase(host)
+MidiCc::MidiCc(IMpUnknown* host) : MpBase(host),
+initState(false)
 {
 	// Register pins.
 	initializePin(0, pinGate);
@@ -27,7 +28,9 @@ void MidiCc::subProcess(int bufferOffset, int sampleFrames)
 void MidiCc::onSetPins()
 {
 	if (pinGate.isUpdated())
-	{								
+	{	
+		if (pinGate)
+		{initState = true;}
 	}
 
 	if (pinChannel.isUpdated() || pinMidiCc.isUpdated())
@@ -51,6 +54,10 @@ void MidiCc::onSetPins()
 
 void MidiCc::SendValue(int bufferPosition)
 {
+	if (!initState)
+	{
+		return;
+	}
 	const float v = pinValue.getValue(bufferPosition);
 #if 0
 	int newMidiValue = (int)(v * 127.0f);
@@ -96,4 +103,5 @@ void MidiCc::SendValue(int bufferPosition)
 		bufferPosition
 	);
 #endif
+	initState = true;
 }
