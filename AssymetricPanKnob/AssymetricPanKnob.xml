@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My AssymetricPanKnob" name="Assymetric Pan Knob" category="SE Group/Sub-Controls" >
+        <GUI>            
+            <Pin name="Animation Position" datatype="float" direction="out"/>
+			<Pin name="Value" datatype="float"/>
+            <Pin name="Low" datatype="float" default="-10" isMinimised="true"/>
+            <Pin name="High" datatype="float" default="5" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
