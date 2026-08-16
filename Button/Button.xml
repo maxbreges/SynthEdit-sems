@@ -2,41 +2,48 @@
 <PluginList>
     <Plugin id="Button" name="Button" category="mx/Sub-Controls">
         <GUI graphicsApi="GmpiGui">
-            <Pin name="Bool Out" datatype="bool"/>
+			<Pin name="Text" datatype="string" default="Text"/>
+			<Pin name="Text" datatype="string" direction="out" private="true"/>
+			<Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="true"/>
+
+			<Pin name="Color" datatype="string" default="ff00aa00"/>
+			<Pin name="Color Bottom" datatype="string" default="ff000000" isMinimised="true"/>
+			<Pin name="ColorOut" datatype="string" direction="out" private="true"/>
+
+			<Pin name="Brightness" datatype="float" default="1"/>
+			<Pin name="Opacity" datatype="float" default="1"/>
+
+			<Pin name="Mouse Y Pos" datatype="float" direction="in"/>
+			
+			<Pin name="Bool In" datatype="bool" direction="out"/>
+			<Pin name="Bool Out" datatype="bool"/>
+			<Pin name="Bool Out" datatype="bool" direction="out"/>
             <Pin name="Ctrl+click" datatype="bool" direction="out"/>
-            <Pin name="mOver" datatype="bool" direction="out"/>
+			<Pin name="Ctrl+clk latch" datatype="bool" direction="out"/>
+            <Pin name="mOver" datatype="bool" direction="out" private="true"/>
+			<Pin name="mOver" datatype="bool"/>
+			<Pin name="mDown" datatype="bool"/>
+			
             <Pin name="Mouse Response" datatype="enum" isMinimised="true" metadata="Clicked, Stepped, Off"/>
 			
-            <Pin name="Corner Radius" datatype="int" default="5" isMinimised="true" private="true"/>
-            <Pin name="Color" datatype="string" default="ff00aa00"/>
-            <Pin name="Color Bottom" datatype="string" default="ff000000" isMinimised="true"/>
-			
-            <Pin name="ColorOut" datatype="string" direction="out" private="true"/>
+            <Pin name="Corner Radius" datatype="float" default="5" isMinimised="true" private="true"/>
+
             <Pin name="Gradient Stop" datatype="float" default="0.5" private="true"/>
             <Pin name="Color Glow" datatype="string" private="true"/>
-            <Pin name="Brightness" datatype="float" default="1"/>
+            
             <Pin name="GradientX" datatype="float" default="0.5" private="true" isMinimised="true"/>
             <Pin name="GradientY" datatype="float" default="0.5" private="true" isMinimised="true"/>
             <Pin name="Linear/Radial" datatype="bool" isMinimised="true"/>
 			
             <Pin name="Display Text" datatype="bool" default="1" isMinimised="true"/>
-            <Pin name="Text" datatype="string" default="Hint"/>
-            <Pin name="Text" datatype="string" direction="out"/>
-            <Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="true"/>
 			
-            <Pin name="Font Size" datatype="int" default="16" isMinimised="true"/>
+            <Pin name="Font Size" datatype="float" default="16" isMinimised="true"/>
             <Pin name="Font" datatype="string" default="Times New Roman" isMinimised="true"/>
             <Pin name="Align" datatype="enum" isMinimised="true" metadata="Center, Top, Bottom"/>
             <Pin name="Align Top/Bottom" datatype="float" default="4" isMinimised="true"/>
-			
-            <Pin name="Opacity" datatype="float" default="1"/>
-			<Pin name="Bool In" datatype="bool" direction="out"/>
 
-			<Pin name="Mouse Y Pos" datatype="float" direction="in"/>
 			<Pin name="Hint" datatype="string" default="Hint" isMinimised="true"/>
-			<Pin name="Ctrl+clk latch" datatype="bool" direction="out"/>
-			<Pin name="mOver" datatype="bool" direction="in"/>
-			<Pin name="mDown" datatype="bool" direction="in"/>
+
         </GUI>
     </Plugin>
 </PluginList>

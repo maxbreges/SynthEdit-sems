@@ -22,13 +22,13 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	int Stepped = 1;
 	int Off = 2;
 
-	int radius = 5;
+	float radius = 5;
 
 	std::wstring HintColor = L"ffffffff";
 
 	void onSetBoolOut()
-	{		
-		//pinBoolOut = sharedState;
+	{
+		pinBoolIn = pinBoolOut.getValue();
 		updateColor();
 		invalidateRect();
 	}
@@ -126,7 +126,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	}
 
 	// Define padding (in pixels)
-	int padding = 0;
+	float padding = 0;
 
 	void onSetAlignY()
 	{
@@ -157,83 +157,98 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	//functionality
 	//hint
 	//appearance
-
-	BoolGuiPin pinBoolOut;
-	BoolGuiPin pinCtrlClk;
-	BoolGuiPin pinMouseOver;
-	IntGuiPin pinResponse;
-
-	IntGuiPin pinCornerRadius;
-	StringGuiPin pinColor;
-	StringGuiPin pinBottomColor;
-
-	StringGuiPin pinColorOut;
-	FloatGuiPin pinGradientStop; //not used
-	StringGuiPin pinColorGlow;
-	FloatGuiPin pinBrightness; //would be nice to receive ADSR fade out
-	FloatGuiPin pinGradientCenterX;
-	FloatGuiPin pinGradientCenterY;
-	BoolGuiPin pinRadial;
-
-	BoolGuiPin pinDisplayHint;
 	StringGuiPin pinHint;
 	StringGuiPin pinHintOut;
 	StringGuiPin pinHintColor;
 
-	IntGuiPin pinFontSize;
-	StringGuiPin pinFont;
-	IntGuiPin pinAlignV;
+	StringGuiPin pinColor;
+	StringGuiPin pinBottomColor;
+	StringGuiPin pinColorOut;
 
-	FloatGuiPin pinAlignY;
+	FloatGuiPin pinBrightness; //would be nice to receive ADSR fade out
 	FloatGuiPin pinOpacity;
+	FloatGuiPin pinMouseYPos;
 
 	BoolGuiPin pinBoolIn;
-
-	FloatGuiPin pinMouseYPos;
-	StringGuiPin pinToolTip;
+	BoolGuiPin pinBoolOut;
+	BoolGuiPin pinBoolOutR;
+	BoolGuiPin pinCtrlClk;
 	BoolGuiPin pinCtrlClkLatch;
+	BoolGuiPin pinMouseOver;
 	BoolGuiPin pinMouseOverIn;
 	BoolGuiPin pinMouseDown;
+
+	IntGuiPin pinResponse;
+
+	FloatGuiPin pinCornerRadius;
+
+	FloatGuiPin pinGradientStop; //not used
+	StringGuiPin pinColorGlow;
+	
+	FloatGuiPin pinGradientCenterX;
+	FloatGuiPin pinGradientCenterY;
+	BoolGuiPin pinRadial;
+
+	BoolGuiPin pinDisplayText;
+
+
+	FloatGuiPin pinFontSize;
+	StringGuiPin pinFont;
+
+	IntGuiPin pinAlignV; //enum, has metadata
+	FloatGuiPin pinAlignY;
+
+
+	StringGuiPin pinToolTip;
+
+
 
 public:
 	ButtonGui()
 	{
-		initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolOut));
-		initializePin(pinCtrlClk, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCtrlClk));
-		initializePin(pinMouseOver, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
-		initializePin(pinResponse, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetResponse));
-
-		initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCornerRadius));
-		initializePin(pinColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
-		initializePin(pinBottomColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
-
-		initializePin(pinColorOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
-		initializePin(pinGradientStop, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetGradient));
-		initializePin(pinColorGlow, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
-		initializePin(pinBrightness, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBrightness));
-		initializePin(pinGradientCenterX, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetGradient));
-		initializePin(pinGradientCenterY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetGradient));
-		initializePin(pinRadial, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetRadial));
-
-		initializePin(pinDisplayHint, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetDisplayHint));
 		initializePin(pinHint, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetHint));
 		initializePin(pinHintOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
 		initializePin(pinHintColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetHintColor));
 
-		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetFontSize));
-		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetFont));
-		initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignV));
+		initializePin(pinColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
+		initializePin(pinBottomColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
+		initializePin(pinColorOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
 
-		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignY));;
-		initializePin(pinOpacity, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));;
+		initializePin(pinBrightness, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBrightness));
+		initializePin(pinOpacity, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
+		initializePin(pinMouseYPos, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseYPos));
 
 		initializePin(pinBoolIn, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolIn));
-		initializePin(pinMouseYPos, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseYPos));
-		initializePin(pinToolTip, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetToolTip));
-
+		initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolOut));
+		initializePin(pinBoolOutR);
+		initializePin(pinCtrlClk, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCtrlClk));
 		initializePin(pinCtrlClkLatch, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCtrlClkLatch));
+		initializePin(pinMouseOver, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
 		initializePin(pinMouseOverIn, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
 		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseDown));
+		initializePin(pinResponse, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetResponse));
+
+		initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCornerRadius));
+
+		initializePin(pinGradientStop, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetGradient));
+		initializePin(pinColorGlow, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
+		
+		initializePin(pinGradientCenterX, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetGradient));
+		initializePin(pinGradientCenterY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetGradient));
+		initializePin(pinRadial, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetRadial));
+
+		initializePin(pinDisplayText, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetDisplayHint));
+
+
+		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetFontSize));
+		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetFont));
+
+		initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignV));
+		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignY));
+
+
+		initializePin(pinToolTip, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetToolTip));
+
 	}
 
 	float mult = 1.f;
@@ -274,7 +289,7 @@ public:
 			}
 		}
 
-		pinBoolOut = true;
+		pinBoolOutR = pinBoolOut = true;
 		pinMouseDown = true;
 		//pinCtrlClkLatch = false;
 		bypass:
@@ -303,7 +318,7 @@ public:
 			sharedState = false; // reset after click
 		}
 		// In stepped mode, keep toggle state until next press
-		pinBoolOut = sharedState;
+		pinBoolOutR = pinBoolOut = sharedState;
 		pinMouseDown = false;
 		return gmpi::MP_OK;
 	}
@@ -418,12 +433,12 @@ public:
 		ClipDrawingToBounds x(g, getRect());
 		auto r = getRect();
 
-		int width = r.right - r.left;
-		int height = r.bottom - r.top;
+		float width = r.right - r.left;
+		float height = r.bottom - r.top;
 		heightY = height;
 
-		radius = (std::min)(radius, width / 2);
-		radius = (std::min)(radius, height / 2);
+		radius = (std::min<float>)(radius, width / 2);
+		radius = (std::min<float>)(radius, height / 2);
 
 		auto geometry = g.GetFactory().CreatePathGeometry();
 		auto sink = geometry.Open();
@@ -532,29 +547,29 @@ public:
 		g.DrawGeometry(geometry, outlineBrush, thickness);
 
 		//drawing text
-		if (pinDisplayHint)
+		if (pinDisplayText)
 		{
-			int minFontSize = 8;
-			int maxFontSize = 40;
-			int fontSize;
+			float minFontSize = 8;
+			float maxFontSize = 40;
+			float fontSize;
 
 			// Determine base font size
 			if (pinFontSize != 0)
 			{
 				// Use user-defined font size, constrained within min/max
-				fontSize = std::max<int32_t>(minFontSize, std::min<int32_t>(maxFontSize, pinFontSize));
+				fontSize = std::max<float>(minFontSize, std::min<float>(maxFontSize, pinFontSize));
 			}
 			else
 			{
-				int buttonHeight = getRect().bottom - getRect().top;
-				fontSize = static_cast<int>(buttonHeight * 0.5f);
-				fontSize = std::max<>(minFontSize, std::min<>(maxFontSize, fontSize));
+				float buttonHeight = getRect().bottom - getRect().top;
+				fontSize = static_cast<float>(buttonHeight * 0.5f);
+				fontSize = std::max<float>(minFontSize, std::min<float>(maxFontSize, fontSize));
 			}
 
 			// Adjust font size if pressed
 			if (sharedState)
 			{
-				fontSize = std::max<>(minFontSize, fontSize - 1); // reduce size when pressed
+				fontSize = std::max<float>(minFontSize, fontSize - 1); // reduce size when pressed
 
 			}
 
