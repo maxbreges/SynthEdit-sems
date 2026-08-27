@@ -1,4 +1,4 @@
-#include "mp_gui.h"
+#include "mp_sdk_gui2.h"
 
 using namespace gmpi;
 
@@ -8,7 +8,7 @@ using namespace gmpi;
 #include <objbase.h>  // For CoInitialize, CoUninitialize
 #else
 #include <string>
-#import <Cocoa/Cocoa.h>
+#include <cstdlib>
 #endif
 
 class FolderDialogGui final : public SeGuiInvisibleBase
@@ -20,13 +20,25 @@ class FolderDialogGui final : public SeGuiInvisibleBase
     void onSetTrigger()
     {
         // When trigger pin is set, open folder dialog
-        if (!pinTrigger && m_prev_trigger == true)
+        if (pinTrigger && !m_prev_trigger)
         {
             selectFolder();
         }
         m_prev_trigger = pinTrigger;
     }
-    
+
+    void onSetBackslash()
+    {
+        if (pinBackslash)
+        {
+#if defined(_WIN32)
+            wbackslash = L'\\';
+#elif defined(__APPLE__)
+            backslash = "/";
+#endif
+        }
+    }
+
     StringGuiPin pinFolderName;
     BoolGuiPin pinTrigger;
     BoolGuiPin pinBackslash;
@@ -39,22 +51,6 @@ public:
         initializePin(pinBackslash, static_cast<MpGuiBaseMemberPtr2>(&FolderDialogGui::onSetBackslash));
     }
 
-    void onSetBackslash()
-    {
-        if (pinBackslash)
-        {
-#if defined(_WIN32)
-            
-            wbackslash = L'\\';
-#elif defined(__APPLE__)
-            backslash = "/";
-#endif
-        }
-        else
-        {
-        }
-    }
-
 private:
     void selectFolder()
     {
@@ -65,13 +61,17 @@ private:
 #endif
     }
 
-    void selectFolderWindows(); // Declaration only
-    void selectFolderMac();     // Declaration only
+    void selectFolderWindows(); // Declaration
+    void selectFolderMac();     // Declaration
 };
 
-// Now define the platform-specific functions outside the class
+// Platform-specific implementations
 
 #ifdef _WIN32
+#include <windows.h>
+#include <shobjidl.h>
+#include <objbase.h>
+
 void FolderDialogGui::selectFolderWindows()
 {
     // Initialize COM
@@ -98,9 +98,8 @@ void FolderDialogGui::selectFolderWindows()
                 hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
                 if (SUCCEEDED(hr))
                 {
-                    // Update pinFolderName
+                    // Update pinFolderName with selected path
                     pinFolderName = std::wstring(pszFilePath) + wbackslash;
-
                     CoTaskMemFree(pszFilePath);
                 }
                 pItem->Release();
@@ -113,29 +112,32 @@ void FolderDialogGui::selectFolderWindows()
 #endif
 
 #ifdef __APPLE__
-// Your macOS implementation remains the same
+// macOS implementation using system call to 'osascript'
+#include <cstdio>
+
 void FolderDialogGui::selectFolderMac()
 {
-    @autoreleasepool{
-        NSOpenPanel * panel = [NSOpenPanel openPanel];
-        [panel setCanChooseDirectories : YES] ;
-        [panel setCanChooseFiles : NO] ;
-        [panel setAllowsMultipleSelection : NO] ;
+    const char* command = "osascript -e 'POSIX path of (choose folder)'";
+    FILE* pipe = popen(command, "r");
+    if (!pipe) return;
 
-        if ([panel runModal] == NSFileHandlingPanelOKButton) {
-            NSURL* url = [[panel URLs]firstObject];
-            if (url) {
-                NSString* path = [url path];
-                // Convert NSString to std::string
-                std::string folderPath([path UTF8String]);
-                pinFolderName = folderPath + backslash;
-            }
-        }
+    char buffer[1024]; // larger buffer for longer paths
+    std::string result;
+    if (fgets(buffer, sizeof(buffer), pipe))
+    {
+        result = buffer;
+        // Remove trailing newline
+        if (!result.empty() && result.back() == '\n')
+            result.pop_back();
+
+        // Update pinFolderName
+        pinFolderName = result;
     }
+    pclose(pipe);
 }
 #endif
 
 namespace
 {
-	auto r = Register<FolderDialogGui>::withId(L"mxFolderDialog");
+    auto r = Register<FolderDialogGui>::withId(L"mxFolderDialog");
 }
