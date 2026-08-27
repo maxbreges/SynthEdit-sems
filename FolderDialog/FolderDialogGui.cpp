@@ -11,7 +11,8 @@ using namespace gmpi;
 class FolderDialogGui final : public SeGuiInvisibleBase
 {
     bool m_prev_trigger = false;
-    std::wstring backslash;
+    std::string backslash;
+    std::wstring wbackslash;
 
     void onSetTrigger()
     {
@@ -40,7 +41,8 @@ public:
         if (pinBackslash)
         {
 #if defined(_WIN32)
-            backslash = L'\\';
+            
+            wbackslash = L'\\';
 #elif defined(__APPLE__)
             backslash = "/";
 #endif
@@ -94,7 +96,7 @@ void FolderDialogGui::selectFolderWindows()
                 if (SUCCEEDED(hr))
                 {
                     // Update pinFolderName
-                    pinFolderName = std::wstring(pszFilePath) + backslash;
+                    pinFolderName = std::wstring(pszFilePath) + wbackslash;
 
                     CoTaskMemFree(pszFilePath);
                 }
@@ -111,23 +113,19 @@ void FolderDialogGui::selectFolderWindows()
 // Your macOS implementation remains the same
 void FolderDialogGui::selectFolderMac()
 {
-    // Ensure your source file is compiled as Objective-C++
     @autoreleasepool{
         NSOpenPanel * panel = [NSOpenPanel openPanel];
         [panel setCanChooseDirectories : YES] ;
         [panel setCanChooseFiles : NO] ;
         [panel setAllowsMultipleSelection : NO] ;
 
-        NSInteger result = [panel runModal];
-        if (result == NSFileHandlingPanelOKButton) {
+        if ([panel runModal] == NSFileHandlingPanelOKButton) {
             NSURL* url = [[panel URLs]firstObject];
             if (url) {
                 NSString* path = [url path];
-                const char* utf8Path = [path UTF8String];
-
-                // Convert UTF8 C-string to std::wstring
-                std::wstring wpath(utf8Path, utf8Path + strlen(utf8Path));
-                pinFolderName = wpath;
+                // Convert NSString to std::string
+                std::string folderPath([path UTF8String]);
+                pinFolderName = folderPath + backslash;
             }
         }
     }
