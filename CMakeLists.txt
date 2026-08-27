@@ -186,7 +186,7 @@ include(plugin_helper.cmake)
 #add_subdirectory(ListFiles)
 #add_subdirectory(MIDICC)
 #add_subdirectory (AssymetricPanKnob)
-
+add_subdirectory (FolderDialog)
 
 #add_subdirectory (AutoFixedValues)
 #add_subdirectory (AutoFixedValuesInt)

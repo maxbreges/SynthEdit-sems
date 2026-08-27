@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="mxFolderDialog" name="Folder Dialog" category="mx/GUI/Utility">
+        <GUI>
+            <Pin name="Folder Name" datatype="string"/>
+            <Pin name="Trigger" datatype="bool" direction="out"/>
+			<Pin name="Add backslash" datatype="bool" default="1" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
