@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My ExtractExt" name="Extract Extension" category="Sub-Controls">
+        <GUI>
+            <Pin name="File" datatype="string"/>
+            <Pin name="Extension" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
