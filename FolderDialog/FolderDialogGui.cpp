@@ -1,4 +1,4 @@
-#include "mp_sdk_gui2.h"
+#include "mp_gui.h"
 
 using namespace gmpi;
 
@@ -6,6 +6,9 @@ using namespace gmpi;
 #include <windows.h>
 #include <shobjidl.h> // For IFileOpenDialog, FOS_PICKFOLDERS
 #include <objbase.h>  // For CoInitialize, CoUninitialize
+#else
+#include <string>
+#import <Cocoa/Cocoa.h>
 #endif
 
 class FolderDialogGui final : public SeGuiInvisibleBase
