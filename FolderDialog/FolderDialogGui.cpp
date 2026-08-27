@@ -111,22 +111,23 @@ void FolderDialogGui::selectFolderWindows()
 // Your macOS implementation remains the same
 void FolderDialogGui::selectFolderMac()
 {
+    // Ensure your source file is compiled as Objective-C++
     @autoreleasepool{
         NSOpenPanel * panel = [NSOpenPanel openPanel];
         [panel setCanChooseDirectories : YES] ;
         [panel setCanChooseFiles : NO] ;
         [panel setAllowsMultipleSelection : NO] ;
 
-        if ([panel runModal] == NSModalResponseOK)
-        {
+        NSInteger result = [panel runModal];
+        if (result == NSFileHandlingPanelOKButton) {
             NSURL* url = [[panel URLs]firstObject];
-            if (url)
-            {
+            if (url) {
                 NSString* path = [url path];
-                // Convert NSString to std::wstring
                 const char* utf8Path = [path UTF8String];
+
+                // Convert UTF8 C-string to std::wstring
                 std::wstring wpath(utf8Path, utf8Path + strlen(utf8Path));
-                pinFolderName = wpath + backslash;
+                pinFolderName = wpath;
             }
         }
     }
