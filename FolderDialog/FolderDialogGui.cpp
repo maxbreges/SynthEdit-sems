@@ -2,15 +2,6 @@
 
 using namespace gmpi;
 
-#ifdef _WIN32
-#include <windows.h>
-#include <shobjidl.h> // For IFileOpenDialog, FOS_PICKFOLDERS
-#include <objbase.h>  // For CoInitialize, CoUninitialize
-#else
-#include <string>
-#include <cstdlib>
-#endif
-
 class FolderDialogGui final : public SeGuiInvisibleBase
 {
     bool m_prev_trigger = false;
@@ -20,12 +11,16 @@ class FolderDialogGui final : public SeGuiInvisibleBase
     void onSetTrigger()
     {
         // When trigger pin is set, open folder dialog
-        if (pinTrigger && !m_prev_trigger)
+        if (!pinTrigger && m_prev_trigger == true)
         {
             selectFolder();
         }
         m_prev_trigger = pinTrigger;
     }
+
+    StringGuiPin pinFolderName;
+    BoolGuiPin pinTrigger;
+    BoolGuiPin pinBackslash;
 
     void onSetBackslash()
     {
@@ -38,10 +33,6 @@ class FolderDialogGui final : public SeGuiInvisibleBase
 #endif
         }
     }
-
-    StringGuiPin pinFolderName;
-    BoolGuiPin pinTrigger;
-    BoolGuiPin pinBackslash;
 
 public:
     FolderDialogGui()
