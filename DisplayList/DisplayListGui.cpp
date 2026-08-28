@@ -47,22 +47,21 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 
 	void onSetList()
 	{
-
-		it_enum_list it(pinListItems.getValue());
+		it_enum_list it(pinListItems);
 		it.FindValue(pinListIndex);
 		int listsize = it.size(); // This would get the size of the list or number of list items total it.size()
 		if (it.IsDone())
 		{
-			pinText = std::string();
+			pinText = std::wstring();
 		}
 		else
 		{
-			pinText = it.CurrentItem()->text;
-			pinSelection = pinText;
+			pinText = it.CurrentItem()->text;			
 		}
 
 		listsize_ = listsize - 1;
 		pinListSize = listsize_;
+		pinSelection = pinText;
 		invalidateRect();
 	}
 
@@ -70,9 +69,11 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	{
 	}
 
-	void onSetListSize()
+	void onSetItemList()
 	{
+		invalidateRect();
 	}
+
 	void onSetCornerRadius()
 	{
 		invalidateRect();
@@ -87,7 +88,7 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	StringGuiPin pinText;
 	StringGuiPin pinTextColor;
 	StringGuiPin pinFont;
-	IntGuiPin pinFontSize;
+	FloatGuiPin pinFontSize;
 	FloatGuiPin pinAnimPosShift;
 	FloatGuiPin pinAnimPosCtrl;
 	IntGuiPin pinListIndex;
@@ -95,9 +96,8 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	IntGuiPin pinListSize;
 	BoolGuiPin pinMouseDown;
 	BoolGuiPin pinColorAdj;
-	IntGuiPin pinCornerRadius;
+	FloatGuiPin pinCornerRadius;
 	StringGuiPin pinSelection;
-	BoolGuiPin pinShiftHold;
 
 public:
 	DisplayList()
@@ -105,20 +105,19 @@ public:
 		initializePin(pinHint);
 		initializePin(pinBgColor);
 		initializePin(pinTopColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTopColor));
-		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetText));
+		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
 		initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextColor));
 		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetTextFont));
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetFontSize));
 		initializePin(pinAnimPosShift, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 		initializePin(pinAnimPosCtrl, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 		initializePin(pinListIndex, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
-		initializePin(pinListItems, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
-		initializePin(pinListSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetListSize));
+		initializePin(pinListItems, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetItemList));
+		initializePin(pinListSize);
 		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetMouseDown));
 		initializePin(pinColorAdj, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetAnimationPosition));
 		initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetCornerRadius));
-		initializePin(pinSelection, static_cast<MpGuiBaseMemberPtr2>(&DisplayList::onSetList));
-		initializePin(pinShiftHold);
+		initializePin(pinSelection);
 	}
 
 	//========================================
@@ -137,10 +136,6 @@ public:
 		{
 			return gmpi::MP_OK; // Indicate successful hit, so right-click menu can show.
 		}
-		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
-		{
-			pinShiftHold = true;
-		}
 
 		pointPrevious = point;	// note first point.
 		pinMouseDown = true;
@@ -151,14 +146,14 @@ public:
 
 	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
 	{
-		float new_pos = pinListIndex;
+		float new_pos = (float)pinListIndex;
 		new_pos = new_pos + delta / 120.0f;
 		if (new_pos < 0.f)
 			new_pos = 0.f;
-		if (new_pos > listsize_)
-			new_pos = listsize_;
+		if (new_pos > (float)listsize_)
+			new_pos = (float)listsize_;
 
-		pinListIndex = new_pos;
+		pinListIndex = (int)new_pos;
 
 		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
 		{
@@ -321,7 +316,6 @@ public:
 
 		pinColorAdj = false;
 		pinMouseDown = false;
-		pinShiftHold = false;
 
 		releaseCapture();
 
@@ -350,8 +344,8 @@ public:
 
 		//======================================
 		auto r = getRect();
-		int width = r.right - r.left;
-		int height = r.bottom - r.top;
+		float width = r.right - r.left;
+		float height = r.bottom - r.top;
 
 		auto topCol = FromHexStringBackwardCompatible(pinTopColor);
 		auto botCol = topCol;
@@ -360,10 +354,10 @@ public:
 			botCol = FromHexStringBackwardCompatible(pinBgColor);
 		}
 
-		int radius = (int)pinCornerRadius;
+		float radius = pinCornerRadius;
 
-		radius = (std::min)(radius, width / 2);
-		radius = (std::min)(radius, height / 2);
+		radius = (std::min<float>)(radius, width / 2);
+		radius = (std::min<float>)(radius, height / 2);
 
 		auto geometry = g.GetFactory().CreatePathGeometry();
 		auto sink = geometry.Open();

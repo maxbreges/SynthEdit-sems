@@ -8,21 +8,20 @@
 			<Pin name="Text" datatype="string" direction="out" private="true"/>
 			<Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="false"/>
 			<Pin name="Text Font" datatype="string" default="Times New Roman" isMinimised="true"/>
-			<Pin name="Font Size" datatype="int" default="16" isMinimised="true" />
+			<Pin name="Font Size" datatype="float" default="16" isMinimised="true" />
 			<Pin name="AnimPos+Shift" datatype="float" direction="in" private="false"/>
 			<Pin name="AnimPos+Ctrl" datatype="float" direction="in" private="true"/>
 
 			<Pin name="Choice" datatype="int" direction="in" />
-			<Pin name="List Items" datatype="string" direction="in" />
+			<Pin name="Item List" datatype="string" direction="in" />
 
 			<Pin name="List Size" datatype="int" direction="in" private="true"/>
 
 			<Pin name="PopUp open" datatype="bool" direction="out"/>
 
 			<Pin name="Shift+Drag" datatype="bool" private="true"/>
-			<Pin name="Corner Radius" datatype="int" isMinimised="true" default="5"/>
+			<Pin name="Corner Radius" datatype="float" isMinimised="true" default="5"/>
 			<Pin name="Selection" datatype="string" direction="in" />
-			<Pin name="Shift hold" datatype="bool" direction="out"/>
 		</GUI>
 	</Plugin>
 </PluginList>
