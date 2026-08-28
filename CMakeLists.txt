@@ -188,6 +188,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (AssymetricPanKnob)
 #add_subdirectory (FolderDialog)
 #add_subdirectory (ExtractExt)
+add_subdirectory (FolderListDir)
 
 #add_subdirectory (AutoFixedValues)
 #add_subdirectory (AutoFixedValuesInt)

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My FolderListDir" name="Folder List Directory" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="Folder Path" datatype="string"/>
+            <Pin name="Choice" datatype="int" direction="out"/>
+            <Pin name="Item List" datatype="string" direction="out"/>
+			<Pin name="Extension" datatype="string" default=".wav" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
