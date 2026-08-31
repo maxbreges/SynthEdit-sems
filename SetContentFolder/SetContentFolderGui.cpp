@@ -13,8 +13,6 @@ class SetContentFolderGui final : public SeGuiInvisibleBase
 
 	bool onSelectFolder = false;
 
-	std::wstring fileContent; //user custom path
-
 	StringGuiPin pinAppDirPath;
 	BoolGuiPin pinTrigger;
 	StringGuiPin pinDirectoryPath;
@@ -50,6 +48,13 @@ public:
 		m_prev_trigger = pinTrigger;
 	}
 
+#if defined(_WIN32)
+	std::wstring wfileContent; //user custom path
+#elif defined(__APPLE__)
+	std::string fileContent; //user custom path
+#endif
+	
+
 	void onSetAppDirPath()
 	{
 		if (!onSelectFolder)
@@ -58,7 +63,11 @@ public:
 		}
 		else
 		{
+#if defined(_WIN32)
+			pinDirectoryPath = wfileContent;
+#elif defined(__APPLE__)
 			pinDirectoryPath = fileContent;
+#endif			
 		}
 	}
 
@@ -128,7 +137,7 @@ void SetContentFolderGui::selectFolderWindows()
 				if (SUCCEEDED(hr))
 				{
 					// Append backslash if needed
-					fileContent = std::wstring(pszFilePath) + wbackslash;
+					wfileContent = std::wstring(pszFilePath) + wbackslash;
 					onSelectFolder = true;
 					onSetAppDirPath();
 					CoTaskMemFree(pszFilePath);
