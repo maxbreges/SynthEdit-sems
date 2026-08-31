@@ -189,6 +189,8 @@ include(plugin_helper.cmake)
 #add_subdirectory (FolderDialog)
 #add_subdirectory (ExtractExt)
 #add_subdirectory (FolderListDir)
+add_subdirectory (SetContentFolder)
+
 
 #add_subdirectory (AutoFixedValues)
 #add_subdirectory (AutoFixedValuesInt)
