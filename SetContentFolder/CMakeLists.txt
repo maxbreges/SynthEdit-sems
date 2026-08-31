@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.19)
 
 project(SetContentFolder)
 
@@ -7,6 +7,5 @@ build_gmpi_plugin(
 	HAS_DSP
 	HAS_GUI
 	SOURCE_FILES
-	  SetContentFolder.cpp
 	  SetContentFolderGui.cpp
 )
