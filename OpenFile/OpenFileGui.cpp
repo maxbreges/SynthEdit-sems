@@ -1,5 +1,9 @@
 #include "mp_gui.h"
 
+//#include <iostream>
+#include <fstream>
+//#include <string>
+
 using namespace gmpi;
 using namespace gmpi_gui;
 
@@ -12,6 +16,11 @@ class OpenFileGui final : public SeGuiInvisibleBase
  	void onSetTrigger()
 	{
 		OnBrowseButton();
+	}
+
+	bool file_does_not_exist(const std::string& filename) {
+		std::ifstream file(filename);
+		return !file.is_open();
 	}
 
 	BoolGuiPin pinTrigger;
@@ -63,7 +72,10 @@ public:
 		}
 
 		nativeFileDialog.setNull(); // release it.
-
+		if (file_does_not_exist(pinFilePath))
+		{
+			pinFilePath = "The file path is invalid";
+		}
 		pinLed = false;
 	}
 };
