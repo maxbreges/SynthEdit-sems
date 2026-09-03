@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My StringRemainder" name="String Remainder" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="String1 In" datatype="string"/>
+            <Pin name="String2 In" datatype="string"/>
+            <Pin name="Remainder" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
