@@ -250,9 +250,9 @@ public:
 
 		// Platform-specific text drawing
 #ifdef _WIN32
-		g.DrawTextU(WStringToUtf8(pinText.getValue()), tf, getRect(), brush, 1);
+		g.DrawTextU(WStringToUtf8(pinText.getValue()), tf, r, brush, 1);
 #else
-		g.DrawTextU(pinText, tf, getRect(), brush, 1);
+		g.DrawTextU(pinText, tf, r, brush, 1);
 #endif
 
 		return gmpi::MP_OK;
