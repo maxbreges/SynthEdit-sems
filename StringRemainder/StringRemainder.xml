@@ -5,6 +5,7 @@
             <Pin name="String1 In" datatype="string"/>
             <Pin name="String2 In" datatype="string"/>
             <Pin name="Remainder" datatype="string" direction="out"/>
+			<Pin name="Choice" datatype="int" direction="out" />
         </GUI>
     </Plugin>
 </PluginList>

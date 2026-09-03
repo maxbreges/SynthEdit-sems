@@ -18,6 +18,7 @@ class StringRemainderGui final : public SeGuiInvisibleBase
  	StringGuiPin pinString1;
  	StringGuiPin pinString2;
  	StringGuiPin pinStringOut;
+	IntGuiPin pinSwitch;
 
 public:
 	StringRemainderGui()
@@ -25,6 +26,7 @@ public:
 		initializePin( pinString1, static_cast<MpGuiBaseMemberPtr2>(&StringRemainderGui::onSetString1) );
 		initializePin( pinString2, static_cast<MpGuiBaseMemberPtr2>(&StringRemainderGui::onSetString2) );
 		initializePin( pinStringOut );
+		initializePin(pinSwitch);
 	}
 
 	void stringRemainder()
@@ -37,9 +39,11 @@ public:
 			// Output the remainder
 			std::string remainder = s2.substr(s1.size());
 			pinStringOut = remainder; // Output: Apple
+			pinSwitch = 0;
 		}
 		else {
 			pinStringOut = pinString2;
+			pinSwitch = 1;
 		}
 	}
 };
