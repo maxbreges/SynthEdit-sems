@@ -243,8 +243,12 @@ public:
 			tf.SetTextAlignment(TextAlignment::Center);
 		
 		if (pinMultiline)
-		{	tf.SetWordWrapping(WordWrapping::Wrap);	}
-		else { tf.SetWordWrapping(WordWrapping::NoWrap); }
+		{
+			r.bottom = r.top + (r.bottom - r.top);
+			tf.SetWordWrapping(WordWrapping::Wrap);	}
+		else {
+			//r.bottom = r.top + pinFontSize;
+			tf.SetWordWrapping(WordWrapping::NoWrap); }
 
 		brush.SetColor(Color::FromHexString(pinTextColor));
 
