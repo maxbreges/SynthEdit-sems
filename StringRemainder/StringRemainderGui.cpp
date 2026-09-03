@@ -4,9 +4,11 @@ using namespace gmpi;
 
 class StringRemainderGui final : public SeGuiInvisibleBase
 {
+	int choice = 0;
+
  	void onSetString1()
 	{
-		stringRemainder();
+		
 	}
 
  	void onSetString2()
@@ -35,15 +37,20 @@ public:
 		std::string s2 = pinString2;
 
 		// Check if s1 is a prefix of s2
+
 		if (s2.compare(0, s1.size(), s1) == 0) {
 			// Output the remainder
 			std::string remainder = s2.substr(s1.size());
 			pinStringOut = remainder; // Output: Apple
-			pinSwitch = 0;
+			choice = 1;
+			pinSwitch = choice;
 		}
 		else {
+
 			pinStringOut = pinString2;
-			pinSwitch = 1;
+			choice = 0;
+
+			pinSwitch = choice;
 		}
 	}
 };
