@@ -238,16 +238,13 @@ public:
 		const char* fontFace = str.c_str();
 		TextFormat tf = g.GetFactory().CreateTextFormat(pinFontSize, fontFace);
 
-		tf.SetParagraphAlignment(ParagraphAlignment::Center),
-
 			tf.SetTextAlignment(TextAlignment::Center);
 		
 		if (pinMultiline)
 		{
-			r.bottom = r.top + (r.bottom - r.top);
 			tf.SetWordWrapping(WordWrapping::Wrap);	}
 		else {
-			//r.bottom = r.top + pinFontSize;
+			tf.SetParagraphAlignment(ParagraphAlignment::Center),
 			tf.SetWordWrapping(WordWrapping::NoWrap); }
 
 		brush.SetColor(Color::FromHexString(pinTextColor));
