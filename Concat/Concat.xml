@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+	<Plugin id="Concat" name="Concat" category="mx/Sub-Controls">
+		<GUI>
+			<Pin name="Text" datatype="string"/>
+			<Pin name="Text" datatype="string"/>
+			<Pin name="Concatenated" datatype="string"/>
+		</GUI>
+	</Plugin>
+</PluginList>
