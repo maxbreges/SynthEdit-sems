@@ -43,7 +43,11 @@ public:
 
 		// Now, 'folderPath' contains the directory path only
 		// You can use it to create files later, or just to get the folder path
-		pinCommonPathOut2Gui = pinCommonPathOut = folderPath + (L"\\");
+#if defined(_WIN32)
+		pinAppDirPathOut2Gui = pinAppDirPathOut = folderPath + (L"\\");
+#elif defined(__APPLE__)
+		pinAppDirPathOut2Gui = pinAppDirPathOut = folderPath + (L"/");
+#endif
 	}
 };
 
