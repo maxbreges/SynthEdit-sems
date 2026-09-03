@@ -49,6 +49,11 @@ class DisplayText final : public gmpi_gui::MpGuiGfxBase
 		invalidateRect();
 	}
 
+	void onSetMultiline()
+	{
+		invalidateRect();
+	}
+
 	StringGuiPin pinText;
 	StringGuiPin pinHint;
 	StringGuiPin pinBgColor;
@@ -61,6 +66,8 @@ class DisplayText final : public gmpi_gui::MpGuiGfxBase
 	BoolGuiPin pinCtrlClick;
 	IntGuiPin pinAlignV;
 	FloatGuiPin pinAlignY;
+
+	BoolGuiPin pinMultiline;
 
 
 public:
@@ -78,6 +85,7 @@ public:
 		initializePin(pinCtrlClick);
 		initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetAlignV));
 		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetAlignY));
+		initializePin(pinMultiline, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetMultiline));
 	}
 
 	//========================================
@@ -233,7 +241,10 @@ public:
 		tf.SetParagraphAlignment(ParagraphAlignment::Center),
 
 			tf.SetTextAlignment(TextAlignment::Center);
-			tf.SetWordWrapping(WordWrapping::Wrap);
+		
+		if (pinMultiline)
+		{	tf.SetWordWrapping(WordWrapping::Wrap);	}
+		else { tf.SetWordWrapping(WordWrapping::NoWrap); }
 
 		brush.SetColor(Color::FromHexString(pinTextColor));
 
@@ -246,12 +257,6 @@ public:
 
 		return gmpi::MP_OK;
 	}
-
-/*	std::string getDisplayText()
-	{
-		std::wstring wideText = pinText.getValue(); // assuming this returns std::wstring
-		return WStringToUtf8(wideText);
-	}*/
 
 };
 
