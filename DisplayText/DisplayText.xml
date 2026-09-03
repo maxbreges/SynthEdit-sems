@@ -16,7 +16,7 @@
             <Pin name="Align" datatype="enum" default="2" isMinimised="true" metadata="Top,Bottom,Center"/>
             <Pin name="Top/Bottom Padding" datatype="float" default="4" isMinimised="true"/>
 
-			<Pin name="Multiline" datatype="bool" minimised="true"/>
+			<Pin name="Multiline" datatype="bool" isMinimised="true"/>
         </GUI>
     </Plugin>
 </PluginList>
