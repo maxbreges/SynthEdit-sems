@@ -241,7 +241,7 @@ public:
 #ifdef _WIN32
 		g.DrawTextU(WStringToUtf8(pinText.getValue()), tf, getRect(), brush, 1);
 #else
-		g.DrawTextU(pinText.getValue(), tf, getRect(), brush, 1);
+		g.DrawTextU(pinText, tf, getRect(), brush, 1);
 #endif
 
 		return gmpi::MP_OK;
