@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="resolveFilename" name="resolveFilename" category="mx/Controls">
+    <Plugin id="resolveFilename" name="Resolve Filename" category="mx/Controls">
 		<Parameters>
-			<Parameter id="0" name="From DSP to Gui" datatype="string" />
+			<Parameter id="0" name="From DSP to Gui" datatype="string" private="true" ignorePatchChange="true"/>
 		</Parameters>
 		<Audio>
 			<Pin name="App Dir Path" datatype="string" default="AppDirPath" private="true"/>

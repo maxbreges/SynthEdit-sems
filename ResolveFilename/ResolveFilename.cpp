@@ -7,15 +7,15 @@ using namespace gmpi;
 class ResolveFilename final : public MpBase2
 {
 	StringInPin pinFileName;
-	StringOutPin pinCommonPathOut;
-	StringOutPin pinCommonPathOut2Gui;
+	StringOutPin pinAppDirPathOut;
+	StringOutPin pinAppDirPathOut2Gui;
 
 public:
 	ResolveFilename()
 	{
 		initializePin(pinFileName);
-		initializePin( pinCommonPathOut );
-		initializePin( pinCommonPathOut2Gui );
+		initializePin( pinAppDirPathOut );
+		initializePin( pinAppDirPathOut2Gui );
 	}
 
 	void onSetPins() override
@@ -44,10 +44,13 @@ public:
 		// Now, 'folderPath' contains the directory path only
 		// You can use it to create files later, or just to get the folder path
 #if defined(_WIN32)
-		pinAppDirPathOut2Gui = pinAppDirPathOut = folderPath + (L"\\");
+		pinAppDirPathOut = folderPath + (L"\\");
+		pinAppDirPathOut2Gui = pinAppDirPathOut;
 #elif defined(__APPLE__)
-		pinAppDirPathOut2Gui = pinAppDirPathOut = folderPath + (L"/");
+		pinAppDirPathOut = folderPath + (L"/");
+		pinAppDirPathOut2Gui = pinAppDirPathOut;
 #endif
+		
 	}
 };
 
