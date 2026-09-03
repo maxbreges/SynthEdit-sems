@@ -55,11 +55,9 @@ class DisplayText final : public gmpi_gui::MpGuiGfxBase
 	StringGuiPin pinTopColor;
 	StringGuiPin pinTextColor;
 	StringGuiPin pinFont;
-	IntGuiPin pinFontSize;
-	FloatGuiPin pinAnimPosShift;
-	FloatGuiPin pinAnimPosAlt;
+	FloatGuiPin pinFontSize;
 	BoolGuiPin pinMouseDown;
-	IntGuiPin pinCornerRadius;
+	FloatGuiPin pinCornerRadius;
 	BoolGuiPin pinCtrlClick;
 	IntGuiPin pinAlignV;
 	FloatGuiPin pinAlignY;
@@ -75,8 +73,6 @@ public:
 		initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetTextColor));
 		initializePin(pinFont, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetTextFont));
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetFontSize));
-		initializePin(pinAnimPosShift);
-		initializePin(pinAnimPosAlt);
 		initializePin(pinMouseDown);
 		initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&DisplayText::onSetCornerRadius));
 		initializePin(pinCtrlClick);
@@ -112,57 +108,6 @@ public:
 		return gmpi::MP_OK;
 	}
 
-	int32_t MP_STDCALL onMouseWheel(int32_t flags, int32_t delta, MP1_POINT point) override
-	{
-		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
-		{
-			float new_pos = pinAnimPosAlt + delta / 12000.0f;
-			if (new_pos < 0.f)
-				new_pos = 0.f;
-			if (new_pos > 1.f)
-				new_pos = 1.f;
-			pinAnimPosAlt = new_pos;
-		}
-
-		invalidateRect();
-
-		return gmpi::MP_OK;
-	}
-
-	int32_t MP_STDCALL onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
-	{
-		if (!getCapture())
-		{
-			return gmpi::MP_UNHANDLED;
-		}
-		// ignore horizontal scrolling
-		if (0 != (flags & gmpi_gui_api::GG_POINTER_KEY_ALT))
-			return gmpi::MP_UNHANDLED;
-
-		if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
-		{
-			Point offset(point.x - pointPrevious.x, point.y - pointPrevious.y); // TODO overload subtraction.
-
-			float coarseness = 0.004f;
-
-			float new_pos = pinAnimPosShift;
-			new_pos = new_pos - coarseness * (float)offset.y;
-
-			if (new_pos < 0.f)
-				new_pos = 0.f;
-
-			if (new_pos > 1.f)
-				new_pos = 1.f;
-
-			pinAnimPosShift = new_pos;
-		}
-
-		pointPrevious = point;
-		invalidateRect();
-
-		return gmpi::MP_OK;
-	}
-
 	int32_t onPointerUp(int32_t flags, struct GmpiDrawing_API::MP1_POINT point)
 	{
 		pinCtrlClick = false;
@@ -193,8 +138,8 @@ public:
 
 		//======================================
 		auto r = getRect();
-		int width = r.right - r.left;
-		int height = r.bottom - r.top;
+		float width = r.right - r.left;
+		float height = r.bottom - r.top;
 
 		auto topCol = FromHexStringBackwardCompatible(pinTopColor);
 		auto botCol = topCol;
@@ -203,10 +148,10 @@ public:
 			botCol = FromHexStringBackwardCompatible(pinBgColor);
 		}
 
-		int radius = (int)pinCornerRadius;
+		float radius = pinCornerRadius;
 
-		radius = (std::min)(radius, width / 2);
-		radius = (std::min)(radius, height / 2);
+		radius = (std::min<float>)(radius, width / 2);
+		radius = (std::min<float>)(radius, height / 2);
 
 		auto geometry = g.GetFactory().CreatePathGeometry();
 		auto sink = geometry.Open();
@@ -288,8 +233,10 @@ public:
 		tf.SetParagraphAlignment(ParagraphAlignment::Center),
 
 			tf.SetTextAlignment(TextAlignment::Center);
+			tf.SetWordWrapping(WordWrapping::Wrap);
 
 		brush.SetColor(Color::FromHexString(pinTextColor));
+
 		// Platform-specific text drawing
 #ifdef _WIN32
 		g.DrawTextU(WStringToUtf8(pinText.getValue()), tf, getRect(), brush, 1);
@@ -299,11 +246,13 @@ public:
 
 		return gmpi::MP_OK;
 	}
+
 /*	std::string getDisplayText()
 	{
 		std::wstring wideText = pinText.getValue(); // assuming this returns std::wstring
-		return WStringToUtf8(pinText.getValue());
+		return WStringToUtf8(wideText);
 	}*/
+
 };
 
 namespace

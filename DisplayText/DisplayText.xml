@@ -8,11 +8,9 @@
             <Pin name="Color" datatype="string" default="FF666666"/>
             <Pin name="Text Color" datatype="string" default="ffffffff"/>
             <Pin name="Font" datatype="string" default="sans-Serif" isMinimised="true"/>
-            <Pin name="Font Size" datatype="int" default="28" isMinimised="false"/>
-            <Pin name="Shift+Drag" datatype="float"/>
-            <Pin name="Shift+MouseWheel" datatype="float"/>
+            <Pin name="Font Size" datatype="float" default="14" isMinimised="true"/>
             <Pin name="Mouse Down" datatype="bool"/>
-            <Pin name="Corner Radius" datatype="int" default="5" isMinimised="true"/>
+            <Pin name="Corner Radius" datatype="float" default="5" isMinimised="true"/>
             <Pin name="Ctrl+click" datatype="bool" direction="out"/>
 			
             <Pin name="Align" datatype="enum" default="2" isMinimised="true" metadata="Top,Bottom,Center"/>
