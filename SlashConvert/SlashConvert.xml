@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My SlashConvert" name="Slash Convert" category="mx/Sub-Controls/Conversion/String" >
+        <GUI>
+            <Pin name="Text In" datatype="string"/>
+			<Pin name="Text In" datatype="string" direction="out"/>
+			<Pin name="Text Out" datatype="string"/>
+            <Pin name="Text Out" datatype="string" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
