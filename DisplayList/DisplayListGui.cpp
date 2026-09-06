@@ -21,7 +21,7 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	}
 	void onSetText()
 	{
-		//pinText = pinListItems;
+		macText = pinText;
 	}
 
 	void onSetTextColor()
@@ -62,6 +62,7 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 		listsize_ = listsize - 1;
 		pinListSize = listsize_;
 		pinSelection = pinText;
+		onSetText();
 		invalidateRect();
 	}
 
@@ -445,7 +446,7 @@ public:
 #ifdef _WIN32
 		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
 #else
-		g.DrawTextU(pinText.getValue(), tf, getRect(), brush);
+		g.DrawTextU(macText, tf, getRect(), brush);
 #endif
 
 		return gmpi::MP_OK;
@@ -455,6 +456,7 @@ public:
 		std::wstring wideText = pinText.getValue(); // assuming this returns std::wstring
 		return WStringToUtf8(wideText);
 	}
+	std::string macText;
 
 	//====================================
 
