@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="GetFilename" name="Get Filename" category="mx/Sub-Controls">
+        <GUI>
+			<Pin name="File Path In" datatype="string" direction="out" />
+			<Pin name="Directory Out" datatype="string"/>
+			<Pin name="Name Out" datatype="string" />
+			<Pin name="Ext Out" datatype="string" />
+        </GUI>
+    </Plugin>
+</PluginList>
