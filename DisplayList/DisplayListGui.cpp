@@ -445,7 +445,7 @@ public:
 #ifdef _WIN32
 		g.DrawTextU(getDisplayText(), tf, getRect(), brush);
 #else
-		g.DrawTextU(pinText, tf, getRect(), brush);
+		g.DrawTextU(pinText.getValue(), tf, getRect(), brush);
 #endif
 
 		return gmpi::MP_OK;
