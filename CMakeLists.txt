@@ -192,7 +192,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (SetContentFolder)
 #add_subdirectory (StringRemainder)
 #add_subdirectory (Concat)
-add_subdirectory (GetFilename)
+#add_subdirectory (GetFilename)
 
 #add_subdirectory (AutoFixedValues)
 #add_subdirectory (AutoFixedValuesInt)
