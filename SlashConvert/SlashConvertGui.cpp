@@ -9,11 +9,13 @@ class SlashConvertGui final : public SeGuiInvisibleBase
  	void onSetText()
 	{
         a = pinTextIn;
+        backslashReverse();
 	}
 
  	void onSetText2()
 	{
         a = pinTextIn2;
+        backslashReverse();
 	}
 
  	StringGuiPin pinTextIn;
