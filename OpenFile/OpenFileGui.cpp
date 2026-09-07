@@ -41,7 +41,7 @@ public:
 		{
 			pinLed = true;
 			filename = pinFilePath.getValue();
-			std::wstring file_extension = getExtension(pinFilePath);
+			//std::wstring file_extension = getExtension(pinFilePath);
 
 			IMpGraphicsHost* dialogHost = 0;
 			getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
@@ -49,7 +49,7 @@ public:
 			if (dialogHost != 0)
 			{
 				dialogHost->createFileDialog(0, nativeFileDialog.GetAddressOf());
-				nativeFileDialog.AddExtensionList(file_extension);
+				//nativeFileDialog.AddExtensionList(file_extension);
 				// caclulate initial directory from file extension, or use default.		
 				if (!filename.empty())
 				{
