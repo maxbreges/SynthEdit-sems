@@ -22,6 +22,7 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 	void onSetText()
 	{
 		macText = pinText;
+		invalidateRect();
 	}
 
 	void onSetTextColor()
@@ -61,8 +62,8 @@ class DisplayList final : public gmpi_gui::MpGuiGfxBase
 
 		listsize_ = listsize - 1;
 		pinListSize = listsize_;
-		pinSelection = pinText;
 		onSetText();
+		pinSelection = pinText;		
 		invalidateRect();
 	}
 
