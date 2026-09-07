@@ -1,5 +1,4 @@
 #include "mp_gui.h"
-#include <fstream>
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -15,17 +14,12 @@ class OpenFileGui final : public SeGuiInvisibleBase
 		OnBrowseButton();
 	}
 
-	bool file_does_not_exist(const std::string& filename) {
-		std::ifstream file(filename);
-		return !file.is_open();
-	}
-
 	// Helper: Get extension 
 	std::wstring getExtension(const std::wstring& ext)
 	{
 		size_t dotPos = ext.find_last_of('.');
 		if (dotPos != std::wstring::npos)
-			return ext.substr(dotPos);
+			return ext.substr(dotPos+1);
 		return ext;
 	}
 
@@ -40,13 +34,13 @@ public:
 		initializePin( pinFilePath );
 		initializePin(pinLed);
 	}
-
+	std::wstring filename;
 	void OnBrowseButton()
 	{		
 		if (!pinTrigger && m_prev_trigger == true)
 		{
 			pinLed = true;
-			auto filename = pinFilePath.getValue();
+			filename = pinFilePath.getValue();
 			std::wstring file_extension = getExtension(pinFilePath);
 
 			IMpGraphicsHost* dialogHost = 0;
@@ -70,15 +64,28 @@ public:
 
 	void OnPopupmenuComplete(int32_t result)
 	{
+#ifdef __APPLE__
+		if (filename.empty())
+		{
+			return;
+		}
+		if (result == gmpi::MP_CANCEL)
+		{
+			pinFilePath = filename;//full path
+		}
 		if (result == gmpi::MP_OK)
 		{
 			pinFilePath = nativeFileDialog.GetSelectedFilename();//full path
-		}		
-		if (result == gmpi::MP_CANCEL)
-		{
-			pinFilePath = pinFilePath;
 		}
+#else
+		if (result == gmpi::MP_OK)
+		{
+			pinFilePath = nativeFileDialog.GetSelectedFilename();//full path
+		}
+#endif
+
 		nativeFileDialog.setNull(); // release it.
+
 		pinLed = false;
 	}
 };
