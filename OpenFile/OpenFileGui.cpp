@@ -1,5 +1,5 @@
 #include "mp_gui.h"
-#include <cwctype> 
+#include <cwctype>
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -21,11 +21,6 @@ class OpenFileGui final : public SeGuiInvisibleBase
 		size_t dotPos = ext.find_last_of('.');
 		if (dotPos != std::wstring::npos)
 			return ext.substr(dotPos+1);
-
-		std::wstring extension = ext;
-		// Convert to lowercase
-		std::transform(extension.begin(), extension.end(), extension.begin(),
-			[](wchar_t c) { return std::towlower(c); });
 		return ext;
 	}
 
@@ -48,6 +43,9 @@ public:
 			pinLed = true;
 			filename = pinFilePath;
 			std::wstring file_extension = getExtension(pinFilePath);
+
+			std::transform(file_extension.begin(), file_extension.end(), file_extension.begin(),
+				[](wchar_t c) { return std::towlower(c); });
 
 			IMpGraphicsHost* dialogHost = 0;
 			getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
