@@ -2,7 +2,6 @@
 #ifndef FILEDIALOG14GUI_H_INCLUDED
 #define FILEDIALOG14GUI_H_INCLUDED
 
-#include "../se_sdk3/mp_sdk_gui2.h"
 #include "../se_sdk3/mp_gui.h"
 
 class FileDialogGui : public SeGuiInvisibleBase
