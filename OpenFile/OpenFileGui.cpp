@@ -40,7 +40,7 @@ public:
 		if (!pinTrigger && m_prev_trigger == true)
 		{
 			pinLed = true;
-			filename = pinFilePath.getValue();
+			filename = pinFilePath;
 			std::wstring file_extension = getExtension(pinFilePath);
 
 			IMpGraphicsHost* dialogHost = 0;
@@ -72,17 +72,14 @@ public:
 	void OnPopupmenuComplete(int32_t result)
 	{
 #ifdef __APPLE__
-		if (filename.empty())
-		{
-			return;
-		}
-		if (result == gmpi::MP_CANCEL)
-		{
-			pinFilePath = filename;//full path
-		}
 		if (result == gmpi::MP_OK)
 		{
 			pinFilePath = nativeFileDialog.GetSelectedFilename();//full path
+		}
+		else if
+		(result == gmpi::MP_CANCEL)
+		{
+			pinFilePath = filename;//full path
 		}
 #else
 		if (result == gmpi::MP_OK)
@@ -92,7 +89,6 @@ public:
 #endif
 
 		nativeFileDialog.setNull(); // release it.
-
 		pinLed = false;
 	}
 };
