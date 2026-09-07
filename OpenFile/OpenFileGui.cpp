@@ -1,4 +1,5 @@
 #include "mp_gui.h"
+#include <cwctype> 
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -20,6 +21,11 @@ class OpenFileGui final : public SeGuiInvisibleBase
 		size_t dotPos = ext.find_last_of('.');
 		if (dotPos != std::wstring::npos)
 			return ext.substr(dotPos+1);
+
+		std::wstring extension = ext;
+		// Convert to lowercase
+		std::transform(extension.begin(), extension.end(), extension.begin(),
+			[](wchar_t c) { return std::towlower(c); });
 		return ext;
 	}
 
