@@ -37,7 +37,7 @@ void FileDialogGui::onSetTrigger()
 		std::wstring filename = pinFileName;
 		std::wstring file_extension = pinFileExtension;
 
-		IMpGraphicsHostBase* dialogHost = 0;
+		IMpGraphicsHost* dialogHost = 0;
 		getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
 
 		if (dialogHost != 0)
