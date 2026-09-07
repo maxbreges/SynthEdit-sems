@@ -1,8 +1,5 @@
 #include "mp_gui.h"
-
-//#include <iostream>
 #include <fstream>
-//#include <string>
 
 using namespace gmpi;
 using namespace gmpi_gui;
@@ -23,6 +20,15 @@ class OpenFileGui final : public SeGuiInvisibleBase
 		return !file.is_open();
 	}
 
+	// Helper: Get extension 
+	std::wstring getExtension(const std::wstring& ext)
+	{
+		size_t dotPos = ext.find_last_of('.');
+		if (dotPos != std::wstring::npos)
+			return ext.substr(dotPos);
+		return ext;
+	}
+
 	BoolGuiPin pinTrigger;
  	StringGuiPin pinFilePath;
 	BoolGuiPin pinLed;	
@@ -40,6 +46,8 @@ public:
 		if (!pinTrigger && m_prev_trigger == true)
 		{
 			pinLed = true;
+			auto filename = pinFilePath.getValue();
+			std::wstring file_extension = getExtension(pinFilePath);
 
 			IMpGraphicsHost* dialogHost = 0;
 			getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
@@ -47,17 +55,13 @@ public:
 			if (dialogHost != 0)
 			{
 				dialogHost->createFileDialog(0, nativeFileDialog.GetAddressOf());
-				
-				// caclulate initial directory from file extension, or use default.
+				nativeFileDialog.AddExtensionList(file_extension);
+				// caclulate initial directory from file extension, or use default.		
+				if (!filename.empty())
 				{
-					auto filename = pinFilePath.getValue();
-
-					if (!filename.empty())
-					{
-						filename = uiHost.resolveFilename(filename);
-						nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
-					}
-				}
+					filename = uiHost.resolveFilename(filename);
+					nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
+				}				
 			}
 			nativeFileDialog.ShowAsync([this](int32_t result) -> void { this->OnPopupmenuComplete(result); });
 		}
@@ -69,13 +73,12 @@ public:
 		if (result == gmpi::MP_OK)
 		{
 			pinFilePath = nativeFileDialog.GetSelectedFilename();//full path
-		}
-
-		nativeFileDialog.setNull(); // release it.
-		if (file_does_not_exist(pinFilePath))
+		}		
+		if (result == gmpi::MP_CANCEL)
 		{
-			pinFilePath = "The file path is invalid";
+			pinFilePath = pinFilePath;
 		}
+		nativeFileDialog.setNull(); // release it.
 		pinLed = false;
 	}
 };
