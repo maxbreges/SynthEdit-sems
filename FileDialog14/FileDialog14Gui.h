@@ -23,6 +23,7 @@ private:
 	StringGuiPin pinFileExtension;
 	BoolGuiPin pinTrigger;
 	BoolGuiPin pinSaveMode;
+	BoolGuiPin pinLed;
 };
 
 #endif

@@ -10,7 +10,7 @@ using namespace gmpi_gui;
 using namespace gmpi_sdk;
 using namespace JmUnicodeConversions;
 
-GMPI_REGISTER_GUI(MP_SUB_TYPE_GUI2, FileDialogGui, L"My FileDialog14");
+GMPI_REGISTER_GUI(MP_SUB_TYPE_GUI, FileDialogGui, L"My FileDialog14");
 
 FileDialogGui::FileDialogGui() :
 	m_prev_trigger(false)
@@ -20,6 +20,7 @@ FileDialogGui::FileDialogGui() :
 	initializePin(pinFileExtension);
 	initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&FileDialogGui::onSetTrigger));
 	initializePin(pinSaveMode);
+	initializePin(pinLed);
 }
 
 std::string FileDialogGui::getDefaultFolder(std::wstring extension)
@@ -32,8 +33,9 @@ std::string FileDialogGui::getDefaultFolder(std::wstring extension)
 void FileDialogGui::onSetTrigger()
 {
 	// trigger on mouse-up
-	if (pinTrigger == false && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
+	if (!pinTrigger && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
+		pinLed = true;
 		std::wstring filename = pinFileName;
 		std::wstring file_extension = pinFileExtension;
 
@@ -200,6 +202,6 @@ void FileDialogGui::OnFileDialogComplete(int32_t result)
 
 		pinFileName = filepath;
 	}
-
+	pinLed = false;
 	nativeFileDialog.setNull(); // release it.
 }
