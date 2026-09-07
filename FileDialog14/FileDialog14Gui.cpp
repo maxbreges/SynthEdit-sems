@@ -35,36 +35,29 @@ void FileDialogGui::onSetTrigger()
 	// trigger on mouse-up
 	if (!pinTrigger && m_prev_trigger == true) // dialog triggered on mouse-up (else dialog grabs focus, button never resets)
 	{
-		pinLed = true;
-		std::wstring filename = pinFileName;
-		std::wstring file_extension = pinFileExtension;
+		
+			pinLed = true;
 
-		IMpGraphicsHost* dialogHost = 0;
-		getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
+			IMpGraphicsHost* dialogHost = 0;
+			getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
 
-		if (dialogHost != 0)
-		{
-			int dialogMode = (int)pinSaveMode;
-			dialogHost->createFileDialog(dialogMode, nativeFileDialog.GetAddressOf());
-
-			if (!nativeFileDialog.isNull())
+			if (dialogHost != 0)
 			{
-				nativeFileDialog.AddExtensionList(pinFileExtension);
+				dialogHost->createFileDialog(0, nativeFileDialog.GetAddressOf());
 
-				auto filename = pinFileName.getValue();
-				if (!filename.empty())
+				// caclulate initial directory from file extension, or use default.
 				{
-					filename = uiHost.resolveFilename(filename);
-					nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
-				}
-				else
-				{
-					nativeFileDialog.setInitialDirectory(getDefaultFolder(pinFileExtension));
-				}
+					auto filename = pinFileName.getValue();
 
-				nativeFileDialog.ShowAsync([this](int32_t result) -> void { this->OnFileDialogComplete(result); });
+					if (!filename.empty())
+					{
+						filename = uiHost.resolveFilename(filename);
+						nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
+					}
+				}
 			}
-		}
+			nativeFileDialog.ShowAsync([this](int32_t result) -> void { this->OnFileDialogComplete(result); });
+		
 	}
 
 	m_prev_trigger = pinTrigger;
