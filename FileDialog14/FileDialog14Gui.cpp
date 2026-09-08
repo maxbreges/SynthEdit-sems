@@ -10,7 +10,7 @@ using namespace gmpi_gui;
 using namespace gmpi_sdk;
 using namespace JmUnicodeConversions;
 
-GMPI_REGISTER_GUI(MP_SUB_TYPE_GUI, FileDialogGui, L"My FileDialog14");
+GMPI_REGISTER_GUI(MP_SUB_TYPE_GUI2, FileDialogGui, L"My FileDialog14");
 
 FileDialogGui::FileDialogGui() :
 	m_prev_trigger(false)
@@ -39,8 +39,8 @@ void FileDialogGui::onSetTrigger()
 		std::wstring filename = pinFileName;
 		std::wstring file_extension = pinFileExtension;
 
-		IMpGraphicsHost* dialogHost = 0;
-		getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
+		IMpGraphicsHostBase* dialogHost = 0;
+		getHost()->queryInterface(SE_IID_GRAPHICS_HOST_BASE, reinterpret_cast<void**>(&dialogHost));
 
 		if (dialogHost != 0)
 		{
