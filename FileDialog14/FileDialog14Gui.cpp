@@ -47,10 +47,12 @@ void FileDialogGui::onSetTrigger()
 			int dialogMode = (int)pinSaveMode;
 			dialogHost->createFileDialog(dialogMode, nativeFileDialog.GetAddressOf());
 
-			//if (!nativeFileDialog.isNull())
+			if (!nativeFileDialog.isNull())
 			{
-				nativeFileDialog.AddExtensionList(pinFileExtension);
-
+#ifdef __APPLE__
+#else
+				nativeFileDialog.AddExtensionList(file_extension);
+#endif
 				auto filename = pinFileName.getValue();
 				if (!filename.empty())
 				{
