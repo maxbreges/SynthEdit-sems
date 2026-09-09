@@ -9,6 +9,8 @@ GmpiGui::FileDialog nativeFileDialog;
 class OpenFileGui final : public SeGuiInvisibleBase
 {
 	bool m_prev_trigger = false;
+	std::wstring filename;
+	std::wstring file_extension;
 
  	void onSetTrigger()
 	{
@@ -35,17 +37,20 @@ public:
 		initializePin( pinFilePath );
 		initializePin(pinLed);
 	}
-	std::wstring filename;
+
+	void updateExtension()
+	{
+		file_extension = getExtension(pinFilePath);
+		std::transform(file_extension.begin(), file_extension.end(), file_extension.begin(),
+			[](wchar_t c) { return std::towlower(c); });
+	}
+
 	void OnBrowseButton()
 	{		
 		if (!pinTrigger && m_prev_trigger == true)
 		{
 			pinLed = true;
 			filename = pinFilePath;
-			std::wstring file_extension = getExtension(pinFilePath);
-
-			std::transform(file_extension.begin(), file_extension.end(), file_extension.begin(),
-				[](wchar_t c) { return std::towlower(c); });
 
 			IMpGraphicsHost* dialogHost = 0;
 			getHost()->queryInterface(SE_IID_GRAPHICS_HOST, reinterpret_cast<void**>(&dialogHost));
@@ -59,12 +64,18 @@ public:
 #ifdef __APPLE__
 #else
 					nativeFileDialog.AddExtensionList(file_extension);
+					nativeFileDialog.AddExtensionList(L"*");
 #endif
 					// caclulate initial directory from file extension, or use default.		
 					if (!filename.empty())
 					{
 						filename = uiHost.resolveFilename(filename);
 						nativeFileDialog.SetInitialFullPath(JmUnicodeConversions::WStringToUtf8(filename));
+					}
+					else
+					{
+						std::string ext = JmUnicodeConversions::WStringToUtf8(file_extension);
+						nativeFileDialog.setInitialDirectory(ext);
 					}
 				}
 			}
@@ -91,6 +102,8 @@ public:
 			pinFilePath = nativeFileDialog.GetSelectedFilename();//full path
 		}
 #endif
+
+		updateExtension();
 
 		nativeFileDialog.setNull(); // release it.
 		pinLed = false;

@@ -20,14 +20,11 @@ class GetFilenameGui final : public SeGuiInvisibleBase
         return name;
     }
 
-    std::string get_extension(std::string& p_filename)
+    std::string get_extension(std::string& ext)
     {
-        size_t found = p_filename.find_last_of(".");
-        if (found == std::string::npos) return p_filename.substr(found);
-        // Convert extension to lowercase
-        std::transform(p_filename.begin(), p_filename.end(), p_filename.begin(),
-            [](unsigned char c) { return std::tolower(c); });
-        return p_filename.substr(found);
+        size_t found = ext.find_last_of(".");
+        if (found == std::string::npos) return ext.substr(found);
+        return ext.substr(found);
     }
 
    std::string StripExtension(const std::string& p_filename)
@@ -43,11 +40,17 @@ class GetFilenameGui final : public SeGuiInvisibleBase
 
        // Retrieve the input value
        std::string filename = get_filename(pinFilePathIn);
+       std::string ext = get_extension(filename);
+ 
+           // Convert extension to lowercase
+           std::transform(ext.begin(), ext.end(), ext.begin(),
+               [](unsigned char c) { return std::tolower(c); });
+       
+           pinExt = ext;
+
        // Strip extension
        std::string filenameWithoutExtension = StripExtension(filename);
-       pinFilename = filenameWithoutExtension;
-
-       pinExt = get_extension(filename);
+       pinFilename = filenameWithoutExtension;       
    }
 
     StringGuiPin pinFilePathIn;

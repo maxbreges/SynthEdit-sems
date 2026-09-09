@@ -17,6 +17,8 @@ public:
 
 	StringGuiPin pinStringIn;
 	StringGuiPin pinStringOut; //debug pin
+
+	std::string a;
 };
 
 #endif

@@ -7,8 +7,8 @@
         <GUI>
             <Pin name="String1 In" datatype="string"/>
             <Pin name="String2 In" datatype="string"/>
-            <Pin name="Remainder" datatype="string" direction="out"/>
-			<Pin name="Choice" datatype="int" direction="out" />
+            <Pin name="Directory Path" datatype="string" direction="out"/>
+			<Pin name="Relative Path" datatype="string" />
         </GUI>
     </Plugin>
 </PluginList>

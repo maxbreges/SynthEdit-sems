@@ -14,7 +14,7 @@ public:
 
     void onSetPins() override
     {
-        getHost()->sendMessageToGui(116599, sizeof(pinIntIn), &pinIntIn);
+        getHost()->sendMessageToGui(116599, sizeof(pinIntIn), &pinIntIn);//sent to gui to get value from gui input pins
     }
 };
 

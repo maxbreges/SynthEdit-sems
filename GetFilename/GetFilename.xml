@@ -3,7 +3,7 @@
     <Plugin id="GetFilename" name="Get Filename" category="mx/Sub-Controls">
         <GUI>
 			<Pin name="File Path In" datatype="string" direction="out" />
-			<Pin name="Directory Out" datatype="string"/>
+			<Pin name="Directory Out" datatype="string" direction="in"/>
 			<Pin name="Name Out" datatype="string" />
 			<Pin name="Ext Out" datatype="string" />
         </GUI>

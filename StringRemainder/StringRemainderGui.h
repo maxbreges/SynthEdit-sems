@@ -20,10 +20,10 @@ public:
 	StringGuiPin pinString1;
 	StringGuiPin pinString2;
 	StringGuiPin pinStringOut;
-	IntGuiPin pinSwitch;
+	StringGuiPin pinRelativePath;
 
 private:
-	int choice;
+
 	std::string s1;
 	std::string s2;
 };

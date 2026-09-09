@@ -3,23 +3,22 @@
 REGISTER_GUI_PLUGIN(StringRemainderGui, L"My StringRemainder");
 
 StringRemainderGui::StringRemainderGui (IMpUnknown* host) : MpGuiBase(host)
-,choice(0)
 
 	{
 		initializePin( pinString1, static_cast<MpGuiBaseMemberPtr>(&StringRemainderGui::onSetString1) );
 		initializePin( pinString2, static_cast<MpGuiBaseMemberPtr>(&StringRemainderGui::onSetString2) );
 		initializePin( pinStringOut );
-		initializePin(pinSwitch);
+		initializePin(pinRelativePath, static_cast<MpGuiBaseMemberPtr>(&StringRemainderGui::onSetString1));
 	}
 
 	void StringRemainderGui::onSetString1()
 	{
-		s1 = pinString1;
+		s1 = pinString1; //App Directory
 	}
 
 	void StringRemainderGui::onSetString2()
 	{
-		s2 = pinString2;
+		s2 = pinString2; //User Path
 		stringRemainder();
 	}
 
@@ -37,14 +36,12 @@ StringRemainderGui::StringRemainderGui (IMpUnknown* host) : MpGuiBase(host)
 		if (s2.compare(0, s1.size(), s1) == 0) {
 			// Output the remainder
 			std::string remainder = s2.substr(s1.size());
-			pinStringOut = remainder; 
-			choice = 1;
-			pinSwitch = choice;
+			pinRelativePath = remainder;
+			pinStringOut = s1 + remainder; //relative path
+
 		}
 		else {
 
-			pinStringOut = "";
-			choice = 0;
-			pinSwitch = choice;
+			pinStringOut = s2;
 		}		
 	}
