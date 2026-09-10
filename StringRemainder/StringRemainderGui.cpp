@@ -41,7 +41,7 @@ StringRemainderGui::StringRemainderGui (IMpUnknown* host) : MpGuiBase(host)
 
 		}
 		else {
-
+			pinRelativePath = "";
 			pinStringOut = s2;
 		}		
 	}
