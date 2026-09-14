@@ -17,6 +17,7 @@
             <Pin name="Note" datatype="int"/>
             <Pin name="NoteToDSP" datatype="int" private="true" parameterId="0"/>
 			<Pin name="Note Name" datatype="string" direction="out"/>
+			<!--<Pin name="Reset" datatype="bool" direction="out"/>-->
         </GUI>
     </Plugin>
 </PluginList>

@@ -14,7 +14,7 @@ MidiLearnGui::MidiLearnGui(IMpUnknown* host) : MpGuiBase(host)
 	initializePin(pinNote, static_cast<MpGuiBaseMemberPtr>(&MidiLearnGui::onPatchChange));
 	initializePin(pinNoteToDsp, static_cast<MpGuiBaseMemberPtr>(&MidiLearnGui::onSetAnimationPosition));
 	initializePin(pinNoteName, static_cast<MpGuiBaseMemberPtr>(&MidiLearnGui::onPatchChange));
-	initializePin(pinReset);
+	//initializePin(pinReset);
 }
 void MidiLearnGui::onSetAnimationPosition()
 {
@@ -64,7 +64,7 @@ int32_t MidiLearnGui::receiveMessageFromAudio(int32_t id, int32_t size, void* me
 	if (id == MESSAGE_ID_GATE && size >= sizeof(bool))
 	{
 		pinAnimationPosition = 0;
-		pinReset = (bool)!pinAnimationPosition;
+		//pinReset = (bool)!pinAnimationPosition;
 	}
 
 	if (id == MESSAGE_ID_NOTE && size >= sizeof(int))

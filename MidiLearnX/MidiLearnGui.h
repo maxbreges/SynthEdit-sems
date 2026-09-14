@@ -17,6 +17,7 @@ public:
 	IntGuiPin pinNote;
 	IntGuiPin pinNoteToDsp;
 	StringGuiPin pinNoteName;
+	//BoolGuiPin pinReset;
 
 	const int MESSAGE_ID_GATE;
 	const int MESSAGE_ID_NOTE;
