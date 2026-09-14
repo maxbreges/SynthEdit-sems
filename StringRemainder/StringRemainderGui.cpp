@@ -9,6 +9,7 @@ StringRemainderGui::StringRemainderGui (IMpUnknown* host) : MpGuiBase(host)
 		initializePin( pinString2, static_cast<MpGuiBaseMemberPtr>(&StringRemainderGui::onSetString2) );
 		initializePin( pinStringOut );
 		initializePin(pinRelativePath, static_cast<MpGuiBaseMemberPtr>(&StringRemainderGui::onSetString1));
+		initializePin(pinDebug);
 	}
 
 	void StringRemainderGui::onSetString1()
@@ -31,6 +32,7 @@ StringRemainderGui::StringRemainderGui (IMpUnknown* host) : MpGuiBase(host)
 
 	void StringRemainderGui::stringRemainder()
 	{
+
 		// Check if s1 is a prefix of s2
 
 		if (s2.compare(0, s1.size(), s1) == 0) {
@@ -38,10 +40,11 @@ StringRemainderGui::StringRemainderGui (IMpUnknown* host) : MpGuiBase(host)
 			std::string remainder = s2.substr(s1.size());
 			pinRelativePath = remainder;
 			pinStringOut = s1 + remainder; //relative path
-
+			pinDebug = "Check if s1 is a prefix of s2\n" + s1 + "\n" + s2 + "\n" + remainder;
 		}
 		else {
 			pinRelativePath = "";
 			pinStringOut = s2;
+			pinDebug = "else part";
 		}		
 	}

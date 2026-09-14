@@ -21,6 +21,7 @@ public:
 	StringGuiPin pinString2;
 	StringGuiPin pinStringOut;
 	StringGuiPin pinRelativePath;
+	StringGuiPin pinDebug;
 
 private:
 

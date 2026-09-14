@@ -6,9 +6,10 @@
 		</Audio>
         <GUI>
             <Pin name="String1 In" datatype="string"/>
-            <Pin name="String2 In" datatype="string"/>
+            <Pin name="String2 In" datatype="string" />
             <Pin name="Directory Path" datatype="string" direction="out"/>
 			<Pin name="Relative Path" datatype="string" />
+			<Pin name="Debug" datatype="string" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>
