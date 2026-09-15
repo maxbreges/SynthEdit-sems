@@ -12,73 +12,42 @@
 
 using namespace gmpi;
 
-// Determine platform-specific path separator
-#ifdef __APPLE__
-static const std::string PathSeparator = "/";
-#else
-static const std::string PathSeparator = "\\";
-#endif
-
 class FolderListDirGui final : public SeGuiInvisibleBase
 {
     std::string directoryPath;
     std::string targetExt;
-    std::string Name;
-
- 	void onSetFolderPath()
-	{
-        directoryPath = pinFolderPath;
-        if (!files.empty())
-        {
-            files.clear();
-        }
-        if (directoryPath.empty())
-            return; // avoid invalid directory access
-        pinChoice = -1;
-        listFilesInDirectory();
-	}
-
-    void onSetChoice()
-    {
-        int choiceIndex = pinChoice;
-
-        if (choiceIndex >= 0 && choiceIndex < static_cast<int>(files.size()))
-        {
-            pinName = files[choiceIndex];
-        }
-        Name = pinName;
-    }
-
- 	void onSetItemList()
-	{
-		// pinItemList changed
-	}
-    void onSetExtension()
-    {
-        targetExt = pinExtension;
-    }
-
-    void onSetFileName()
-    {
-    }
 
  	StringGuiPin pinFolderPath;
- 	IntGuiPin pinChoice;
  	StringGuiPin pinItemList;
     StringGuiPin pinExtension;
-    StringGuiPin pinName;//local var
-
 
 public:
 	FolderListDirGui()
 	{
 		initializePin( pinFolderPath, static_cast<MpGuiBaseMemberPtr2>(&FolderListDirGui::onSetFolderPath) );
-		initializePin( pinChoice, static_cast<MpGuiBaseMemberPtr2>(&FolderListDirGui::onSetChoice) );
-		initializePin( pinItemList, static_cast<MpGuiBaseMemberPtr2>(&FolderListDirGui::onSetItemList) );
+		initializePin( pinItemList);
         initializePin(pinExtension, static_cast<MpGuiBaseMemberPtr2>(&FolderListDirGui::onSetExtension));
-        initializePin(pinName, static_cast<MpGuiBaseMemberPtr2>(&FolderListDirGui::onSetFileName));
+    }
 
-	}
+    void onSetFolderPath()
+    {
+        if (!files.empty())
+        {
+            files.clear();
+        }
+
+        directoryPath = pinFolderPath;
+
+        if (directoryPath.empty())
+            return; // avoid invalid directory access
+
+        listFilesInDirectory();
+    }
+
+    void onSetExtension()
+    {
+        targetExt = pinExtension;
+    }
 
     std::vector<std::string> files;
     void listFilesInDirectory()
@@ -178,10 +147,7 @@ public:
                 ss << ", ";
         }
         pinItemList = ss.str();
-        pinChoice = 0;
-        onSetChoice();
     }
-
 };
 
 namespace
