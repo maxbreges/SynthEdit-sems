@@ -13,14 +13,16 @@ class FolderDialogGui final : public SeGuiInvisibleBase
         // When trigger pin is set, open folder dialog
         if (!pinTrigger && m_prev_trigger == true)
         {
+            pinState = true;
             selectFolder();
         }
-        m_prev_trigger = pinTrigger;
+        m_prev_trigger = pinTrigger;        
     }
 
     StringGuiPin pinFolderName;
     BoolGuiPin pinTrigger;
     BoolGuiPin pinBackslash;
+    BoolGuiPin pinState;
 
     void onSetBackslash()
     {
@@ -40,6 +42,7 @@ public:
         initializePin(pinFolderName);
         initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&FolderDialogGui::onSetTrigger));
         initializePin(pinBackslash, static_cast<MpGuiBaseMemberPtr2>(&FolderDialogGui::onSetBackslash));
+        initializePin(pinState);
     }
 
 private:
@@ -50,6 +53,7 @@ private:
 #elif defined(__APPLE__)
         selectFolderMac();
 #endif
+        pinState = false;
     }
 
     void selectFolderWindows(); // Declaration
