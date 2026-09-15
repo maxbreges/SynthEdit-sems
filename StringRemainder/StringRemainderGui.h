@@ -16,6 +16,7 @@ public:
 	void onSetString1();
 	void onSetString2();
 	void stringRemainder();
+	void onSetRelativePath();
 
 	StringGuiPin pinString1;
 	StringGuiPin pinString2;
@@ -27,6 +28,7 @@ private:
 
 	std::string s1;
 	std::string s2;
+	std::string relativePath;
 };
 
 #endif

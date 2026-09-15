@@ -3,6 +3,7 @@
 REGISTER_GUI_PLUGIN(StringRemainderGui, L"My StringRemainder");
 
 StringRemainderGui::StringRemainderGui (IMpUnknown* host) : MpGuiBase(host)
+
 	{
 		initializePin( pinString1, static_cast<MpGuiBaseMemberPtr>(&StringRemainderGui::onSetString1) );
 		initializePin( pinString2, static_cast<MpGuiBaseMemberPtr>(&StringRemainderGui::onSetString2) );
@@ -32,7 +33,7 @@ StringRemainderGui::StringRemainderGui (IMpUnknown* host) : MpGuiBase(host)
 
 		stringRemainder();	
 	}
-	std::string relativePath;
+
 	void StringRemainderGui::stringRemainder()
 	{
 		// Check if s1 is a prefix of s2
