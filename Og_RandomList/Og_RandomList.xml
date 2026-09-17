@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My Og_RandomList" name="Random List" category="Og/Sub-Controls">
+        <GUI>
+			<Pin name="Bool" datatype="bool" />
+			<Pin name="Choice" datatype="int"/>
+			<Pin name="Item List" datatype="string"/>
+			<Pin name="List Size" datatype="int" direction="out"/>
+        </GUI>
+    </Plugin>
+</PluginList>
