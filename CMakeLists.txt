@@ -196,6 +196,9 @@ include(plugin_helper.cmake)
 #add_subdirectory (TextGuiToDSP)
 #add_subdirectory (SlashConvert)
 #add_subdirectory (FindString)
+#add_subdirectory(Og_RandomList)
+#add_subdirectory(Og_Button)
+add_subdirectory(Og_DisplayList)
 
 
 #add_subdirectory (AutoFixedValues)
