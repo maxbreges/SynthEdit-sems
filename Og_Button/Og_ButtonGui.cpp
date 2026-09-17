@@ -247,7 +247,6 @@ public:
 		initializePin(pinAlignV, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignV));
 		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignY));
 
-
 		initializePin(pinToolTip, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetToolTip));
 		initializePin(pinReset, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetReset));
 	}
