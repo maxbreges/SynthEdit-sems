@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My FindString" name="Find String" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="String In" datatype="string" />
+			<Pin name="String To Find" datatype="string" />
+            <Pin name="0, substr" datatype="string" direction="in"/>
+            <Pin name="substr" datatype="string" direction="in"/>
+			<Pin name="Position" datatype="int" direction="out" private="true"/>
+			<Pin name="Include &lt;Previous Folder&gt;" datatype="bool" default="1" isMinimised="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>

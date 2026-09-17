@@ -195,7 +195,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (GetFilename)
 #add_subdirectory (TextGuiToDSP)
 #add_subdirectory (SlashConvert)
-
+add_subdirectory (FindString)
 
 
 #add_subdirectory (AutoFixedValues)
