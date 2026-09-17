@@ -3,7 +3,7 @@
     <Plugin id="My FolderListDir" name="Folder List Directory" category="mx/Sub-Controls">
 		<GUI>
             <Pin name="Folder Path" datatype="string"/>
-            <Pin name="Item List" datatype="string"/>
+            <Pin name="Item List" datatype="string" direction="out"/>
 			<Pin name="Extension" datatype="string" default=".wav" isMinimised="true"/>
         </GUI>
     </Plugin>

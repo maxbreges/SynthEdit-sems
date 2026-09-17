@@ -16,6 +16,7 @@ class FolderListDirGui final : public SeGuiInvisibleBase
 {
     std::string directoryPath;
     std::string targetExt;
+    std::string prevItemList;
 
  	StringGuiPin pinFolderPath;
  	StringGuiPin pinItemList;
@@ -28,6 +29,15 @@ public:
 		initializePin( pinItemList);
         initializePin(pinExtension, static_cast<MpGuiBaseMemberPtr2>(&FolderListDirGui::onSetExtension));
     }
+
+/*    int32_t initialize() override
+    {
+        if (prevItemList.compare(0, pinFolderPath.getValue().size(), pinFolderPath) != 0)
+        {
+            listFilesInDirectory();
+        }
+        return 0;
+    }*/
 
     void onSetFolderPath()
     {
@@ -147,6 +157,7 @@ public:
                 ss << ", ";
         }
         pinItemList = ss.str();
+        prevItemList = pinItemList;
     }
 };
 
