@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My TextGuiToDSP" name="TextGuiToDSP" category="mx/Sub-Controls/Conversion">
+		<Audio>
+			<Pin name="int" datatype="int" default="10" private="true"/>
+			<Pin name="out" datatype="string" direction="out"/>
+			<!--<Pin name="int" datatype="int" direction="out"/>-->
+        </Audio>
+        <GUI>
+			<Pin name="in" datatype="string" />
+			<Pin name="in" datatype="string" direction="out" private="true"/>
+		</GUI>
+    </Plugin>
+</PluginList>
