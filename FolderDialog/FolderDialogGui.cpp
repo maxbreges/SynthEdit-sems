@@ -139,43 +139,24 @@ void FolderDialogGui::selectFolderWindows()
 
 void FolderDialogGui::selectFolderMac()
 {
-    std::wstring folderToOpen = pinFolderToOpen.getValue();
-    std::string command;
+    const char* command = "osascript -e 'POSIX path of (choose folder)'";
+    FILE* pipe = popen(command, "r");
 
-    if (!folderToOpen.empty())
-    {
-        // Convert wide string to UTF-8
-        std::string folderPath(folderToOpen.begin(), folderToOpen.end());
-        // Escape quotes in path
-        size_t pos = 0;
-        while ((pos = folderPath.find("\"", pos)) != std::string::npos)
-        {
-            folderPath.insert(pos, "\\");
-            pos += 2;
-        }
-        command = "osascript -e 'POSIX path of (choose folder with prompt \"Select Folder\" default location \"" + folderPath + "')";
-    }
-    else
-    {
-        command = "osascript -e 'POSIX path of (choose folder)'";
-    }
-
-    FILE* pipe = popen(command.c_str(), "r");
-    if (!pipe)
-        return;
-
+    if (!pipe) return;
     pinState = true;
-    char buffer[1024];
+    char buffer[1024]; // larger buffer for longer paths
     std::string result;
     if (fgets(buffer, sizeof(buffer), pipe))
     {
+
         result = buffer;
+        // Remove trailing newline
         if (!result.empty() && result.back() == '\n')
             result.pop_back();
 
-        pinFolderName = result;
+        // Update pinFolderName
+        pinFolderName = result; 
         previousString = pinFolderName;
-        // You can implement getLastFolderName if needed
     }
     pclose(pipe);
     pinState = false;
