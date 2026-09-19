@@ -6,7 +6,7 @@
             <Pin name="Trigger" datatype="bool" direction="out"/>
 			<Pin name="Add backslash" datatype="bool" default="1" isMinimised="true"/>
 			<Pin name="State" datatype="bool" direction="in"/>
-			<Pin name="Selected folder" datatype="string"/>
+			<Pin name="Folder to open" datatype="string"/>
 			<Pin name="!previousFolder" datatype="bool" direction="in"/>
         </GUI>
     </Plugin>

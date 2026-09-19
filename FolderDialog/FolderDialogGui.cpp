@@ -10,28 +10,6 @@ class FolderDialogGui final : public SeGuiInvisibleBase
 
     std::string previousString;
 
-    //Helper
-    std::string getLastFolderName(const std::string& path)
-    {
-        // Remove trailing slashes
-        size_t endPos = path.size();
-        while (endPos > 0 && (path[endPos - 1] == '/' || path[endPos - 1] == '\\'))
-            --endPos;
-
-        // Find the last slash before endPos
-        size_t lastSlashPos = path.rfind('/', endPos - 1);
-#if defined(_WIN32)
-        size_t lastBackslashPos = path.rfind('\\', endPos - 1);
-        lastSlashPos = std::max<int>(lastSlashPos, lastBackslashPos);
-#endif
-
-        if (lastSlashPos == std::string::npos)
-            return ""; // no slash found, no folder
-
-        // Extract the folder name after last slash
-        return path.substr(lastSlashPos + 1, endPos - lastSlashPos);
-    }
-
     void onSetTrigger()
     {
         // When trigger pin is set, open folder dialog
@@ -46,7 +24,7 @@ class FolderDialogGui final : public SeGuiInvisibleBase
     BoolGuiPin pinTrigger;
     BoolGuiPin pinBackslash;
     BoolGuiPin pinState;
-    StringGuiPin pinSelectedFolderName;
+    StringGuiPin pinFolderToOpen;
     BoolGuiPin pinFolderChangedTrig;
 
     void onSetBackslash()
@@ -68,7 +46,7 @@ public:
         initializePin(pinTrigger, static_cast<MpGuiBaseMemberPtr2>(&FolderDialogGui::onSetTrigger));
         initializePin(pinBackslash, static_cast<MpGuiBaseMemberPtr2>(&FolderDialogGui::onSetBackslash));
         initializePin(pinState);
-        initializePin(pinSelectedFolderName);
+        initializePin(pinFolderToOpen);
         initializePin(pinFolderChangedTrig);
     }
 
@@ -104,15 +82,27 @@ private:
 
 void FolderDialogGui::selectFolderWindows()
 {
-    // Initialize COM
     HRESULT hr = CoInitialize(nullptr);
     if (FAILED(hr))
-        return; // COM init failed
+        return;
 
     IFileOpenDialog* pFileOpen = nullptr;
     hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileOpen));
     if (SUCCEEDED(hr))
     {
+        // Check if pinFolderToOpen has a value
+        std::wstring folderToOpen = pinFolderToOpen.getValue();
+        if (!folderToOpen.empty())
+        {
+            IShellItem* pFolderItem = nullptr;
+            hr = SHCreateItemFromParsingName(folderToOpen.c_str(), nullptr, IID_PPV_ARGS(&pFolderItem));
+            if (SUCCEEDED(hr))
+            {
+                pFileOpen->SetFolder(pFolderItem);
+                pFolderItem->Release();
+            }
+        }
+
         pinState = true;
         DWORD dwFlags;
         pFileOpen->GetOptions(&dwFlags);
@@ -129,10 +119,8 @@ void FolderDialogGui::selectFolderWindows()
                 hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
                 if (SUCCEEDED(hr))
                 {
-                    // Update pinFolderName with selected path
-                    pinFolderName = std::wstring(pszFilePath) + wbackslash; 
+                    pinFolderName = std::wstring(pszFilePath) + wbackslash;
                     previousString = pinFolderName;
-                    pinSelectedFolderName = getLastFolderName(pinFolderName); 
                     CoTaskMemFree(pszFilePath);
                 }
                 pItem->Release();
@@ -151,25 +139,43 @@ void FolderDialogGui::selectFolderWindows()
 
 void FolderDialogGui::selectFolderMac()
 {
-    const char* command = "osascript -e 'POSIX path of (choose folder)'";
-    FILE* pipe = popen(command, "r");
+    std::wstring folderToOpen = pinFolderToOpen.getValue();
+    std::string command;
 
-    if (!pipe) return;
+    if (!folderToOpen.empty())
+    {
+        // Convert wide string to UTF-8
+        std::string folderPath(folderToOpen.begin(), folderToOpen.end());
+        // Escape quotes in path
+        size_t pos = 0;
+        while ((pos = folderPath.find("\"", pos)) != std::string::npos)
+        {
+            folderPath.insert(pos, "\\");
+            pos += 2;
+        }
+        command = "osascript -e 'POSIX path of (choose folder with prompt \"Select Folder\" default location \"" + folderPath + "')";
+    }
+    else
+    {
+        command = "osascript -e 'POSIX path of (choose folder)'";
+    }
+
+    FILE* pipe = popen(command.c_str(), "r");
+    if (!pipe)
+        return;
+
     pinState = true;
-    char buffer[1024]; // larger buffer for longer paths
+    char buffer[1024];
     std::string result;
     if (fgets(buffer, sizeof(buffer), pipe))
     {
-
         result = buffer;
-        // Remove trailing newline
         if (!result.empty() && result.back() == '\n')
             result.pop_back();
 
-        // Update pinFolderName
-        pinFolderName = result; 
+        pinFolderName = result;
         previousString = pinFolderName;
-        pinSelectedFolderName = getLastFolderName(pinFolderName);
+        // You can implement getLastFolderName if needed
     }
     pclose(pipe);
     pinState = false;
