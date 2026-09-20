@@ -14,7 +14,7 @@ class TextAppendGuiGui final : public SeGuiInvisibleBase
 public:
     TextAppendGuiGui()
     {
-        initializePin(pinTextOut, static_cast<MpGuiBaseMemberPtr2>(&TextAppendGuiGui::onSetTextIn));
+        initializePin(pinTextOut);
     }
 
     virtual int32_t MP_STDCALL setPin(int32_t pinId, int32_t voice, int32_t size, const void* data) override
@@ -61,12 +61,12 @@ private:
         // Transmit the concatenated output string
         getHost()->pinTransmit(pinTextOut.getId(), result.size(), result.data());
     }
-
+/*
     int32_t initialize() override
     {
         // Initial setup if needed can be added here
         return SeGuiInvisibleBase::initialize();
-    }
+    }*/
 };
 
 namespace

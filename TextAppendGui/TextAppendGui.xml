@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="TextAppendGui" name="Text Append Gui" category="mx/Sub-Controls">
+    <Plugin id="TextAppendGuiL" name="Text Append Gui &lt;" category="mx/Sub-Controls">
         <GUI>
-            <Pin name="Text Out" datatype="string" direction="out"/>
-            <Pin name="Text In" datatype="string" direction="in" autoDuplicate="true"/>
+            <Pin name="Text Out" datatype="string"/>
+            <Pin name="Text In" datatype="string" autoDuplicate="true"/>
         </GUI>
     </Plugin>
-	<Plugin id="TextAppendGuiL" name="Text Append Gui &lt;" category="mx/Sub-Controls">
+	<Plugin id="TextAppendGui" name="Text Append Gui" category="mx/Sub-Controls">
 		<GUI>
-			<Pin name="Text Out" datatype="string"/>
-			<Pin name="Text In" datatype="string" direction="in" autoDuplicate="true"/>
+			<Pin name="Text Out" datatype="string" direction="out"/>
+			<Pin name="Text In" datatype="string" autoDuplicate="true"/>
 		</GUI>
 	</Plugin>
 </PluginList>
