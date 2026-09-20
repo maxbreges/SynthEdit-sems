@@ -7,7 +7,7 @@
 			<Pin name="Add backslash" datatype="bool" default="1" isMinimised="true"/>
 			<Pin name="State" datatype="bool" direction="in"/>
 			<Pin name="Folder to open" datatype="string"/>
-			<Pin name="!previousFolder" datatype="bool" direction="in"/>
+			<Pin name="!previousFolder" datatype="bool" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>
