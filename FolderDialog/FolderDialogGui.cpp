@@ -146,7 +146,7 @@ void FolderDialogGui::selectFolderWindows()
 
 void FolderDialogGui::selectFolderMac()
 {
-    const char* default_folder = defaultFolder;
+    const char* default_folder = defaultFolder.c_str();
     char command[512];
     snprintf(command, sizeof(command),
         "osascript -e 'POSIX path of (choose folder with prompt \"Select a folder\" default location (POSIX file \"%s\"))'", default_folder);
