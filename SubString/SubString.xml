@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My SubString" name="SubString" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="String1 In" datatype="string" direction="out"/>
+            <Pin name="String2 In" datatype="string"/>
+            <Pin name="Substring" datatype="string" />
+        </GUI>
+    </Plugin>
+</PluginList>
