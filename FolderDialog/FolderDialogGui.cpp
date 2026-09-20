@@ -10,7 +10,7 @@ class FolderDialogGui final : public SeGuiInvisibleBase
 
     std::string previousString;
 
-    std::string defaultFolder;
+    std::string default_folder;
 
     void onSetTrigger()
     {
@@ -54,7 +54,7 @@ public:
 
     void onSetDefaultFolder()
     {
-        defaultFolder = pinFolderToOpen;
+        default_folder = pinFolderToOpen;
     }
 
     void onSetFolderName()
@@ -144,9 +144,9 @@ void FolderDialogGui::selectFolderWindows()
 // macOS implementation using system call to 'osascript'
 #include <cstdio>
 
-/*void FolderDialogGui::selectFolderMac()
+void FolderDialogGui::selectFolderMac()
 {
-    const char* command = "osascript -e 'POSIX path of (choose folder)'";
+    const char* command = "osascript -e 'POSIX path of (choose folder with prompt \"Select a folder\" default location (POSIX file \"$default_folder\"))'";
     FILE* pipe = popen(command, "r");
 
     if (!pipe) return;
@@ -164,50 +164,6 @@ void FolderDialogGui::selectFolderWindows()
         // Update pinFolderName
         pinFolderName = result; 
         previousString = pinFolderName;
-    }
-    pclose(pipe);
-    pinState = false;
-}*/
-
-void FolderDialogGui::selectFolderMac()
-{
-    std::wstring folderToOpen = pinFolderToOpen.getValue();
-    std::string command;
-
-    if (!folderToOpen.empty())
-    {
-        // Convert wide string to UTF-8
-        std::string folderPath(folderToOpen.begin(), folderToOpen.end());
-        // Escape quotes in path
-        size_t pos = 0;
-        while ((pos = folderPath.find("\"", pos)) != std::string::npos)
-        {
-            folderPath.insert(pos, "\\");
-            pos += 2;
-        }
-        command = "osascript -e 'POSIX path of (choose folder with prompt \"Select Folder\" default location \"" + folderPath + "')";
-    }
-    else
-    {
-        command = "osascript -e 'POSIX path of (choose folder)'";
-    }
-
-    FILE* pipe = popen(command.c_str(), "r");
-    if (!pipe)
-        return;
-
-    pinState = true;
-    char buffer[1024];
-    std::string result;
-    if (fgets(buffer, sizeof(buffer), pipe))
-    {
-        result = buffer;
-        if (!result.empty() && result.back() == '\n')
-            result.pop_back();
-
-        pinFolderName = result;
-        previousString = pinFolderName;
-        // You can implement getLastFolderName if needed
     }
     pclose(pipe);
     pinState = false;
