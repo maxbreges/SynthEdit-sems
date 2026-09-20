@@ -5,6 +5,8 @@
             <Pin name="Folder Path" datatype="string"/>
             <Pin name="Item List" datatype="string" direction="out"/>
 			<Pin name="Extension" datatype="string" default=".wav" isMinimised="true"/>
+			<Pin name="Clear List" datatype="bool" isMinimised="true"/>
+			<Pin name="Update" datatype="bool" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>

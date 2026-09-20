@@ -21,23 +21,31 @@ class FolderListDirGui final : public SeGuiInvisibleBase
  	StringGuiPin pinFolderPath;
  	StringGuiPin pinItemList;
     StringGuiPin pinExtension;
+    BoolGuiPin pinClearVectorMemory;
+    BoolGuiPin pinUpdate;
 
 public:
 	FolderListDirGui()
 	{
 		initializePin( pinFolderPath, static_cast<MpGuiBaseMemberPtr2>(&FolderListDirGui::onSetFolderPath) );
-		initializePin( pinItemList);
+		initializePin( pinItemList );
         initializePin(pinExtension, static_cast<MpGuiBaseMemberPtr2>(&FolderListDirGui::onSetExtension));
+        initializePin(pinClearVectorMemory, static_cast<MpGuiBaseMemberPtr2>(&FolderListDirGui::onSetClear));
+        initializePin(pinUpdate);
     }
 
-/*    int32_t initialize() override
+    void onSetClear()
     {
-        if (prevItemList.compare(0, pinFolderPath.getValue().size(), pinFolderPath) != 0)
+        if (pinClearVectorMemory)
         {
-            listFilesInDirectory();
+            files.clear();
         }
-        return 0;
-    }*/
+    }
+
+    void onSetUpdate()
+    {
+        pinUpdate = false;
+    }
 
     void onSetFolderPath()
     {
@@ -45,11 +53,16 @@ public:
         {
             files.clear();
         }
-
-        directoryPath = pinFolderPath;
+        directoryPath = pinFolderPath;       
 
         if (directoryPath.empty())
-            return; // avoid invalid directory access
+        {
+            directoryPath = pinFolderPath;
+            if (directoryPath.empty())
+            {
+                return;
+            }
+        }
 
         listFilesInDirectory();
     }
@@ -158,6 +171,8 @@ public:
         }
         pinItemList = ss.str();
         prevItemList = pinItemList;
+        pinUpdate = true;
+        onSetUpdate();
     }
 };
 
