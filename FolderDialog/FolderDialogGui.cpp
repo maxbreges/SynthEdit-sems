@@ -10,7 +10,7 @@ class FolderDialogGui final : public SeGuiInvisibleBase
 
     std::string previousString;
 
-    std::string default_folder;
+    std::string defaultFolder;
 
     void onSetTrigger()
     {
@@ -54,7 +54,7 @@ public:
 
     void onSetDefaultFolder()
     {
-        default_folder = pinFolderToOpen;
+        defaultFolder = pinFolderToOpen;
     }
 
     void onSetFolderName()
@@ -146,7 +146,11 @@ void FolderDialogGui::selectFolderWindows()
 
 void FolderDialogGui::selectFolderMac()
 {
-    const char* command = "osascript -e 'POSIX path of (choose folder with prompt \"Select a folder\" default location (POSIX file \"$default_folder\"))'";
+    const char* default_folder = defaultFolder;
+    char command[512];
+    snprintf(command, sizeof(command),
+        "osascript -e 'POSIX path of (choose folder with prompt \"Select a folder\" default location (POSIX file \"%s\"))'", default_folder);
+
     FILE* pipe = popen(command, "r");
 
     if (!pipe) return;
