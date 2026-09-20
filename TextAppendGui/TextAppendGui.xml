@@ -6,4 +6,10 @@
             <Pin name="Text In" datatype="string" direction="in" autoDuplicate="true"/>
         </GUI>
     </Plugin>
+	<Plugin id="TextAppendGuiL" name="Text Append Gui &lt;" category="mx/Sub-Controls">
+		<GUI>
+			<Pin name="Text Out" datatype="string"/>
+			<Pin name="Text In" datatype="string" direction="in" autoDuplicate="true"/>
+		</GUI>
+	</Plugin>
 </PluginList>

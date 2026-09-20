@@ -71,5 +71,9 @@ private:
 
 namespace
 {
-    auto r = Register<TextAppendGuiGui>::withId(L"TextAppendGui");
+    bool r[] =
+    {
+    Register<TextAppendGuiGui>::withId(L"TextAppendGui"),
+    Register<TextAppendGuiGui>::withId(L"TextAppendGuiL"),
+    };
 }
