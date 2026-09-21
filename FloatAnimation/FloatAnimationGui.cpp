@@ -65,6 +65,7 @@ public:
     void onSetOnOff()
     {
         isEnabled = (pinOnOff == true);
+        count = 0;
     }
 
     void onSetTime()
