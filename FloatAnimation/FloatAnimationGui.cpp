@@ -1,81 +1,51 @@
-#include "mp_sdk_gui2.h"
-#include <thread>
-#include <atomic>
+#include "FloatAnimationGui.h"
 
-using namespace gmpi;
+REGISTER_GUI_PLUGIN(FloatAnimationGui, L"My FloatAnimation");
 
-class FloatAnimationGui final : public SeGuiInvisibleBase
-{
-    std::atomic<bool> isRunning{ false };
-    std::thread animationThread;
-    float count = 0;
-    bool isEnabled = false;
-    int time = 0;
-
-    void animationLoop()
+FloatAnimationGui::FloatAnimationGui(IMpUnknown* host) : MpGuiBase(host)
+, speed(0.5f), mult(3)
     {
-        while (isRunning)
+        initializePin(pinOnOff, static_cast<MpGuiBaseMemberPtr>(&FloatAnimationGui::onSetOnOff));
+        initializePin(pinSpeed, static_cast<MpGuiBaseMemberPtr>(&FloatAnimationGui::onSetSpeed));
+        initializePin(pinAnimPos);
+    }
+
+    void FloatAnimationGui::onSetOnOff()
+    {
+        bool onOff = false;
+        onOff = pinOnOff;
+        getHost()->sendMessageToAudio(31253, sizeof(onOff), &onOff);
+        onSetSpeed();
+    }
+
+    void FloatAnimationGui::onSetSpeed()
+    {
+        if (pinSpeed > 1.f)
         {
-            if (isEnabled)
-            {
-                // Perform count up
-                for (int i = 0; i < 100 && isEnabled; ++i)
-                {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(time));
-                    count++;
-                    pinFloatOut = count*0.01f;
-                }
-                // Perform count down
-                for (int i = 0; i < 100 && isEnabled; ++i)
-                {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(time));
-                    count--;
-                    pinFloatOut = count * 0.01f;
-                }
-            }
-            else
-            {
-                std::this_thread::sleep_for(std::chrono::milliseconds(10));
-            }
+            pinSpeed = 1.f;
         }
+        if (pinSpeed <= 0.f)
+        {
+            pinSpeed = 0.f;
+        }
+
+        speed = pinSpeed;
+
+        getHost()->sendMessageToAudio(31254, sizeof(speed), &speed);
     }
 
-    BoolGuiPin pinOnOff;
-    FloatGuiPin pinTime;
-    FloatGuiPin pinFloatOut;
+    int sampleCnt = 0; // member or global variable
 
-public:
-    FloatAnimationGui()
+    int32_t FloatAnimationGui::receiveMessageFromAudio(int32_t id, int32_t size, void* messageData)
     {
-        initializePin(pinOnOff, static_cast<MpGuiBaseMemberPtr2>(&FloatAnimationGui::onSetOnOff));
-        initializePin(pinTime, static_cast<MpGuiBaseMemberPtr2>(&FloatAnimationGui::onSetTime));
-        initializePin(pinFloatOut);
+        if (id == 312)
+        {
+            // Cast messageData to int pointer and dereference with explicit cast
+            sampleCnt = static_cast<int>(*(const int*)messageData);
+        }
+        mult = (-5 * speed) + 6;
+        float divider = 1.f / (60 * mult);
+        pinAnimPos = sampleCnt * divider;
 
-        isRunning = true;
-        animationThread = std::thread(&FloatAnimationGui::animationLoop, this);
+        return gmpi::MP_OK;
     }
-
-    ~FloatAnimationGui()
-    {
-        isRunning = false;
-        if (animationThread.joinable())
-            animationThread.join();
-    }
-
-    void onSetOnOff()
-    {
-        isEnabled = (pinOnOff == true);
-        count = 0;
-    }
-
-    void onSetTime()
-    {
-        time = 10 * (1.f - 1.f * (pinTime)) + 1.f;
-    }
-};
-
-
-namespace
-{
-	auto r = Register<FloatAnimationGui>::withId(L"My FloatAnimation");
-}

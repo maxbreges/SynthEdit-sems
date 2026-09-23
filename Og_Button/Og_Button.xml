@@ -6,7 +6,7 @@
 			<Pin name="Text" datatype="string" direction="out" private="true"/>
 			<Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="true"/>
 
-			<Pin name="Color" datatype="string" default="ff00aa00"/>
+			<Pin name="Color" datatype="string" default="ffaa99aa"/>
 			<Pin name="Color Bottom" datatype="string" default="ff000000" isMinimised="true"/>
 			<Pin name="ColorOut" datatype="string" direction="out" private="true"/>
 

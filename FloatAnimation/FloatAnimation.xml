@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="My FloatAnimation" name="000_FloatAnimation" category="mx/Sub-Controls">
-        <GUI>
+    <Plugin id="My FloatAnimation" name="000_Float Animation" category="mx/Sub-Controls">
+		<Audio>
+			<Pin name="Bool" datatype="bool" direction="out" />
+			<Pin name="Int" datatype="int" direction="out" private="true"/>
+		</Audio>
+		<GUI>
             <Pin name="On/Off" datatype="bool"/>
 			<Pin name="Speed" datatype="float" default="0.5"/>
-            <Pin name="Float" datatype="float" direction="out"/>
+            <Pin name="Animation Position" datatype="float" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>
