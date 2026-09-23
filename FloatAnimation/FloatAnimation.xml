@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="My FloatAnimation" name="000_Float Animation" category="mx/Sub-Controls">
+    <Plugin id="My FloatAnimation" name="Float Animation" category="mx/Sub-Controls">
 		<Audio>
 			<Pin name="Bool" datatype="bool" direction="out" />
 			<Pin name="Int" datatype="int" direction="out" private="true"/>
