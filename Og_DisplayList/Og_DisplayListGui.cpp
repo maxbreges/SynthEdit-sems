@@ -2,71 +2,51 @@
 #include "Drawing.h"
 #include "it_enum_list.h"
 #include "mp_gui.h"
+#include <sstream>
+#include <iomanip>
 
 using namespace gmpi;
 using namespace gmpi_gui;
 using namespace GmpiDrawing;
 
 GmpiGui::PopupMenu nativeMenu;
+GmpiDrawing_API::MP1_POINT pointPrevious;
 
 class Og_DisplayListGui final : public gmpi_gui::MpGuiGfxBase
-{
-
+{   
  	void onSetBgColor()
-	{
-        invalidateRect();
-	}
-
+	{invalidateRect();}
  	void onSetColor()
 	{
-        invalidateRect();
-	}
+        updateColor(); invalidateRect();}
 
  	void onSetTextColor()
-	{
-        invalidateRect();
-	}
-
+	{invalidateRect();}
  	void onSetTextFont()
-	{
-        invalidateRect();
-	}
-
+	{invalidateRect();}
  	void onSetFontSize()
-	{
-        invalidateRect();
-	}
+	{invalidateRect();}
 
  	void onSetChoice()
 	{
-				it_enum_list it(pinItemList);
+		it_enum_list it(pinItemList);
 		it.FindValue(pinChoice);
-		if (it.IsDone())
-		{
-			pinSelection = std::wstring();
-		}
-		else
-		{
-			pinSelection = it.CurrentItem()->text;
-            
-		}
-
+        pinSelection = it.CurrentItem()->text;
 		onSetText();
-
 		invalidateRect();
 	}
+
+    void onSetSelection(){}
 
     std::string macText;
     void onSetText()
     {
-        macText = pinSelection;
+        macText = pinSelection;        
         invalidateRect();
     }
 
  	void onSetItemList()
-	{
-        invalidateRect();
-	}
+	{invalidateRect();}
 
     float corner = 5;
     void onSetCornerRadius()
@@ -76,9 +56,7 @@ class Og_DisplayListGui final : public gmpi_gui::MpGuiGfxBase
     }
 
     void onSetCornerOn()
-    {
-        invalidateRect();
-    }
+    {invalidateRect();}
 
  	StringGuiPin pinBgColor;
  	StringGuiPin pinColor;
@@ -87,14 +65,19 @@ class Og_DisplayListGui final : public gmpi_gui::MpGuiGfxBase
  	FloatGuiPin pinFontSize;
  	IntGuiPin pinChoice;
  	StringGuiPin pinItemList;
-	StringGuiPin pinSelection;
+	StringGuiPin pinSelection; //internal pin
  	BoolGuiPin pinPopUpopen;
  	FloatGuiPin pinCornerRadius;
     BoolGuiPin pinCornerOn;
 
-    BoolGuiPin pinReset;
     BoolGuiPin pinUpdate;
 
+    BoolGuiPin pinShiftClk;
+    BoolGuiPin pinCtrlClk;
+
+    StringGuiPin pinColorGlow;
+    StringGuiPin pinColorOut;
+    
 public:
 	Og_DisplayListGui()
 	{
@@ -107,31 +90,23 @@ public:
 
 		initializePin( pinChoice, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetChoice) );
 		initializePin( pinItemList, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetItemList) );
-		initializePin(pinSelection);
+		initializePin(pinSelection, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetSelection));
 
 		initializePin( pinPopUpopen );
 		initializePin( pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetCornerRadius) );
         initializePin(pinCornerOn, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetCornerOn));
 
-        initializePin(pinReset, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetReset));
         initializePin(pinUpdate, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetUpdate));
+
+        initializePin(pinShiftClk);
+        initializePin(pinCtrlClk);
+
+        initializePin(pinColorGlow);
+        initializePin(pinColorOut);
     }
 
-    void onSetReset()
-    {
-        pinChoice = 0;
-        onSetChoice();
-    }
     void onSetUpdate()
-    {
-        onSetChoice();
-    }
-
-    int32_t MP_STDCALL initialize() override
-    {
-        onSetChoice();
-        return gmpi::MP_OK;
-    }
+    {onSetChoice();}
 
     int32_t MP_STDCALL onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
     {
@@ -140,15 +115,33 @@ public:
         {
             return gmpi::MP_OK; // Indicate successful hit, so right-click menu can show.
         }
+        
+        if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) && !(flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT))
+        {
+            pinCtrlClk = true;
+            goto bypass;
+        }
+        if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) && !(flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL))
+        {
+            pinShiftClk = true;
+            goto bypass;
+        }
 
-        setCapture();
+        if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) && (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) || !(flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) && !(flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL))
+        {
+            setCapture();
+        }
+
+    bypass:
+        pinCtrlClk = false;
+        pinShiftClk = false;
 
         return gmpi::MP_OK;
     }
 
     int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point)
     {
-        if (getCapture())
+        if (getCapture() && !(flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) && !(flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT))
         {
             releaseCapture();
 
@@ -157,7 +150,6 @@ public:
             nativeMenu.SetAlignment(TextAlignment::Leading);
 
             it_enum_list itr(pinItemList);
-
             const int popupMenuWrapRowCount = 32;
             int vertical_size = 0; // for collumns on tall menus.
             for (itr.First(); !itr.IsDone(); itr.Next())
@@ -211,18 +203,10 @@ public:
     {
         if (result == gmpi::MP_OK)
         {
-/*#if 1
-            if (nativeMenu.GetSelectedId() == pinChoice)
-            {
-                pinChoice = -1;
-            }
-#endif*/
             pinChoice = nativeMenu.GetSelectedId();
         }
-
         nativeMenu.setNull(); // release it.
     }
-
 
     Color FromHexStringBackwardCompatible(const std::wstring& s)
     {
@@ -236,18 +220,15 @@ public:
     }
 
     int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext) override
-    {
+    {        
         Graphics g(drawingContext);
         ClipDrawingToBounds x(g, getRect());
-
+        
         //an advanced rectangle with the gradient       
                 //======================================
         auto r = getRect();
         float width = r.right - r.left;
         float height = r.bottom - r.top;
-
-        auto topCol = FromHexStringBackwardCompatible(pinColor);
-        auto botCol = FromHexStringBackwardCompatible(pinBgColor);
 
         float radius = corner;
 
@@ -255,7 +236,6 @@ public:
         radius = (std::min)(radius, height / 2);
 
         auto geometry = g.GetFactory().CreatePathGeometry();
-
         auto sink = geometry.Open();
 
         // define a corner 
@@ -317,7 +297,26 @@ public:
         Point point1(1, 0);
         Point point2(1, height);
 
+        // glow added to gradient brush
+        auto topCol = FromHexStringBackwardCompatible(pinColorOut);
+        auto botCol = FromHexStringBackwardCompatible(pinBgColor);
+        auto glowCol = GmpiDrawing::Color::FromHexString(pinColorGlow);
         GradientStop gradientStops[]
+        {
+            { 0.0f, topCol },
+            { 0.33f, glowCol },
+            { 0.5f, topCol },
+            { 1.0f, botCol },
+        };
+
+        auto gradientStopCollection = g.CreateGradientStopCollection(gradientStops);
+        auto Brush = g.CreateLinearGradientBrush(gradientStopCollection, point1, point2);
+        auto outlineBrush = g.CreateSolidColorBrush(botCol);
+        float thickness = 1.f;
+        g.FillGeometry(geometry, Brush);
+        g.DrawGeometry(geometry, outlineBrush, thickness);
+
+/*        GradientStop gradientStops[] //basic gradient without glow
         {
         { 0.0f, topCol }, //topColorBright },
         { 1.0f, botCol },//bottomColorBright },
@@ -325,7 +324,7 @@ public:
 
         auto gradientBrush = g.CreateLinearGradientBrush(gradientStops, point1, point2);
 
-        g.FillGeometry(geometry, gradientBrush);
+        g.FillGeometry(geometry, gradientBrush);*/
 
         //=============================================================
 
@@ -343,6 +342,112 @@ public:
 #endif
 
         return gmpi::MP_OK;
+    }
+
+    //======================================================================
+
+    //Brightness class
+
+        // Helper to convert hex string to uint32_t
+    uint32_t hexStringToUint32(const std::string& hexStr)
+    {
+        uint32_t value = 0;
+        std::stringstream ss;
+        ss << std::hex << hexStr;
+        ss >> value;
+        return value;
+    }
+
+    // Helper to convert uint32_t to hex string
+    std::string uint32ToHexString(uint32_t value, size_t width = 6)
+    {
+        std::stringstream ss;
+        ss << std::setfill('0') << std::setw(width) << std::hex << value;
+        return ss.str();
+    }
+
+    // Extract R, G, B components
+    void extractRGB(uint32_t color, uint8_t& r, uint8_t& g, uint8_t& b)
+    {
+        r = (color >> 16) & 0xFF;
+        g = (color >> 8) & 0xFF;
+        b = color & 0xFF;
+    }
+
+    // Combine R, G, B into uint32
+    uint32_t combineRGB(uint8_t r, uint8_t g, uint8_t b)
+    {
+        return (r << 16) | (g << 8) | b;
+    }
+
+    //copied from Button
+
+// Inside Og_DisplayListGui class
+
+// Helper to brighten a color (similar to ButtonGui)
+    uint32_t brightenColor(uint32_t color, float factor)
+    {
+        uint8_t r, g, b;
+        extractRGB(color, r, g, b);
+        r = std::min<>(255, static_cast<int>(r * factor));
+        g = std::min<>(255, static_cast<int>(g * factor));
+        b = std::min<>(255, static_cast<int>(b * factor));
+        return combineRGB(r, g, b);
+    }
+
+    // Adjust color brightness (darken or brighten)
+    uint32_t adjustBrightness(uint32_t color, float brightness)
+    {
+        uint8_t r, g, b;
+        extractRGB(color, r, g, b);
+        r = static_cast<uint8_t>(std::min<>(255.0f, r * brightness));
+        g = static_cast<uint8_t>(std::min<>(255.0f, g * brightness));
+        b = static_cast<uint8_t>(std::min<>(255.0f, b * brightness));
+        return combineRGB(r, g, b);
+    }
+
+    void updateColor() //can be cleaned up a bit to use just pure numbers
+    {
+        // Read input color
+        std::string inputHex = pinColor;
+        if (inputHex.size() >= 2 && inputHex[0] == '0' && (inputHex[1] == 'x' || inputHex[1] == 'X'))
+            inputHex = inputHex.substr(2);
+
+        uint32_t color = hexStringToUint32(inputHex);
+
+        // Define brightness factors similar to ButtonGui
+        float baseBrightness = 1.25f; // you can adjust this as needed
+        float glowBrightnessFactor = 0.7f * 1.44f; // for a brighter glow
+
+        // Determine brightness based on your logic (if any)
+        float brightness, brightnessGlow;
+ 
+           brightness = 0.55f * baseBrightness;
+           brightnessGlow = 0.75f * baseBrightness;
+
+        // Generate main color
+        uint32_t adjustedColor = adjustBrightness(color, brightness);
+        // Generate glow color by brightening the original color
+        uint32_t glowColor = brightenColor(color, glowBrightnessFactor);
+
+        // Convert colors to hex strings with opacity
+        std::string resultHex = uint32ToHexString(adjustedColor, 8);
+        std::string glowHex = uint32ToHexString(glowColor, 8);
+
+        // Apply opacity
+        uint8_t opacityHex = static_cast<uint8_t>(1.f * 255.0f);
+        std::stringstream ss;
+        ss << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(opacityHex);
+        std::string opacityStr = ss.str();
+
+        if (resultHex.size() >= 8)
+            resultHex.replace(0, 2, opacityStr);
+        if (glowHex.size() >= 8)
+            glowHex.replace(0, 2, opacityStr);
+
+        // Set output pins
+        pinColorOut = resultHex;
+        pinColorGlow = glowHex;
     }
 };
 

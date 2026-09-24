@@ -9,12 +9,13 @@
             <Pin name="Font Size" datatype="float" default="16" isMinimised="true"/>
             <Pin name="Choice" datatype="int"/>
             <Pin name="Item List" datatype="string"/>
-			<Pin name="Selection" datatype="string" />
-            <Pin name="PopUp open" datatype="bool" direction="out"/>
+			<Pin name="Selection" datatype="string" private="true"/>
+            <Pin name="PopUp open out" datatype="bool" />
             <Pin name="Corner Radius" datatype="float" default="5" isMinimised="true"/>
 			<Pin name="Corner On/Off" datatype="bool" default="1" isMinimised="true"/>
-			<Pin name="!previousFolder" datatype="bool" />
-			<Pin name="Update Display" datatype="bool" />
+			<Pin name="Update Display in" datatype="bool" />
+			<Pin name="Shift+clk out" datatype="bool" />
+			<Pin name="Ctrl+clk out" datatype="bool" />
         </GUI>
     </Plugin>
 </PluginList>
