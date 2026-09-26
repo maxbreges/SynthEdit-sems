@@ -22,7 +22,7 @@ public:
 	{
 		std::wstring filename = pinFileName.getValue() + L".txt";
 		// Step 1: Resolve filename to full path
-		wchar_t fullFilename[MAX_PATH];
+		wchar_t fullFilename[1024];
 		getHost()->resolveFilename(filename.c_str(), sizeof(fullFilename) / sizeof(fullFilename[0]), fullFilename);
 		
 		std::wstring fullPath(fullFilename);
