@@ -5,6 +5,7 @@
             <Pin name="String1 In" datatype="string" direction="out"/>
             <Pin name="String2 In" datatype="string"/>
             <Pin name="Substring" datatype="string" />
+			<Pin name="Reset" datatype="bool" />
         </GUI>
     </Plugin>
 </PluginList>
