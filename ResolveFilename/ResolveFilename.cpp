@@ -1,6 +1,4 @@
 #include "mp_sdk_audio.h"
-#include "../shared/string_utilities.h"
-#include <string>
 
 using namespace gmpi;
 
@@ -9,6 +7,7 @@ class ResolveFilename final : public MpBase2
 	StringInPin pinFileName;
 	StringOutPin pinAppDirPathOut;
 	StringOutPin pinAppDirPathOut2Gui;
+	StringOutPin pinDebug;
 
 public:
 	ResolveFilename()
@@ -16,17 +15,18 @@ public:
 		initializePin(pinFileName);
 		initializePin( pinAppDirPathOut );
 		initializePin( pinAppDirPathOut2Gui );
+		initializePin(pinDebug);
 	}
-
+	
 	void onSetPins() override
 	{
-		std::wstring filename = StripExtension(pinFileName) + L".txt";
+		std::wstring filename = pinFileName.getValue() + L".txt";
 		// Step 1: Resolve filename to full path
-		wchar_t fullFilename[500];
+		wchar_t fullFilename[MAX_PATH];
 		getHost()->resolveFilename(filename.c_str(), sizeof(fullFilename) / sizeof(fullFilename[0]), fullFilename);
-
+		
 		std::wstring fullPath(fullFilename);
-
+		pinDebug = fullPath;
 		// Step 2: Extract directory path
 		size_t lastSlashPos = fullPath.find_last_of(L"\\/");
 

@@ -8,10 +8,13 @@
 			<Pin name="App Dir Path" datatype="string" default="AppDirPath" private="true"/>
             <Pin name="App Directory" datatype="string" direction="out"/>
             <Pin name="App Dir Path" datatype="string" direction="out" private="true" parameterId="0"/>
-        </Audio>
+			<Pin name="Debug" datatype="string" direction="out" private="true"/>
+		</Audio>
 		<GUI>
 			<Pin name="App Dir Path" datatype="string" direction="in" private="true" parameterId="0"/>
 			<Pin name="App Directory" datatype="string" direction="out"/>
+			<Pin name="Init pulse" datatype="bool" direction="out"/>
+			<Pin name="Reset Init" datatype="bool" direction="out" private="true"/>
 		</GUI>
     </Plugin>
 </PluginList>
