@@ -2,10 +2,13 @@
 <PluginList>
     <Plugin id="My SubString" name="SubString" category="mx/Sub-Controls">
         <GUI>
-            <Pin name="String1 In" datatype="string" direction="out"/>
-            <Pin name="String2 In" datatype="string"/>
-            <Pin name="Substring" datatype="string" />
-			<Pin name="Reset" datatype="bool" />
+            <Pin name="User Path" datatype="string" direction="out"/>
+            <Pin name="App Directory Path" datatype="string"/>
+            <Pin name="Relative Path" datatype="string" />
+			<Pin name="Full Path" datatype="string"/>
+			<Pin name="Bool Flag" datatype="bool" />
+			<Pin name="Full Path Out" datatype="string" direction="out"/>
+			<Pin name="Rescan" datatype="bool" />
         </GUI>
     </Plugin>
 </PluginList>

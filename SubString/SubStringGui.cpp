@@ -4,61 +4,97 @@ using namespace gmpi;
 
 class SubStringGui final : public SeGuiInvisibleBase
 {
-    std::string s1;
-    std::string s2;
-    std::string subString;
+    std::string folderDialogPath;
+    std::string appDir;
+    std::string relativePath;
+    bool boolFlag = false;
 
-    void onSetS1()
+    void onSetFolderDialogPath() //user folder pin
     {
-        s1 = pinString1;
-        s2 = pinString2;
+        onSetAppDir();
+    }
 
-        if (s1.empty())
+    void onSetAppDir() //app dir pin
+    {
+        appDir = pinAppDir;
+        folderDialogPath = pinFolderDialogPath;
+        if (folderDialogPath.empty())
         {
-            onSetResetIn();            
+            pinFullPath = appDir + relativePath;
+            return;
+        }
+        onCompare();
+    }
+
+    void onCompare()
+    {
+        if (folderDialogPath.compare(0, appDir.size(), appDir) == 0)
+        {
+            boolFlag = false;
+            pinBoolFlag = boolFlag;
+            relativePath = folderDialogPath.substr(appDir.size());
+            pinRelativePath = relativePath;
         }
 
-        if (s1.compare(0, s2.size(), s2) == 0)
+        if (folderDialogPath.compare(0, appDir.size(), appDir) != 0)
         {
-            // Output the remainder
-            subString = s1.substr(s2.size());
-
-            pinSubString = s2 + subString;
+            boolFlag = true;
+            pinBoolFlag = boolFlag;
+            pinUserPath = folderDialogPath;
         }
-        if (s1.compare(0, s2.size(), s2) != 0)
+        onSetFullPath();
+    }
+
+    void onSetFullPath()
+    {
+        if (boolFlag)
         {
-            pinSubString = s1;
+            pinFullPath = pinUserPath;
+        }
+        if (!boolFlag)
+        {
+            pinFullPath = appDir + relativePath;
         }
     }
 
-    void onSetS2()
-    {
-        if(s1.empty())
-        {
-          pinString1 = s2 + subString;
-        }
-    }
-
-    StringGuiPin pinString1;
-    StringGuiPin pinString2;
-    StringGuiPin pinSubString;
-    BoolGuiPin pinResetIn;
+    StringGuiPin pinFolderDialogPath;
+    StringGuiPin pinAppDir;
+    StringGuiPin pinRelativePath;
+    StringGuiPin pinUserPath;
+    BoolGuiPin pinBoolFlag;
+    StringGuiPin pinFullPath;
+    BoolGuiPin pinRescan;
 
 public:
     SubStringGui()
     {
-        initializePin(pinString1, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetS1));
-        initializePin(pinString2, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetS2));
-        initializePin(pinSubString, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetPatchValue));
-        initializePin(pinResetIn, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetResetIn));
+        initializePin(pinFolderDialogPath, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetFolderDialogPath));
+        initializePin(pinAppDir, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetAppDir));
+        initializePin(pinRelativePath, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetRelativePath));
+        initializePin(pinUserPath, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetUserPath));
+        initializePin(pinBoolFlag, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetBoolFlag));
+        initializePin(pinFullPath);
+        initializePin(pinRescan, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetRescan));
     }
-    void onSetPatchValue()
+    void onSetRelativePath()
+    {
+        relativePath = pinRelativePath;
+        onSetFullPath();
+    }
+
+    void onSetUserPath()
     {
     }
 
-    void onSetResetIn()
+    void onSetBoolFlag()
     {
-        pinString1 = pinSubString;
+        boolFlag = pinBoolFlag;
+        onSetFullPath();
+    }
+
+    void onSetRescan()
+    {
+        onSetBoolFlag();              
     }
 };
 
