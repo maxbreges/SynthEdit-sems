@@ -85,27 +85,27 @@ public:
         initializePin(pinRescan, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetRescan));
         initializePin(pinDebug);
     }
-    void onSetRelativePath()
-    {
-        relativePath = pinRelativePath;
-        onSetFullPath();
-        pinDebug = "onSetRelativePath()";
-    }
-
     void onSetUserPath()
     {
+        onSetFullPath();
+        pinDebug = "onSetUserPath()";
     }
-
     void onSetBoolFlag()
     {
         boolFlag = pinBoolFlag;
         onSetFullPath();
         pinDebug = "onSetBoolFlag()";
     }
-
     void onSetRescan()
     {
-        onSetBoolFlag();              
+        onSetBoolFlag();  
+        pinDebug = "onSetRescan()";
+    }
+    void onSetRelativePath()
+    {
+        relativePath = pinRelativePath;
+        onSetFullPath();
+        pinDebug = "onSetRelativePath()";
     }
 };
 
