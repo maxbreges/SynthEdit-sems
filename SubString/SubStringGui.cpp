@@ -12,6 +12,7 @@ class SubStringGui final : public SeGuiInvisibleBase
     void onSetFolderDialogPath() //user folder pin
     {
         onSetAppDir();
+        pinDebug = "onSetFolderDialogPath()";
     }
 
     void onSetAppDir() //app dir pin
@@ -24,6 +25,7 @@ class SubStringGui final : public SeGuiInvisibleBase
             return;
         }
         onCompare();
+        pinDebug = "onSetAppDir()";
     }
 
     void onCompare()
@@ -34,6 +36,7 @@ class SubStringGui final : public SeGuiInvisibleBase
             pinBoolFlag = boolFlag;
             relativePath = folderDialogPath.substr(appDir.size());
             pinRelativePath = relativePath;
+            pinDebug = "onCompare(0)";
         }
 
         if (folderDialogPath.compare(0, appDir.size(), appDir) != 0)
@@ -41,6 +44,7 @@ class SubStringGui final : public SeGuiInvisibleBase
             boolFlag = true;
             pinBoolFlag = boolFlag;
             pinUserPath = folderDialogPath;
+            pinDebug = "onCompare(1)";
         }
         onSetFullPath();
     }
@@ -51,11 +55,13 @@ class SubStringGui final : public SeGuiInvisibleBase
         {
             pinFolderDialogPath = pinUserPath;
             pinFullPath = pinUserPath;
+            pinDebug = "onSetFullPath(1)";
         }
         if (!boolFlag)
         {
             pinFullPath = appDir + relativePath;
-        }
+            pinDebug = "onSetFullPath(0)";
+        }        
     }
 
     StringGuiPin pinFolderDialogPath;
@@ -65,6 +71,7 @@ class SubStringGui final : public SeGuiInvisibleBase
     BoolGuiPin pinBoolFlag;
     StringGuiPin pinFullPath;
     BoolGuiPin pinRescan;
+    StringGuiPin pinDebug;
 
 public:
     SubStringGui()
@@ -76,11 +83,13 @@ public:
         initializePin(pinBoolFlag, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetBoolFlag));
         initializePin(pinFullPath);
         initializePin(pinRescan, static_cast<MpGuiBaseMemberPtr2>(&SubStringGui::onSetRescan));
+        initializePin(pinDebug);
     }
     void onSetRelativePath()
     {
         relativePath = pinRelativePath;
         onSetFullPath();
+        pinDebug = "onSetRelativePath()";
     }
 
     void onSetUserPath()
@@ -91,6 +100,7 @@ public:
     {
         boolFlag = pinBoolFlag;
         onSetFullPath();
+        pinDebug = "onSetBoolFlag()";
     }
 
     void onSetRescan()

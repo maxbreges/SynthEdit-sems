@@ -9,6 +9,7 @@
 			<Pin name="Bool Flag" datatype="bool" />
 			<Pin name="Full Path Out" datatype="string" direction="out"/>
 			<Pin name="Rescan" datatype="bool" />
+			<Pin name="Debug" datatype="string" direction="out"/>
         </GUI>
     </Plugin>
 </PluginList>
