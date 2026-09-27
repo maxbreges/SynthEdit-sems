@@ -49,6 +49,7 @@ class SubStringGui final : public SeGuiInvisibleBase
     {
         if (boolFlag)
         {
+            pinFolderDialogPath = pinUserPath;
             pinFullPath = pinUserPath;
         }
         if (!boolFlag)
