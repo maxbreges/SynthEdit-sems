@@ -6,7 +6,7 @@
 			<Pin name="Text" datatype="string" direction="out" private="true"/>
 			<Pin name="Text Color" datatype="string" default="ffffffff" isMinimised="true"/>
 
-			<Pin name="Color" datatype="string" default="ffaa99aa"/>
+			<Pin name="Color" datatype="string" default="ff00aa00"/>
 			<Pin name="Color Bottom" datatype="string" default="ff000000" isMinimised="true"/>
 			<Pin name="ColorOut" datatype="string" direction="out" private="true"/>
 
@@ -18,11 +18,10 @@
 			<Pin name="Bool In" datatype="bool" />
 			<Pin name="Bool Out" datatype="bool"/>
 			<Pin name="Bool Out" datatype="bool" direction="out"/>
-			<Pin name="Ctrl+click" datatype="bool" direction="out"/>
-			<Pin name="Ctrl+clk latch" datatype="bool"/>
-			<Pin name="mOver" datatype="bool" direction="out" private="true"/>
-			<Pin name="mOver" datatype="bool"/>
-			<Pin name="mDown" datatype="bool"/>
+			<Pin name="Ctrl+click" datatype="bool" />
+			<Pin name="Shift+click" datatype="bool"/>
+			<Pin name="Shift+Ctrl+clk" datatype="bool"/>
+			<Pin name="mOver" datatype="bool"/>			
 
 			<Pin name="Mouse Response" datatype="enum" isMinimised="true" metadata="Clicked, Stepped, Off"/>
 
@@ -42,9 +41,7 @@
 			<Pin name="Align" datatype="enum" isMinimised="true" metadata="Center, Top, Bottom"/>
 			<Pin name="Align Top/Bottom" datatype="float" default="4" isMinimised="true"/>
 
-			<Pin name="Hint" datatype="string" default="Hint" isMinimised="true"/>
-			<Pin name="Reset Latch State" datatype="bool" />
-
+			<Pin name="Hint" datatype="string" default="" isMinimised="true"/>
 		</GUI>
 	</Plugin>
 </PluginList>

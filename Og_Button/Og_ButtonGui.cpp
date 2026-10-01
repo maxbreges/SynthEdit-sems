@@ -26,28 +26,15 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 	std::wstring HintColor = L"ffffffff";
 
-	void onSetBoolOut()
+void onSetBoolOut()
 	{
 		pinBoolIn = pinBoolOut.getValue();
 		updateColor();
-		invalidateRect();
-	}
-
-	void onSetCtrlClk()
-	{
-	}
-
-	void onSetMouseOver()
-	{
-	}
-	void onSetMouseDown()
-	{
 	}
 
 	int32_t MP_STDCALL setHover(bool isMouseOverMe) override
 	{
 		pinMouseOver = isMouseOverMe;
-		pinMouseOverIn = isMouseOverMe;
 
 		onSetHint();
 		return gmpi::MP_OK;
@@ -81,7 +68,6 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	void onSetColor()
 	{
 		updateColor();
-		invalidateRect();
 	}
 	void onSetGradient()
 	{
@@ -89,19 +75,12 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	}
 	void onSetRadial()
 	{
-		if (pinRadial)
-		{
-			radius = 100;
-		}
-		else
-			radius = 5;
-		invalidateRect();
+		updateColor();
 	}
 
 	void onSetBrightness()
 	{
 		updateColor();
-		invalidateRect();
 	}
 
 	void onSetHintColor()
@@ -138,9 +117,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	{
 		sharedState = pinBoolIn;
 		updateColor();
-		invalidateRect();
 	}
-
 
 	void onSetMouseYPos()
 	{
@@ -150,7 +127,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	{
 	}
 
-	void onSetCtrlClkLatch()
+	void onSetShiftCtrlClk()
 	{
 	}
 
@@ -173,10 +150,9 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 	BoolGuiPin pinBoolOut;
 	BoolGuiPin pinBoolOutR;
 	BoolGuiPin pinCtrlClk;
-	BoolGuiPin pinCtrlClkLatch;
+	BoolGuiPin pinShiftClk;
+	BoolGuiPin pinShiftCtrlClk;
 	BoolGuiPin pinMouseOver;
-	BoolGuiPin pinMouseOverIn;
-	BoolGuiPin pinMouseDown;
 
 	IntGuiPin pinResponse;
 
@@ -200,15 +176,13 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 
 	StringGuiPin pinToolTip;
-	BoolGuiPin pinReset;
-
 
 
 public:
 	ButtonGui()
 	{
 		initializePin(pinHint, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetHint));
-		initializePin(pinHintOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
+		initializePin(pinHintOut);
 		initializePin(pinHintColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetHintColor));
 
 		initializePin(pinColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
@@ -222,11 +196,11 @@ public:
 		initializePin(pinBoolIn, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolIn));
 		initializePin(pinBoolOut, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetBoolOut));
 		initializePin(pinBoolOutR);
-		initializePin(pinCtrlClk, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCtrlClk));
-		initializePin(pinCtrlClkLatch, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCtrlClkLatch));
-		initializePin(pinMouseOver, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
-		initializePin(pinMouseOverIn, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseOver));
-		initializePin(pinMouseDown, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetMouseDown));
+		initializePin(pinCtrlClk);
+		initializePin(pinShiftClk);
+		initializePin(pinShiftCtrlClk);
+		initializePin(pinMouseOver);
+
 		initializePin(pinResponse, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetResponse));
 
 		initializePin(pinCornerRadius, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetCornerRadius));
@@ -248,13 +222,8 @@ public:
 		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignY));
 
 		initializePin(pinToolTip, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetToolTip));
-		initializePin(pinReset, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetReset));
 	}
-	void onSetReset()
-	{
-		if (pinReset)
-			pinCtrlClkLatch = false;
-	}
+
 
 	float mult = 1.f;
 	float heightY = 1.f;
@@ -267,10 +236,23 @@ public:
 
 		pinMouseYPos = mult * (1 - (float)offset.y) + 1.f;
 
-		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
+		if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) && (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT))
 		{
 			setCapture();
-			pinCtrlClkLatch = !pinCtrlClkLatch;
+			pinShiftCtrlClk = true;
+			goto bypass;
+		}
+
+		if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)&&((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) ==0))
+		{
+			setCapture();
+			pinCtrlClk = true;
+			goto bypass;
+		}
+		if ((flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT) && ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) == 0))
+		{
+			setCapture();
+			pinShiftClk = true;
 			goto bypass;
 		}
 
@@ -295,36 +277,23 @@ public:
 		}
 
 		pinBoolOutR = pinBoolOut = true;
-		pinMouseDown = true;
-		//pinCtrlClkLatch = false;
+
 	bypass:
 		return gmpi::MP_OK;
-
 	}
 
 	int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point) override
 	{
-
-		// Release control key
-		if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
-		{
-			pinCtrlClk = true;
-			pinCtrlClk = false;
-		}
-
-		// Ensure capture exists before releasing
-		if (getCapture())
-		{
-			releaseCapture();
-		}
-
 		if (pinResponse.getValue() == 0) // Clicked mode
 		{
 			sharedState = false; // reset after click
 		}
 		// In stepped mode, keep toggle state until next press
 		pinBoolOutR = pinBoolOut = sharedState;
-		pinMouseDown = false;
+		pinShiftClk = false;
+		pinCtrlClk = false;
+		pinShiftCtrlClk = false;
+		releaseCapture();
 		return gmpi::MP_OK;
 	}
 
@@ -390,15 +359,28 @@ public:
 		// Clamp brightness
 		if (!sharedState)
 		{
+			if (pinRadial)
+			{
+				brightness = 0.85f * PinBrightness;
+				brightnessGlow = 1.0f * PinBrightness;
+			}
+			else
 			brightness = 0.55f * PinBrightness;
 			brightnessGlow = 0.75f * PinBrightness;
+
 			HintColor = pinHintColor;
 		}
 
 		if (sharedState)
 		{
-			brightness = 0.85f * PinBrightness;
-			brightnessGlow = 1.0f * PinBrightness;
+			if (pinRadial)
+			{
+				brightness = 1.5f * PinBrightness;
+				brightnessGlow = 2.666f * PinBrightness;
+			}
+			else
+			brightness = 1.0f * PinBrightness;
+			brightnessGlow = 1.333f * PinBrightness;
 			HintColor = pinBottomColor;
 		}
 
@@ -430,6 +412,7 @@ public:
 		// Output
 		pinColorOut = resultHex;
 		pinColorGlow = resultHexGlow;
+		invalidateRect();
 	}
 
 	int32_t MP_STDCALL OnRender(GmpiDrawing_API::IMpDeviceContext* drawingContext) override
@@ -442,8 +425,14 @@ public:
 		float height = r.bottom - r.top;
 		heightY = height;
 
-		radius = (std::min<float>)(radius, width / 2);
-		radius = (std::min<float>)(radius, height / 2);
+		const float cornerRadius = std::min<float>(
+			radius,
+			std::min<float>(width, height) * 0.5f
+		);
+
+		// Size the radial gradient to the current rectangle.
+		// For a circular gradient that fits inside, use half the shorter side.
+		const float radialRadius = std::min<float>(width, height) * 0.5f;
 
 		auto geometry = g.GetFactory().CreatePathGeometry();
 		auto sink = geometry.Open();
@@ -517,12 +506,22 @@ public:
 			{ 0.33f, glowCol },
 			{ 0.5f, topCol },
 			{ 1.0f, botCol },
-		};
-		GradientStop gradientStopsR[]
-		{
+		};		
+
+			GradientStop gradientStopsR[]
+			{
+				{ 0.0f, topCol },
+				{ 1.0f, botCol },
+			};
+
+			GradientStop gradientStopsRS[]
+			{
 			{ 0.0f, topCol },
+			{ 0.6f, glowCol },
+			{ 0.8f, topCol },
 			{ 1.0f, botCol },
-		};
+			};
+		
 
 		// Calculate gradient center based on pins
 		float gradientX = r.left + pinGradientCenterX * r.getWidth();
@@ -531,11 +530,13 @@ public:
 
 		auto gradientStopCollection = g.CreateGradientStopCollection(gradientStops);
 		auto gradientStopCollectionR = g.CreateGradientStopCollection(gradientStopsR);
+		auto gradientStopCollectionRS = g.CreateGradientStopCollection(gradientStopsRS);					
 
 		// Create the radial gradient brush
-		//float radiusR = std::min<>(r.getWidth()*0.5f, r.getHeight()*0.5f);
-		RadialGradientBrushProperties radialGradientProps(gradientCenter, radius);
+
+		RadialGradientBrushProperties radialGradientProps(gradientCenter, radialRadius);
 		auto BrushR = g.CreateRadialGradientBrush(radialGradientProps, BrushProperties(), gradientStopCollectionR);
+		auto BrushRS = g.CreateRadialGradientBrush(radialGradientProps, BrushProperties(), gradientStopCollectionRS);
 
 		auto Brush = g.CreateLinearGradientBrush(gradientStopCollection, point1, point2);
 		auto outlineBrush = g.CreateSolidColorBrush(botCol);
@@ -543,8 +544,13 @@ public:
 
 		if (pinRadial)
 		{
+			radius = radialRadius;
+			if(sharedState)
+			{
+				g.FillGeometry(geometry, BrushRS);
+			}
+			else
 			g.FillGeometry(geometry, BrushR);
-			onSetRadial();
 		}
 		else
 
@@ -608,12 +614,14 @@ public:
 #endif
 		}
 		//===================================
+		invalidateRect();
 		return gmpi::MP_OK;
 	}
+
 	std::string getDisplayText()
 	{
 		return WStringToUtf8(pinHint.getValue());
-	}
+	}	
 };
 
 namespace
