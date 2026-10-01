@@ -3,8 +3,8 @@
     <Plugin id="LatchGui" name="Latch Gui" category="mx/Sub-Controls">
         <GUI>
             <Pin name="Click In" datatype="bool"/>
-            <Pin name="Latch Out" datatype="bool" direction="out"/>
-			<Pin name="Latch Out" datatype="bool" />
+			<Pin name="Click In" datatype="bool" direction="out"/>
+            <Pin name="Latch Out" datatype="bool" />
         </GUI>
     </Plugin>
 </PluginList>
