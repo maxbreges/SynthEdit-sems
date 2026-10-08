@@ -26,6 +26,7 @@ class ButtonGui final : public gmpi_gui::MpGuiGfxBase
 
 	std::wstring HintColor = L"ffffffff";
 
+
 void onSetBoolOut()
 	{
 		pinBoolIn = pinBoolOut.getValue();
@@ -36,7 +37,7 @@ void onSetBoolOut()
 	{
 		pinMouseOver = isMouseOverMe;
 
-		onSetHint();
+		onSetText();
 		return gmpi::MP_OK;
 	}
 
@@ -46,19 +47,23 @@ void onSetBoolOut()
 		SetResponse = (mResponse[pinResponse.getValue()]);
 	}
 
-	int32_t MP_STDCALL getToolTip(GmpiDrawing_API::MP1_POINT point, gmpi::IString* returnString) override {
+	int32_t MP_STDCALL getToolTip(GmpiDrawing_API::MP1_POINT point, gmpi::IString* returnString) override 
+	{
+		if (pinDisableHint)
+			return gmpi::MP_OK; // Leave the tooltip empty.
+
 		auto utf8String = (std::string)pinToolTip;
 		returnString->setData(utf8String.data(), (int32_t)utf8String.size());
 		return gmpi::MP_OK;
 	}
 
-	void onSetDisplayHint()
+	void onSetDisplayText()
 	{
 		invalidateRect();
 	}
-	void onSetHint()
+	void onSetText()
 	{
-		pinHintOut = pinHint;
+		pinTextOut = pinText;
 		invalidateRect();
 	}
 	void onSetCornerRadius()
@@ -125,6 +130,7 @@ void onSetBoolOut()
 
 	void onSetToolTip()
 	{
+		invalidateRect();
 	}
 
 	void onSetShiftCtrlClk()
@@ -134,9 +140,9 @@ void onSetBoolOut()
 	//functionality
 	//hint
 	//appearance
-	StringGuiPin pinHint;
-	StringGuiPin pinHintOut;
-	StringGuiPin pinHintColor;
+	StringGuiPin pinText;
+	StringGuiPin pinTextOut;
+	StringGuiPin pinTextColor;
 
 	StringGuiPin pinColor;
 	StringGuiPin pinBottomColor;
@@ -176,14 +182,14 @@ void onSetBoolOut()
 
 
 	StringGuiPin pinToolTip;
-
+	BoolGuiPin pinDisableHint;
 
 public:
 	ButtonGui()
 	{
-		initializePin(pinHint, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetHint));
-		initializePin(pinHintOut);
-		initializePin(pinHintColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetHintColor));
+		initializePin(pinText, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetText));
+		initializePin(pinTextOut);
+		initializePin(pinTextColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetHintColor));
 
 		initializePin(pinColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
 		initializePin(pinBottomColor, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetColor));
@@ -212,7 +218,7 @@ public:
 		initializePin(pinGradientCenterY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetGradient));
 		initializePin(pinRadial, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetRadial));
 
-		initializePin(pinDisplayText, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetDisplayHint));
+		initializePin(pinDisplayText, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetDisplayText));
 
 
 		initializePin(pinFontSize, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetFontSize));
@@ -222,6 +228,7 @@ public:
 		initializePin(pinAlignY, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetAlignY));
 
 		initializePin(pinToolTip, static_cast<MpGuiBaseMemberPtr2>(&ButtonGui::onSetToolTip));
+		initializePin(pinDisableHint);
 	}
 
 
@@ -235,6 +242,11 @@ public:
 		mult = 1.f / heightY;
 
 		pinMouseYPos = mult * (1 - (float)offset.y) + 1.f;
+
+		if (pinResponse.getValue() == 2)
+		{
+			goto bypass;
+		}
 
 		if ((flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL) && (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT))
 		{
@@ -368,7 +380,7 @@ public:
 			brightness = 0.55f * PinBrightness;
 			brightnessGlow = 0.75f * PinBrightness;
 
-			HintColor = pinHintColor;
+			HintColor = pinTextColor;
 		}
 
 		if (sharedState)
@@ -610,7 +622,7 @@ public:
 #ifdef _WIN32
 			g.DrawTextU(getDisplayText(), textFormat, getRect(), brush, 1);
 #else
-			g.DrawTextU(pinHint, textFormat, getRect(), brush, 1);
+			g.DrawTextU(pinText, textFormat, getRect(), brush, 1);
 #endif
 		}
 		//===================================
@@ -620,7 +632,7 @@ public:
 
 	std::string getDisplayText()
 	{
-		return WStringToUtf8(pinHint.getValue());
+		return WStringToUtf8(pinText.getValue());
 	}	
 };
 

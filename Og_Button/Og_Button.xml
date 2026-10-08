@@ -41,7 +41,8 @@
 			<Pin name="Align" datatype="enum" isMinimised="true" metadata="Center, Top, Bottom"/>
 			<Pin name="Align Top/Bottom" datatype="float" default="4" isMinimised="true"/>
 
-			<Pin name="Hint" datatype="string" default="" isMinimised="true"/>
+			<Pin name="Hint" datatype="string" default="" isMinimised="false"/>
+			<Pin name="Disable Hint" datatype="bool" default="1" isMinimised="false"/>
 		</GUI>
 	</Plugin>
 </PluginList>
