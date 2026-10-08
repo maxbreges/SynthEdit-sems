@@ -2,19 +2,19 @@
 <PluginList>
     <Plugin id="resolveFilename" name="Resolve Filename" category="mx/Controls">
 		<Parameters>
-			<Parameter id="0" name="From DSP to Gui" datatype="string" private="true" ignorePatchChange="true"/>
+			<Parameter id="0" name="App Directory Path" datatype="string" private="true" ignorePatchChange="true"/>
 		</Parameters>
 		<Audio>
 			<Pin name="App Dir Path" datatype="string" default="AppDirPath" private="true"/>
             <Pin name="App Directory" datatype="string" direction="out"/>
             <Pin name="App Dir Path" datatype="string" direction="out" private="true" parameterId="0"/>
 			<Pin name="Debug" datatype="string" direction="out" private="true"/>
+			<Pin name="Init pulse" datatype="bool" direction="out" private="false"/>
 		</Audio>
 		<GUI>
 			<Pin name="App Dir Path" datatype="string" direction="in" private="true" parameterId="0"/>
 			<Pin name="App Directory" datatype="string" direction="out"/>
-			<Pin name="Init pulse" datatype="bool" direction="out"/>
-			<Pin name="Reset Init" datatype="bool" direction="out" private="true"/>
+			<Pin name="Init pulse" datatype="bool" direction="out" private="false"/>
 		</GUI>
     </Plugin>
 </PluginList>

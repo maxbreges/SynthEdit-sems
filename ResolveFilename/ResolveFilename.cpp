@@ -6,16 +6,18 @@ class ResolveFilename final : public MpBase2
 {
 	StringInPin pinFileName;
 	StringOutPin pinAppDirPathOut;
-	StringOutPin pinAppDirPathOut2Gui;
+	StringOutPin pinToParameter;
 	StringOutPin pinDebug;
+	BoolOutPin pinBool;
 
 public:
 	ResolveFilename()
 	{
 		initializePin(pinFileName);
 		initializePin( pinAppDirPathOut );
-		initializePin( pinAppDirPathOut2Gui );
+		initializePin(pinToParameter);
 		initializePin(pinDebug);
+		initializePin(pinBool);
 	}
 	
 	void onSetPins() override
@@ -26,7 +28,7 @@ public:
 		getHost()->resolveFilename(filename.c_str(), sizeof(fullFilename) / sizeof(fullFilename[0]), fullFilename);
 		
 		std::wstring fullPath(fullFilename);
-		pinDebug = fullPath;
+		//pinDebug = fullPath;
 		// Step 2: Extract directory path
 		size_t lastSlashPos = fullPath.find_last_of(L"\\/");
 
@@ -45,12 +47,22 @@ public:
 		// You can use it to create files later, or just to get the folder path
 #if defined(_WIN32)
 		pinAppDirPathOut = folderPath + (L"\\");
-		pinAppDirPathOut2Gui = pinAppDirPathOut;
+		pinToParameter = pinAppDirPathOut;
 #elif defined(__APPLE__)
 		pinAppDirPathOut = folderPath + (L"/");
-		pinAppDirPathOut2Gui = pinAppDirPathOut;
+		pinToParameter = pinAppDirPathOut;
 #endif
-		
+		pinBool.setValue(true, getBlockPosition());
+		pinBool.setValue(false, getBlockPosition() + 44);
+
+/*		//preparing string for sending to gui
+		auto messageData = pinAppDirPathOut.getValue();
+		messageData.push_back(L'\0');
+		size_t sizeInBytes = messageData.size() * sizeof(wchar_t);
+		int32_t sizeInBytesInt32 = static_cast<int32_t>(sizeInBytes);
+		getHost()->sendMessageToGui(121, sizeInBytesInt32, messageData.data());*/
+
+		getHost()->sendMessageToGui(0, 0, nullptr);
 	}
 };
 

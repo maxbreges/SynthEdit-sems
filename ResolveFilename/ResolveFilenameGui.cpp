@@ -1,39 +1,21 @@
-#include "mp_sdk_gui2.h"
+#include "ResolveFileNameGui.h"
 
-using namespace gmpi;
+REGISTER_GUI_PLUGIN (ResolveFilenameGui, L"resolveFilename");
 
-class ResolveFilenameGui final : public SeGuiInvisibleBase
+ResolveFilenameGui::ResolveFilenameGui (IMpUnknown* host) : MpGuiBase(host)
 {
-	int Init = false;
-
-	void onSetFromDSP()
-	{
-		pinInit = Init;
-		pinCommonPath = pinFromDSP;
-		Init = true;
-		pinInit = Init;
-		onSetReset();
-	}
-
-	StringGuiPin pinFromDSP;
-	StringGuiPin pinCommonPath;
-	BoolGuiPin pinInit;
-	BoolGuiPin pinReset;
-
-public:
-	ResolveFilenameGui()
-	{	initializePin(pinFromDSP, static_cast<MpGuiBaseMemberPtr2>(&ResolveFilenameGui::onSetFromDSP));
-		initializePin(pinCommonPath);
-		initializePin(pinInit, static_cast<MpGuiBaseMemberPtr2>(&ResolveFilenameGui::onSetFromDSP));
-		initializePin(pinReset, static_cast<MpGuiBaseMemberPtr2>(&ResolveFilenameGui::onSetReset));
-	}
-	void onSetReset()
-	{
-		pinInit = pinReset;
-	}
-};
-
-namespace
+    initializePin(pinFromParameter, static_cast<MpGuiBaseMemberPtr>(&ResolveFilenameGui::onSetString));
+    initializePin(pinCommonPath);
+        initializePin(pinBool);
+}
+void ResolveFilenameGui::onSetString()
 {
-	auto r = Register<ResolveFilenameGui>::withId(L"resolveFilename");
+    pinCommonPath = pinFromParameter;
+}
+
+int32_t ResolveFilenameGui::receiveMessageFromAudio(int32_t id, int32_t size, void* messageData)
+{
+    pinBool = true;
+    pinBool = false;
+    return gmpi::MP_OK;
 }
