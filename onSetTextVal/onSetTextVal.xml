@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My onSetTextVal" name="onSetTextVal" category="mx/Modifiers">
+        <Audio>
+            <Pin name="string" datatype="string"/>
+            <Pin name="bool" datatype="bool" direction="out"/>
+        </Audio>
+    </Plugin>
+</PluginList>
