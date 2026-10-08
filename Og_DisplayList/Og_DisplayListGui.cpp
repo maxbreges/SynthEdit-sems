@@ -58,6 +58,9 @@ class Og_DisplayListGui final : public gmpi_gui::MpGuiGfxBase
     void onSetCornerOn()
     {invalidateRect();}
 
+    StringGuiPin pinToolTip;
+    BoolGuiPin pinDisableHint;
+
  	StringGuiPin pinBgColor;
  	StringGuiPin pinColor;
  	StringGuiPin pinTextColor;
@@ -81,6 +84,9 @@ class Og_DisplayListGui final : public gmpi_gui::MpGuiGfxBase
 public:
 	Og_DisplayListGui()
 	{
+        initializePin(pinToolTip, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetToolTip));
+        initializePin(pinDisableHint);
+
 		initializePin( pinBgColor, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetBgColor) );
 		initializePin( pinColor, static_cast<MpGuiBaseMemberPtr2>(&Og_DisplayListGui::onSetColor) );
 
@@ -103,6 +109,21 @@ public:
 
         initializePin(pinColorGlow);
         initializePin(pinColorOut);
+    }
+
+    void onSetToolTip()
+    {
+        invalidateRect();
+    }
+
+    int32_t MP_STDCALL getToolTip(GmpiDrawing_API::MP1_POINT point, gmpi::IString* returnString) override
+    {
+        if (pinDisableHint)
+            return gmpi::MP_OK; // Leave the tooltip empty.
+
+        auto utf8String = (std::string)pinToolTip;
+        returnString->setData(utf8String.data(), (int32_t)utf8String.size());
+        return gmpi::MP_OK;
     }
 
     void onSetUpdate()

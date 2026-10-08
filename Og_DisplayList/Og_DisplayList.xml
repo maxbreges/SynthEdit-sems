@@ -2,7 +2,10 @@
 <PluginList>
     <Plugin id="My Og_DisplayList" name="Display List" category="Og/Sub-Controls">
         <GUI graphicsApi="GmpiGui">
-            <Pin name="BgColor" datatype="string" default="FF000000" private="true"/>
+			<Pin name="Hint" datatype="string" default="" isMinimised="false"/>
+			<Pin name="Disable Hint" datatype="bool" default="1" isMinimised="false"/>
+			
+			<Pin name="BgColor" datatype="string" default="FF000000" private="true"/>
             <Pin name="Color" datatype="string" default="FF666666"/>
             <Pin name="Text Color" datatype="string" default="ffffffff"/>
             <Pin name="Text Font" datatype="string" default="Times New Roman" isMinimised="true"/>
