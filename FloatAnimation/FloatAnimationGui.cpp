@@ -47,5 +47,10 @@ FloatAnimationGui::FloatAnimationGui(IMpUnknown* host) : MpGuiBase(host)
         float divider = 1.f / (60 * mult);
         pinAnimPos = sampleCnt * divider;
 
+        if (!pinOnOff)
+        {
+            pinAnimPos = 0.f;
+        }
+
         return gmpi::MP_OK;
     }

@@ -86,7 +86,6 @@ public:
     }
 };
 
-
 namespace
 {
     auto r = Register<FloatAnimation>::withId(L"My FloatAnimation");
