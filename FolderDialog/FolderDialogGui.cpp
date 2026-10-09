@@ -148,35 +148,36 @@ void FolderDialogGui::selectFolderMac()
 {
     const char* default_folder = defaultFolder.c_str();
     char command[512];
+
     snprintf(command, sizeof(command),
-        "osascript -e 'set folder to (choose folder with prompt \"Select a folder\" default location (POSIX file \"%s\"))' -e 'display dialog folder'", default_folder);
+        "osascript -e 'POSIX path of (choose folder with prompt \"Select a folder\" "
+        "default location (POSIX file \"%s\"))'",
+        default_folder);
 
     FILE* pipe = popen(command, "r");
+    if (!pipe)
+        return;
 
-    if (!pipe) return;
     pinState = true;
-    char buffer[1024]; // larger buffer for longer paths
+
+    char buffer[1024];
     std::string result;
-    if (fgets(buffer, sizeof(buffer), pipe))
-    {
-        // Remove trailing newline
-        if (!result.empty() && result.back() == '\n')
-        {
-            result.pop_back();
-        }
 
-        // Remove any quotes around the path
-        if (result.size() > 1 && result[0] == '"' && result[result.size() - 1] == '"')
-        {
-            result = result.substr(1, result.size() - 2);
-        }
+    while (fgets(buffer, sizeof(buffer), pipe))
+        result += buffer;
 
-        // Store the result
-        // Here, you can do something with the selected folder path, like set it to a variable
-        // For example:
-        selectedFolder = result;
-    }
     pclose(pipe);
+
+    if (!result.empty() && result.back() == '\n')
+        result.pop_back();
+
+    if (!result.empty())
+    {
+        pinFolderName = result;
+        previousString = pinFolderName;
+    }
+
+    pinState = false;
 }
 
 #endif
