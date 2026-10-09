@@ -146,13 +146,20 @@ void FolderDialogGui::selectFolderWindows()
 
 void FolderDialogGui::selectFolderMac()
 {
-    const char* default_folder = defaultFolder.c_str();
-    char command[512];
+    char command[2048];
 
-    snprintf(command, sizeof(command),
-        "osascript -e 'POSIX path of (choose folder with prompt \"Select a folder\" "
-        "default location (POSIX file \"%s\"))'",
-        default_folder);
+    if (defaultFolder.empty())
+    {
+        snprintf(command, sizeof(command),
+            "osascript -e 'POSIX path of (choose folder with prompt \"Select a folder\")'");
+    }
+    else
+    {
+        snprintf(command, sizeof(command),
+            "osascript -e 'POSIX path of (choose folder with prompt \"Select a folder\" "
+            "default location (POSIX file \"%s\"))'",
+            defaultFolder.c_str());
+    }
 
     FILE* pipe = popen(command, "r");
     if (!pipe)
@@ -162,19 +169,19 @@ void FolderDialogGui::selectFolderMac()
 
     char buffer[1024];
     std::string result;
-
     while (fgets(buffer, sizeof(buffer), pipe))
         result += buffer;
 
-    pclose(pipe);
+    int status = pclose(pipe);
 
-    if (!result.empty() && result.back() == '\n')
-        result.pop_back();
-
-    if (!result.empty())
+    if (status == 0 && !result.empty())
     {
+        if (result.back() == '\n')
+            result.pop_back();
+
+        defaultFolder = result;  // Remember for the next selection.
         pinFolderName = result;
-        previousString = pinFolderName;
+        previousString = result;
     }
 
     pinState = false;
