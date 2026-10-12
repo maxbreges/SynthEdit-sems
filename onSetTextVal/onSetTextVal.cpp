@@ -10,6 +10,7 @@ class onSetTextVal final : public MpBase2
 	StringInPin pinString;
 	BoolOutPin pinBool;
 	BoolOutPin pinToParam;
+
 public:
 	onSetTextVal()
 	{
@@ -22,7 +23,7 @@ public:
 	{
 		if (isInitialized)
 		{
-			pinToParam = true;
+			pinToParam.setValue(true, getBlockPosition());
 
 			if (guiOpen)
 			{
@@ -35,7 +36,6 @@ public:
 		}
 
 		isInitialized = true;
-
 	}
 
 	int32_t receiveMessageFromGui(int32_t id, int32_t size, void* msg)
@@ -44,7 +44,11 @@ public:
 		{
 			auto value = *static_cast<const int32_t*>(msg);
 			guiOpen = value;
-			onSetPins();
+
+			if (value > 1)
+			{
+				onSetPins();
+			}			
 		}
 
 		return gmpi::MP_OK;

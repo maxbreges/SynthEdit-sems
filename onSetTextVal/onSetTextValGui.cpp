@@ -12,17 +12,19 @@ class GUI_open_countGui final : public SeGuiInvisibleBase
 
  	void onSetBoolVal()
 	{
-		retrievePluginID(static_cast<int32_t>(pinBoolVal));
+		if (pinBoolVal)
+		{
+			retrievePluginID(static_cast<int32_t>(pinBoolVal));
+		}
+		else{}
 	}
 
 	BoolGuiPin pinBoolVal;
- 	IntGuiPin pinInstanceIdCount;
 
 public:
 	GUI_open_countGui()
 	{
 		initializePin(pinBoolVal, static_cast<MpGuiBaseMemberPtr2>(&GUI_open_countGui::onSetBoolVal) );
-		initializePin(pinInstanceIdCount, static_cast<MpGuiBaseMemberPtr2>(&GUI_open_countGui::onSetBoolVal));
 		instanceId = ++nextInstanceId;	
 	}
 
@@ -33,8 +35,6 @@ public:
 		if (instanceId >= 1)
 		{
 			getHost()->sendMessageToAudio(2232322, sizeof(instanceId), &instanceId);
-			pinInstanceIdCount = (const int)instanceId;
-			nextInstanceId = instanceId = 0;
 		}
 		
 		return handle; // or return value, depending on intent
