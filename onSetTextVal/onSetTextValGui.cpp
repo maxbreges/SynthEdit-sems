@@ -20,24 +20,29 @@ class GUI_open_countGui final : public SeGuiInvisibleBase
 	}
 
 	BoolGuiPin pinBoolVal;
+	BoolGuiPin pinFolderChanged;
 
 public:
 	GUI_open_countGui()
 	{
 		initializePin(pinBoolVal, static_cast<MpGuiBaseMemberPtr2>(&GUI_open_countGui::onSetBoolVal) );
+		initializePin(pinFolderChanged, static_cast<MpGuiBaseMemberPtr2>(&GUI_open_countGui::onSetFolderChanged));
 		instanceId = ++nextInstanceId;	
 	}
 
-	int32_t retrievePluginID(int value)
+	void onSetFolderChanged()
 	{
-		auto handle = getHost()->getHandle(value);
-		
+		bool folderChanged = pinFolderChanged;
+		getHost()->sendMessageToAudio(2232323, sizeof(folderChanged), &folderChanged);
+	}
+
+	int32_t retrievePluginID(int value)
+	{		
 		if (instanceId >= 1)
 		{
 			getHost()->sendMessageToAudio(2232322, sizeof(instanceId), &instanceId);
-		}
-		
-		return handle; // or return value, depending on intent
+		}		
+		return value; 
 	}
 };
 

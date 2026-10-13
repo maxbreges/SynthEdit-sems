@@ -5,12 +5,14 @@
 			<Parameter id="0" datatype="bool" private="true" persistant="false"/>
 		</Parameters>
 		<Audio>
+			<Pin name="bool" datatype="bool" direction="out" parameterId="0"/>
             <Pin name="string" datatype="string"/>
             <Pin name="bool" datatype="bool" direction="out"/>
-			<Pin name="bool" datatype="bool" direction="out" parameterId="0"/>
+			<!--<Pin name="boolRef" datatype="bool" direction="out"/>-->
         </Audio>
 		<GUI>
 			<Pin name="bool" datatype="bool" parameterId="0"/>
+			<Pin name="!previousFolder" datatype="bool" />			
 		</GUI>
     </Plugin>
 </PluginList>
