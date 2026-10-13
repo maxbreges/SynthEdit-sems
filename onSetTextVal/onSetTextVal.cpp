@@ -65,7 +65,6 @@ public:
 		{
 			folderChanged = true;
 		}
-
 		return gmpi::MP_OK;
 	}
 };
