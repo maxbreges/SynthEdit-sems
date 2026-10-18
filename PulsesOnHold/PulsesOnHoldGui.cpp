@@ -69,7 +69,7 @@ public:
 		initializePin(pinOnMouseUp);
 	}
 
-	bool PulsesOnHoldGui::OnTimer()
+	bool OnTimer() override
 	{
 		hold = true;
 
