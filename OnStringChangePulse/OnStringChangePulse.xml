@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="My onStringChangePulse" name="onStringChangePulse" category="mx/Tools">		
+        <Audio>
+            <Pin name="String In" datatype="string" />
+            <Pin name="Bool" datatype="bool" direction="out"/>
+            <Pin name="Pulse Length (samples)" datatype="int" default="200" isMinimised="true"/>
+        </Audio>
+		<GUI>
+			<Pin name="Bool In" datatype="bool" direction="out"/>
+		</GUI>
+    </Plugin>
+</PluginList>
