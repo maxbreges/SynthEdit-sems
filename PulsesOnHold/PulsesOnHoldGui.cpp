@@ -1,5 +1,8 @@
+#ifndef DRAWING_H
+#define DRAWING_H
+
 #include <chrono>
-#include "mp_sdk_gui2.h"
+#include "mp_sdk_gui.h"
 #include "../se_sdk3/TimerManager.h"
 
 using namespace gmpi;
@@ -84,6 +87,7 @@ public:
 		}
 		return true;
 	}
+#endif  // DRAWING_H
 };
 
 namespace
