@@ -169,6 +169,7 @@ public:
             GmpiGui::GraphicsHost host(getGuiHost());
             nativeMenu = host.createPlatformMenu(Point(0, 0));
             nativeMenu.SetAlignment(TextAlignment::Leading);
+            pinPopUpopen = true;
 
             it_enum_list itr(pinItemList);
             const int popupMenuWrapRowCount = 32;
@@ -226,6 +227,7 @@ public:
         {
             pinChoice = nativeMenu.GetSelectedId();
         }
+        pinPopUpopen = false;
         nativeMenu.setNull(); // release it.
     }
 
