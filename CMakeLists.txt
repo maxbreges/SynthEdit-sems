@@ -201,6 +201,7 @@ include(plugin_helper.cmake)
 #add_subdirectory(Og_DisplayList)
 #add_subdirectory (SubString)
 #add_subdirectory(onSetTextVal)
+add_subdirectory(PulsesOnHold)
 
 
 #add_subdirectory (AutoFixedValues)
