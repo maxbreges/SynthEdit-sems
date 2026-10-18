@@ -9,4 +9,10 @@ build_gmpi_plugin(
 	  PulsesOnHoldGui.cpp
 	${se_sdk_folder}/TimerManager.h
         ${se_sdk_folder}/TimerManager.cpp
+
 )
+
+if(APPLE)
+    target_link_libraries(PulsesOnHold PRIVATE "-framework CoreFoundation")
+endif()
+
