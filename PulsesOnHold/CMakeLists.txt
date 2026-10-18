@@ -7,4 +7,6 @@ build_gmpi_plugin(
 	HAS_GUI
 	SOURCE_FILES
 	  PulsesOnHoldGui.cpp
+	${se_sdk_folder}/TimerManager.h
+        ${se_sdk_folder}/TimerManager.cpp
 )
