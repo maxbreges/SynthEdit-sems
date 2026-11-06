@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PluginList>
-    <Plugin id="My PulsesOnHold" name="Pulses On Hold" category="mx/Sub-Controls">
+    <Plugin id="My PulsesOnHold" name="Pulses On Hold" graphicsApi="none" category="mx/Sub-Controls">
         <GUI>            
             <Pin name="Bool In" datatype="bool" direction="out"/>
 			<Pin name="Timeout (ms)" datatype="int" default="750"/>

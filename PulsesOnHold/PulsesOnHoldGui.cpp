@@ -22,9 +22,9 @@ class PulsesOnHoldGui final : public SeGuiInvisibleBase, public TimerClient
 		}
 		else
 		{
-			pinBool = false;
-			StopTimer();
+			pinBool = false;			
 			hold = false;
+			StopTimer();
 		}
 
 		if (pinHold && !prevBool && !pinOnMouseUp)
