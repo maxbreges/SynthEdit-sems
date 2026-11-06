@@ -14,6 +14,7 @@ protected:
 	BoolGuiPin pinMouseOver;
 	StringGuiPin pinHintOut;
 	BoolGuiPin pinCtrlClk;
+	BoolGuiPin pinShiftClk;
 	BoolGuiPin pinReset;
 
 public:

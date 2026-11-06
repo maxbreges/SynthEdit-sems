@@ -31,7 +31,8 @@ ImageXGui::ImageXGui(bool useMouseResponsePin) :
 	initializePin(10, pinMouseOver);	
 	initializePin(11, pinHintOut, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::onSetHintOut));
 	initializePin(12, pinCtrlClk);
-	initializePin(13, pinReset, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::onSetReset));
+	initializePin(13, pinShiftClk);
+	initializePin(14, pinReset, static_cast<MpGuiBaseMemberPtr2>(&ImageXGui::onSetReset));
 }
 
 int32_t ImageXGui::setHover(bool isMouseOverMe)
@@ -92,10 +93,6 @@ int32_t ImageXGui::onMouseWheel(int32_t flags, int32_t delta, GmpiDrawing_API::M
 
 int32_t ImageXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 {
-	if (pinMouseResponse == 5)
-	{
-		pinAnimationPosition = 1.f;
-	}
 
 	if (flags & gmpi_gui_api::GG_POINTER_KEY_CONTROL)
 	{
@@ -105,6 +102,15 @@ int32_t ImageXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point
 			goto pass;
 		}
 		
+	}
+	if (flags & gmpi_gui_api::GG_POINTER_KEY_SHIFT)
+	{
+		pinShiftClk = true;
+		if (pinMouseResponse == 4)
+		{
+			goto pass;
+		}
+
 	}
 
 	//	_RPT2(_CRT_WARN, "onPointerDown (%f,%f)\n", point.x, point.y);
@@ -178,10 +184,15 @@ int32_t ImageXGui::onPointerDown(int32_t flags, GmpiDrawing_API::MP1_POINT point
 
 	if (!bitmap_.isNull())
 	{
-		if (!pinCtrlClk)
-		{		
-		pinMouseDown = true;
-		pinMouseDownLegacy = true;
+		if (pinCtrlClk || pinShiftClk)
+		{
+			pinMouseDown = false;
+			pinMouseDownLegacy = false;
+		}
+		else
+		{
+			pinMouseDown = true;
+			pinMouseDownLegacy = true;
 		}
 	}
 	pass:
@@ -329,6 +340,7 @@ int32_t ImageXGui::onPointerMove(int32_t flags, GmpiDrawing_API::MP1_POINT point
 int32_t ImageXGui::onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point)
 {
 	pinCtrlClk = false;
+	pinShiftClk = false;
 
 	//	_RPT2(_CRT_WARN, "onPointerUp (%f,%f)\n", point.x, point.y);
 
