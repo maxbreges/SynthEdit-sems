@@ -37,6 +37,7 @@ public:
 		initializePin(pinNoteOut);
 		initializePin(pinTrig);
 		initializePin(pinVel);
+		setSleep(true);
 	}
 
 	int32_t open() override
@@ -59,8 +60,6 @@ public:
 
 	void onMidi2Message(const midi::message_view& msg)
 	{
-		learnedNote = pinNoteIn;
-
 		const auto header = gmpi::midi_2_0::decodeHeader(msg);
 
 		// only 8-byte messages supported. only 16 channels supported
@@ -71,7 +70,6 @@ public:
 
 		case gmpi::midi_2_0::NoteOn:
 		{
-
 			const auto note = gmpi::midi_2_0::decodeNote(msg);
 
 			int status = true;
@@ -90,8 +88,15 @@ public:
 				pinMIDIOut.send(out.m);
 			}
 
-			setSleep(false);
-			setSubProcess(&MidiLearn::subProcess);
+			if(vel > 0)
+			{
+				setSleep(false);
+				setSubProcess(&MidiLearn::subProcess);
+			}
+			else
+			{
+				//setSleep(true);
+			}
 		}
 		break;
 		case gmpi::midi_2_0::NoteOff:
@@ -116,6 +121,7 @@ public:
 				boolSwitch = false;
 				getHost()->sendMessageToGui(22323, sizeof(boolSwitch), &boolSwitch);
 				getHost()->sendMessageToGui(22324, sizeof(b2), &b2);
+				setSleep(true);
 			}
 		}	
 
@@ -147,13 +153,18 @@ public:
 
 			pinTrig.setValue(false, getBlockPosition() +s);
 		}
+		setSleep(true);
 	}
 
 	void onSetPins() override
 	{
 		if (pinNoteIn)
 		{
+			learnedNote = pinNoteIn;
 			pinNoteOut = pinNoteIn;
+		}
+		else
+		{			
 		}
 	}
 };
