@@ -1,6 +1,5 @@
 #include "PopUpMenuGui.h"
 #include "Drawing.h"
-#include "unicode_conversion.h"
 
 using namespace gmpi;
 using namespace gmpi_gui;
