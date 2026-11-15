@@ -15,6 +15,7 @@ public:
 	int32_t MP_STDCALL onPointerUp(int32_t flags, GmpiDrawing_API::MP1_POINT point) override;
 
 	std::string getDisplayText() override;
+	void openMenu();
 	void OnPopupComplete(int32_t result);
 	void onSetExt();
 	void onSetSelection();
@@ -30,7 +31,6 @@ private:
 	BoolGuiPin pinPopUpOpen;
 	BoolGuiPin pinOpenExt;
 	StringGuiPin pinSelection;
-	BoolGuiPin pinMouseDown;
 };
 
 #endif
