@@ -9,7 +9,7 @@ class SubStringGui final : public SeGuiInvisibleBase
     std::string relativePath;
     bool boolFlag = false;
 
-    std::string a;
+    std::string aw;
 
     void onSetFolderDialogPath() //user folder pin
     {
@@ -23,7 +23,8 @@ class SubStringGui final : public SeGuiInvisibleBase
         folderDialogPath = pinFolderDialogPath;
         if (folderDialogPath.empty())
         {
-            a = appDir + relativePath;
+            aw = appDir + relativePath;
+            backslashReverse();
             return;
         }
         onCompare();
@@ -56,12 +57,14 @@ class SubStringGui final : public SeGuiInvisibleBase
         if (boolFlag)
         {
             pinFolderDialogPath = pinUserPath;
-            a = pinUserPath;
+            aw = pinUserPath;
+            backslashReverse();
             pinDebug = "onSetFullPath(1)";
         }
         if (!boolFlag)
         {
-            a = appDir + relativePath;
+            aw = appDir + relativePath;
+            backslashReverse();
             pinDebug = "onSetFullPath(0)";
         }        
     }
@@ -71,8 +74,8 @@ class SubStringGui final : public SeGuiInvisibleBase
 #if defined(_WIN32)
         // On Windows: normalize to backslashes
 
-        std::replace(a.begin(), a.end(), '/', '\\');
-        pinFullPath = a;
+        std::replace(aw.begin(), aw.end(), '/', '\\');
+        pinFullPath = aw;
 
 
 #elif defined(__APPLE__)
