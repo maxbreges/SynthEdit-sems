@@ -80,8 +80,8 @@ class SubStringGui final : public SeGuiInvisibleBase
 
 #elif defined(__APPLE__)
         // On macOS: normalize to forward slashes
-        std::replace(a.begin(), a.end(), '\\', '/');
-        pinFullPath = a;
+        std::replace(aw.begin(), aw.end(), '\\', '/');
+        pinFullPath = aw;
 
 #endif
     }
