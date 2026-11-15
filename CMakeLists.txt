@@ -202,6 +202,7 @@ include(plugin_helper.cmake)
 #add_subdirectory (SubString)
 #add_subdirectory(onStringChangePulse)
 #add_subdirectory(PulsesOnHold)
+add_subdirectory(PathRebuild)
 
 
 #add_subdirectory (AutoFixedValues)

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PluginList>
+    <Plugin id="Path Rebuild" name="Path Rebuild" category="mx/Sub-Controls">
+        <GUI>
+            <Pin name="User Path" datatype="string" direction="out"/>
+            <Pin name="App Directory Path" datatype="string"/>
+            <Pin name="Relative Path" datatype="string" />
+			<Pin name="Full Path" datatype="string"/>
+			<Pin name="Bool Flag" datatype="bool" default="false"/>
+			<Pin name="Full Path Out" datatype="string" direction="out"/>
+			<Pin name="Rescan" datatype="bool" private="true"/>
+			<Pin name="Debug" datatype="string" direction="out" private="true"/>
+        </GUI>
+    </Plugin>
+</PluginList>
