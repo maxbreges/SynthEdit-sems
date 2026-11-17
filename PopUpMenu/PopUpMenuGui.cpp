@@ -27,14 +27,22 @@ PopupMenuGui::PopupMenuGui()
 	initializePin(pinOpenExt, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::onSetExt));
 	initializePin(pinSelection, static_cast<MpGuiBaseMemberPtr2>(&PopupMenuGui::redraw));
 }
-bool onSetExtFlag = false;
 
 void PopupMenuGui::onSetExt()
 {
-	if (pinPopUpOpen || !pinOpenExt)
-		return;
+	bool clicked = false;
 
-	openMenu();
+	if (pinOpenExt) 
+	{ 
+		setCapture();
+		clicked = true;
+	}	
+	if (clicked && !pinOpenExt)
+	{
+		releaseCapture();
+		openMenu();
+		clicked = false;
+	}
 }
 
 void PopupMenuGui::onSetChoice()
@@ -93,8 +101,7 @@ int32_t MP_STDCALL PopupMenuGui::onPointerUp(int32_t flags, GmpiDrawing_API::MP1
 	{
 		releaseCapture();
 		openMenu();
-
-		}
+	}
 	return gmpi::MP_OK;
 }
 
@@ -148,7 +155,6 @@ void PopupMenuGui::openMenu()
 	}
 	pinPopUpOpen = true;
 	nativeMenu.ShowAsync([this](int32_t result) -> void { this->OnPopupComplete(result); });
-
 }
 
 std::string PopupMenuGui::getDisplayText()
