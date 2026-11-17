@@ -155,8 +155,7 @@ void PopupMenuGui::openMenu()
 	}
 	pinPopUpOpen = true;
 	pinOpenExt = false;
-	pinOpenExt = true;
-	pinOpenExt = false;
+
 	nativeMenu.ShowAsync([this](int32_t result) -> void { this->OnPopupComplete(result); });
 }
 
