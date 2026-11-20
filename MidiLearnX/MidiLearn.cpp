@@ -94,8 +94,7 @@ public:
 				setSubProcess(&MidiLearn::subProcess);
 			}
 			else
-			{
-				//setSleep(true);
+			{					
 			}
 		}
 		break;
@@ -153,7 +152,11 @@ public:
 
 			pinTrig.setValue(false, getBlockPosition() +s);
 		}
-		setSleep(true);
+
+		if (vel <= 0.01f)
+		{
+			setSleep(true);
+		}		
 	}
 
 	void onSetPins() override
@@ -164,8 +167,8 @@ public:
 			pinNoteOut = pinNoteIn;
 		}
 		else
-		{			
-		}
+		{
+		}		
 	}
 };
 
